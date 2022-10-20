@@ -10,18 +10,19 @@ import java.util.Arrays;
  */
 public class Board {
     private BoardTile[][] board;
-    private ArrayList<String> column = new ArrayList<>(Arrays.asList("A","B","C","D","E","F","G","H","I","J"));
-    private ArrayList<Integer> row = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9,10));
+    private String[] column = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"};
+    private int[] row = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 
     public Board(int length, int width){
-        board = new BoardTile[length][width];
+        board = new BoardTile[width][length];
         for (int i = 0; i< length; i ++){
             for(int j = 0; j<width; j ++){
-                board[i][j].setX(column.get(i));
-                board[i][j].setY(row.get(j));
+                board[i][j] = new BoardTile("B", column[i],row[j]);
             }
         }
 
     }
+
+
 
 }
