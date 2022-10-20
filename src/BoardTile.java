@@ -16,6 +16,8 @@ public class BoardTile {
     private final String BLANK = "B";
     private final String LETTER_MULTI = "LM";
     private final String WORD_MULTI = "WM";
+
+    private final String START = "S";
     private String type;
 
     private String x;
@@ -32,8 +34,10 @@ public class BoardTile {
             this.type = WORD_MULTI;
         }else if (type.equals(LETTER_MULTI)){
             this.type = LETTER_MULTI;
-        }else{
+        }else if (type.equals(BLANK)){
             this.type = BLANK;
+        }else{
+            this.type = START;
         }
         this.x = x;
         this.y = y;
@@ -117,7 +121,7 @@ public class BoardTile {
      * @param type, String that contains the board tile type (B,LM,WM)
      */
     public void setType(String type){
-        if (type.equals(BLANK) || type.equals(WORD_MULTI) || type.equals(LETTER_MULTI)){
+        if (type.equals(BLANK) || type.equals(WORD_MULTI) || type.equals(LETTER_MULTI) || type.equals(START)){
             this.type = type;
         }
     }
