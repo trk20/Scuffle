@@ -18,11 +18,15 @@ public class BoardTile {
     private final String WORD_MULTI = "WM";
     private String type;
 
+    private String x;
+
+    private int y;
+
     /**
      * Constructor for creating a new BoardTile object
      * @param type, the type of the board object
      */
-    public BoardTile(String type){
+    public BoardTile(String type, String x, int y){
         taken = false;
         if(type.equals(WORD_MULTI)){
             this.type = WORD_MULTI;
@@ -31,6 +35,41 @@ public class BoardTile {
         }else{
             this.type = BLANK;
         }
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Method used for setting the X position of the board Tile
+     * @param x, the new x position of the tile
+     */
+
+    public void setX(String x){
+        this.x = x;
+    }
+
+    /**
+     * Method used for getting the X position of the board tile
+     * @return x, returns the x postion of the tile
+     */
+    public String getX() {
+        return x;
+    }
+
+    /**
+     * Method used for setting the Y position of the board tile
+     * @param y, the y position of the tile
+     */
+    public void setY(int y){
+        this.y =y;
+    }
+
+    /**
+     * Method used for getting to Y position of the board tile
+     * @return y, returns the y position of the tile
+     */
+    public int getY() {
+        return y;
     }
 
     /**
@@ -71,6 +110,16 @@ public class BoardTile {
      */
     public String getType(){
         return type;
+    }
+
+    /**
+     * Method to set the type of the board tile
+     * @param type, String that contains the board tile type (B,LM,WM)
+     */
+    public void setType(String type){
+        if (type.equals(BLANK) || type.equals(WORD_MULTI) || type.equals(LETTER_MULTI)){
+            this.type = type;
+        }
     }
 
 }
