@@ -20,6 +20,7 @@ public class Board {
                 board[i][j] = new BoardTile("B", column[i],row[j]);
             }
         }
+        //Add code to initialize the special tiles on the board here
 
     }
 
