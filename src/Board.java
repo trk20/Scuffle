@@ -77,7 +77,7 @@ public class Board {
         }
         for(int i = 0; i < word.length(); i++){
             BoardTile currentTile = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
-            if(currentTile.isTaken() && currentTile.getLetter() != word.charAt(i)){
+            if(currentTile.isTaken() && currentTile.getLetter().getChar() != word.charAt(i)){
                 //if a letter of the word would overwrite a previous word's letter
                 return false;
             }
@@ -114,6 +114,8 @@ public class Board {
      * @return the score tallied by the word placement, -1 if it is invalid
      */
     public int placeWord(String word, int row, int column, boolean direction){
+        ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
+        System.out.println("Lenght of word: "+ wordLetters.size());
 
         //check if word placement is ok
         if(!wordPlacementOk(word,row,column,direction)){
@@ -126,8 +128,23 @@ public class Board {
 
         for(int index = 0; index < word.length(); index++){
             //place letters on the board
-            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.charAt(index));
+            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
+
         }
+        return score;
+    }
+
+    public int getWordScore(String word,int row, int column, boolean direction){
+        int word_length = word.length();
+        int score = 0;
+        //if word is left-to-right
+        if (direction){
+            for (int i = 0; i< word_length; i++){
+
+            }
+        }
+
+        //if word is vertical
         return score;
     }
 

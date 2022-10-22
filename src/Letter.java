@@ -39,11 +39,12 @@ public enum Letter {
     // Fields
     /** Score associated with letter (defined by Scrabble rules) */
     private final int score;
+
     /** Character associated with letter (used for printing) */
     private final char character; // char to enforce only one character
+
     /** Frequency of appearance, how many copies are in a fresh draw pile*/
     private final int frequency;
-
     /**
      * Letter Constructor, initializes fields with given parameters.
      *
@@ -57,6 +58,12 @@ public enum Letter {
         this.character = character;
         this.frequency = freq;
     }
+
+    public char getChar() {
+        return character;
+    }
+
+
 
     /**
      * Returns the String representation of Letter
@@ -98,6 +105,16 @@ public enum Letter {
      * @return An ArrayList of letters corresponding to the word's characters.
      */
     public static ArrayList<Letter> wordToLetters(String word){
-        return new ArrayList<Letter>();
+
+        ArrayList<Letter> letters = new ArrayList<>();
+        for (int i =0; i<word.length(); i++){
+            for(Letter l: Letter.values()){
+                if(l.getChar() == word.toUpperCase().charAt(i)){
+                    letters.add(l);
+                }
+            }
+        }
+
+        return letters;
     }
 }
