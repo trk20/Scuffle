@@ -53,8 +53,12 @@ public class DrawPile {
      *
      * @return A randomly picked letter from the DrawPile if possible,
      *  otherwise null.
+     *  @author Alexandre Marques - 101189743
      */
     public Letter draw() {
-        return null; //TODO
+        // If list is empty, return null
+        if(letterPile.isEmpty()) return null;
+        // Pile order is already randomised so return first element
+        return letterPile.remove(0);
     }
 }
