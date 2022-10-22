@@ -28,10 +28,17 @@ public class Hand {
     /**
      * Draw a letter from the game's DrawPile,
      * then add it to the hand's letters.
+     *
+     * @throws NullPointerException if draw pile has no more letters to draw.
      */
-    public void draw(){
-        // letters.add(pile.draw());
-        letters.add(Letter.A); // TODO
+    public void draw() throws NullPointerException {
+        Letter newLetter = pile.draw();
+        // Indicates empty draw pile
+        if(newLetter == null){
+            throw new NullPointerException("No more letters in draw pile.");
+        }
+        // Should be a valid letter (not null)
+        letters.add(newLetter);
     }
 
     /**
@@ -40,7 +47,7 @@ public class Hand {
      * @return If the letters used are all in the hand, returns true.
      * Otherwise, return False.
      */
-    private boolean containsLetters(ArrayList<Letter> used){
+    private boolean containsLetters(List<Letter> used){
         return false; // TODO
     }
 
@@ -52,7 +59,7 @@ public class Hand {
      * @return If the letters used are all in the hand, returns true.
      *  Otherwise, return False.
      */
-    public boolean useLetters(ArrayList<Letter> used){
+    public boolean useLetters(List<Letter> used){
         return false; // TODO
     }
 
