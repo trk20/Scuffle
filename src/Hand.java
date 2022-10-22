@@ -49,9 +49,16 @@ public class Hand {
      *
      * @return If the letters used are all in the hand, returns true.
      * Otherwise, return False.
+     * @author Alexandre Marques - 101189743
      */
     private boolean containsLetters(List<Letter> used){
-        return false; // TODO
+        for(Letter l: used){
+            // If l is not in hand, return false
+            if(!(letters.contains(l)))
+                return false;
+        }
+        // Every letter used is contained in the Hand
+        return true;
     }
 
     /**
@@ -61,9 +68,19 @@ public class Hand {
      *
      * @return If the letters used are all in the hand, returns true.
      *  Otherwise, return False.
+     * @author Alexandre Marques - 101189743
      */
     public boolean useLetters(List<Letter> used){
-        return false; // TODO
+        // Does not contain letters
+        if(!containsLetters(used)){
+            return false;
+        }
+        // For each used letter, remove it from the hand
+        for(Letter l: used){
+            letters.remove(l);
+        }
+        // Valid removal, return true
+        return true;
     }
 
     /**
