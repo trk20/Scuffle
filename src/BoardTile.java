@@ -6,39 +6,31 @@ import java.util.*;
  *
  * @author Vladimir Kovacina
  * @version 1.0
+ *
+ * @author Timothy Kennedy
+ * @version 1.1
  */
 
 
 public class BoardTile {
 
     private char letter;
-    private boolean taken;
-    private final String BLANK = "B";
-    private final String LETTER_MULTI = "LM";
-    private final String WORD_MULTI = "WM";
 
-    private final String START = "S";
-    private String type;
+    public enum Type {START, BLANK, X2WORD, X3WORD, X2LETTER, X3LETTER}
 
-    private String x;
+    private Type tileType;
 
+    //x and y unused, possibly removable
+    private int x;
     private int y;
 
     /**
      * Constructor for creating a new BoardTile object
      * @param type, the type of the board object
      */
-    public BoardTile(String type, String x, int y){
-        taken = false;
-        if(type.equals(WORD_MULTI)){
-            this.type = WORD_MULTI;
-        }else if (type.equals(LETTER_MULTI)){
-            this.type = LETTER_MULTI;
-        }else if (type.equals(BLANK)){
-            this.type = BLANK;
-        }else{
-            this.type = START;
-        }
+    public BoardTile(Type type, int x, int y){
+        this.tileType = type;
+        this.letter = ' ';
         this.x = x;
         this.y = y;
     }
@@ -48,15 +40,15 @@ public class BoardTile {
      * @param x, the new x position of the tile
      */
 
-    public void setX(String x){
+    public void setX(int x){
         this.x = x;
     }
 
     /**
      * Method used for getting the X position of the board tile
-     * @return x, returns the x postion of the tile
+     * @return x, returns the x position of the tile
      */
-    public String getX() {
+    public int getX() {
         return x;
     }
 
@@ -76,25 +68,18 @@ public class BoardTile {
         return y;
     }
 
-    /**
-     * Sets the board tile to taken (used when letter is placed)
-     */
-    public void setTaken(){
-        //Should add some error checking to check if letter is a char
-        taken = true;
-    }
 
     /**
      * Method used for checking is a board tile is taken
      * @return true is the tile is taken (contains a letter), false otherwise
      */
     public boolean isTaken(){
-        return taken;
+        return letter != ' ';
     }
 
     /**
      * Method used for setting the letter (char) of the board tile
-     * @param letter
+     * @param letter the letter the tile now has
      */
     public void setLetter(char letter){
         this.letter = letter;
@@ -112,18 +97,23 @@ public class BoardTile {
      * Method used to get the type of tile
      * @return return the type of tile, String
      */
-    public String getType(){
-        return type;
+    public Type getType(){
+        return tileType;
     }
 
     /**
      * Method to set the type of the board tile
      * @param type, String that contains the board tile type (B,LM,WM)
      */
-    public void setType(String type){
-        if (type.equals(BLANK) || type.equals(WORD_MULTI) || type.equals(LETTER_MULTI) || type.equals(START)){
-            this.type = type;
-        }
+    public void setType(Type type){
+        this.tileType = type;
     }
 
+    @Override
+    public String toString() {
+        if(this.letter != ' '){
+            return String.valueOf(letter);
+        }
+        return tileType.toString().replaceAll("BLANK"," -- ").replace("START", "S").replace("X2WORD", "2W").replace("X3WORD", "3W").replace("X2LETTER", "2L").replace("X3LETTER", "3L");
+    }
 }
