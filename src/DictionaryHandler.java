@@ -7,10 +7,10 @@ import java.util.ArrayList;
  * A class handling the loading of the set of valid words, and the evaluation of the validity of possible words
  *
  * @author Timothy Kennedy
- * @version 1.0
+ * @version 1.1
  */
 public class DictionaryHandler {
-    ArrayList<String> allWords; // Storage for all valid words
+    private ArrayList<String> allWords; // Storage for all valid words
 
     /**
      * Constructs a new DictionaryHandler object with all valid words loaded into an ArrayList
@@ -48,6 +48,7 @@ public class DictionaryHandler {
     }
 
     public static void main(String[] args) {
+        /*
         DictionaryHandler dict = new DictionaryHandler();
         System.out.println(dict.isValidWord("maybe"));
         System.out.println(dict.isValidWord("no"));
@@ -55,5 +56,11 @@ public class DictionaryHandler {
         System.out.println(dict.isValidWord("indiscretion"));
         System.out.println(dict.isValidWord("expletive"));
         System.out.println(dict.isValidWord("notavalidword"));
+        */
+
+        Board board = new Board(15,15);
+        board.placeWord("spoons",5,7,false);
+        System.out.println(board);
+
     }
 }
