@@ -60,7 +60,7 @@ public class DictionaryHandler {
 
         Board board = new Board(15,15);
         board.placeWord("spoons",5,7,false);
-        //board.placeWord("sport", 5,7,true);
+        board.placeWord("sport", 5,7,true);
         //board.placeWord("spawn", 6,6,true);
 
         System.out.println(board);

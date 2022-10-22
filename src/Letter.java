@@ -101,15 +101,19 @@ public enum Letter {
     /**
      * Convert a word string to a list of Letters.
      *
+     * @author Vladimir Kovacina
      * @param word a word to be seperated into individual Letter enums
      * @return An ArrayList of letters corresponding to the word's characters.
      */
     public static ArrayList<Letter> wordToLetters(String word){
 
         ArrayList<Letter> letters = new ArrayList<>();
+        //Go through the letters of the word
         for (int i =0; i<word.length(); i++){
+            //Look for the corresponding Letter
             for(Letter l: Letter.values()){
                 if(l.getChar() == word.toUpperCase().charAt(i)){
+                    //Add the corresponding Letter to the returned ArrayList
                     letters.add(l);
                 }
             }

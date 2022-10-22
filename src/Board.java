@@ -77,7 +77,7 @@ public class Board {
         }
         for(int i = 0; i < word.length(); i++){
             BoardTile currentTile = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
-            if(currentTile.isTaken() && currentTile.getLetter().getChar() != word.charAt(i)){
+            if(currentTile.isTaken() && currentTile.getLetter().getChar() != word.toUpperCase().charAt(i)){
                 //if a letter of the word would overwrite a previous word's letter
                 return false;
             }
@@ -119,6 +119,7 @@ public class Board {
 
         //check if word placement is ok
         if(!wordPlacementOk(word,row,column,direction)){
+            System.out.println("Word placement invalid");
             return -1;
         }
         int score = 0;
@@ -129,7 +130,6 @@ public class Board {
         for(int index = 0; index < word.length(); index++){
             //place letters on the board
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
-
         }
         return score;
     }
