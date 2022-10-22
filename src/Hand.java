@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class Hand takes care of holding, playing, and drawing
@@ -12,7 +13,7 @@ public class Hand {
     /** The game's draw pile (should be the same for all players/hands in the game) */
     final private DrawPile pile;
     /** The Hand's contained letters*/
-    final private ArrayList<Letter> letters;
+    final private List<Letter> letters;
 
     /**
      * Hand constructor, saves draw pile and
