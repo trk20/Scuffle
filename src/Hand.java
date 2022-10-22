@@ -18,6 +18,8 @@ public class Hand {
     /**
      * Hand constructor, saves draw pile and
      * creates an "empty" hand, has no Letters yet.
+     *
+     * @author Alexandre Marques - 101189743
      */
     Hand(DrawPile pile){
         // Initialize fields to default / parameter values
@@ -30,6 +32,7 @@ public class Hand {
      * then add it to the hand's letters.
      *
      * @throws NullPointerException if draw pile has no more letters to draw.
+     * @author Alexandre Marques - 101189743
      */
     public void draw() throws NullPointerException {
         Letter newLetter = pile.draw();
@@ -65,12 +68,20 @@ public class Hand {
 
     /**
      * Shows letters contained in the Hand.
-     * Format: "Hand: A, B, C, D."
+     * Format: "Hand: A B C D"
      *
      * @return String representation of Hand object.
+     * @author Alexandre Marques - 101189743
      */
     @Override
     public String toString(){
-        return ""; // TODO
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hand: ");
+        // Append each letter, + a trailing space
+        for (Letter l: letters) {
+            sb.append(l).append(" ");
+        }
+        // Trim last trailing space (and return string)
+        return sb.toString().trim();
     }
 }
