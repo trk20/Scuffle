@@ -43,6 +43,8 @@ public class Player {
      * @param used List of letters to discard
      */
     public void discardLetters(List<Letter> used){
+        // TODO: need to pass "used" to draw pile
+        //  -> make a way to add letters back in (DrawPile method)
         return;
     }
 
@@ -50,6 +52,7 @@ public class Player {
      * Add points from a placement to this Player's score.
      *
      * @param points points to be added to the score
+     * @author Alexandre Marques - 101189743
      */
     public void addPoints(int points){
         this.score += points;
@@ -59,6 +62,7 @@ public class Player {
      * String representation of player, includes their player name.
      *
      * @return Player's name String
+     * @author Alexandre Marques - 101189743
      */
     @Override
     public String toString() {
