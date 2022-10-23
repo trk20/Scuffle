@@ -1,5 +1,13 @@
 
 import java.util.*;
+/**
+ * Class that handles user console input
+ * The functions follow a pattern of a verifier/prompter where the prompter will run in a loop until the verifier
+ * validates the input
+ *
+ * @Author: Kieran Rourke
+ * @Version OCT-23
+ */
 public class TextController {
     private Scanner inputHandler;
 
@@ -8,6 +16,11 @@ public class TextController {
         inputHandler = new Scanner(System.in);
     }
 
+    /**
+     * Checks if a word is only letters
+     * @param word: input
+     * @return: True/False depending on if it's valid
+     */
     private boolean isValidWord(String word){
         if (!word.chars().allMatch(Character::isLetter)){
             System.out.println("Invalid Characters entered please only enter letters");
@@ -15,6 +28,11 @@ public class TextController {
         }
         return true;
     }
+
+    /**
+     * Asks a user for a word
+     * @return: the word
+     */
     public String askForWord(){
         String word = "";
         boolean validWord = false;
@@ -26,6 +44,11 @@ public class TextController {
         return word;
     }
 
+    /**
+     * Checks if a coord is of the right length and that it follows the desired format
+     * @param coords: input
+     * @return: True/False depending on if it's valid
+     */
     private Boolean isValidCoords(String coords){
         if (coords.length() != 2){
             System.out.println("Invalid input, Coords are too long must be length 2 found "+coords.length());
@@ -38,6 +61,10 @@ public class TextController {
         return true;
     }
 
+    /**
+     * Asks a user for coordinates
+     * @return: the coords
+     */
     public String askForCoords(){
         String coords = "";
         boolean validCoords = false;
@@ -53,6 +80,11 @@ public class TextController {
 
     }
 
+    /**
+     * Checks if a string is a number
+     * @param num: input
+     * @return: True/False depending on if it's valid
+     */
     private boolean isValidNum(String num){
         if (num.length() != 1){
             System.out.println(String.format("Invalid input, %s is too long must be length 1 found "+num.length(), num));
@@ -64,12 +96,17 @@ public class TextController {
         }
         return true;
     }
+
+    /**
+     * Asks a user for num players
+     * @return: num players
+     */
     public int askForNumPlayers(){
         String numPlayers = "";
         boolean validNum = false;
 
         while (!validNum){
-            System.out.println("How many players would like to play?");
+            System.out.println("How many players would like to play? Maximum 9");
             numPlayers = inputHandler.nextLine();
             validNum = isValidNum(numPlayers);
         }
