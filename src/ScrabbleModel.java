@@ -21,10 +21,18 @@ public class ScrabbleModel {
         this.wordDictionary = new DictionaryHandler();
     }
 
+    /**
+     * Increments turn
+     * @param turn: current value
+     * @return new value
+     */
     private int incrementTurn(int turn){
         return turn == numPlayers ? 0 : ++turn;
     }
 
+    /**
+     * Prints Board
+     */
     private void printBoard(){
         System.out.print(board);
     }
