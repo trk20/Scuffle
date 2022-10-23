@@ -17,7 +17,6 @@ public class Board {
     private BoardTile[][] board;
     private String[] column = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"};
 
-
     private DictionaryHandler dictionary;
 
     public Board(int length, int width){
