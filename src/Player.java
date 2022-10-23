@@ -14,17 +14,20 @@ public class Player {
     final private Hand hand;
     /** Player's cumulative score for the game */
     private int score;
+    /** Game model, has a shared DrawPile, and a Board */
+    final private ScrabbleModel model;
 
     /**
      * Player constructor, sets a name from the name parameter,
      * initializes an empty hand, and sets score to 0 initially.
      *
      * @param name the Player's display name
-     * @param drawPile the game's shared drawPile
+     * @param model the Scrabble game's model
      */
-    public Player(String name, DrawPile drawPile) {
+    public Player(String name, ScrabbleModel model) {
         this.name = name;
-        this.hand = new Hand(drawPile);
+        this.model = model;
+        this.hand = new Hand(model.getDrawPile());
         this.score = 0;
     }
 
@@ -32,20 +35,30 @@ public class Player {
      * Called to try to place letters on the board
      *
      * @param used List of letters to place (in order)
+     * @return True if hand contains used letters, false otherwise. // FIXME: may depend on model/board too
      */
-    public void placeLetters(List<Letter> used){
-        return;
+    public boolean placeLetters(List<Letter> used){
+        // FIXME: May need a model reference, or the board
+        return false;
     }
 
     /**
      * Called to discard letters (and draw the same amount)
      *
      * @param used List of letters to discard
+     *
+     * @author Alexandre Marques - 101189743
      */
     public void discardLetters(List<Letter> used){
-        // TODO: need to pass "used" to draw pile
-        //  -> make a way to add letters back in (DrawPile method)
-        return;
+        // Add the letters to be removed to the model's DrawPile
+        model.getDrawPile().addToPile(used);
+        // Remove the letters from the hand
+        hand.useLetters(used);
+
+        /* Note: will always be able to draw enough letters.
+         * Worst case scenario: DrawPile is empty, discard hand, Player draws their own hand back.
+         * This works only because "useLetters" is called after "addToPile" -> order is important!
+         */
     }
 
     /**
