@@ -18,6 +18,8 @@ public class Hand {
     /**
      * Hand constructor, saves draw pile and
      * creates an "empty" hand, has no Letters yet.
+     *
+     * @author Alexandre Marques - 101189743
      */
     Hand(DrawPile pile){
         // Initialize fields to default / parameter values
@@ -28,10 +30,18 @@ public class Hand {
     /**
      * Draw a letter from the game's DrawPile,
      * then add it to the hand's letters.
+     *
+     * @throws NullPointerException if draw pile has no more letters to draw.
+     * @author Alexandre Marques - 101189743
      */
-    public void draw(){
-        // letters.add(pile.draw());
-        letters.add(Letter.A); // TODO
+    public void draw() throws NullPointerException {
+        Letter newLetter = pile.draw();
+        // Indicates empty draw pile
+        if(newLetter == null){
+            throw new NullPointerException("No more letters in draw pile.");
+        }
+        // Should be a valid letter (not null)
+        letters.add(newLetter);
     }
 
     /**
@@ -39,9 +49,16 @@ public class Hand {
      *
      * @return If the letters used are all in the hand, returns true.
      * Otherwise, return False.
+     * @author Alexandre Marques - 101189743
      */
-    private boolean containsLetters(ArrayList<Letter> used){
-        return false; // TODO
+    private boolean containsLetters(List<Letter> used){
+        for(Letter l: used){
+            // If l is not in hand, return false
+            if(!(letters.contains(l)))
+                return false;
+        }
+        // Every letter used is contained in the Hand
+        return true;
     }
 
     /**
@@ -51,19 +68,37 @@ public class Hand {
      *
      * @return If the letters used are all in the hand, returns true.
      *  Otherwise, return False.
+     * @author Alexandre Marques - 101189743
      */
-    public boolean useLetters(ArrayList<Letter> used){
-        return false; // TODO
+    public boolean useLetters(List<Letter> used){
+        // Does not contain letters
+        if(!containsLetters(used)){
+            return false;
+        }
+        // For each used letter, remove it from the hand
+        for(Letter l: used){
+            letters.remove(l);
+        }
+        // Valid removal, return true
+        return true;
     }
 
     /**
      * Shows letters contained in the Hand.
-     * Format: "Hand: A, B, C, D."
+     * Format: "Hand: A B C D"
      *
      * @return String representation of Hand object.
+     * @author Alexandre Marques - 101189743
      */
     @Override
     public String toString(){
-        return ""; // TODO
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hand: ");
+        // Append each letter, + a trailing space
+        for (Letter l: letters) {
+            sb.append(l).append(" ");
+        }
+        // Trim last trailing space (and return string)
+        return sb.toString().trim();
     }
 }
