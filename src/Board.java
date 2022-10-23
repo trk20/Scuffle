@@ -139,48 +139,28 @@ public class Board {
         }
         boolean x3word = false;
         boolean x2word = false;
-        //if direction is horizontal
-        if(direction) {
-            for (int i = 0; i < wordLetters.size(); i++) {
-                if(board[row][column + i].getType() == BoardTile.Type.BLANK){
-                    score += wordLetters.get(i).getScore();
-                } else if (board[row][column + i].getType() == BoardTile.Type.X2LETTER) {
-                    score += 2 * wordLetters.get(i).getScore();
-                } else if (board[row][column + i].getType() == BoardTile.Type.X3LETTER) {
-                    score += 3 * wordLetters.get(i).getScore();
-                } else if (board[row][column + i].getType() == BoardTile.Type.X2WORD) {
-                    x2word = true;
-                }else{
-                    x3word = true;
-                }
-            }
-            if (x2word){
-                score *= 2;
-            }
-            if (x3word){
-                score +=3;
-            }
-        }else{
-            for (int i = 0; i < wordLetters.size(); i++) {
-                if(board[row + i][column].getType() == BoardTile.Type.BLANK){
-                    score += wordLetters.get(i).getScore();
-                } else if (board[row + i][column].getType() == BoardTile.Type.X2LETTER) {
-                    score += 2 * wordLetters.get(i).getScore();
-                } else if (board[row + i][column].getType() == BoardTile.Type.X3LETTER) {
-                    score += 3 * wordLetters.get(i).getScore();
-                } else if (board[row + i][column].getType() == BoardTile.Type.X2WORD) {
-                    x2word = true;
-                }else{
-                    x3word = true;
-                }
-            }
-            if (x2word){
-                score *= 2;
-            }
-            if (x3word){
-                score +=3;
+
+        for (int i = 0; i < wordLetters.size(); i++) {
+            if(board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.BLANK){
+                score += wordLetters.get(i).getScore();
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2LETTER) {
+                score += 2 * wordLetters.get(i).getScore();
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3LETTER) {
+                score += 3 * wordLetters.get(i).getScore();
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2WORD) {
+                x2word = true;
+            }else{
+                x3word = true;
             }
         }
+        if (x2word){
+            score *= 2;
+        }
+        if (x3word){
+            score +=3;
+        }
+
+
         System.out.println("Player Score:"+ score);
         return score;
 
@@ -189,6 +169,7 @@ public class Board {
     @Override
     public String toString() {
         String returnString = "";
+
         for(BoardTile[] row:board){
             for(BoardTile tile:row){
                 returnString += " ".repeat(5-tile.toString().length()) + tile;
