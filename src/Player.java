@@ -32,30 +32,34 @@ public class Player {
     }
 
     /**
-     * Called to try to place letters on the board
+     * Called to try to place letters on the board.
+     * Checks if PLayer has the letters to play.
+     * Does not do any board verification!
      *
      * @param used List of letters to place (in order)
-     * @return True if hand contains used letters, false otherwise. // FIXME: may depend on model/board too
+     * @return True if hand contains used letters, false otherwise.
+     *
+     * @throws NullPointerException to indicate that the game's DrawPile is empty.
      */
     public boolean placeLetters(List<Letter> used){
-        // FIXME: May need a model reference, or the board
-        return false;
+        return hand.useLetters(used);
     }
 
     /**
      * Called to discard letters (and draw the same amount)
      *
      * @param used List of letters to discard
+     * @return True if hand contains used letters, false otherwise.
      *
      * @author Alexandre Marques - 101189743
      */
-    public void discardLetters(List<Letter> used){
+    public boolean discardLetters(List<Letter> used){
         // Add the letters to be removed to the model's DrawPile
         model.getDrawPile().addToPile(used);
-        // Remove the letters from the hand
-        hand.useLetters(used);
+        // Remove the letters from the hand (return true if hand contains used letters)
+        return hand.useLetters(used);
 
-        /* Note: will always be able to draw enough letters.
+        /* Note: Will always be able to draw enough letters. -> no empty pile exception
          * Worst case scenario: DrawPile is empty, discard hand, Player draws their own hand back.
          * This works only because "useLetters" is called after "addToPile" -> order is important!
          */
