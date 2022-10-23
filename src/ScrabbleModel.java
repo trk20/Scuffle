@@ -68,7 +68,7 @@ public class ScrabbleModel {
         boolean direction;
 
         turn = incrementTurn(turn);
-        System.out.printf("It is Player %d turn%n", turn);
+        System.out.printf("It is Player %d turn", turn);
         while(!isValidInput){
             word = inputHandler.askForWord();
             isValidInput = validateWord(word);
