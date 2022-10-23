@@ -41,7 +41,7 @@ public class Player {
      *
      * @throws NullPointerException to indicate that the game's DrawPile is empty.
      */
-    public boolean placeLetters(List<Letter> used){
+    public boolean placeLetters(List<Letter> used) throws NullPointerException{
         return hand.useLetters(used);
     }
 
