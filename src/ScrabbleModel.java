@@ -30,6 +30,9 @@ public class ScrabbleModel {
         return turn == numPlayers ? 0 : ++turn;
     }
 
+    /**
+     * Prints Board
+     */
     private void printBoard(){
         System.out.print(board);
     }
