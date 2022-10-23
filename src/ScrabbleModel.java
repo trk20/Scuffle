@@ -3,8 +3,8 @@ import java.util.*;
 /**
  * Class that controls/models the overall scrabble game
  *
- * @Author: Kieran Rourke
- * @Version OCT-23
+ * @author: Kieran Rourke
+ * @version OCT-23
  */
 public class ScrabbleModel {
     private Board board;
@@ -14,11 +14,14 @@ public class ScrabbleModel {
     private int numPlayers;
     private final int SIZE = 15;
     private int turn = 0;
+    /** Model's shared DrawPile */
+    private final DrawPile drawPile;
 
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
         this.inputHandler = new TextController();
         this.wordDictionary = new DictionaryHandler();
+        this.drawPile = new DrawPile();
     }
 
     /**
@@ -130,5 +133,14 @@ public class ScrabbleModel {
     public static void main(String[] args){
         ScrabbleModel s = new ScrabbleModel();
         s.startGame();
+    }
+
+    /**
+     * Getter for model drawPile.
+     * @author Alexandre marques - 101189743
+     * @return model's shared DrawPile
+     */
+    public DrawPile getDrawPile() {
+        return drawPile;
     }
 }
