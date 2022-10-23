@@ -25,6 +25,10 @@ public class ScrabbleModel {
         return turn == numPlayers ? 0 : ++turn;
     }
 
+    private void printBoard(){
+        System.out.print(board);
+    }
+
     /**
      * Following Methods handle parsing the user coord input
      * @param coords: String inputted by the user. Will be in the form 2f or f2.
@@ -74,6 +78,7 @@ public class ScrabbleModel {
     public void startGame(){
         numPlayers = inputHandler.askForNumPlayers();
         boolean running = true;
+        printBoard();
         while(running){
             nextTurn();
         }
@@ -107,8 +112,8 @@ public class ScrabbleModel {
         y = getYCoord(coords);
         direction = getDirection(coords);
 
-        System.out.println(board.placeWord(word, x, y, direction));
-        System.out.print(board);
+        board.placeWord(word, x, y, direction);
+        printBoard();
         //TODO calculate score add it to player
 
 
