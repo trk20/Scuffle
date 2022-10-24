@@ -77,7 +77,7 @@ public class Board {
         }
         for(int i = 0; i < word.length(); i++){
             BoardTile currentTile = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
-            if(currentTile.isTaken() && currentTile.getLetter() != word.charAt(i)){
+            if(currentTile.isTaken() && currentTile.getLetter().getChar() != word.toUpperCase().charAt(i)){
                 //if a letter of the word would overwrite a previous word's letter
                 return false;
             }
@@ -88,6 +88,7 @@ public class Board {
         }
 
         return connectedToStart;
+
     }
 
     /**
@@ -111,29 +112,65 @@ public class Board {
      * @param row the row of the board to start the word on
      * @param column the column of the board to start the word on
      * @param direction whether the word is left-to-right
-     * @return the score tallied by the word placement, -1 if it is invalid
+     * @return true is word was placed successfully, false otherwise
      */
-    public int placeWord(String word, int row, int column, boolean direction){
+    public boolean placeWord(String word, int row, int column, boolean direction){
+        ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
 
         //check if word placement is ok
         if(!wordPlacementOk(word,row,column,direction)){
-            return -1;
+            System.out.println("Word placement invalid");
+            return false;
         }
-        int score = 0;
-
-        //tally score
-        score += boardScore(row,column,word.length(),direction);
 
         for(int index = 0; index < word.length(); index++){
             //place letters on the board
-            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.charAt(index));
+            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
         }
+        return true;
+    }
+
+    public int getWordScore(String word,int row, int column, boolean direction){
+
+        ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
+        int score = 0;
+        if (!wordPlacementOk(word,row,column,direction)){
+            return score;
+        }
+        boolean x3word = false;
+        boolean x2word = false;
+
+        for (int i = 0; i < wordLetters.size(); i++) {
+            if(board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3WORD){
+                x3word = true;
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2LETTER) {
+                score += 2 * wordLetters.get(i).getScore();
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3LETTER) {
+                score += 3 * wordLetters.get(i).getScore();
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2WORD) {
+                x2word = true;
+            }else{
+                //Blank or Start tile
+                score += wordLetters.get(i).getScore();
+            }
+        }
+        if (x2word){
+            score *= 2;
+        }
+        if (x3word){
+            score +=3;
+        }
+
+
+        System.out.println("Player Score:"+ score);
         return score;
+
     }
 
     @Override
     public String toString() {
         String returnString = "";
+
         for(BoardTile[] row:board){
             for(BoardTile tile:row){
                 returnString += " ".repeat(5-tile.toString().length()) + tile;

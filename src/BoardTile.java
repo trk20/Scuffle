@@ -14,7 +14,7 @@ import java.util.*;
 
 public class BoardTile {
 
-    private char letter;
+    private Letter letter;
 
     public enum Type {START, BLANK, X2WORD, X3WORD, X2LETTER, X3LETTER}
 
@@ -24,13 +24,15 @@ public class BoardTile {
     private int x;
     private int y;
 
+    private boolean taken;
+
     /**
      * Constructor for creating a new BoardTile object
      * @param type, the type of the board object
      */
     public BoardTile(Type type, int x, int y){
         this.tileType = type;
-        this.letter = ' ';
+        this.taken =false;
         this.x = x;
         this.y = y;
     }
@@ -74,22 +76,23 @@ public class BoardTile {
      * @return true is the tile is taken (contains a letter), false otherwise
      */
     public boolean isTaken(){
-        return letter != ' ';
+        return taken;
     }
 
     /**
      * Method used for setting the letter (char) of the board tile
      * @param letter the letter the tile now has
      */
-    public void setLetter(char letter){
+    public void setLetter(Letter letter){
         this.letter = letter;
+        taken = true;
     }
 
     /**
      *Method used for getting the letter (char) of the board tile
      * @return letter, the character that the tile contains
      */
-    public char getLetter(){
+    public Letter getLetter(){
         return letter;
         //might need error checking here
     }
@@ -111,9 +114,9 @@ public class BoardTile {
 
     @Override
     public String toString() {
-        if(this.letter != ' '){
+        if(this.isTaken()){
             return String.valueOf(letter);
         }
-        return tileType.toString().replaceAll("BLANK"," -- ").replace("START", "S").replace("X2WORD", "2W").replace("X3WORD", "3W").replace("X2LETTER", "2L").replace("X3LETTER", "3L");
+        return tileType.toString().replaceAll("BLANK"," -- ").replace("START", "ST").replace("X2WORD", "2W").replace("X3WORD", "3W").replace("X2LETTER", "2L").replace("X3LETTER", "3L");
     }
 }
