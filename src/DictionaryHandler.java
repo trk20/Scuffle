@@ -61,10 +61,11 @@ public class DictionaryHandler {
         Board board = new Board(15,15);
         board.placeWord("spoon",5,7,false);
         System.out.println(board);
-        System.out.println(board.wordPlacementOk("s",10,7,false));
-        board.placeWord("s",10,7,false);
-        System.out.println(board.wordPlacementOk("nothing", 7, 6,true));
-        board.placeWord("nothing", 7, 6,true);
+        board.getWordScore("spoons",5,7,false);
+        board.placeWord("sport", 5,7,true);
+        board.getWordScore("sport", 5,7,true);
+        board.getWordScore("hi", 2,2,true);
+        //board.placeWord("spawn", 6,6,true);
         System.out.println(board);
 
     }
