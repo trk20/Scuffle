@@ -18,6 +18,8 @@ public class ScrabbleModel {
     public static final Boolean PLACE = true;
     /** Model's shared DrawPile */
     private final DrawPile drawPile;
+    /** Max players limited by the four racks (see README setup rules) */
+    public static final int MAX_PLAYERS = 4;
 
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
@@ -163,7 +165,7 @@ public class ScrabbleModel {
 
         board.placeWord(word, x, y, direction);
         printBoard();
-        System.out.println("You're new " + currentPlayer.getHand());
+        System.out.println("Your new " + currentPlayer.getHand());
         //TODO calculate score add it to player
     }
 
