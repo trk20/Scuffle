@@ -66,18 +66,6 @@ public enum Letter {
 
 
     /**
-     * Returns the String representation of Letter
-     *
-     * @author Alexandre Marques - 101189743
-     * @return The character associated to the Letter, as a string.
-     */
-    @Override
-    // TODO: Unit tests for this
-    public String toString() {
-        return ""+character; // Concatenate char to convert to String
-    }
-
-    /**
      * Returns the score associated to this Letter.
      *
      * @author Alexandre Marques - 101189743
@@ -100,13 +88,14 @@ public enum Letter {
 
     /**
      * Convert a word string to a list of Letters.
+     * Assumes all characters are valid.
      *
      * @author Vladimir Kovacina
      * @param word a word to be seperated into individual Letter enums
      * @return An ArrayList of letters corresponding to the word's characters.
+     * @author Alexandre Marques - 101189743
      */
     public static ArrayList<Letter> wordToLetters(String word){
-
         ArrayList<Letter> letters = new ArrayList<>();
         //Go through the letters of the word
         for (int i =0; i<word.length(); i++){
@@ -120,5 +109,23 @@ public enum Letter {
         }
 
         return letters;
+        // Empty letters list
+        ArrayList<Letter> letters = new ArrayList<>();
+        // TODO: Find a letter for each char in the string...
+
+        return letters;
+    }
+
+    /**
+     * Returns the String representation of Letter
+     *
+     * @author Alexandre Marques - 101189743
+     * @return The character associated to the Letter, as a string.
+     */
+    @Override
+    // TODO: Unit tests for this
+    public String toString() {
+        return ""+character; // Concatenate char to convert to String
+
     }
 }

@@ -7,17 +7,21 @@ import java.util.List;
  * When playing letters, verifies the Hand contains them.
  *
  * @author Alexandre Marques - 101189743
- * @version 2022-10-22
+ * @version 2022-10-23
  */
 public class Hand {
     /** The game's draw pile (should be the same for all players/hands in the game) */
     final private DrawPile pile;
     /** The Hand's contained letters*/
     final private List<Letter> letters;
+    /** Hand's maximum capacity. Always draw back up to it when using letters*/
+    final static private int HAND_SIZE = 7;
 
     /**
      * Hand constructor, saves draw pile and
      * creates an "empty" hand, has no Letters yet.
+     *
+     * @author Alexandre Marques - 101189743
      */
     Hand(DrawPile pile){
         // Initialize fields to default / parameter values
@@ -26,12 +30,37 @@ public class Hand {
     }
 
     /**
+     * Keeps drawing (with draw()) until the HAND_SIZE Letter limit is reached.
+     *
+     * @see #draw()
+     * @throws NullPointerException if draw pile has no more letters to draw.
+     * @author Alexandre Marques - 101189743
+     */
+    // TODO: Consider making custom exception (i.e. EmptyPileException)
+    private void fillHand() throws NullPointerException {
+        // Keep drawing until reaching hand limit
+        while(letters.size() < HAND_SIZE) {
+            draw();
+        }
+    }
+
+    /**
      * Draw a letter from the game's DrawPile,
      * then add it to the hand's letters.
+     *
+     * @throws NullPointerException if draw pile has no more letters to draw.
+     * @author Alexandre Marques - 101189743
      */
-    public void draw(){
-        // letters.add(pile.draw());
-        letters.add(Letter.A); // TODO
+    // TODO: Consider making custom exception (i.e. EmptyPileException)
+    private void draw() throws NullPointerException {
+        // Check for valid letter (non-null value)
+        Letter newLetter = pile.draw();
+        // Indicates empty draw pile
+        if (newLetter == null) {
+            throw new NullPointerException("No more letters in draw pile.");
+        }
+        // Should be a valid letter (not null)
+        letters.add(newLetter);
     }
 
     /**
@@ -39,9 +68,16 @@ public class Hand {
      *
      * @return If the letters used are all in the hand, returns true.
      * Otherwise, return False.
+     * @author Alexandre Marques - 101189743
      */
-    private boolean containsLetters(ArrayList<Letter> used){
-        return false; // TODO
+    private boolean containsLetters(List<Letter> used){
+        for(Letter l: used){
+            // If l is not in hand, return false
+            if(!(letters.contains(l)))
+                return false;
+        }
+        // Every letter used is contained in the Hand
+        return true;
     }
 
     /**
@@ -51,19 +87,45 @@ public class Hand {
      *
      * @return If the letters used are all in the hand, returns true.
      *  Otherwise, return False.
+     * @author Alexandre Marques - 101189743
+     *
+     * @throws NullPointerException to indicate that the game's DrawPile is empty.
      */
-    public boolean useLetters(ArrayList<Letter> used){
-        return false; // TODO
+    public boolean useLetters(List<Letter> used) throws NullPointerException{
+        // Does not contain letters
+        if(!containsLetters(used)){
+            return false;
+        }
+        // For each used letter, remove it from the hand
+        for(Letter l: used){
+            letters.remove(l);
+        }
+
+        /* Letters were used, so Hand needs to be filled.
+         * Note: Throws exception for empty draw pile!
+         */
+        fillHand();
+
+        // Valid removal, return true
+        return true;
     }
 
     /**
      * Shows letters contained in the Hand.
-     * Format: "Hand: A, B, C, D."
+     * Format: "Hand: A B C D"
      *
      * @return String representation of Hand object.
+     * @author Alexandre Marques - 101189743
      */
     @Override
     public String toString(){
-        return ""; // TODO
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hand: ");
+        // Append each letter, + a trailing space
+        for (Letter l: letters) {
+            sb.append(l).append(" ");
+        }
+        // Trim last trailing space (and return string)
+        return sb.toString().trim();
     }
 }
