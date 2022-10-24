@@ -14,6 +14,8 @@ public class Board {
     private BoardTile[][] board;
     private String[] column = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"};
 
+    private ArrayList<String> currentWords;
+
     private DictionaryHandler dictionary;
 
     /**
@@ -28,6 +30,7 @@ public class Board {
         board = new BoardTile[length][width];
         dictionary = new DictionaryHandler();
         Random r = new Random();
+        currentWords = new ArrayList<>();
         for (int row = 0; row< length; row ++){
             for(int col = 0; col<width; col ++){
                 int randomInt = r.nextInt(14);
@@ -114,7 +117,7 @@ public class Board {
         ArrayList<String> newWords = new ArrayList<>();
 
         for(int index = 0; index < word.length(); index++){ //place word on the copy of the board
-            boardCopy[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.charAt(index));
+            boardCopy[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(Letter.wordToLetters(""+word.charAt(index)).get(0));
         }
         for(BoardTile[] currentRow:boardCopy){ //get all taken tiles
             for(BoardTile tile:currentRow){
@@ -223,14 +226,17 @@ public class Board {
      */
     public boolean placeWord(String word, int row, int column, boolean direction){
         ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
-
+        int score = 0;
         //tally score
         score += boardScore(row,column,word.length(),direction);
 
         for(int index = 0; index < word.length(); index++){
             //place letters on the board
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
+            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setType(BoardTile.Type.BLANK);
         }
+        currentWords = new ArrayList<>();
+        currentWords.addAll(allBoardWords(word,row,column,direction));
         return true;
     }
 
@@ -271,6 +277,24 @@ public class Board {
 
     }
 
+    /**
+     * Gets a list of all new words created by a word placement
+     *
+      * @param word the word being placed
+     * @param row the row the word starts on
+     * @param column the column the word starts on
+     * @param direction whether the word is left-to-right
+     * @return a list of all new words
+     */
+    public List<String> getNewWords(String word,int row, int column, boolean direction){
+        List<String> newWords = new ArrayList<>(allBoardWords(word, row, column, direction));
+        for (String aWord:newWords) {
+            if(currentWords.contains(aWord)){
+                newWords.remove(newWords.lastIndexOf(aWord));
+            }
+        }
+        return newWords;
+    }
     /**
      * Creates and returns a string representation of the board
      * @author Timothy Kennedy

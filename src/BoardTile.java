@@ -19,8 +19,6 @@ public class BoardTile {
     public enum Type {START, BLANK, X2WORD, X3WORD, X2LETTER, X3LETTER}
 
     private Type tileType;
-
-    //x and y unused, possibly removable
     private int x;
     private int y;
 
@@ -82,7 +80,7 @@ public class BoardTile {
      * @return true is the tile is taken (contains a letter), false otherwise
      */
     public boolean isTaken() {
-        return letter != ' ';
+        return letter != null ;
     }
 
     /**
