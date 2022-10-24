@@ -63,7 +63,7 @@ public class Board {
      * @param direction whether the word is left-to-right
      * @return whether the word's placement is valid
      */
-    private boolean wordPlacementOk(String word, int row, int column, boolean direction){
+    public boolean wordPlacementOk(String word, int row, int column, boolean direction){
         if(!dictionary.isValidWord(word)){
             return false;
         }
@@ -100,7 +100,7 @@ public class Board {
      * @param direction whether the word is placed top-to-bottom
      * @return the score of the word placement
      */
-    private int boardScore(int row, int column, int length,boolean direction){
+    public int boardScore(int row, int column, int length,boolean direction){
         // todo: calculate score
         return 0;
     }
@@ -170,11 +170,17 @@ public class Board {
     @Override
     public String toString() {
         String returnString = "";
-
+        int i = 0;
+        for(int j  = 0; j < column.length ; j ++){
+            returnString += " ".repeat(4) + column[j];
+        }
+        returnString += "\n\n";
         for(BoardTile[] row:board){
+            returnString += i + "" ;
             for(BoardTile tile:row){
                 returnString += " ".repeat(5-tile.toString().length()) + tile;
             }
+            i ++;
             returnString+="\n\n";
         }
         return returnString;

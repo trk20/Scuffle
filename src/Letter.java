@@ -109,11 +109,7 @@ public enum Letter {
         }
 
         return letters;
-        // Empty letters list
-        ArrayList<Letter> letters = new ArrayList<>();
-        // TODO: Find a letter for each char in the string...
 
-        return letters;
     }
 
     /**
