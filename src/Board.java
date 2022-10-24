@@ -141,8 +141,8 @@ public class Board {
         boolean x2word = false;
 
         for (int i = 0; i < wordLetters.size(); i++) {
-            if(board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.BLANK){
-                score += wordLetters.get(i).getScore();
+            if(board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3WORD){
+                x3word = true;
             } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2LETTER) {
                 score += 2 * wordLetters.get(i).getScore();
             } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3LETTER) {
@@ -150,7 +150,8 @@ public class Board {
             } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2WORD) {
                 x2word = true;
             }else{
-                x3word = true;
+                //Blank or Start tile
+                score += wordLetters.get(i).getScore();
             }
         }
         if (x2word){
