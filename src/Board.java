@@ -1,5 +1,8 @@
 import java.sql.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Class that handles the Board for the Scrabble game
@@ -16,14 +19,6 @@ public class Board {
 
     private DictionaryHandler dictionary;
 
-    /**
-     * Constructor for a Board object
-     * @author Vladimir Kovacina
-     * @author Timothy Kennedy
-     *
-     * @param length the length of the board
-     * @param width the width of the board
-     */
     public Board(int length, int width){
         board = new BoardTile[length][width];
         dictionary = new DictionaryHandler();
@@ -42,13 +37,12 @@ public class Board {
             }
         }
         //Initialize the start tile:
-        board[length/2][width/2].setType(BoardTile.Type.START);
+        board[(int)length/2][(int)width/2].setType(BoardTile.Type.START);
 
     }
 
     /**
      * Checks whether a tile is connected to the start tile
-     * @author Timothy Kennedy
      *
      * @param column the column of the tile
      * @param row the row of the tile
@@ -59,112 +53,9 @@ public class Board {
         return board[row][column].getType() == BoardTile.Type.START || column!=15 && board[row][column+1].isTaken() || column!=0 && board[row][column-1].isTaken() || row!=15 && board[row+1][column].isTaken() || row!=0 && board[row-1][column].isTaken();
     }
 
-
-    /**
-     * Creates a word starting from given coordinates
-     * @author Timothy Kennedy
-     *
-     * @param aBoard the state of the board to check
-     * @param row the row to start from
-     * @param column the column to start from
-     * @param direction whether the direction of the word is right-to-left
-     * @return the word starting at the given coordinates
-     */
-    private String wordStartingFrom(BoardTile[][] aBoard, int row, int column, boolean direction){
-        //initialize a string with the first character of the word
-        String word = "" + aBoard[row][column].getLetter();
-        int index = 1;
-
-        //going in the direction of the word, add each character to the word
-        if(direction){
-            while (row+index < 15 && aBoard[row+index][column].isTaken()){
-                word += aBoard[row+index][column].getLetter();
-                index+=1;
-            }
-        }else{
-            while (column+index < 15 && aBoard[row][column+index].isTaken()){
-                word += aBoard[row][column+index].getLetter();
-                index+=1;
-            }
-        }
-
-        return word;
-    }
-
-    /**
-     * Finds all words after a word placement
-     * @author Timothy Kennedy
-     *
-     * @param word the word being placed
-     * @param row the row the word starts on
-     * @param column the column the word starts on
-     * @param direction whether the word is left-to-right
-     * @return the list of words originating from the word placement
-     */
-    public List<String> allBoardWords(String word, int row, int column, boolean direction){
-        //make a copy of the board
-        BoardTile[][] boardCopy = new BoardTile[board.length][board[0].length];
-        for(int i = 0; i < board.length; i++){
-            for (int j = 0; j < board[0].length; j++){
-                boardCopy[i][j] = board[i][j].copy();
-            }
-        }
-
-        Set<BoardTile> allTiles = new HashSet<>();
-        ArrayList<String> newWords = new ArrayList<>();
-
-        for(int index = 0; index < word.length(); index++){ //place word on the copy of the board
-            boardCopy[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.charAt(index));
-        }
-        for(BoardTile[] currentRow:boardCopy){ //get all taken tiles
-            for(BoardTile tile:currentRow){
-                if(tile.isTaken()){
-                    allTiles.add(tile);
-                }
-            }
-        }
-
-        for (BoardTile tile:allTiles){
-            //find words
-            if(tile.isTaken()) {
-                //if tile is the start of a word, IE: no letters before it, and 1+ letters after it, add the word starting from that position to the list of words
-                if ((tile.getX() > 0 && !boardCopy[tile.getX() - 1][tile.getY()].isTaken() || tile.getX() == 0) && tile.getX() < 14 && boardCopy[tile.getX() + 1][tile.getY()].isTaken()) {
-                    newWords.add(wordStartingFrom(boardCopy, tile.getX(), tile.getY(), true));
-                }
-                if ((tile.getY() > 0 && !boardCopy[tile.getX()][tile.getY() - 1].isTaken() || tile.getY() == 0) && tile.getY() < 14 && boardCopy[tile.getX()][tile.getY() + 1].isTaken()) {
-                    newWords.add(wordStartingFrom(boardCopy, tile.getX(), tile.getY(), false));
-                }
-            }
-        }
-        return newWords;
-    }
-
-
-    /**
-     * Checks a given board state to see if it is valid after a given word placement
-     * @author Timothy Kennedy
-     *
-     * @param word the word being placed
-     * @param row the row the word starts on
-     * @param column the column the word starts on
-     * @param direction whether the word is placed left-to-right
-     * @return whether the board state is valid
-     */
-    private boolean boardValid(String word, int row, int column, boolean direction) {
-        for(String currentWord:allBoardWords(word,row,column,direction)){
-            if(!dictionary.isValidWord(currentWord)){
-                //System.out.println(currentWord + " is not a valid word");
-                return false;
-            }
-        }
-        return true;
-    }
-
-
     /**
      * Checks whether a specified word is allowed to be placed in a certain spot
      * Ignores the creation of invalid words due to placement location
-     * @author Timothy Kennedy
      *
      * @param word the word to be checked
      * @param row the row the word would start at
@@ -173,6 +64,9 @@ public class Board {
      * @return whether the word's placement is valid
      */
     public boolean wordPlacementOk(String word, int row, int column, boolean direction){
+        if(!dictionary.isValidWord(word)){
+            return false;
+        }
 
         //flag to track if any of the letters are connected to the start tile
         boolean connectedToStart = false;
@@ -183,7 +77,7 @@ public class Board {
         }
         for(int i = 0; i < word.length(); i++){
             BoardTile currentTile = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
-            if(currentTile.isTaken() && currentTile.getLetter() != word.charAt(i)){
+            if(currentTile.isTaken() && currentTile.getLetter().getChar() != word.toUpperCase().charAt(i)){
                 //if a letter of the word would overwrite a previous word's letter
                 return false;
             }
@@ -193,12 +87,12 @@ public class Board {
             }
         }
 
-        return connectedToStart && boardValid(word, row, column, direction);
+        return connectedToStart;
+
     }
 
-
     /**
-     * Calculates the score given by a placed word
+     * calculates the score given by a placed word
      *
      * @param length the length of the word
      * @param row the row of the board to the word starts on
@@ -206,48 +100,87 @@ public class Board {
      * @param direction whether the word is placed top-to-bottom
      * @return the score of the word placement
      */
-    private int boardScore(int row, int column, int length,boolean direction){
+    public int boardScore(int row, int column, int length,boolean direction){
         // todo: calculate score
         return 0;
     }
 
     /**
      * Places a word on the board
-     * @author Timothy Kennedy
      *
      * @param word the word to be placed
      * @param row the row of the board to start the word on
      * @param column the column of the board to start the word on
      * @param direction whether the word is left-to-right
-     * @return the score tallied by the word placement
+     * @return true is word was placed successfully, false otherwise
      */
-    public int placeWord(String word, int row, int column, boolean direction){
+    public boolean placeWord(String word, int row, int column, boolean direction){
+        ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
 
-        int score = 0;
-
-        //tally score
-        score += boardScore(row,column,word.length(),direction);
+        //check if word placement is ok
+        if(!wordPlacementOk(word,row,column,direction)){
+            System.out.println("Word placement invalid");
+            return false;
+        }
 
         for(int index = 0; index < word.length(); index++){
             //place letters on the board
-            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.charAt(index));
+            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
         }
-        return score;
+        return true;
     }
 
-    /**
-     * Creates and returns a string representation of the board
-     * @author Timothy Kennedy
-     *
-     * @return a string representation of the board
-     */
+    public int getWordScore(String word,int row, int column, boolean direction){
+
+        ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
+        int score = 0;
+        if (!wordPlacementOk(word,row,column,direction)){
+            return score;
+        }
+        boolean x3word = false;
+        boolean x2word = false;
+
+        for (int i = 0; i < wordLetters.size(); i++) {
+            if(board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3WORD){
+                x3word = true;
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2LETTER) {
+                score += 2 * wordLetters.get(i).getScore();
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3LETTER) {
+                score += 3 * wordLetters.get(i).getScore();
+            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2WORD) {
+                x2word = true;
+            }else{
+                //Blank or Start tile
+                score += wordLetters.get(i).getScore();
+            }
+        }
+        if (x2word){
+            score *= 2;
+        }
+        if (x3word){
+            score +=3;
+        }
+
+
+        System.out.println("Player Score:"+ score);
+        return score;
+
+    }
+
     @Override
     public String toString() {
         String returnString = "";
+        int i = 0;
+        for(int j  = 0; j < column.length ; j ++){
+            returnString += " ".repeat(4) + column[j];
+        }
+        returnString += "\n\n";
         for(BoardTile[] row:board){
+            returnString += i + "" ;
             for(BoardTile tile:row){
                 returnString += " ".repeat(5-tile.toString().length()) + tile;
             }
+            i ++;
             returnString+="\n\n";
         }
         return returnString;

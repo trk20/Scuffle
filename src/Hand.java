@@ -7,13 +7,15 @@ import java.util.List;
  * When playing letters, verifies the Hand contains them.
  *
  * @author Alexandre Marques - 101189743
- * @version 2022-10-22
+ * @version 2022-10-23
  */
 public class Hand {
     /** The game's draw pile (should be the same for all players/hands in the game) */
     final private DrawPile pile;
     /** The Hand's contained letters*/
     final private List<Letter> letters;
+    /** Hand's maximum capacity. Always draw back up to it when using letters*/
+    final static private int HAND_SIZE = 7;
 
     /**
      * Hand constructor, saves draw pile and
@@ -28,16 +30,33 @@ public class Hand {
     }
 
     /**
+     * Keeps drawing (with draw()) until the HAND_SIZE Letter limit is reached.
+     *
+     * @see #draw()
+     * @throws NullPointerException if draw pile has no more letters to draw.
+     * @author Alexandre Marques - 101189743
+     */
+    // TODO: Consider making custom exception (i.e. EmptyPileException)
+    public void fillHand() throws NullPointerException {
+        // Keep drawing until reaching hand limit
+        while(letters.size() < HAND_SIZE) {
+            draw();
+        }
+    }
+
+    /**
      * Draw a letter from the game's DrawPile,
      * then add it to the hand's letters.
      *
      * @throws NullPointerException if draw pile has no more letters to draw.
      * @author Alexandre Marques - 101189743
      */
-    public void draw() throws NullPointerException {
+    // TODO: Consider making custom exception (i.e. EmptyPileException)
+    private void draw() throws NullPointerException {
+        // Check for valid letter (non-null value)
         Letter newLetter = pile.draw();
         // Indicates empty draw pile
-        if(newLetter == null){
+        if (newLetter == null) {
             throw new NullPointerException("No more letters in draw pile.");
         }
         // Should be a valid letter (not null)
@@ -69,8 +88,10 @@ public class Hand {
      * @return If the letters used are all in the hand, returns true.
      *  Otherwise, return False.
      * @author Alexandre Marques - 101189743
+     *
+     * @throws NullPointerException to indicate that the game's DrawPile is empty.
      */
-    public boolean useLetters(List<Letter> used){
+    public boolean useLetters(List<Letter> used) throws NullPointerException{
         // Does not contain letters
         if(!containsLetters(used)){
             return false;
@@ -79,8 +100,25 @@ public class Hand {
         for(Letter l: used){
             letters.remove(l);
         }
+
+        /* Letters were used, so Hand needs to be filled.
+         * Note: Throws exception for empty draw pile!
+         */
+        fillHand();
+
         // Valid removal, return true
         return true;
+    }
+
+    /**
+     * Return the hand as an array of chars
+     */
+    public List<Character> getCharLetters(){
+        List<Character> chars = new ArrayList<>(letters.size());
+        for(Letter l: letters){
+            chars.add(l.getCharLetter());
+        }
+        return chars;
     }
 
     /**

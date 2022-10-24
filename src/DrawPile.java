@@ -48,6 +48,20 @@ public class DrawPile {
     }
 
     /**
+     * Adds a list of discarded letters back into the pile.
+     * Reshuffles pile to keep a random order.
+     *
+     * @param discarded List of discarded letters to add back to the pile
+     * @author Alexandre Marques - 101189743
+     */
+    public void addToPile(List<Letter> discarded) {
+        // Add all the discarded letters back to the pile
+        letterPile.addAll(discarded);
+        // Shuffle list for random draw order
+        Collections.shuffle(letterPile);
+    }
+
+    /**
      * Removes and returns a random letter from the letterPile.
      * In the case of an empty pile, returns null.
      *
