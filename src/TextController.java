@@ -9,6 +9,7 @@ import java.util.*;
  * @Version OCT-23
  */
 public class TextController {
+
     private Scanner inputHandler;
 
 
@@ -16,6 +17,38 @@ public class TextController {
         inputHandler = new Scanner(System.in);
     }
 
+    /**
+     * Verifies that the action given is either d or p
+     * @param action: the user input
+     * @return: True/false depending on if it's valid
+     */
+    public boolean isValidAction(String action){
+        if (action.length() != 1){
+            System.out.println("Invalid action expected length 1 got length "+action.length());
+            return false;
+        }
+        if (!action.equals("p") && !action.equals("d")){
+           System.out.println("Expected value p or d received "+action);
+           return false;
+        }
+        return true;
+    }
+    /**
+     * Asks the user if they want to discard or place cards
+     * @return: their answer
+     */
+    public boolean getUserAction(){
+        String input = "";
+        boolean isValidInput = false;
+
+        while (!isValidInput){
+            System.out.println("Please indicate if you would like to place letters or discard letters");
+            System.out.println("For discard enter in d, For place enter in p");
+            input = inputHandler.nextLine();
+            isValidInput = isValidAction(input);
+        }
+        return input.equals("d") ? ScrabbleModel.DISCARD : ScrabbleModel.PLACE;
+    }
     /**
      * Checks if a word is only letters
      * @param word: input
@@ -31,13 +64,14 @@ public class TextController {
 
     /**
      * Asks a user for a word
+     * @param message: Prompting message *optional
      * @return: the word
      */
-    public String askForWord(){
+    public String askForWord(String message){
         String word = "";
         boolean validWord = false;
         while (!validWord){
-            System.out.println("Please Enter your word");
+            System.out.println(Objects.requireNonNullElse(message, "Please Enter your word"));
             word = inputHandler.nextLine();
             validWord = isValidWord(word);
         }
@@ -50,13 +84,27 @@ public class TextController {
      * @return: True/False depending on if it's valid
      */
     private Boolean isValidCoords(String coords){
-        if (coords.length() != 2){
+        if (coords.length() != 2 && coords.length() != 3){
             System.out.println("Invalid input, Coords are too long must be length 2 found "+coords.length());
             return false;
         }
-        if (!(Character.isDigit(coords.charAt(0)) && Character.isLetter(coords.charAt(1)) || Character.isDigit(coords.charAt(1)) && Character.isLetter(coords.charAt(0)))){
-            System.out.println("Invalid input, Coords are not one letter and a number");
-            return false;
+        if (coords.length() == 3){
+            if (Character.isLetter(coords.charAt(0))){
+                if (!Character.isDigit(coords.charAt(1)) || !Character.isDigit(coords.charAt(2))){
+                    System.out.println("Invalid input, Coords are not one letter and a number");
+                    return false;
+                }
+            }else{
+                if (!Character.isDigit(coords.charAt(0)) || !Character.isDigit(coords.charAt(1))){
+                    System.out.println("Invalid input, Coords are not one letter and a number");
+                    return false;
+                }
+            }
+        } else {
+            if (!(Character.isDigit(coords.charAt(0)) && Character.isLetter(coords.charAt(1)) || Character.isDigit(coords.charAt(1)) && Character.isLetter(coords.charAt(0)))){
+                System.out.println("Invalid input, Coords are not one letter and a number");
+                return false;
+            }
         }
         return true;
     }
@@ -114,10 +162,25 @@ public class TextController {
         return Integer.parseInt(numPlayers);
     }
 
+    /**
+     * Asks for player name
+     * @param index: the index of the player list
+     * @return: the name
+     */
+    public String askForPlayerName(int index){
+        String word = "";
+        boolean validWord = false;
+        while (!validWord){
+            System.out.println("Please enter the name of Player "+ (index+1));
+            word = inputHandler.nextLine();
+            validWord = isValidWord(word);
+        }
+        return word;
+    }
+
 
     public static void main(String[] args){
         TextController t = new TextController();
-        t.askForWord();
         t.askForCoords();
     }
 }

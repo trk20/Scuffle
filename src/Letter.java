@@ -87,6 +87,14 @@ public enum Letter {
     }
 
     /**
+     *
+     * @return the char representation of a letter
+     */
+    public char getCharLetter(){
+        return character;
+    }
+
+    /**
      * Convert a word string to a list of Letters.
      * Assumes all characters are valid.
      *
@@ -107,11 +115,6 @@ public enum Letter {
                 }
             }
         }
-
-        return letters;
-        // Empty letters list
-        ArrayList<Letter> letters = new ArrayList<>();
-        // TODO: Find a letter for each char in the string...
 
         return letters;
     }

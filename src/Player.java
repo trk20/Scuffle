@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,7 @@ public class Player {
         this.model = model;
         this.hand = new Hand(model.getDrawPile());
         this.score = 0;
+        fillHand();
     }
 
     /**
@@ -73,6 +75,33 @@ public class Player {
      */
     public void addPoints(int points){
         this.score += points;
+    }
+
+    /**
+     * Fills the hand
+     */
+    private void fillHand(){
+        hand.fillHand();
+    }
+
+    public Hand getHand(){
+        return hand;
+    }
+
+    /**
+     * Verifies if a player has the letters to place a given word
+     * @param word
+     * @return
+     */
+    public boolean canPlaceWord(String word){
+        char[] ch = word.toCharArray();
+        List<Character> handLetters = hand.getCharLetters();
+        for(char c : ch){
+            if (!handLetters.contains(Character.toUpperCase(c))){
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

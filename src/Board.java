@@ -63,7 +63,7 @@ public class Board {
      * @param direction whether the word is left-to-right
      * @return whether the word's placement is valid
      */
-    private boolean wordPlacementOk(String word, int row, int column, boolean direction){
+    public boolean wordPlacementOk(String word, int row, int column, boolean direction){
         if(!dictionary.isValidWord(word)){
             return false;
         }
