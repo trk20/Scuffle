@@ -3,7 +3,7 @@
 
 ## Rule set [adapted from hasbro](https://scrabble.hasbro.com/en-us/rules)
 ### Setup:
-- There are 100 tiles in the letter bag ([M3](#future-milestones))
+- There are 100 tiles in the letter bag (Unfinished until [M3](#future-milestones))
 - One game board
 - Four racks (up to four players can play)
 - 
