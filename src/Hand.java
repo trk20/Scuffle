@@ -37,7 +37,7 @@ public class Hand {
      * @author Alexandre Marques - 101189743
      */
     // TODO: Consider making custom exception (i.e. EmptyPileException)
-    private void fillHand() throws NullPointerException {
+    public void fillHand() throws NullPointerException {
         // Keep drawing until reaching hand limit
         while(letters.size() < HAND_SIZE) {
             draw();
@@ -108,6 +108,17 @@ public class Hand {
 
         // Valid removal, return true
         return true;
+    }
+
+    /**
+     * Return the hand as an array of chars
+     */
+    public List<Character> getCharLetters(){
+        List<Character> chars = new ArrayList<>(letters.size());
+        for(Letter l: letters){
+            chars.add(l.getCharLetter());
+        }
+        return chars;
     }
 
     /**
