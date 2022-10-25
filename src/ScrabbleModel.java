@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -96,8 +95,6 @@ public class ScrabbleModel {
         int x = getXCoord(coords);
         int y = getYCoord(coords);
         boolean direction = getDirection(coords);
-        List<String> newWords = board.getNewWords(word, x, y, direction);
-        System.out.println("New words "+newWords);
 
         if (!p.containsLetters(word)){
             System.out.println("You do not contain the letters needed for the word");
@@ -113,6 +110,8 @@ public class ScrabbleModel {
             System.out.println("Coords are not valid based on current board arrangement");
             return false;
         }
+//        List<String> newWords = board.getNewWords(word, x, y, direction);
+//        System.out.println("New words "+newWords);
         return true;
     }
 

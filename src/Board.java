@@ -243,7 +243,7 @@ public class Board {
         }
 
         playedWords.add(Letter.lettersToString(word).toUpperCase());
-        System.out.println("Played Words So far: "+ playedWords);
+//        System.out.println("Played Words So far: "+ playedWords);
         return true;
     }
 
