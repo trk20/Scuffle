@@ -43,7 +43,7 @@ public class TextController {
 
         while (!isValidInput){
             System.out.println("Please indicate if you would like to place letters or discard letters");
-            System.out.println("For discard enter in d, For place enter in p");
+            System.out.println("To discard enter in d, To place enter in p");
             input = inputHandler.nextLine();
             isValidInput = isValidAction(input);
         }
@@ -119,8 +119,8 @@ public class TextController {
 
         while (!validCoords){
             System.out.println("Please enter your coordinates. They must be in one of the following formats: 2d, d2");
-            System.out.println("If the Row(Letter) is entered first the word will be placed horizontally and" +
-                    " if the Column(number) is entered first the word will be placed vertically");
+            System.out.println("Letter/Row first (d2): Horizontal, left to right placement");
+            System.out.println("Number/Column first (2d): Vertical, top to bottom placement");
             coords = inputHandler.nextLine();
             validCoords = isValidCoords(coords);
         }
@@ -151,15 +151,33 @@ public class TextController {
      */
     public int askForNumPlayers(){
         String numPlayers = "";
+        int playersInt = 0;
         boolean validNum = false;
 
-        while (!validNum){
-            System.out.println("How many players would like to play? Maximum 9");
+        // Makes sure the given input is within the model's max players
+        while (playersInt <= 0){
+            System.out.println("How many players would like to play? Up to "
+                    +ScrabbleModel.MAX_PLAYERS+" players can play");
             numPlayers = inputHandler.nextLine();
+            // Checks if it's a single digit (0-9)
             validNum = isValidNum(numPlayers);
+
+            // Check if the number is within the range
+            if(validNum) { // Makes sure the parseInt doesn't crash the program
+                playersInt = Integer.parseInt(numPlayers);
+                if (playersInt > ScrabbleModel.MAX_PLAYERS) {
+                    // Set back to 0 if the players are above the model's max players. Ask again.
+                    System.out.println("Too many players want to play, max is 4. " +
+                            "Asked for " + playersInt);
+                    playersInt = 0;
+                } else if (playersInt < ScrabbleModel.MIN_PLAYERS) {
+                    System.out.println("At least "+ScrabbleModel.MIN_PLAYERS+" player(s) have to play! " +
+                            "Asked for "+ playersInt);
+                }
+            }
         }
 
-        return Integer.parseInt(numPlayers);
+        return playersInt;
     }
 
     /**
