@@ -64,12 +64,17 @@ public class DictionaryHandler {
         board.placeWord("revoting",5,7,false);
         System.out.println(board);
         //System.out.println(board.getNewWords("revoting",5,7,false));
-        board.getWordScore("revoting",5,7,false);
+        //board.getWordScore("revoting",5,7,false);
+        board.boardScore("revoting",5,7,false);
 
         board.placeWord("joked", 8,6,true);
+        System.out.println(board);
+        board.boardScore("joked", 8,6,true);
+
         board.placeWord("yex",4,8,false);
         System.out.println(board);
         board.boardScore("yex",4,8,false);
+
         //BoardTile[][] b1 = board.getBoard();
        // System.out.println(" Is it taken: " + b1[5][7].isTaken()+ " The x coord:"+b1[5][7].getX() + " The y coord: "+ b1[5][7].getY() );
 

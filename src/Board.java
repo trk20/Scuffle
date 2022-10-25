@@ -134,7 +134,7 @@ public class Board {
             //place letters on the board
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
         }
-        playedWords.add(word);
+        playedWords.add(word.toUpperCase());
         System.out.println("Played Words So far: "+ playedWords);
         return true;
     }
@@ -194,12 +194,13 @@ public class Board {
             }
             //new word will be opposite direction from current word
             String newWord = createWord(board,start,end,!direction );
-            if(dictionary.isValidWord(newWord)){
+            if(dictionary.isValidWord(newWord) && !playedWords.contains(newWord)){
                 score +=getWordScore(newWord, start.getX(), start.getY(), !direction);
                 newWords.add(newWord);
             }
         }
         System.out.println("New Words: "+ newWords);
+        playedWords.addAll(newWords);
         return score;
     }
 
