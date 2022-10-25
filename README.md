@@ -76,6 +76,11 @@ This class handles running the game and delegating tasks to other classes. This 
 from the MVC design pattern. This class is also the main class which starts the game and handles the user's turns as well as
 it handles processing and parsing of the user input.  
 
+### Class Board :
+This class handles the internal representation of the board's current state. It contains the methods to validate and place words, and to return the score given by a placement.
+
+
+
 ## Missing Features and bugs
 ### Milestone 1
 - Documentation
