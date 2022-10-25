@@ -43,7 +43,7 @@ public class TextController {
 
         while (!isValidInput){
             System.out.println("Please indicate if you would like to place letters or discard letters");
-            System.out.println("For discard enter in d, For place enter in p");
+            System.out.println("To discard enter in d, To place enter in p");
             input = inputHandler.nextLine();
             isValidInput = isValidAction(input);
         }
@@ -119,8 +119,8 @@ public class TextController {
 
         while (!validCoords){
             System.out.println("Please enter your coordinates. They must be in one of the following formats: 2d, d2");
-            System.out.println("If the Row(Letter) is entered first the word will be placed horizontally and" +
-                    " if the Column(number) is entered first the word will be placed vertically");
+            System.out.println("Letter/Row first (d2): Horizontal, left to right placement");
+            System.out.println("Number/Column first (2d): Vertical, top to bottom placement");
             coords = inputHandler.nextLine();
             validCoords = isValidCoords(coords);
         }
@@ -167,8 +167,12 @@ public class TextController {
                 playersInt = Integer.parseInt(numPlayers);
                 if (playersInt > ScrabbleModel.MAX_PLAYERS) {
                     // Set back to 0 if the players are above the model's max players. Ask again.
-                    System.out.println("Too many players want to play, max is 4 but asked for " + playersInt);
+                    System.out.println("Too many players want to play, max is 4. " +
+                            "Asked for " + playersInt);
                     playersInt = 0;
+                } else if (playersInt < ScrabbleModel.MIN_PLAYERS) {
+                    System.out.println("At least "+ScrabbleModel.MIN_PLAYERS+" player(s) have to play! " +
+                            "Asked for "+ playersInt);
                 }
             }
         }

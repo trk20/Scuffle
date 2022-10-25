@@ -1,7 +1,8 @@
 import java.util.*;
 
 /**
- * Class that controls/models the overall scrabble game
+ * Class that controls/models the overall scrabble game.
+ * For Milestone 1, also acts as a text "view".
  *
  * @author: Kieran Rourke
  * @version OCT-23
@@ -20,6 +21,8 @@ public class ScrabbleModel {
     private final DrawPile drawPile;
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
+    /** Min players, should be 2 but 1 could work if we want to allow solo play */
+    public static final int MIN_PLAYERS = 1;
 
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
@@ -77,7 +80,7 @@ public class ScrabbleModel {
     }
 
     private boolean getDirection(String coords){
-        return !Character.isLetter(coords.charAt(0));
+        return Character.isLetter(coords.charAt(0));
     }
 
     /**
@@ -191,8 +194,9 @@ public class ScrabbleModel {
 
         turn = incrementTurn(turn);
         currentPlayer = players.get(turn-1);
+        System.out.println("==========================");
         System.out.printf("It is Player %d/%s's turn\n", turn, currentPlayer);
-        System.out.println("Your current hand is " + currentPlayer.getHand());
+        System.out.println("Your current hand is \n\t" + currentPlayer.getHand());
         action = getAction();
 
         if(action == PLACE){
@@ -200,6 +204,7 @@ public class ScrabbleModel {
         }else{
             handleDiscard(currentPlayer);
         }
+        System.out.println("Your new hand is \n\t" + currentPlayer.getHand());
     }
 
     /**
