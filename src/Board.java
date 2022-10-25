@@ -17,6 +17,8 @@ public class Board {
 
     private DictionaryHandler dictionary;
 
+    private ArrayList<String> playedWords;
+
     /**
      * Constructor for a Board object
      * @author Vladimir Kovacina
@@ -28,6 +30,7 @@ public class Board {
     public Board(int length, int width){
         board = new BoardTile[length][width];
         dictionary = new DictionaryHandler();
+        playedWords = new ArrayList<>();
         Random r = new Random();
         currentWords = new ArrayList<>();
         for (int row = 0; row< length; row ++){
@@ -203,19 +206,24 @@ public class Board {
     }
 
 
-//    /**
-//     * Calculates the score given by a placed word
-//     *
-//     * @param length the length of the word
-//     * @param row the row of the board to the word starts on
-//     * @param column the column of the board the word starts on
-//     * @param direction whether the word is placed top-to-bottom
-//     * @return the score of the word placement
-//     */
-//    public int boardScore(int row, int column, int length,boolean direction){
-//        // todo: calculate score
-//        return 0;
-//    }
+
+    /**
+     * Calculates the score given by a placed word
+     *
+     * @param word the word the user placed on the board
+     * @param row the row of the board to the word starts on
+     * @param column the column of the board the word starts on
+     * @param direction whether the word is placed top-to-bottom
+     * @return the score of the word placement
+     */
+    public int boardScore(List<Letter> word, int row, int column,boolean direction){
+        int totalScore = 0;
+        totalScore += this.getWordScore(word,row,column,direction);
+//        System.out.println("Score without additional words: "+ totalScore);
+        totalScore += this.getAdditionalScores(word,row,column,direction);
+//       System.out.println("Total Score: "+ totalScore);
+        return totalScore;
+    }
 
     /**
      * Places a word on the board
@@ -226,51 +234,164 @@ public class Board {
      * @param column the column of the board to start the word on
      * @param direction whether the word is left-to-right
      */
-    public void placeWord(List<Letter> word, int row, int column, boolean direction){
-//        int score = 0;
-//        //tally score
-//        score += boardScore(row,column,word.size(),direction);
+    public boolean placeWord(List<Letter> word, int row, int column, boolean direction){
 
         for(int index = 0; index < word.size(); index++){
             //place letters on the board
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.get(index));
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setType(BoardTile.Type.BLANK);
         }
-        currentWords = new ArrayList<>();
-        currentWords.addAll(allBoardWords(word,row,column,direction));
+
+        playedWords.add(Letter.lettersToString(word).toUpperCase());
+        System.out.println("Played Words So far: "+ playedWords);
+        return true;
     }
 
-    public int getWordScore(List<Letter> word,int row, int column, boolean direction){
+    /**
+     * Calculates the score for any additional words created when the user placed his word
+     * @param word The initial word the user placed
+     * @param row The row the word begins in
+     * @param column The column the word begins in
+     * @param direction The direction of the word: true is horizontal, false is vertical
+     * @return returns the combined score of all the additional words
+     */
+    public int getAdditionalScores(List<Letter> word, int row, int column, boolean direction){
+        int score = 0;
+        ArrayList<String> newWords = new ArrayList<>();
+        for (int i = 0; i< word.size(); i++){
+            BoardTile current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
+            BoardTile start= current;
+            BoardTile end = current;
+            //X is row, Y is col
+            int j = 0;
+            //if words is Vertical
+            if(!direction){
+                //Check left /find start
+
+                while(board[current.getX()][current.getY() - j].isTaken()){
+                    start = board[current.getX()][current.getY() - j];
+                    j ++;
+                }
+
+                current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
+                j = 0;
+                //Check right /find end
+                while(board[current.getX()][current.getY() + j].isTaken()){
+                    end = board[current.getX()][current.getY() + j];
+                    j ++;
+                }
+
+            // word is Horizontal
+            }else{
+                while(board[current.getX() -j][current.getY()].isTaken()){
+                    start = board[current.getX() -j][current.getY()];
+                    // decrease row
+                    j ++;
+                }
+                current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
+                j = 0;
+
+                while(board[current.getX() +j][current.getY()].isTaken()){
+                    end = board[current.getX() +j][current.getY()];
+                    // increase row
+                    j ++;
+                }
+            }
+            //new word will be opposite direction from current word
+            String newWord = createWord(board,start,end,!direction);
+            if(dictionary.isValidWord(newWord) && !playedWords.contains(newWord)){
+                score +=getWordScore(Letter.wordToLetters(newWord), start.getX(), start.getY(), !direction);
+                newWords.add(newWord);
+            }
+        }
+        playedWords.addAll(newWords);
+        return score;
+    }
+
+
+    /**
+     * Creates a word, given the start and end tile and the direction of the word
+     *
+     * @author: Vladimir Kovacina
+     *
+     * @param aBoard the board on which the tiles are on
+     * @param start the start tile of the word, tile where the word begins
+     * @param end the end tile of the word, tile where the word ends
+     * @param direction the diredtion of the word
+     * @return returns the new created word
+     */
+    public String createWord(BoardTile aBoard[][], BoardTile start, BoardTile end, boolean direction){
+        String createdWord = "";
+        //System.out.println("Start:"+ start.getLetter().getCharLetter() + " End:" + end.getLetter().getCharLetter());
+        int length = 0;
+        if (direction){
+            length = end.getY() - start.getY() + 1;
+
+        }
+        else{
+            length = end.getX() - start.getX() + 1;
+
+        }
+
+        for ( int i = 0; i < length ;i++ ){
+            //Horizontal
+            if (direction){
+               createdWord += aBoard[start.getX()][start.getY() + i].getLetter();
+            //Vertical Word
+            }else{
+                createdWord += aBoard[start.getX() + i][start.getY()].getLetter();
+            }
+        }
+        //System.out.println("Created Word: " + createdWord);
+        return createdWord;
+    }
+
+    /**
+     * Calculates the score of a single word, based off the value of the letters and tile multipliers
+     *
+     * @author Vladimir Kovacina
+     *
+     * @param word The word to calculate the score of
+     * @param row The row the word begins in
+     * @param column The column the word begins in
+     * @param direction The direction of the word
+     * @return int The score of the word
+     */
+    public int getWordScore(List<Letter> word, int row, int column, boolean direction){
+    
         int score = 0;
         if (!wordInBoard(word,row,column,direction)){
             return score;
         }
-        boolean x3word = false;
-        boolean x2word = false;
+        int multiplier = 1;
 
         for (int i = 0; i < word.size(); i++) {
             if(board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3WORD){
-                x3word = true;
+                multiplier *= 3;
+                // Clear tile
+                board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].setType(BoardTile.Type.BLANK);
             } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2LETTER) {
                 score += 2 * word.get(i).getScore();
+                // Clear tile
+                board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].setType(BoardTile.Type.BLANK);
             } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3LETTER) {
                 score += 3 * word.get(i).getScore();
-            } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2WORD) {
-                x2word = true;
+                // Clear tile
+                board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].setType(BoardTile.Type.BLANK);
+            } else if ((board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2WORD)
+                ||(board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.START))
+            {
+                multiplier *= 2;
+                // Clear tile
+                board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].setType(BoardTile.Type.BLANK);
             }else{
-                //Blank or Start tile
                 score += word.get(i).getScore();
             }
         }
-        if (x2word){
-            score *= 2;
-        }
-        if (x3word){
-            score +=3;
-        }
 
+        score *= multiplier;
 
-        System.out.println("Player Score:"+ score);
+//        System.out.println("Player Score:"+ score);
         return score;
 
     }
@@ -293,9 +414,10 @@ public class Board {
         }
         return newWords;
     }
+  
     /**
      * Creates and returns a string representation of the board
-     * @author Timothy Kennedy
+     * @author Timothy Kennedy and Vladimir Kovacina
      *
      * @return a string representation of the board
      */

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Enumeration class Letter, contains constants for each Scrabble letter.
@@ -66,7 +67,6 @@ public enum Letter {
      * @author Alexandre Marques - 101189743
      * @return Letter's Scrabble score.
      */
-    // TODO: Unit tests for this
     public int getScore() {
         return score;
     }
@@ -102,8 +102,24 @@ public enum Letter {
                 }
             }
         }
-
         return letters;
+    }
+
+    /**
+     * Convert a list of Letters to a word string.
+     * Assumes all characters are valid.
+     *
+     * @author Alexandre Marques
+     * @param word A List of letters corresponding to the word's characters.
+     * @return A string corresponding to the word's letters.
+     * @author Alexandre Marques - 101189743
+     */
+    public static String lettersToString(List<Letter> word){
+        StringBuilder str = new StringBuilder();
+        for (Letter l: word) {
+            str.append(l.toString());
+        }
+        return str.toString();
     }
 
     /**
@@ -113,7 +129,6 @@ public enum Letter {
      * @return The character associated to the Letter, as a string.
      */
     @Override
-    // TODO: Unit tests for this
     public String toString() {
         return ""+character; // Concatenate char to convert to String
 
