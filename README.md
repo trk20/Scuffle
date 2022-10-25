@@ -65,7 +65,16 @@ In case of a tie, the player with the highest score before adding or deducting u
 [Unimplemented](#milestone-1)
 
 ## Design
-- TODO
+### Class TextController:
+This class focuses on prompting and parsing the user input and ensuring that the input is in the desired format.
+This class follows a pattern of prompting/scanning method and a verifying method. The prompter runs in a loop 
+and everytime a user's input is entered, the verifier is called to verify the input and if it is valid,
+the prompter returns the value.
+
+### Class ScrabbleModel:
+This class handles running the game and delegating tasks to other classes. This class follows the model pattern
+from the MVC design pattern. This class is also the main class which starts the game and handles the user's turns. 
+
 ## Missing Features and bugs
 ### Milestone 1
 - Documentation

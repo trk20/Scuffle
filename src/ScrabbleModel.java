@@ -14,7 +14,6 @@ public class ScrabbleModel {
     private int numPlayers;
     private final int SIZE = 15;
     private int turn = 0;
-//    private DictionaryHandler wordDictionary;
     public static final Boolean DISCARD = false;
     public static final Boolean PLACE = true;
     /** Model's shared DrawPile */
@@ -31,7 +30,6 @@ public class ScrabbleModel {
         this.inputHandler = new TextController();
         this.drawPile = new DrawPile();
         this.gameFinished = false;
-//        wordDictionary = new DictionaryHandler();
     }
 
     /**
@@ -222,6 +220,5 @@ public class ScrabbleModel {
     public static void main(String[] args){
         ScrabbleModel s = new ScrabbleModel();
         s.startGame();
-//        System.out.println(Letter.S);
     }
 }
