@@ -65,7 +65,23 @@ In case of a tie, the player with the highest score before adding or deducting u
 [Unimplemented](#milestone-1)
 
 ## Design
-- TODO
+### Draw Pile
+- Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
+- Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
+- Letters can be added back in (for discarding) and drawn from the pile (to remove them)
+### Hand
+- Uses a list of letters to hold up to 7 letters
+  - If possible, always fills up to the max (as long as there are letters to draw), otherwise alerts model
+- Allow to check if the hand contains a subset of letters
+- Allows to use letters, or see letters
+### Player
+- Can add to their own points, or display them
+- Can check if they have letters, play letters, or discard them
+- Cna display their info (name, score, hand information)
+### Letter (enums)
+- Has information on frequency of appearence, a display character, and a point value.
+- Has static methods to return lists of Letters from strings or vice-versa
+
 ## Missing Features and bugs
 ### Milestone 1
 - Documentation
