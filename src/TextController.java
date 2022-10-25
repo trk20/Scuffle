@@ -151,15 +151,28 @@ public class TextController {
      */
     public int askForNumPlayers(){
         String numPlayers = "";
+        int playersInt = 0;
         boolean validNum = false;
 
-        while (!validNum){
-            System.out.println("How many players would like to play? Maximum 9");
+        // Validates number, and make sure it's within the model's max players
+        while (!validNum || playersInt <= 0){
+            System.out.println("How many players would like to play? Up to "
+                    +ScrabbleModel.MAX_PLAYERS+" players can play");
             numPlayers = inputHandler.nextLine();
+            // Checks if it's a single digit (0-9)
             validNum = isValidNum(numPlayers);
+
+            // Check if the number is
+            playersInt = Integer.parseInt(numPlayers);
+            if(playersInt > ScrabbleModel.MAX_PLAYERS){
+                // Set back to 0 if the players are above the model's max players. Ask again.
+                System.out.println("Too many players want to play, max is 4 but asked for "+playersInt);
+                playersInt = 0;
+            }
+
         }
 
-        return Integer.parseInt(numPlayers);
+        return playersInt;
     }
 
     /**
@@ -178,9 +191,9 @@ public class TextController {
         return word;
     }
 
-
+/*
     public static void main(String[] args){
         TextController t = new TextController();
         t.askForCoords();
-    }
+    }*/
 }
