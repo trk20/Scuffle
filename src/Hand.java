@@ -42,7 +42,7 @@ public class Hand {
     private void fillHand() throws NullPointerException {
         // Keep drawing until reaching hand limit
         while(letters.size() < HAND_SIZE) {
-            draw();
+            draw(); // Throws here (if empty draw)
         }
     }
 
@@ -113,14 +113,14 @@ public class Hand {
     }
 
     /**
-     * Return the hand as an array of chars
+     * Get held letters. Useful for end of game operations.
+     * (Checking for empty hand, remaining letters)
+     *
+     * @return List of held Letter(s)
+     * @author Alexandre Marques
      */
-    public List<Character> getCharLetters(){
-        List<Character> chars = new ArrayList<>(letters.size());
-        for(Letter l: letters){
-            chars.add(l.getCharLetter());
-        }
-        return chars;
+    public List<Letter> getHeldLetters(){
+        return letters;
     }
 
     /**

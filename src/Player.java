@@ -92,4 +92,13 @@ public class Player {
         // Others shouldn't have access to the Hand object, just need the string for now
         return hand.toString();
     }
+
+    /**
+     * Checks if the Player has no more letters to play.
+     * @return True if there are no more letters in the Hand.
+     */
+    public boolean outOfLetters(){
+        // No more letters in the hand -> size == 0
+        return hand.getHeldLetters().size() == 0;
+    }
 }

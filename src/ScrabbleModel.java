@@ -23,12 +23,15 @@ public class ScrabbleModel {
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
     public static final int MIN_PLAYERS = 1;
+    /** False until something triggers a game to end (Player out of Letters, or no more possible moves)*/
+    boolean gameFinished;
 
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
         this.inputHandler = new TextController();
         // this.wordDictionary = new DictionaryHandler(); FIXME: Remove?
         this.drawPile = new DrawPile();
+        this.gameFinished = false;
     }
 
     /**
@@ -110,9 +113,9 @@ public class ScrabbleModel {
     /**
      * Handles the user wanting to discard letters
      * @param currentPlayer The player whose turn it is
+     * @author Kieran, Alexandre
      */
     public void handleDiscard(Player currentPlayer){
-        boolean validInput = false;
         List<Letter> word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
 
         // If discard returns false -> player does not have the letters to discard
@@ -132,9 +135,19 @@ public class ScrabbleModel {
         int x, y;
         boolean direction;
 
-        while(!currentPlayer.placeLetters(word)){
-            System.out.println("You do not contain these letters please try again");
-            word = inputHandler.askForWord(null);
+        try {
+            while (!currentPlayer.placeLetters(word)) {
+                System.out.println("You do not contain these letters please try again");
+                word = inputHandler.askForWord(null);
+            }
+        }
+        // Empty draw pile, start checking for game end
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+            // if player is out of letters, end the game
+            if(currentPlayer.outOfLetters()){
+                this.gameFinished = true;
+            }
         }
 
         while(!isValidInput){
@@ -157,12 +170,11 @@ public class ScrabbleModel {
      */
     public void startGame(){
         initializePlayers();
-        boolean running = true;
         printBoard();
-        while(running){ // TODO: need a way to end the game
+        while(!gameFinished){ // TODO: need a way to end the game
             nextTurn();
         }
-
+        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
     /**
