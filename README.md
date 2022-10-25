@@ -65,7 +65,15 @@ In case of a tie, the player with the highest score before adding or deducting u
 [Unimplemented](#milestone-1)
 
 ## Design
-- TODO
+- BoardTile Class:
+  - The BoardTile Class uses two enums, Type enum and Letter enum. 
+  - The Type enum is created within the BoardTile Class and it is used to assign types to the BoardTiles. Since the
+  types are constant we decided to put them in an enum to avoid accidentally assigning a wrong type.
+  - The Letter enum is also used in the BoardTile class, each tile wil be able to hold one Letter. Letters were made
+  to be an enum since they are constant and contain values and frequencies of each letter.
+  - The BoardTile also keeps track of its location on the board, using integers x and y to store the 
+  appropriate row and column values.
+  
 ## Missing Features and bugs
 ### Milestone 1
 - Documentation
