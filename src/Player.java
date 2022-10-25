@@ -75,6 +75,10 @@ public class Player {
         this.score += points;
     }
 
+    public boolean containsLetters(List<Letter> word){
+        return hand.containsLetters(word);
+    }
+
     /**
      * String representation of player in this format:
      * "========{name}========

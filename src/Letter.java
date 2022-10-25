@@ -61,12 +61,6 @@ public enum Letter {
         this.frequency = freq;
     }
 
-    public char getChar() {
-        return character;
-    }
-
-
-
     /**
      * Returns the score associated to this Letter.
      *
@@ -88,14 +82,6 @@ public enum Letter {
     }
 
     /**
-     *
-     * @return the char representation of a letter
-     */
-    public char getCharLetter(){
-        return character;
-    }
-
-    /**
      * Convert a word string to a list of Letters.
      * Assumes all characters are valid.
      *
@@ -110,7 +96,7 @@ public enum Letter {
         for (int i =0; i<word.length(); i++){
             //Look for the corresponding Letter
             for(Letter l: Letter.values()){
-                if(l.getChar() == word.toUpperCase().charAt(i)){
+                if(l.character == word.toUpperCase().charAt(i)){
                     //Add the corresponding Letter to the returned ArrayList
                     letters.add(l);
                 }

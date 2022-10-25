@@ -72,7 +72,7 @@ public class Hand {
      * Otherwise, return False.
      * @author Alexandre Marques - 101189743
      */
-    private boolean containsLetters(List<Letter> used){
+    public boolean containsLetters(List<Letter> used){
         for(Letter l: used){
             // If l is not in hand, return false
             if(!(letters.contains(l)))
@@ -84,8 +84,8 @@ public class Hand {
 
     /**
      * Remove letters used from the hand,
-     * if they are all in the hand (return true).
-     * Otherwise, does nothing (return false).
+     * Assumes the letters are in the hand!
+     * User needs to check themselves before using them.
      *
      * @return If the letters used are all in the hand, returns true.
      *  Otherwise, return False.
@@ -94,10 +94,6 @@ public class Hand {
      * @throws NullPointerException to indicate that the game's DrawPile is empty.
      */
     public boolean useLetters(List<Letter> used) throws NullPointerException{
-        // Does not contain letters
-        if(!containsLetters(used)){
-            return false;
-        }
         // For each used letter, remove it from the hand
         for(Letter l: used){
             letters.remove(l);
