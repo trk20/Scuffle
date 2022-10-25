@@ -66,12 +66,14 @@ In case of a tie, the player with the highest score before adding or deducting u
 
 ## Design
 - TODO
-## Missing Features
+## Missing Features and bugs
 ### Milestone 1
 - Documentation
     - Class UML
     - Important Sequences
     - Design section of README
+- Backtracking if the word you chose cannot be placed
+  - Currently, locks you into the choice until you manage to place it (potentially blocking your game)
 - Scoring/announcing scores not implemented yet
 - Have a way to end the game
   - Remove remaining letters' point value from score at the end of the game
