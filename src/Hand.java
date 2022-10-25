@@ -123,7 +123,7 @@ public class Hand {
 
     /**
      * Shows letters contained in the Hand.
-     * Format: "Hand: A B C D"
+     * Format: "Hand: (A, 1) (B, 1) {other letters}"
      *
      * @return String representation of Hand object.
      * @author Alexandre Marques - 101189743
@@ -134,7 +134,8 @@ public class Hand {
         sb.append("Hand: ");
         // Append each letter, + a trailing space
         for (Letter l: letters) {
-            sb.append(l).append(" ");
+            // Format: "(A, 1) "
+            sb.append("(").append(l).append(", ").append(l.getScore()).append(") ");
         }
         // Trim last trailing space (and return string)
         return sb.toString().trim();
