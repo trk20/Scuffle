@@ -59,8 +59,8 @@ public class ScrabbleModel {
 
     /**
      * Following Methods handle parsing the user coord input
-     * @param coords: String inputted by the user. Will be in the form 2f or f2.
-     * @return: The integer/boolean value from the input
+     * @param coords String inputted by the user. Will be in the form 2f or f2.
+     * @return The integer/boolean value from the input
      */
     private int getXCoord(String coords){
         if(coords.length() == 3){
@@ -83,7 +83,7 @@ public class ScrabbleModel {
     /**
      * The following functions validate that a given user input is valid.
      * This does not check general format mistakes as that is handled in the text controller
-     * @param word/coords: Raw string user input
+     * @param word/coords Raw string user input
      * @return: True/false depending on if the input is valid
      */
     private boolean validateWord(String word, Player p){
@@ -112,7 +112,7 @@ public class ScrabbleModel {
 
     /**
      * Gets the user action either place or discard
-     * @return: boolean mapped to the action
+     * @return boolean mapped to the action
      */
     public boolean getAction(){
         return inputHandler.getUserAction();
@@ -120,7 +120,7 @@ public class ScrabbleModel {
 
     /**
      * Handles the user wanting to discard letters
-     * @param currentPlayer: The player whose turn it is
+     * @param currentPlayer The player whose turn it is
      */
     public void handleDiscard(Player currentPlayer){
         boolean validInput = false;
@@ -138,7 +138,7 @@ public class ScrabbleModel {
     }
     /**
      * Handles the user wanting to place letters
-     * @param currentPlayer: The player whose turn it is
+     * @param currentPlayer The player whose turn it is
      */
     public void handlePlace(Player currentPlayer){
         String word = "";
