@@ -19,9 +19,12 @@ public class Board {
 
     private DictionaryHandler dictionary;
 
+    private ArrayList<String> playedWords;
+
     public Board(int length, int width){
         board = new BoardTile[length][width];
         dictionary = new DictionaryHandler();
+        playedWords = new ArrayList<>();
         Random r = new Random();
         for (int row = 0; row< length; row ++){
             for(int col = 0; col<width; col ++){
@@ -100,9 +103,13 @@ public class Board {
      * @param direction whether the word is placed top-to-bottom
      * @return the score of the word placement
      */
-    public int boardScore(int row, int column, int length,boolean direction){
-        // todo: calculate score
-        return 0;
+    public int boardScore(String word, int row, int column,boolean direction){
+        int totalScore = 0;
+        totalScore += this.getWordScore(word,row,column,direction);
+        System.out.println("Score without additional words: "+ totalScore);
+        totalScore += this.getAdditionalScores(word,row,column,direction);
+        System.out.println("Total Score: "+ totalScore);
+        return totalScore;
     }
 
     /**
@@ -127,7 +134,92 @@ public class Board {
             //place letters on the board
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
         }
+        playedWords.add(word);
+        System.out.println("Played Words So far: "+ playedWords);
         return true;
+    }
+    public int getAdditionalScores(String word, int row, int column, boolean direction){
+        int score = 0;
+        ArrayList<String> newWords = new ArrayList<>();
+        for (int i = 0; i< word.length(); i++){
+            BoardTile current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
+            //System.out.println("Current starting pos: x:" + current.getX() + " y: "+ current.getY());
+            BoardTile start= current;
+            BoardTile end = current;
+            //X is col, Y is row
+            int j = 0;
+            //if words is Vertical
+            if(!direction){
+                //Check left /find start
+
+                while(board[current.getX()][current.getY() - j].isTaken()){
+                    //System.out.println("Checking left side: " + board[current.getX()][current.getY() - j].isTaken());
+                    start = board[current.getX()][current.getY() - j];
+                    j ++;
+                }
+                //System.out.println("Current: " + start.getLetter().getCharLetter());
+                current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
+                j = 0;
+                //Check right /find end
+                while(board[current.getX()][current.getY() + j].isTaken()){
+                    //System.out.println("Checking Right side: " + board[current.getX()][current.getY() - j].isTaken());
+                    end = board[current.getX()][current.getY() + j];
+                    j ++;
+                }
+
+            // word is Horizontal
+            }else{
+                while(board[current.getX() -j][current.getY()].isTaken()){
+                    start = board[current.getX() -j][current.getY()];
+                    // decrease row
+                    j ++;
+                }
+                current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
+                j = 0;
+
+                while(board[current.getX() +j][current.getY()].isTaken()){
+                    end = board[current.getX() +j][current.getY()];
+                    // increase row
+                    j ++;
+                }
+            }
+            //new word will be opposite direction from current word
+            String newWord = createWord(board,start,end,!direction );
+            if(dictionary.isValidWord(newWord)){
+                score +=getWordScore(newWord, start.getX(), start.getY(), !direction);
+                newWords.add(newWord);
+            }
+        }
+        System.out.println("New Words: "+ newWords);
+        return score;
+    }
+
+
+
+    public String createWord(BoardTile aBoard[][], BoardTile start, BoardTile end, boolean direction){
+        String createdWord = "";
+        //System.out.println("Start:"+ start.getLetter().getCharLetter() + " End:" + end.getLetter().getCharLetter());
+        int length = 0;
+        if (direction){
+            length = end.getY() - start.getY() + 1;
+
+        }
+        else{
+            length = end.getX() - start.getX() + 1;
+
+        }
+
+        for ( int i = 0; i < length ;i++ ){
+            //Horizontal
+            if (direction){
+               createdWord += aBoard[start.getX()][start.getY() + i].getLetter().getCharLetter();
+            //Vertical Word
+            }else{
+                createdWord += aBoard[start.getX() + i][start.getY()].getLetter().getCharLetter();
+            }
+        }
+        //System.out.println("Created Word: " + createdWord);
+        return createdWord;
     }
 
     public int getWordScore(String word,int row, int column, boolean direction){
@@ -158,9 +250,8 @@ public class Board {
             score *= 2;
         }
         if (x3word){
-            score +=3;
+            score *=3;
         }
-
 
         System.out.println("Player Score:"+ score);
         return score;
