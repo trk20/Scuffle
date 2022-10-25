@@ -65,17 +65,31 @@ In case of a tie, the player with the highest score before adding or deducting u
 [Unimplemented](#milestone-1)
 
 ## Design
+### Draw Pile
+- Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
+- Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
+- Letters can be added back in (for discarding) and drawn from the pile (to remove them)
+### Hand
+- Uses a list of letters to hold up to 7 letters
+  - If possible, always fills up to the max (as long as there are letters to draw), otherwise alerts model
+- Allow to check if the hand contains a subset of letters
+- Allows to use letters, or see letters
+### Player
+- Can add to their own points, or display them
+- Can check if they have letters, play letters, or discard them
+- Cna display their info (name, score, hand information)
+### Letter (enums)
+- Has information on frequency of appearence, a display character, and a point value.
+- Has static methods to return lists of Letters from strings or vice-versa
 ### Class TextController:
 This class focuses on prompting and parsing the user input and ensuring that the input is in the desired format.
 This class follows a pattern of prompting/scanning method and a verifying method. The prompter runs in a loop 
 and everytime a user's input is entered, the verifier is called to verify the input and if it is valid,
 the prompter returns the value.
-
 ### Class ScrabbleModel:
 This class handles running the game and delegating tasks to other classes. This class follows the model pattern
 from the MVC design pattern. This class is also the main class which starts the game and handles the user's turns as well as
 it handles processing and parsing of the user input.  
-
 ### Class BoardTle:
 This class is used to handle the squares in the Board class.
 The BoardTile Class uses two enums, Type enum and Letter enum.
