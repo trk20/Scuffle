@@ -122,7 +122,7 @@ public class ScrabbleModel {
      * Gets the user action either place or discard
      * @return boolean mapped to the action
      */
-    public boolean getAction(){
+    private boolean getAction(){
         return inputHandler.getUserAction();
     }
 
@@ -131,7 +131,7 @@ public class ScrabbleModel {
      * @param currentPlayer The player whose turn it is
      * @author Kieran, Alexandre
      */
-    public void handleDiscard(Player currentPlayer){
+    private void handleDiscard(Player currentPlayer){
         List<Letter> word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
 
         // If discard returns false -> player does not have the letters to discard
@@ -145,8 +145,8 @@ public class ScrabbleModel {
      * Handles the user wanting to place letters
      * @param currentPlayer The player whose turn it is
      */
-    public void handlePlace(Player currentPlayer){
-        List<Letter> word = null;
+    private void handlePlace(Player currentPlayer){
+        List<Letter> word = inputHandler.askForWord(null);
         String coords = "";
         boolean isValidInput = false;
         int x, y;
@@ -191,7 +191,7 @@ public class ScrabbleModel {
     /**
      * Handles running a turn, will be called in a loop until the game is over
      */
-    public void nextTurn(){
+    private void nextTurn(){
         boolean action;
         Player currentPlayer;
 
