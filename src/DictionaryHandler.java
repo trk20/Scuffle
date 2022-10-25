@@ -72,6 +72,26 @@ public class DictionaryHandler {
 //        System.out.println(board);
 //        board.boardScore("yex",4,8,false);
 
+        Board board = new Board(15,15);
+        System.out.println(board);
+        board.placeWord(Letter.wordToLetters("revoting"),5,7,false);
+        System.out.println(board);
+        //System.out.println(board.getNewWords("revoting",5,7,false));
+        //board.getWordScore("revoting",5,7,false);
+        board.boardScore(Letter.wordToLetters("revoting"),5,7,false);
+
+        board.placeWord(Letter.wordToLetters("joked"), 8,6,true);
+        System.out.println(board);
+        board.boardScore(Letter.wordToLetters("joked"), 8,6,true);
+
+        board.placeWord(Letter.wordToLetters("yex"),4,8,false);
+        System.out.println(board);
+        board.boardScore(Letter.wordToLetters("yex"),4,8,false);
+
+        board.placeWord(Letter.wordToLetters("jib"),8,6,false);
+        System.out.println(board);
+        board.boardScore(Letter.wordToLetters("jib"),8,6,false);
+
         //BoardTile[][] b1 = board.getBoard();
        // System.out.println(" Is it taken: " + b1[5][7].isTaken()+ " The x coord:"+b1[5][7].getX() + " The y coord: "+ b1[5][7].getY() );
 
