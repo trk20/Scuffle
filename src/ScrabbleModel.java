@@ -14,7 +14,7 @@ public class ScrabbleModel {
     private int numPlayers;
     private final int SIZE = 15;
     private int turn = 0;
-    private DictionaryHandler wordDictionary;
+//    private DictionaryHandler wordDictionary;
     public static final Boolean DISCARD = false;
     public static final Boolean PLACE = true;
     /** Model's shared DrawPile */
@@ -31,7 +31,7 @@ public class ScrabbleModel {
         this.inputHandler = new TextController();
         this.drawPile = new DrawPile();
         this.gameFinished = false;
-        wordDictionary = new DictionaryHandler();
+//        wordDictionary = new DictionaryHandler();
     }
 
     /**
@@ -103,14 +103,12 @@ public class ScrabbleModel {
             return false;
         }
 
-        for (String newWord: newWords){
-            if (!wordDictionary.isValidWord(newWord)){
-                System.out.println("Can not place word as it forms an invalid word");
-                return false;
-            }
+        if(!board.boardWordsValid(word, x, y, direction)){
+            System.out.println("Can not place word as it forms an invalid word");
+            return false;
         }
 
-        if(!board.wordPlacementOk(word, x, y, direction)){
+        if(!board.wordInBoard(word, x, y, direction)){
             System.out.println("Coords are not valid based on current board arrangement");
             return false;
         }
@@ -173,7 +171,6 @@ public class ScrabbleModel {
 
         board.placeWord(word, x, y, direction);
         printBoard();
-        // TODO calculate score add it to player
     }
 
     /**

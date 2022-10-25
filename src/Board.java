@@ -1,4 +1,3 @@
-import java.sql.Array;
 import java.util.*;
 
 /**
@@ -146,7 +145,7 @@ public class Board {
 
 
     /**
-     * Checks a given board state to see if it is valid after a given word placement
+     * Checks for the creation of invalid words due to a word placement
      * @author Timothy Kennedy
      *
      * @param word the word being placed
@@ -155,10 +154,9 @@ public class Board {
      * @param direction whether the word is placed left-to-right
      * @return whether the board state is valid
      */
-    private boolean boardValid(List<Letter> word, int row, int column, boolean direction) {
-        for(String currentWord:allBoardWords(word,row,column,direction)){
-            if(!dictionary.isValidWord(currentWord)){
-                //System.out.println(currentWord + " is not a valid word");
+    public boolean boardWordsValid(List<Letter> word, int row, int column, boolean direction) {
+        for (String newWord: getNewWords(word, row, column, direction)) {
+            if (!dictionary.isValidWord(newWord)) {
                 return false;
             }
         }
@@ -167,8 +165,10 @@ public class Board {
 
 
     /**
-     * Checks whether a specified word is allowed to be placed in a certain spot
-     * Ignores the creation of invalid words due to placement location
+     * Checks whether a specified word is allowed to be placed in a certain spot:
+     * Does not allow overlapping with other words... TODO: placement should skip over tiles instead
+     * Checks if it is connected to the start (through other words if necessary) FIXME: should only be needed for first tile
+     * Checks if word would go off the board
      * @author Timothy Kennedy
      *
      * @param word the word to be checked
@@ -177,7 +177,8 @@ public class Board {
      * @param direction whether the word is left-to-right
      * @return whether the word's placement is valid
      */
-    public boolean wordPlacementOk(List<Letter> word, int row, int column, boolean direction){
+    // TODO: (M2) make more cohesive
+    public boolean wordInBoard(List<Letter> word, int row, int column, boolean direction){
 
         //flag to track if any of the letters are connected to the start tile
         boolean connectedToStart = false;
@@ -198,23 +199,23 @@ public class Board {
             }
         }
 
-        return connectedToStart && boardValid(word, row, column, direction);
+        return connectedToStart;
     }
 
 
-    /**
-     * Calculates the score given by a placed word
-     *
-     * @param length the length of the word
-     * @param row the row of the board to the word starts on
-     * @param column the column of the board the word starts on
-     * @param direction whether the word is placed top-to-bottom
-     * @return the score of the word placement
-     */
-    public int boardScore(int row, int column, int length,boolean direction){
-        // todo: calculate score
-        return 0;
-    }
+//    /**
+//     * Calculates the score given by a placed word
+//     *
+//     * @param length the length of the word
+//     * @param row the row of the board to the word starts on
+//     * @param column the column of the board the word starts on
+//     * @param direction whether the word is placed top-to-bottom
+//     * @return the score of the word placement
+//     */
+//    public int boardScore(int row, int column, int length,boolean direction){
+//        // todo: calculate score
+//        return 0;
+//    }
 
     /**
      * Places a word on the board
@@ -224,12 +225,11 @@ public class Board {
      * @param row the row of the board to start the word on
      * @param column the column of the board to start the word on
      * @param direction whether the word is left-to-right
-     * @return the score tallied by the word placement
      */
-    public boolean placeWord(List<Letter> word, int row, int column, boolean direction){
-        int score = 0;
-        //tally score
-        score += boardScore(row,column,word.size(),direction);
+    public void placeWord(List<Letter> word, int row, int column, boolean direction){
+//        int score = 0;
+//        //tally score
+//        score += boardScore(row,column,word.size(),direction);
 
         for(int index = 0; index < word.size(); index++){
             //place letters on the board
@@ -238,12 +238,11 @@ public class Board {
         }
         currentWords = new ArrayList<>();
         currentWords.addAll(allBoardWords(word,row,column,direction));
-        return true;
     }
 
     public int getWordScore(List<Letter> word,int row, int column, boolean direction){
         int score = 0;
-        if (!wordPlacementOk(word,row,column,direction)){
+        if (!wordInBoard(word,row,column,direction)){
             return score;
         }
         boolean x3word = false;
