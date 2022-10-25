@@ -97,7 +97,7 @@ public class Board {
     /**
      * calculates the score given by a placed word
      *
-     * @param length the length of the word
+     * @param word the word the user placed on the board
      * @param row the row of the board to the word starts on
      * @param column the column of the board the word starts on
      * @param direction whether the word is placed top-to-bottom
@@ -138,6 +138,15 @@ public class Board {
         System.out.println("Played Words So far: "+ playedWords);
         return true;
     }
+
+    /**
+     * Calculates the score for any additional words created when the user placed his word
+     * @param word The initial word the user placed
+     * @param row The row the word begins in
+     * @param column The column the word begins in
+     * @param direction The direction of the word: true is horizontal, false is vertical
+     * @return returns the combined score of all the additional words
+     */
     public int getAdditionalScores(String word, int row, int column, boolean direction){
         int score = 0;
         ArrayList<String> newWords = new ArrayList<>();
@@ -195,7 +204,17 @@ public class Board {
     }
 
 
-
+    /**
+     * Creates a word, given the start and end tile and the direction of the word
+     *
+     * @author: Vladimir Kovacina
+     *
+     * @param aBoard the board on which the tiles are on
+     * @param start the start tile of the word, tile where the word begins
+     * @param end the end tile of the word, tile where the word ends
+     * @param direction the diredtion of the word
+     * @return returns the new created word
+     */
     public String createWord(BoardTile aBoard[][], BoardTile start, BoardTile end, boolean direction){
         String createdWord = "";
         //System.out.println("Start:"+ start.getLetter().getCharLetter() + " End:" + end.getLetter().getCharLetter());
@@ -222,6 +241,17 @@ public class Board {
         return createdWord;
     }
 
+    /**
+     * Calculates the score of a single word, based off the value of the letters and tile multipliers
+     *
+     * @author Vladimir Kovacina
+     *
+     * @param word The word to calculate the score of
+     * @param row The row the word begins in
+     * @param column The column the word begins in
+     * @param direction The direction of the word
+     * @return int The score of the word
+     */
     public int getWordScore(String word,int row, int column, boolean direction){
 
         ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
@@ -258,6 +288,12 @@ public class Board {
 
     }
 
+    /**
+     * Creates and returns a string representation of the board
+     * @author Timothy Kennedy and Vladimir Kovacina
+     *
+     * @return a string representation of the board
+     */
     @Override
     public String toString() {
         String returnString = "";
