@@ -159,7 +159,8 @@ public class ScrabbleModel {
 
         board.placeWord(word, x, y, direction);
         printBoard();
-        // TODO calculate score add it to player
+        System.out.println("Your new " + currentPlayer.getHand());
+        //TODO calculate score add it to player
     }
 
     /**
