@@ -73,7 +73,8 @@ the prompter returns the value.
 
 ### Class ScrabbleModel:
 This class handles running the game and delegating tasks to other classes. This class follows the model pattern
-from the MVC design pattern. This class is also the main class which starts the game and handles the user's turns. 
+from the MVC design pattern. This class is also the main class which starts the game and handles the user's turns as well as
+it handles processing and parsing of the user input.  
 
 ## Missing Features and bugs
 ### Milestone 1
