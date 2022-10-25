@@ -36,9 +36,9 @@ When playing a blank, you must state which letter it represents. It remains that
 To do this, choose the discard option at the start of your turn. Choose the letters to discard.
 You will add your letters to the bag, then draw the same amount. This ends your turn.
 8. Cannot challenge words, as the game validates them for the players.
-9. The game ends when all letters have been drawn and one player uses their last letter; 
+9. The game ends when all letters have been drawn and one player uses their last letter;
 or when all possible plays have been made.
-   - [Work in progress](#milestone-1): currently, game never ends
+   - Note: second condition no legal moves is a [work in progress](#milestone-1)
 
 ### Scoring:
 1. The game keeps a tally of each player's score, displaying it after each turn. 
@@ -75,9 +75,12 @@ In case of a tie, the player with the highest score before adding or deducting u
 - Backtracking if the word you chose cannot be placed
   - Currently, locks you into the choice until you manage to place it (potentially blocking your game)
 - Scoring/announcing scores not implemented yet
-- Have a way to end the game
+- End game score adjustments
   - Remove remaining letters' point value from score at the end of the game
   - Determine winner -> Have an end "screen" / print block
+    - Tie breaking
+- Have a way to end the game
+    - Partially implemented. Does not end when there are no valid moves, only when a player empties their hand.
 - Determine player order by drawing from the letter bag
 - Special scoring -> BINGO
 ### Future Milestones 
