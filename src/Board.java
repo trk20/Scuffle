@@ -219,7 +219,7 @@ public class Board {
         totalScore += this.getWordScore(word,row,column,direction);
 //        System.out.println("Score without additional words: "+ totalScore);
         totalScore += this.getAdditionalScores(word,row,column,direction);
-//        System.out.println("Total Score: "+ totalScore);
+//       System.out.println("Total Score: "+ totalScore);
         return totalScore;
     }
 
@@ -244,8 +244,8 @@ public class Board {
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setType(BoardTile.Type.BLANK);
         }
         //add word to list of played words
-//        playedWords.add(word.toUpperCase());
-//        System.out.println("Played Words So far: "+ playedWords);
+        playedWords.add(Letter.lettersToString(word).toUpperCase());
+        System.out.println("Played Words So far: "+ playedWords);
         return true;
     }
 
@@ -306,7 +306,6 @@ public class Board {
                 newWords.add(newWord);
             }
         }
-//        System.out.println("New Words: "+ newWords);
         playedWords.addAll(newWords);
         return score;
     }

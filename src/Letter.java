@@ -119,22 +119,22 @@ public enum Letter {
         return letters;
     }
 
-//    /**
-//     * Convert a list of Letters to a word string.
-//     * Assumes all characters are valid.
-//     *
-//     * @author Alexandre Marques
-//     * @param word A List of letters corresponding to the word's characters.
-//     * @return A string corresponding to the word's letters.
-//     * @author Alexandre Marques - 101189743
-//     */
-//    public static String lettersToString(List<Letter> word){
-//        StringBuilder str = new StringBuilder();
-//        for (Letter l: word) {
-//            str.append(l.toString());
-//        }
-//        return str.toString();
-//    }
+    /**
+     * Convert a list of Letters to a word string.
+     * Assumes all characters are valid.
+     *
+     * @author Alexandre Marques
+     * @param word A List of letters corresponding to the word's characters.
+     * @return A string corresponding to the word's letters.
+     * @author Alexandre Marques - 101189743
+     */
+    public static String lettersToString(List<Letter> word){
+        StringBuilder str = new StringBuilder();
+        for (Letter l: word) {
+            str.append(l.toString());
+        }
+        return str.toString();
+    }
 
     /**
      * Returns the String representation of Letter
