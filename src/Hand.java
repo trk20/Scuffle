@@ -72,7 +72,7 @@ public class Hand {
      * Otherwise, return False.
      * @author Alexandre Marques - 101189743
      */
-    private boolean containsLetters(List<Letter> used){
+    public boolean containsLetters(List<Letter> used){
         for(Letter l: used){
             // If l is not in hand, return false
             if(!(letters.contains(l)))
