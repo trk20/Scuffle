@@ -134,6 +134,7 @@ public class Board {
             //place letters on the board
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
         }
+        //add word to list of played words
         playedWords.add(word.toUpperCase());
         System.out.println("Played Words So far: "+ playedWords);
         return true;
@@ -152,26 +153,23 @@ public class Board {
         ArrayList<String> newWords = new ArrayList<>();
         for (int i = 0; i< word.length(); i++){
             BoardTile current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
-            //System.out.println("Current starting pos: x:" + current.getX() + " y: "+ current.getY());
             BoardTile start= current;
             BoardTile end = current;
-            //X is col, Y is row
+            //X is row, Y is col
             int j = 0;
             //if words is Vertical
             if(!direction){
                 //Check left /find start
 
                 while(board[current.getX()][current.getY() - j].isTaken()){
-                    //System.out.println("Checking left side: " + board[current.getX()][current.getY() - j].isTaken());
                     start = board[current.getX()][current.getY() - j];
                     j ++;
                 }
-                //System.out.println("Current: " + start.getLetter().getCharLetter());
+
                 current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
                 j = 0;
                 //Check right /find end
                 while(board[current.getX()][current.getY() + j].isTaken()){
-                    //System.out.println("Checking Right side: " + board[current.getX()][current.getY() - j].isTaken());
                     end = board[current.getX()][current.getY() + j];
                     j ++;
                 }
