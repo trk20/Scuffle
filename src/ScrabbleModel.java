@@ -161,7 +161,6 @@ public class ScrabbleModel {
 
         board.placeWord(word, x, y, direction);
         printBoard();
-
         currentPlayer.addPoints(board.boardScore(word, x, y, direction));
     }
 
