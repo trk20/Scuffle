@@ -201,7 +201,8 @@ public class Board {
             }
         }
 
-        return connectedToStart && boardValid(word, row, column, direction);
+        return connectedToStart ;
+                //&& boardValid(word, row, column, direction);
     }
 
 
@@ -234,9 +235,6 @@ public class Board {
      * @return the score tallied by the word placement
      */
     public boolean placeWord(List<Letter> word, int row, int column, boolean direction){
-        int score = 0;
-        //tally score
-        score += boardScore(word, row,column,direction); //
 
         for(int index = 0; index < word.size(); index++){
             //place letters on the board
@@ -245,7 +243,7 @@ public class Board {
         }
         //add word to list of played words
         playedWords.add(Letter.lettersToString(word).toUpperCase());
-        System.out.println("Played Words So far: "+ playedWords);
+        //System.out.println("Played Words So far: "+ playedWords);
         return true;
     }
 
@@ -268,24 +266,28 @@ public class Board {
             int j = 0;
             //if words is Vertical
             if(!direction){
-                //Check left /find start
-
+                //Check left side/find start
                 while(board[current.getX()][current.getY() - j].isTaken()){
+                    //tile is taken so set start to this tile
                     start = board[current.getX()][current.getY() - j];
+                    //increase column checking
                     j ++;
                 }
 
                 current = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
                 j = 0;
-                //Check right /find end
+                //Check right side /find end
                 while(board[current.getX()][current.getY() + j].isTaken()){
+                    //tile is taken so set end to this tile
                     end = board[current.getX()][current.getY() + j];
+                    //decrease column checking
                     j ++;
                 }
 
             // word is Horizontal
             }else{
                 while(board[current.getX() -j][current.getY()].isTaken()){
+                    //tile is taken so set start to this tile
                     start = board[current.getX() -j][current.getY()];
                     // decrease row
                     j ++;
@@ -294,6 +296,7 @@ public class Board {
                 j = 0;
 
                 while(board[current.getX() +j][current.getY()].isTaken()){
+                    //tile is taken so set end to this tile
                     end = board[current.getX() +j][current.getY()];
                     // increase row
                     j ++;
@@ -301,11 +304,13 @@ public class Board {
             }
             //new word will be opposite direction from current word
             String newWord = createWord(board,start,end,!direction);
+            //Check if new word is valid and not already played
             if(dictionary.isValidWord(newWord) && !playedWords.contains(newWord)){
                 score +=getWordScore(Letter.wordToLetters(newWord), start.getX(), start.getY(), !direction);
                 newWords.add(newWord);
             }
         }
+        //add the new words to the playedWords list
         playedWords.addAll(newWords);
         return score;
     }
