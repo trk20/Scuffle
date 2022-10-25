@@ -60,18 +60,15 @@ public class DictionaryHandler {
         DictionaryHandler dic = new DictionaryHandler();
         System.out.println(dic.isValidWord("re"));
         Board board = new Board(15,15);
-        System.out.println(board);
-        board.placeWord("revoting",5,7,false);
-        System.out.println(board);
-        //System.out.println(board.getNewWords("revoting",5,7,false));
-        //board.getWordScore("revoting",5,7,false);
-        board.boardScore("revoting",5,7,false);
-
-        board.placeWord("joked", 8,6,true);
-        System.out.println(board);
-        board.boardScore("joked", 8,6,true);
-
-        board.placeWord("yex",4,8,false);
+//        board.placeWord("spoon",5,7,false);
+//        System.out.println(board);
+//        System.out.println(board.getNewWords("spoons",5,7,false));
+//        board.getWordScore("spoons",5,7,false);
+//        System.out.println(board.getNewWords("sport", 5,7,true));
+//        board.placeWord("sport", 5,7,true);
+//        board.getWordScore("sport", 5,7,true);
+//        board.getWordScore("hi", 2,2,true);
+        //board.placeWord("spawn", 6,6,true);
         System.out.println(board);
         board.boardScore("yex",4,8,false);
 
