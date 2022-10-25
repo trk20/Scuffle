@@ -1,4 +1,4 @@
-# 3310 Group Project: Scrabble
+# 3110 Group Project: Scrabble
 ### Version: Milestone 1
 
 ## Rule set [adapted from hasbro](https://scrabble.hasbro.com/en-us/rules)
