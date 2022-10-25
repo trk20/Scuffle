@@ -4,14 +4,14 @@ import java.util.*;
  * Class that controls/models the overall scrabble game.
  * For Milestone 1, also acts as a text "view".
  *
- * @author: Kieran Rourke
+ * @author Kieran Rourke
  * @version OCT-23
  */
 public class ScrabbleModel {
-    private Board board;
-    private TextController inputHandler;
+    final private Board board;
+    final private TextController inputHandler;
     private ArrayList<Player> players;
-    private DictionaryHandler wordDictionary;
+    // private DictionaryHandler wordDictionary; FIXME: Remove? (Board responsibility?)
     private int numPlayers;
     private final int SIZE = 15;
     private int turn = 0;
@@ -27,7 +27,7 @@ public class ScrabbleModel {
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
         this.inputHandler = new TextController();
-        this.wordDictionary = new DictionaryHandler();
+        // this.wordDictionary = new DictionaryHandler(); FIXME: Remove?
         this.drawPile = new DrawPile();
     }
 
@@ -67,16 +67,20 @@ public class ScrabbleModel {
      */
     private int getXCoord(String coords){
         if(coords.length() == 3){
-             return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(String.valueOf(coords.substring(1, 2))) : Integer.parseInt(String.valueOf(coords.substring(0, 1)));
+             return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(coords.substring(1, 2))
+                     : Integer.parseInt(coords.substring(0, 1));
         }
-        return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(String.valueOf(coords.charAt(1))) : Integer.parseInt(String.valueOf(coords.charAt(0)));
+        return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(String.valueOf(coords.charAt(1)))
+                : Integer.parseInt(String.valueOf(coords.charAt(0)));
     }
 
     private int getYCoord(String coords){
         if (coords.length() == 3){
-             return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65: (int) Character.toUpperCase(coords.charAt(2)) - 65;
+             return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65
+                     : (int) Character.toUpperCase(coords.charAt(2)) - 65;
         }
-        return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65: (int) Character.toUpperCase(coords.charAt(1)) - 65;
+        return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65
+                : (int) Character.toUpperCase(coords.charAt(1)) - 65;
     }
 
     private boolean getDirection(String coords){
@@ -109,17 +113,13 @@ public class ScrabbleModel {
      */
     public void handleDiscard(Player currentPlayer){
         boolean validInput = false;
-        List<Letter> word = new ArrayList<>();
+        List<Letter> word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
 
-        while(!validInput){
+        // If discard returns false -> player does not have the letters to discard
+        while(!currentPlayer.discardLetters(word)){
+            System.out.println("You do not contain these letters please try again");
             word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
-            validInput = currentPlayer.canPlaceWord(word);
-            if (!validInput){
-               System.out.println("You do not contain these letters please try again");
-            }
         }
-        if(currentPlayer.discardLetters(word));
-
     }
     /**
      * Handles the user wanting to place letters
@@ -132,10 +132,14 @@ public class ScrabbleModel {
         int x, y;
         boolean direction;
 
+        while(!currentPlayer.placeLetters(word)){
+            System.out.println("You do not contain these letters please try again");
+            word = inputHandler.askForWord(null);
+        }
+
         while(!isValidInput){
             coords = inputHandler.askForCoords();
             isValidInput = validateCoords(coords, word);
-            currentPlayer.placeLetters(word);
         }
 
         x = getXCoord(coords);
@@ -145,7 +149,7 @@ public class ScrabbleModel {
         board.placeWord(word, x, y, direction);
         printBoard();
         System.out.println("Your new " + currentPlayer.getHandStr());
-        //TODO calculate score add it to player
+        // TODO calculate score add it to player
     }
 
     /**
@@ -155,7 +159,7 @@ public class ScrabbleModel {
         initializePlayers();
         boolean running = true;
         printBoard();
-        while(running){
+        while(running){ // TODO: need a way to end the game
             nextTurn();
         }
 
