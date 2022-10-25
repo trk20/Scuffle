@@ -89,6 +89,13 @@ public class ScrabbleModel {
     }
 
 
+    /**
+     * Validates User input to ensure that it can be placed on the board
+     * @param coords: The coords for the placement
+     * @param word: The word to be placed
+     * @param p: The current player
+     * @return: True/false depending on if it is a valid placement
+     */
     private boolean validateInput(String coords, List<Letter> word, Player p){
         int x = getXCoord(coords);
         int y = getYCoord(coords);
@@ -108,12 +115,9 @@ public class ScrabbleModel {
             System.out.println("Coords are not valid based on current board arrangement");
             return false;
         }
-//        List<String> newWords = board.getNewWords(word, x, y, direction);
-//        System.out.println("New words "+newWords);
+
         return true;
     }
-
-
 
     /**
      * Gets the user action either place or discard
