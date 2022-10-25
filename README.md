@@ -25,10 +25,10 @@ those must also form complete words, crossword fashion, with all such letters.
 The player gets full credit for all words formed or modified on his or her turn.
    - The next player being determined by the person who gave their name after the previous player
 4. New words may be formed by:
-   -Adding one or more letters to a word or letters already on the board.
-   -Placing a word at right angles to a word already on the board. 
+   - Adding one or more letters to a word or letters already on the board.
+   - Placing a word at right angles to a word already on the board. 
     The new word must use one of the letters already on the board or must add a letter to it.
-   -Placing a complete word parallel to a word already played so that adjacent letters also form complete words. 
+   - Placing a complete word parallel to a word already played so that adjacent letters also form complete words. 
 5. No tile may be shifted or replaced after it has been played and scored.
 6. Blanks [M3](#future-milestones): The two blank tiles may be used as any letters. 
 When playing a blank, you must state which letter it represents. It remains that letter for the rest of the game.
