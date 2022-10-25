@@ -104,7 +104,7 @@ public class Board {
      * @param direction whether the word is left-to-right
      * @return the list of words originating from the word placement
      */
-    public List<String> allBoardWords(String word, int row, int column, boolean direction){
+    public List<String> allBoardWords(List<Letter> word, int row, int column, boolean direction){
         //make a copy of the board
         BoardTile[][] boardCopy = new BoardTile[board.length][board[0].length];
         for(int i = 0; i < board.length; i++){
@@ -116,8 +116,8 @@ public class Board {
         Set<BoardTile> allTiles = new HashSet<>();
         ArrayList<String> newWords = new ArrayList<>();
 
-        for(int index = 0; index < word.length(); index++){ //place word on the copy of the board
-            boardCopy[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(Letter.wordToLetters(""+word.charAt(index)).get(0));
+        for(int index = 0; index < word.size(); index++){ //place word on the copy of the board
+            boardCopy[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.get(index));
         }
         for(BoardTile[] currentRow:boardCopy){ //get all taken tiles
             for(BoardTile tile:currentRow){
@@ -131,10 +131,12 @@ public class Board {
             //find words
             if(tile.isTaken()) {
                 //if tile is the start of a word, IE: no letters before it, and 1+ letters after it, add the word starting from that position to the list of words
-                if ((tile.getX() > 0 && !boardCopy[tile.getX() - 1][tile.getY()].isTaken() || tile.getX() == 0) && tile.getX() < 14 && boardCopy[tile.getX() + 1][tile.getY()].isTaken()) {
+                if ((tile.getX() > 0 && !boardCopy[tile.getX() - 1][tile.getY()].isTaken()
+                        || tile.getX() == 0) && tile.getX() < 14 && boardCopy[tile.getX() + 1][tile.getY()].isTaken()) {
                     newWords.add(wordStartingFrom(boardCopy, tile.getX(), tile.getY(), true));
                 }
-                if ((tile.getY() > 0 && !boardCopy[tile.getX()][tile.getY() - 1].isTaken() || tile.getY() == 0) && tile.getY() < 14 && boardCopy[tile.getX()][tile.getY() + 1].isTaken()) {
+                if ((tile.getY() > 0 && !boardCopy[tile.getX()][tile.getY() - 1].isTaken()
+                        || tile.getY() == 0) && tile.getY() < 14 && boardCopy[tile.getX()][tile.getY() + 1].isTaken()) {
                     newWords.add(wordStartingFrom(boardCopy, tile.getX(), tile.getY(), false));
                 }
             }
@@ -153,7 +155,7 @@ public class Board {
      * @param direction whether the word is placed left-to-right
      * @return whether the board state is valid
      */
-    private boolean boardValid(String word, int row, int column, boolean direction) {
+    private boolean boardValid(List<Letter> word, int row, int column, boolean direction) {
         for(String currentWord:allBoardWords(word,row,column,direction)){
             if(!dictionary.isValidWord(currentWord)){
                 //System.out.println(currentWord + " is not a valid word");
@@ -175,18 +177,18 @@ public class Board {
      * @param direction whether the word is left-to-right
      * @return whether the word's placement is valid
      */
-    public boolean wordPlacementOk(String word, int row, int column, boolean direction){
+    public boolean wordPlacementOk(List<Letter> word, int row, int column, boolean direction){
 
         //flag to track if any of the letters are connected to the start tile
         boolean connectedToStart = false;
 
-        if(row+((!direction) ? word.length() : 0) >= 15 || column+((direction) ? word.length() : 0) >= 15){
+        if(row+((!direction) ? word.size() : 0) >= 15 || column+((direction) ? word.size() : 0) >= 15){
             //if the word would run off the board
             return false;
         }
-        for(int i = 0; i < word.length(); i++){
+        for(int i = 0; i < word.size(); i++){
             BoardTile currentTile = board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)];
-            if(currentTile.isTaken() && currentTile.getLetter().getChar() != word.toUpperCase().charAt(i)){
+            if(currentTile.isTaken() && currentTile.getLetter() != word.get(i)){
                 //if a letter of the word would overwrite a previous word's letter
                 return false;
             }
@@ -224,15 +226,14 @@ public class Board {
      * @param direction whether the word is left-to-right
      * @return the score tallied by the word placement
      */
-    public boolean placeWord(String word, int row, int column, boolean direction){
-        ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
+    public boolean placeWord(List<Letter> word, int row, int column, boolean direction){
         int score = 0;
         //tally score
-        score += boardScore(row,column,word.length(),direction);
+        score += boardScore(row,column,word.size(),direction);
 
-        for(int index = 0; index < word.length(); index++){
+        for(int index = 0; index < word.size(); index++){
             //place letters on the board
-            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(wordLetters.get(index));
+            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.get(index));
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setType(BoardTile.Type.BLANK);
         }
         currentWords = new ArrayList<>();
@@ -240,9 +241,7 @@ public class Board {
         return true;
     }
 
-    public int getWordScore(String word,int row, int column, boolean direction){
-
-        ArrayList<Letter> wordLetters = Letter.wordToLetters(word);
+    public int getWordScore(List<Letter> word,int row, int column, boolean direction){
         int score = 0;
         if (!wordPlacementOk(word,row,column,direction)){
             return score;
@@ -250,18 +249,18 @@ public class Board {
         boolean x3word = false;
         boolean x2word = false;
 
-        for (int i = 0; i < wordLetters.size(); i++) {
+        for (int i = 0; i < word.size(); i++) {
             if(board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3WORD){
                 x3word = true;
             } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2LETTER) {
-                score += 2 * wordLetters.get(i).getScore();
+                score += 2 * word.get(i).getScore();
             } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X3LETTER) {
-                score += 3 * wordLetters.get(i).getScore();
+                score += 3 * word.get(i).getScore();
             } else if (board[row+((!direction) ? i : 0)][column+((direction) ? i : 0)].getType() == BoardTile.Type.X2WORD) {
                 x2word = true;
             }else{
                 //Blank or Start tile
-                score += wordLetters.get(i).getScore();
+                score += word.get(i).getScore();
             }
         }
         if (x2word){
@@ -286,7 +285,7 @@ public class Board {
      * @param direction whether the word is left-to-right
      * @return a list of all new words
      */
-    public List<String> getNewWords(String word,int row, int column, boolean direction){
+    public List<String> getNewWords(List<Letter> word,int row, int column, boolean direction){
         List<String> newWords = new ArrayList<>(allBoardWords(word, row, column, direction));
         for (String aWord:newWords) {
             if(currentWords.contains(aWord)){

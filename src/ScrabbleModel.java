@@ -83,25 +83,7 @@ public class ScrabbleModel {
         return Character.isLetter(coords.charAt(0));
     }
 
-    /**
-     * The following functions validate that a given user input is valid.
-     * This does not check general format mistakes as that is handled in the text controller
-     * @param word/coords Raw string user input
-     * @return: True/false depending on if the input is valid
-     */
-    private boolean validateWord(String word, Player p){
-        if(!p.canPlaceWord(word)){
-            System.out.printf("Invalid Word: %s can not be assembled based on your current letters\n", word);
-            return false;
-        }
-        if(!wordDictionary.isValidWord(word)){
-            System.out.println("Invalid Word not found in dictionnary");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateCoords(String coords, String word){
+    private boolean validateCoords(String coords, List<Letter> word){
         int x = getXCoord(coords);
         int y = getYCoord(coords);
         boolean direction = getDirection(coords);
@@ -127,7 +109,7 @@ public class ScrabbleModel {
      */
     public void handleDiscard(Player currentPlayer){
         boolean validInput = false;
-        String word = "";
+        List<Letter> word = new ArrayList<>();
 
         while(!validInput){
             word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
@@ -136,7 +118,7 @@ public class ScrabbleModel {
                System.out.println("You do not contain these letters please try again");
             }
         }
-        currentPlayer.discardLetters(Letter.wordToLetters(word));
+        if(currentPlayer.discardLetters(word));
 
     }
     /**
@@ -144,22 +126,16 @@ public class ScrabbleModel {
      * @param currentPlayer The player whose turn it is
      */
     public void handlePlace(Player currentPlayer){
-        String word = "";
+        List<Letter> word = inputHandler.askForWord(null);
         String coords = "";
         boolean isValidInput = false;
         int x, y;
         boolean direction;
 
         while(!isValidInput){
-            word = inputHandler.askForWord(null);
-            isValidInput = validateWord(word, currentPlayer);
-        }
-        isValidInput = false;
-
-        while(!isValidInput){
             coords = inputHandler.askForCoords();
             isValidInput = validateCoords(coords, word);
-            currentPlayer.placeLetters(Letter.wordToLetters(word));
+            currentPlayer.placeLetters(word);
         }
 
         x = getXCoord(coords);
