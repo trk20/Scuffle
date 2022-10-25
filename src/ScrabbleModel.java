@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -122,6 +123,7 @@ public class ScrabbleModel {
             word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
         }
     }
+
     /**
      * Handles the user wanting to place letters
      * @param currentPlayer The player whose turn it is
@@ -159,8 +161,7 @@ public class ScrabbleModel {
 
         board.placeWord(word, x, y, direction);
         printBoard();
-        System.out.println("Your new " + currentPlayer.getHand());
-        //TODO calculate score add it to player
+        currentPlayer.addPoints(board.boardScore(word, x, y, direction));
     }
 
     /**
