@@ -59,14 +59,14 @@ public class DictionaryHandler {
         */
 
         Board board = new Board(15,15);
-        board.placeWord("spoon",5,7,false);
-        System.out.println(board);
-        System.out.println(board.getNewWords("spoons",5,7,false));
-        board.getWordScore("spoons",5,7,false);
-        System.out.println(board.getNewWords("sport", 5,7,true));
-        board.placeWord("sport", 5,7,true);
-        board.getWordScore("sport", 5,7,true);
-        board.getWordScore("hi", 2,2,true);
+//        board.placeWord("spoon",5,7,false);
+//        System.out.println(board);
+//        System.out.println(board.getNewWords("spoons",5,7,false));
+//        board.getWordScore("spoons",5,7,false);
+//        System.out.println(board.getNewWords("sport", 5,7,true));
+//        board.placeWord("sport", 5,7,true);
+//        board.getWordScore("sport", 5,7,true);
+//        board.getWordScore("hi", 2,2,true);
         //board.placeWord("spawn", 6,6,true);
         System.out.println(board);
 

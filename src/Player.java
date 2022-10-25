@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +29,6 @@ public class Player {
         this.model = model;
         this.hand = new Hand(model.getDrawPile());
         this.score = 0;
-        fillHand();
     }
 
     /**
@@ -78,40 +76,32 @@ public class Player {
     }
 
     /**
-     * Fills the hand
-     */
-    private void fillHand(){
-        hand.fillHand();
-    }
-
-    public Hand getHand(){
-        return hand;
-    }
-
-    /**
-     * Verifies if a player has the letters to place a given word
-     * @param word
-     * @return
-     */
-    public boolean canPlaceWord(String word){
-        char[] ch = word.toCharArray();
-        List<Character> handLetters = hand.getCharLetters();
-        for(char c : ch){
-            if (!handLetters.contains(Character.toUpperCase(c))){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * String representation of player, includes their player name.
+     * String representation of player in this format:
+     * "========{name}========
+     *  Score: {score}
+     *  {hand}"
      *
-     * @return Player's name String
+     * @return Player's String representation
      * @author Alexandre Marques - 101189743
      */
     @Override
     public String toString() {
-        return name;
+        StringBuilder sb = new StringBuilder();
+        // ========{name}========:\n
+        sb.append("=".repeat(8)).append(name).append("=".repeat(8)).append("\n");
+        // Score: {score}\n
+        sb.append("Score: ").append(score).append("\n");
+        // {hand}
+        sb.append(hand);
+        return sb.toString();
+    }
+
+    /**
+     * Checks if the Player has no more letters to play.
+     * @return True if there are no more letters in the Hand.
+     */
+    public boolean outOfLetters(){
+        // No more letters in the hand -> size == 0
+        return hand.getHeldLetters().size() == 0;
     }
 }

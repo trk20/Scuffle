@@ -1,16 +1,16 @@
 import java.util.*;
 
 /**
- * Class that controls/models the overall scrabble game
+ * Class that controls/models the overall scrabble game.
+ * For Milestone 1, also acts as a text "view".
  *
- * @author: Kieran Rourke
+ * @author Kieran Rourke
  * @version OCT-23
  */
 public class ScrabbleModel {
-    private Board board;
-    private TextController inputHandler;
+    final private Board board;
+    final private TextController inputHandler;
     private ArrayList<Player> players;
-    private DictionaryHandler wordDictionary;
     private int numPlayers;
     private final int SIZE = 15;
     private int turn = 0;
@@ -20,12 +20,16 @@ public class ScrabbleModel {
     private final DrawPile drawPile;
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
+    /** Min players, should be 2 but 1 could work if we want to allow solo play */
+    public static final int MIN_PLAYERS = 1;
+    /** False until something triggers a game to end (Player out of Letters, or no more possible moves)*/
+    boolean gameFinished;
 
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
         this.inputHandler = new TextController();
-        this.wordDictionary = new DictionaryHandler();
         this.drawPile = new DrawPile();
+        this.gameFinished = false;
     }
 
     /**
@@ -59,46 +63,32 @@ public class ScrabbleModel {
 
     /**
      * Following Methods handle parsing the user coord input
-     * @param coords: String inputted by the user. Will be in the form 2f or f2.
-     * @return: The integer/boolean value from the input
+     * @param coords String inputted by the user. Will be in the form 2f or f2.
+     * @return The integer/boolean value from the input
      */
     private int getXCoord(String coords){
         if(coords.length() == 3){
-             return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(String.valueOf(coords.substring(1, 2))) : Integer.parseInt(String.valueOf(coords.substring(0, 1)));
+             return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(coords.substring(1, 2))
+                     : Integer.parseInt(coords.substring(0, 1));
         }
-        return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(String.valueOf(coords.charAt(1))) : Integer.parseInt(String.valueOf(coords.charAt(0)));
+        return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(String.valueOf(coords.charAt(1)))
+                : Integer.parseInt(String.valueOf(coords.charAt(0)));
     }
 
     private int getYCoord(String coords){
         if (coords.length() == 3){
-             return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65: (int) Character.toUpperCase(coords.charAt(2)) - 65;
+             return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65
+                     : (int) Character.toUpperCase(coords.charAt(2)) - 65;
         }
-        return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65: (int) Character.toUpperCase(coords.charAt(1)) - 65;
+        return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65
+                : (int) Character.toUpperCase(coords.charAt(1)) - 65;
     }
 
     private boolean getDirection(String coords){
-        return !Character.isLetter(coords.charAt(0));
+        return Character.isLetter(coords.charAt(0));
     }
 
-    /**
-     * The following functions validate that a given user input is valid.
-     * This does not check general format mistakes as that is handled in the text controller
-     * @param word/coords: Raw string user input
-     * @return: True/false depending on if the input is valid
-     */
-    private boolean validateWord(String word, Player p){
-        if(!p.canPlaceWord(word)){
-            System.out.printf("Invalid Word: %s can not be assembled based on your current letters\n", word);
-            return false;
-        }
-        if(!wordDictionary.isValidWord(word)){
-            System.out.println("Invalid Word not found in dictionnary");
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateCoords(String coords, String word){
+    private boolean validateCoords(String coords, List<Letter> word){
         int x = getXCoord(coords);
         int y = getYCoord(coords);
         boolean direction = getDirection(coords);
@@ -112,7 +102,7 @@ public class ScrabbleModel {
 
     /**
      * Gets the user action either place or discard
-     * @return: boolean mapped to the action
+     * @return boolean mapped to the action
      */
     public boolean getAction(){
         return inputHandler.getUserAction();
@@ -120,43 +110,47 @@ public class ScrabbleModel {
 
     /**
      * Handles the user wanting to discard letters
-     * @param currentPlayer: The player whose turn it is
+     * @param currentPlayer The player whose turn it is
+     * @author Kieran, Alexandre
      */
     public void handleDiscard(Player currentPlayer){
-        boolean validInput = false;
-        String word = "";
+        List<Letter> word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
 
-        while(!validInput){
+        // If discard returns false -> player does not have the letters to discard
+        while(!currentPlayer.discardLetters(word)){
+            System.out.println("You do not contain these letters please try again");
             word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
-            validInput = currentPlayer.canPlaceWord(word);
-            if (!validInput){
-               System.out.println("You do not contain these letters please try again");
-            }
         }
-        currentPlayer.discardLetters(Letter.wordToLetters(word));
-
     }
     /**
      * Handles the user wanting to place letters
-     * @param currentPlayer: The player whose turn it is
+     * @param currentPlayer The player whose turn it is
      */
     public void handlePlace(Player currentPlayer){
-        String word = "";
+        List<Letter> word = inputHandler.askForWord(null);
         String coords = "";
         boolean isValidInput = false;
         int x, y;
         boolean direction;
 
-        while(!isValidInput){
-            word = inputHandler.askForWord(null);
-            isValidInput = validateWord(word, currentPlayer);
+        try {
+            while (!currentPlayer.placeLetters(word)) {
+                System.out.println("You do not contain these letters please try again");
+                word = inputHandler.askForWord(null);
+            }
         }
-        isValidInput = false;
+        // Empty draw pile, start checking for game end
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+            // if player is out of letters, end the game
+            if(currentPlayer.outOfLetters()){
+                this.gameFinished = true;
+            }
+        }
 
         while(!isValidInput){
             coords = inputHandler.askForCoords();
             isValidInput = validateCoords(coords, word);
-            currentPlayer.placeLetters(Letter.wordToLetters(word));
         }
 
         x = getXCoord(coords);
@@ -174,12 +168,11 @@ public class ScrabbleModel {
      */
     public void startGame(){
         initializePlayers();
-        boolean running = true;
         printBoard();
-        while(running){
+        while(!gameFinished){
             nextTurn();
         }
-
+        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
     /**
@@ -191,8 +184,10 @@ public class ScrabbleModel {
 
         turn = incrementTurn(turn);
         currentPlayer = players.get(turn-1);
-        System.out.printf("It is Player %d/%s's turn\n", turn, currentPlayer);
-        System.out.println("Your current hand is " + currentPlayer.getHand());
+        System.out.println("==========================");
+        System.out.printf("It is Player %d's turn\n", turn);
+        // Print player state before turn
+        System.out.println(currentPlayer);
         action = getAction();
 
         if(action == PLACE){
@@ -200,6 +195,8 @@ public class ScrabbleModel {
         }else{
             handleDiscard(currentPlayer);
         }
+        // Print player state after turn
+        System.out.println(currentPlayer);
     }
 
     /**
@@ -213,6 +210,6 @@ public class ScrabbleModel {
     public static void main(String[] args){
         ScrabbleModel s = new ScrabbleModel();
         s.startGame();
-        System.out.println(Letter.S);
+//        System.out.println(Letter.S);
     }
 }
