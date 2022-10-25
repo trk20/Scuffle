@@ -76,21 +76,24 @@ public class Player {
     }
 
     /**
-     * String representation of player, includes their player name.
+     * String representation of player in this format:
+     * "========{name}========
+     *  Score: {score}
+     *  {hand}"
      *
-     * @return Player's name String
+     * @return Player's String representation
      * @author Alexandre Marques - 101189743
      */
     @Override
     public String toString() {
-        // TODO: consider making getHandStr part of this,
-        //  we would need to refactor the outputs to do this though.
-        return name;
-    }
-
-    public String getHandStr(){
-        // Others shouldn't have access to the Hand object, just need the string for now
-        return hand.toString();
+        StringBuilder sb = new StringBuilder();
+        // ========{name}========:\n
+        sb.append("=".repeat(8)).append(name).append("=".repeat(8)).append("\n");
+        // Score: {score}\n
+        sb.append("Score: ").append(score).append("\n");
+        // {hand}
+        sb.append(hand);
+        return sb.toString();
     }
 
     /**

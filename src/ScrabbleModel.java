@@ -11,7 +11,6 @@ public class ScrabbleModel {
     final private Board board;
     final private TextController inputHandler;
     private ArrayList<Player> players;
-    // private DictionaryHandler wordDictionary; FIXME: Remove? (Board responsibility?)
     private int numPlayers;
     private final int SIZE = 15;
     private int turn = 0;
@@ -29,7 +28,6 @@ public class ScrabbleModel {
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
         this.inputHandler = new TextController();
-        // this.wordDictionary = new DictionaryHandler(); FIXME: Remove?
         this.drawPile = new DrawPile();
         this.gameFinished = false;
     }
@@ -161,7 +159,6 @@ public class ScrabbleModel {
 
         board.placeWord(word, x, y, direction);
         printBoard();
-        System.out.println("Your new " + currentPlayer.getHandStr());
         // TODO calculate score add it to player
     }
 
@@ -171,7 +168,7 @@ public class ScrabbleModel {
     public void startGame(){
         initializePlayers();
         printBoard();
-        while(!gameFinished){ // TODO: need a way to end the game
+        while(!gameFinished){
             nextTurn();
         }
         System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
@@ -187,8 +184,9 @@ public class ScrabbleModel {
         turn = incrementTurn(turn);
         currentPlayer = players.get(turn-1);
         System.out.println("==========================");
-        System.out.printf("It is Player %d/%s's turn\n", turn, currentPlayer);
-        System.out.println("Your current hand is \n\t" + currentPlayer.getHandStr());
+        System.out.printf("It is Player %d's turn\n", turn);
+        // Print player state before turn
+        System.out.println(currentPlayer);
         action = getAction();
 
         if(action == PLACE){
@@ -196,7 +194,8 @@ public class ScrabbleModel {
         }else{
             handleDiscard(currentPlayer);
         }
-        System.out.println("Your new hand is \n\t" + currentPlayer.getHandStr());
+        // Print player state after turn
+        System.out.println(currentPlayer);
     }
 
     /**
@@ -210,6 +209,6 @@ public class ScrabbleModel {
     public static void main(String[] args){
         ScrabbleModel s = new ScrabbleModel();
         s.startGame();
-        System.out.println(Letter.S);
+//        System.out.println(Letter.S);
     }
 }
