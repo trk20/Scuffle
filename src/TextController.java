@@ -12,7 +12,6 @@ public class TextController {
 
     private Scanner inputHandler;
 
-
     public TextController(){
         inputHandler = new Scanner(System.in);
     }
@@ -197,11 +196,5 @@ public class TextController {
             validWord = isValidWord(word);
         }
         return word;
-    }
-
-
-    public static void main(String[] args){
-        TextController t = new TextController();
-        t.askForCoords();
     }
 }
