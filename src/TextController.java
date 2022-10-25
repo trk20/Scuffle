@@ -63,11 +63,14 @@ public class TextController {
     }
 
     /**
-     * Asks a user for a word
-     * @param message: Prompting message *optional
-     * @return: the word
+     * Asks a user for a word,
+     *
+     * @param message Prompting message *optional
+     * @return A list of Letters corresponding to the input string.
+     *
+     * @author Kieran, Alexandre
      */
-    public String askForWord(String message){
+    public List<Letter> askForWord(String message){
         String word = "";
         boolean validWord = false;
         while (!validWord){
@@ -75,7 +78,7 @@ public class TextController {
             word = inputHandler.nextLine();
             validWord = isValidWord(word);
         }
-        return word;
+        return Letter.wordToLetters(word);
     }
 
     /**
