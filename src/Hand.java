@@ -27,6 +27,8 @@ public class Hand {
         // Initialize fields to default / parameter values
         this.pile = pile;
         letters = new ArrayList<>();
+        // Start hand in filled state
+        fillHand();
     }
 
     /**
@@ -37,7 +39,7 @@ public class Hand {
      * @author Alexandre Marques - 101189743
      */
     // TODO: Consider making custom exception (i.e. EmptyPileException)
-    public void fillHand() throws NullPointerException {
+    private void fillHand() throws NullPointerException {
         // Keep drawing until reaching hand limit
         while(letters.size() < HAND_SIZE) {
             draw();

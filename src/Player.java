@@ -30,7 +30,6 @@ public class Player {
         this.model = model;
         this.hand = new Hand(model.getDrawPile());
         this.score = 0;
-        fillHand();
     }
 
     /**
@@ -78,17 +77,6 @@ public class Player {
     }
 
     /**
-     * Fills the hand
-     */
-    private void fillHand(){
-        hand.fillHand();
-    }
-
-    public Hand getHand(){
-        return hand;
-    }
-
-    /**
      * Verifies if a player has the letters to place a given word
      * @param word
      * @return
@@ -112,6 +100,13 @@ public class Player {
      */
     @Override
     public String toString() {
+        // TODO: consider making getHandStr part of this,
+        //  we would need to refactor the outputs to do this though.
         return name;
+    }
+
+    public String getHandStr(){
+        // Others shouldn't have access to the Hand object, just need the string for now
+        return hand.toString();
     }
 }

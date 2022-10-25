@@ -168,7 +168,7 @@ public class ScrabbleModel {
 
         board.placeWord(word, x, y, direction);
         printBoard();
-        System.out.println("Your new " + currentPlayer.getHand());
+        System.out.println("Your new " + currentPlayer.getHandStr());
         //TODO calculate score add it to player
     }
 
@@ -196,7 +196,7 @@ public class ScrabbleModel {
         currentPlayer = players.get(turn-1);
         System.out.println("==========================");
         System.out.printf("It is Player %d/%s's turn\n", turn, currentPlayer);
-        System.out.println("Your current hand is \n\t" + currentPlayer.getHand());
+        System.out.println("Your current hand is \n\t" + currentPlayer.getHandStr());
         action = getAction();
 
         if(action == PLACE){
@@ -204,7 +204,7 @@ public class ScrabbleModel {
         }else{
             handleDiscard(currentPlayer);
         }
-        System.out.println("Your new hand is \n\t" + currentPlayer.getHand());
+        System.out.println("Your new hand is \n\t" + currentPlayer.getHandStr());
     }
 
     /**
