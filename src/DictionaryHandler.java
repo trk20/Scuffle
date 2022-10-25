@@ -57,9 +57,9 @@ public class DictionaryHandler {
         System.out.println(dict.isValidWord("expletive"));
         System.out.println(dict.isValidWord("notavalidword"));
         */
-        DictionaryHandler dic = new DictionaryHandler();
-        System.out.println(dic.isValidWord("re"));
-        Board board = new Board(15,15);
+//        DictionaryHandler dic = new DictionaryHandler();
+//        System.out.println(dic.isValidWord("re"));
+//        Board board = new Board(15,15);
 //        board.placeWord("spoon",5,7,false);
 //        System.out.println(board);
 //        System.out.println(board.getNewWords("spoons",5,7,false));
@@ -69,8 +69,8 @@ public class DictionaryHandler {
 //        board.getWordScore("sport", 5,7,true);
 //        board.getWordScore("hi", 2,2,true);
         //board.placeWord("spawn", 6,6,true);
-        System.out.println(board);
-        board.boardScore("yex",4,8,false);
+//        System.out.println(board);
+//        board.boardScore("yex",4,8,false);
 
         //BoardTile[][] b1 = board.getBoard();
        // System.out.println(" Is it taken: " + b1[5][7].isTaken()+ " The x coord:"+b1[5][7].getX() + " The y coord: "+ b1[5][7].getY() );
