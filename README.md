@@ -1,4 +1,4 @@
-# 3310 Group Project: Scrabble
+# 3110 Group Project: Scrabble
 ### Version: Milestone 1
 
 ## Rule set [adapted from hasbro](https://scrabble.hasbro.com/en-us/rules)
@@ -65,31 +65,43 @@ In case of a tie, the player with the highest score before adding or deducting u
 [Unimplemented](#milestone-1)
 
 ## Design
+### Draw Pile
+- Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
+- Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
+- Letters can be added back in (for discarding) and drawn from the pile (to remove them)
+### Hand
+- Uses a list of letters to hold up to 7 letters
+  - If possible, always fills up to the max (as long as there are letters to draw), otherwise alerts model
+- Allow to check if the hand contains a subset of letters
+- Allows to use letters, or see letters
+### Player
+- Can add to their own points, or display them
+- Can check if they have letters, play letters, or discard them
+- Cna display their info (name, score, hand information)
+### Letter (enums)
+- Has information on frequency of appearence, a display character, and a point value.
+- Has static methods to return lists of Letters from strings or vice-versa
 ### Class TextController:
 This class focuses on prompting and parsing the user input and ensuring that the input is in the desired format.
 This class follows a pattern of prompting/scanning method and a verifying method. The prompter runs in a loop 
 and everytime a user's input is entered, the verifier is called to verify the input and if it is valid,
 the prompter returns the value.
-
 ### Class ScrabbleModel:
 This class handles running the game and delegating tasks to other classes. This class follows the model pattern
 from the MVC design pattern. This class is also the main class which starts the game and handles the user's turns as well as
 it handles processing and parsing of the user input.  
-
 ### Class Board :
 This class handles the internal representation of the board's current state. It contains the methods to validate and place words, and to return the score given by a placement.
+### Class BoardTile:
+This class is used to handle the squares in the Board class.
+The BoardTile Class uses two enums, Type enum and Letter enum.
+The Type enum is created within the BoardTile Class and it is used to assign types to the BoardTiles. Since the types are constant we decided to put them in an enum to avoid accidentally assigning a wrong type.
+The Letter enum is also used in the BoardTile class, each tile wil be able to hold one Letter. Letters were made to be an enum since they are constant and contain values and frequencies of each letter.
+The BoardTile also keeps track of its location on the board, using integers x and y to store the appropriate row and column values.
 
-
-
-## Missing Features and bugs
+## Missing Features and bugs (see issues)
 ### Milestone 1
-- Documentation
-    - Class UML
-    - Important Sequences
-    - Design section of README
-- Backtracking if the word you chose cannot be placed
-  - Currently, locks you into the choice until you manage to place it (potentially blocking your game)
-- Scoring/announcing scores not implemented yet
+- BUG: checking if player has letters can have issues when using multiple copies of a letter
 - End game score adjustments
   - Remove remaining letters' point value from score at the end of the game
   - Determine winner -> Have an end "screen" / print block
