@@ -18,13 +18,13 @@ public class ScrabbleFrame extends JFrame{
     private final int WIDTH = 1280;
     private final int HEIGHT = 720;
 
-
+    
     public ScrabbleFrame() throws HeadlessException {
         super("Scrabble");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
-
+        //Current idea is to have containers wrap around the content to ensure sizing
         centerContent = new JPanel();
         leftContent = new JPanel();
         rightContent = new JPanel();
