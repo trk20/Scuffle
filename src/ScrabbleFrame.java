@@ -15,8 +15,8 @@ public class ScrabbleFrame extends JFrame{
     private JPanel northContentContainer;
     private JPanel southContentContainer;
 
-    private final int WIDTH = 1280;
-    private final int HEIGHT = 720;
+    private final int WIDTH = 1500;
+    private final int HEIGHT = 1000;
 
     
     public ScrabbleFrame() throws HeadlessException {
