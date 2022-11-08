@@ -251,7 +251,7 @@ public class Board {
     }
 
     /**
-     * [deprecated]
+     * @deprecated
      * Calculates the score for any additional words created when the user placed his word
      * @param word The initial word the user placed
      * @param row The row the word begins in
