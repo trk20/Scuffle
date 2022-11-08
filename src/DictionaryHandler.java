@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -74,20 +75,26 @@ public class DictionaryHandler {
 
         Board board = new Board(15,15);
         System.out.println(board);
+        System.out.println(board.getNewWords(Letter.wordToLetters("revoting"),5,7,false));
+        System.out.println(board.getWordScore(Letter.wordToLetters("revoting"),5,7,false));
         board.placeWord(Letter.wordToLetters("revoting"),5,7,false);
         System.out.println(board);
-        //System.out.println(board.getNewWords("revoting",5,7,false));
-        //board.getWordScore("revoting",5,7,false);
         board.boardScore(Letter.wordToLetters("revoting"),5,7,false);
 
+        System.out.println(board.getNewWords(Letter.wordToLetters("joked"), 8,6,true));
+        System.out.println(board.getWordScore(Letter.wordToLetters("joked"), 8,6,true));
         board.placeWord(Letter.wordToLetters("joked"), 8,6,true);
         System.out.println(board);
         board.boardScore(Letter.wordToLetters("joked"), 8,6,true);
 
+        System.out.println(board.getNewWords(Letter.wordToLetters("yex"),4,8,false));
+        System.out.println(board.getWordScore(Letter.wordToLetters("yex"),4,8,false));
         board.placeWord(Letter.wordToLetters("yex"),4,8,false);
         System.out.println(board);
         board.boardScore(Letter.wordToLetters("yex"),4,8,false);
 
+        System.out.println(board.getNewWords(Letter.wordToLetters("jib"),8,6,false));
+        System.out.println(board.getWordScore(Letter.wordToLetters("jib"),8,6,false));
         board.placeWord(Letter.wordToLetters("jib"),8,6,false);
         System.out.println(board);
         board.boardScore(Letter.wordToLetters("jib"),8,6,false);

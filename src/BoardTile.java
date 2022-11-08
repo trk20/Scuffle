@@ -127,7 +127,9 @@ public class BoardTile {
      * @return a copy of this BoardTile
      */
     public BoardTile copy(){
-        return new BoardTile(tileType,x,y);
+        BoardTile copy = new BoardTile(tileType,x,y);
+        copy.setLetter(this.letter);
+        return copy;
     }
     @Override
     public String toString() {
