@@ -75,7 +75,7 @@ public class Board {
      * @param direction whether the direction of the word is right-to-left
      * @return the word starting at the given coordinates
      */
-    private PlacedWord wordStartingFrom(BoardTile[][] aBoard, int row, int column, boolean direction){
+    private PlacedWord getWordStartingFrom(BoardTile[][] aBoard, int row, int column, boolean direction){
         //initialize a string with the first character of the word
         ArrayList<BoardTile> wordTiles = new ArrayList<>();
         wordTiles.add(aBoard[row][column]);
@@ -137,11 +137,11 @@ public class Board {
                 //if tile is the start of a word, IE: no letters before it, and 1+ letters after it, add the word starting from that position to the list of words
                 if ((tile.getX() > 0 && !boardCopy[tile.getX() - 1][tile.getY()].isTaken()
                         || tile.getX() == 0) && tile.getX() < 14 && boardCopy[tile.getX() + 1][tile.getY()].isTaken()) {
-                    words.add(wordStartingFrom(boardCopy, tile.getX(), tile.getY(), true));
+                    words.add(getWordStartingFrom(boardCopy, tile.getX(), tile.getY(), true));
                 }
                 if ((tile.getY() > 0 && !boardCopy[tile.getX()][tile.getY() - 1].isTaken()
                         || tile.getY() == 0) && tile.getY() < 14 && boardCopy[tile.getX()][tile.getY() + 1].isTaken()) {
-                    words.add(wordStartingFrom(boardCopy, tile.getX(), tile.getY(), false));
+                    words.add(getWordStartingFrom(boardCopy, tile.getX(), tile.getY(), false));
                 }
             }
         }
@@ -159,7 +159,7 @@ public class Board {
      * @param direction whether the word is placed left-to-right
      * @return whether the board state is valid
      */
-    public boolean boardWordsValid(List<Letter> word, int row, int column, boolean direction) {
+    public boolean boardWordsAreValid(List<Letter> word, int row, int column, boolean direction) {
         for (PlacedWord newWord: getNewWords(word, row, column, direction)) {
             if (!dictionary.isValidWord(newWord.toString())) {
                 return false;
@@ -172,7 +172,7 @@ public class Board {
     /**
      * Checks whether a specified word is allowed to be placed in a certain spot:
      * Does not allow overlapping with other words... TODO: placement should skip over tiles instead
-     * Checks if it is connected to the start (through other words if necessary) FIXME: should only be needed for first tile
+     * Checks if it is connected to the start - only checks necessary tiles
      * Checks if word would go off the board
      * @author Timothy Kennedy
      *
@@ -314,6 +314,7 @@ public class Board {
 
 
     /**
+     * @deprecated
      * Creates a word, given the start and end tile and the direction of the word
      *
      * @author Vladimir Kovacina

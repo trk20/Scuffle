@@ -106,7 +106,7 @@ public class ScrabbleModel {
             return false;
         }
 
-        if(!board.boardWordsValid(word, x, y, direction)){
+        if(!board.boardWordsAreValid(word, x, y, direction)){
             System.out.println("Can not place word as it forms an invalid word");
             return false;
         }
