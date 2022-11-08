@@ -9,14 +9,11 @@ public class ScrabbleFrame extends JFrame{
     private JPanel northContent;
     private JPanel southContent;
 
-    private JPanel centerContentContainer;
-    private JPanel leftContentContainer;
-    private JPanel rightContentContainer;
-    private JPanel northContentContainer;
-    private JPanel southContentContainer;
+    private final int WIDTH = 1280;
+    private final int HEIGHT = 720;
+    private final int menuHeight = 50;
 
-    private final int WIDTH = 1500;
-    private final int HEIGHT = 1000;
+
 
     
     public ScrabbleFrame() throws HeadlessException {
@@ -32,25 +29,22 @@ public class ScrabbleFrame extends JFrame{
         northContent = new JPanel();
 
 
-        rightContentContainer = new JPanel();
-        rightContentContainer.setMaximumSize(new Dimension(300, HEIGHT));
+        setDefaultContent();
+
+        this.add(centerContent, BorderLayout.CENTER);
+        this.add(leftContent, BorderLayout.WEST);
+        this.add(northContent, BorderLayout.NORTH);
+        this.add(southContent, BorderLayout.SOUTH);
+        this.add(rightContent, BorderLayout.EAST);
 
 
-        centerContentContainer = new JPanel();
-        centerContentContainer.add(centerContent);
-        centerContentContainer.setMaximumSize(new Dimension(WIDTH, HEIGHT));
 
-        leftContentContainer = new JPanel();
-        leftContentContainer.setMaximumSize(new Dimension(200,HEIGHT));
+        this.setSize(WIDTH, HEIGHT);
+        this.setVisible(true);
 
-        northContentContainer = new JPanel();
-        northContentContainer.setMaximumSize(new Dimension(WIDTH, 50));
+    }
 
-        southContentContainer = new JPanel();
-        southContentContainer.setMaximumSize(new Dimension(WIDTH, 200));
-        southContentContainer.setLayout(new FlowLayout());
-
-        // Intialize Default Content
+    public void setDefaultContent(){
         JPanel tempCenterContent = new JPanel();
         tempCenterContent.setBackground(Color.WHITE);
         tempCenterContent.add(new JLabel("Board"));
@@ -74,60 +68,45 @@ public class ScrabbleFrame extends JFrame{
         JPanel tempRightContent = new JPanel();
         tempRightContent.setBackground(Color.CYAN);
         tempRightContent.add(new JLabel("Turns"));
-        setRightContent(tempRightContent);
 
-
-
-        this.add(centerContentContainer, BorderLayout.CENTER);
-        this.add(leftContentContainer, BorderLayout.WEST);
-        this.add(northContentContainer, BorderLayout.NORTH);
-        this.add(southContentContainer, BorderLayout.SOUTH);
-        this.add(rightContentContainer, BorderLayout.EAST);
-
-        this.setSize(WIDTH, HEIGHT);
-        this.setVisible(true);
-
+        setRightContent(new TurnActionPanel());
     }
 
     public void setCenterContent(JPanel centerContent) {
-        centerContent.setPreferredSize(centerContentContainer.getMaximumSize());
-
         this.centerContent = centerContent;
-        centerContentContainer.add(this.centerContent);
+
+        repaint();
+        revalidate();
     }
 
     public void setLeftContent(JPanel leftContent) {
-        leftContent.setPreferredSize(leftContentContainer.getMaximumSize());
+        leftContent.setPreferredSize(new Dimension(WIDTH/8, HEIGHT));
         this.leftContent = leftContent;
-        leftContentContainer.add(this.leftContent);
 
         repaint();
         revalidate();
     }
 
     public void setRightContent(JPanel rightContent) {
-        rightContent.setPreferredSize(rightContentContainer.getMaximumSize());
-
+        rightContent.setPreferredSize(new Dimension(WIDTH/8, HEIGHT));
         this.rightContent = rightContent;
-        rightContentContainer.add(this.rightContent);
+
         repaint();
         revalidate();
     }
 
     public void setNorthContent(JPanel northContent) {
-        northContent.setPreferredSize(northContentContainer.getMaximumSize());
-
+        northContent.setPreferredSize(new Dimension(WIDTH, menuHeight));
         this.northContent = northContent;
-        northContentContainer.add(this.northContent);
+
         repaint();
         revalidate();
     }
 
     public void setSouthContent(JPanel southContent) {
-        southContent.setPreferredSize(southContentContainer.getMaximumSize());
-
+        southContent.setPreferredSize(new Dimension(WIDTH, HEIGHT/4));
         this.southContent = southContent;
-        southContentContainer.add(this.southContent);
+
         repaint();
         revalidate();
     }
