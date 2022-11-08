@@ -374,7 +374,6 @@ public class Board {
             int wordScore = 0;
             int multiplier = 1;
             for (BoardTile tile:newWord.getTiles()) {
-                if((tile.getX() >= row && tile.getY() == column) || (tile.getX() == row && tile.getY() >= column)){
                     switch (tile.getType()){
                         case X2LETTER:
                             wordScore+=tile.getLetter().getScore()*2;
@@ -394,7 +393,6 @@ public class Board {
                             wordScore+=tile.getLetter().getScore();
                             break;
                     }
-                }
             }
             score += wordScore*multiplier;
         }
