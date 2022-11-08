@@ -1,3 +1,7 @@
+package Model;
+
+import Model.Letter;
+import Model.ScrabbleModel;
 
 import java.util.*;
 /**
@@ -121,7 +125,7 @@ public class TextController {
 
         while (!validCoords){
             System.out.println("Please enter your coordinates. They must be in one of the following formats: 2d, d2");
-            System.out.println("Letter/Row first (d2): Horizontal, left to right placement");
+            System.out.println("Model.Letter/Row first (d2): Horizontal, left to right placement");
             System.out.println("Number/Column first (2d): Vertical, top to bottom placement");
             coords = inputHandler.nextLine();
             validCoords = isValidCoords(coords);
@@ -191,7 +195,7 @@ public class TextController {
         String word = "";
         boolean validWord = false;
         while (!validWord){
-            System.out.println("Please enter the name of Player "+ (index+1));
+            System.out.println("Please enter the name of Model.Player "+ (index+1));
             word = inputHandler.nextLine();
             validWord = isValidWord(word);
         }

@@ -1,10 +1,12 @@
+package Model;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class Hand takes care of holding, playing, and drawing
- * Letter tiles for a Player.
- * When playing letters, verifies the Hand contains them.
+ * Class Model.Hand takes care of holding, playing, and drawing
+ * Model.Letter tiles for a Model.Player.
+ * When playing letters, verifies the Model.Hand contains them.
  *
  * @author Alexandre Marques - 101189743
  * @version 2022-10-23
@@ -12,13 +14,13 @@ import java.util.List;
 public class Hand {
     /** The game's draw pile (should be the same for all players/hands in the game) */
     final private DrawPile pile;
-    /** The Hand's contained letters*/
+    /** The Model.Hand's contained letters*/
     final private List<Letter> letters;
-    /** Hand's maximum capacity. Always draw back up to it when using letters*/
+    /** Model.Hand's maximum capacity. Always draw back up to it when using letters*/
     final static private int HAND_SIZE = 7;
 
     /**
-     * Hand constructor, saves draw pile and
+     * Model.Hand constructor, saves draw pile and
      * creates an "empty" hand, has no Letters yet.
      *
      * @author Alexandre Marques - 101189743
@@ -32,7 +34,7 @@ public class Hand {
     }
 
     /**
-     * Keeps drawing (with draw()) until the HAND_SIZE Letter limit is reached.
+     * Keeps drawing (with draw()) until the HAND_SIZE Model.Letter limit is reached.
      *
      * @see #draw()
      * @throws NullPointerException if draw pile has no more letters to draw.
@@ -47,7 +49,7 @@ public class Hand {
     }
 
     /**
-     * Draw a letter from the game's DrawPile,
+     * Draw a letter from the game's Model.DrawPile,
      * then add it to the hand's letters.
      *
      * @throws NullPointerException if draw pile has no more letters to draw.
@@ -66,7 +68,7 @@ public class Hand {
     }
 
     /**
-     * Checks if "used" letters are all in the Hand.
+     * Checks if "used" letters are all in the Model.Hand.
      *
      * @return If the letters used are all in the hand, returns true.
      * Otherwise, return False.
@@ -78,7 +80,7 @@ public class Hand {
             if(!(letters.contains(l)))
                 return false;
         }
-        // Every letter used is contained in the Hand
+        // Every letter used is contained in the Model.Hand
         return true;
     }
 
@@ -89,7 +91,7 @@ public class Hand {
      *  Otherwise, return False.
      * @author Alexandre Marques - 101189743
      *
-     * @throws NullPointerException to indicate that the game's DrawPile is empty.
+     * @throws NullPointerException to indicate that the game's Model.DrawPile is empty.
      */
     public boolean useLetters(List<Letter> used) throws NullPointerException{
         if(!containsLetters(used)){
@@ -101,7 +103,7 @@ public class Hand {
             letters.remove(l);
         }
 
-        /* Letters were used, so Hand needs to be filled.
+        /* Letters were used, so Model.Hand needs to be filled.
          * Note: Throws exception for empty draw pile!
          */
         fillHand();
@@ -112,7 +114,7 @@ public class Hand {
      * Get held letters. Useful for end of game operations.
      * (Checking for empty hand, remaining letters)
      *
-     * @return List of held Letter(s)
+     * @return List of held Model.Letter(s)
      * @author Alexandre Marques
      */
     public List<Letter> getHeldLetters(){
@@ -120,16 +122,16 @@ public class Hand {
     }
 
     /**
-     * Shows letters contained in the Hand.
-     * Format: "Hand: (A, 1) (B, 1) {other letters}"
+     * Shows letters contained in the Model.Hand.
+     * Format: "Model.Hand: (A, 1) (B, 1) {other letters}"
      *
-     * @return String representation of Hand object.
+     * @return String representation of Model.Hand object.
      * @author Alexandre Marques - 101189743
      */
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Hand: ");
+        sb.append("Model.Hand: ");
         // Append each letter, + a trailing space
         for (Letter l: letters) {
             // Format: "(A, 1) "

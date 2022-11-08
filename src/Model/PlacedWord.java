@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +15,7 @@ public class PlacedWord {
     //the tiles that make up the word and its placement
 
     /**
-     * Constructor for a PlacedWord object
+     * Constructor for a Model.PlacedWord object
      * @author Timothy Kennedy
      *
      * @param tiles the tiles that make up the placed word
@@ -72,7 +74,7 @@ public class PlacedWord {
      * Creates and returns a string representation of the placed word
      * @author Timothy Kennedy
      *
-     * @return the word contained in the PlacedWord object
+     * @return the word contained in the Model.PlacedWord object
      */
     public String toString(){
         String returnString = "";

@@ -1,9 +1,11 @@
+package Model;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Class DrawPile takes care of the letter drawing logic.
+ * Class Model.DrawPile takes care of the letter drawing logic.
  * Keeps track of drawn letters to reduce their draw likelihoods.
  *
  * @author Alexandre Marques - 101189743
@@ -14,7 +16,7 @@ public class DrawPile {
     private List<Letter> letterPile;
 
     /**
-     * DrawPile constructor, initializes letterPile to its initial state.
+     * Model.DrawPile constructor, initializes letterPile to its initial state.
      *
      * @see #resetPile()
      * @author Alexandre Marques - 101189743
@@ -25,7 +27,7 @@ public class DrawPile {
 
     /**
      * Sets letterPile to its initial state,
-     * That is each Letter should appear exactly as many
+     * That is each Model.Letter should appear exactly as many
      * times in the letterPile as their defined frequency says.
      * Then, randomises the list order (for random draws).
      *
@@ -35,7 +37,7 @@ public class DrawPile {
         // Quick reset -> makes empty list
         this.letterPile = new ArrayList<>();
 
-        // For each Letter enum...
+        // For each Model.Letter enum...
         for(Letter l: Letter.values()){
             // Add one copy of the letter until
             // there are as many copies as the letter's frequency
@@ -65,7 +67,7 @@ public class DrawPile {
      * Removes and returns a random letter from the letterPile.
      * In the case of an empty pile, returns null.
      *
-     * @return A randomly picked letter from the DrawPile if possible,
+     * @return A randomly picked letter from the Model.DrawPile if possible,
      *  otherwise null.
      *  @author Alexandre Marques - 101189743
      */

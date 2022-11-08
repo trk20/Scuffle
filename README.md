@@ -46,8 +46,8 @@ The score value of each letter is indicated by a number next to its character.
 The score value of a blank ([M3](#future-milestones)) is zero.
 2. The score for each turn is the sum of the letter values in each word(s) formed or modified on that turn, 
 plus the additional points obtained from placing letters on _Premium Squares_ [M3](#future-milestones).
-3. Premium Letter Squares: (Scoring unaffected for now! [M3](#future-milestones))
-   - Letter score: 2L is double letter score, 3L is triple letter score
+3. Premium Model.Letter Squares: (Scoring unaffected for now! [M3](#future-milestones))
+   - Model.Letter score: 2L is double letter score, 3L is triple letter score
    - Word score: 2W is double word score, 3W is triple word score -> counted after premium letter tiles. 
    They can multiply each other
       - Center square counts as 2W
@@ -69,35 +69,35 @@ In case of a tie, the player with the highest score before adding or deducting u
 - Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
 - Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
 - Letters can be added back in (for discarding) and drawn from the pile (to remove them)
-### Hand
+### Model.Hand
 - Uses a list of letters to hold up to 7 letters
   - If possible, always fills up to the max (as long as there are letters to draw), otherwise alerts model
 - Allow to check if the hand contains a subset of letters
 - Allows to use letters, or see letters
-### Player
+### Model.Player
 - Can add to their own points, or display them
 - Can check if they have letters, play letters, or discard them
 - Cna display their info (name, score, hand information)
-### Letter (enums)
+### Model.Letter (enums)
 - Has information on frequency of appearence, a display character, and a point value.
 - Has static methods to return lists of Letters from strings or vice-versa
-### Class TextController:
+### Class Model.TextController:
 This class focuses on prompting and parsing the user input and ensuring that the input is in the desired format.
 This class follows a pattern of prompting/scanning method and a verifying method. The prompter runs in a loop 
 and everytime a user's input is entered, the verifier is called to verify the input and if it is valid,
 the prompter returns the value.
-### Class ScrabbleModel:
+### Class Model.ScrabbleModel:
 This class handles running the game and delegating tasks to other classes. This class follows the model pattern
 from the MVC design pattern. This class is also the main class which starts the game and handles the user's turns as well as
 it handles processing and parsing of the user input.  
-### Class Board :
+### Class Model.Board :
 This class handles the internal representation of the board's current state. It contains the methods to validate and place words, and to return the score given by a placement.
-### Class BoardTile:
-This class is used to handle the squares in the Board class.
-The BoardTile Class uses two enums, Type enum and Letter enum.
-The Type enum is created within the BoardTile Class and it is used to assign types to the BoardTiles. Since the types are constant we decided to put them in an enum to avoid accidentally assigning a wrong type.
-The Letter enum is also used in the BoardTile class, each tile wil be able to hold one Letter. Letters were made to be an enum since they are constant and contain values and frequencies of each letter.
-The BoardTile also keeps track of its location on the board, using integers x and y to store the appropriate row and column values.
+### Class Model.BoardTile:
+This class is used to handle the squares in the Model.Board class.
+The Model.BoardTile Class uses two enums, Type enum and Model.Letter enum.
+The Type enum is created within the Model.BoardTile Class and it is used to assign types to the BoardTiles. Since the types are constant we decided to put them in an enum to avoid accidentally assigning a wrong type.
+The Model.Letter enum is also used in the Model.BoardTile class, each tile wil be able to hold one Model.Letter. Letters were made to be an enum since they are constant and contain values and frequencies of each letter.
+The Model.BoardTile also keeps track of its location on the board, using integers x and y to store the appropriate row and column values.
 
 ## Missing Features and bugs (see issues)
 ### Milestone 1

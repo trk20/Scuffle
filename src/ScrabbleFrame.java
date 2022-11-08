@@ -53,7 +53,7 @@ public class ScrabbleFrame extends JFrame{
         // Intialize Default Content
         JPanel tempCenterContent = new JPanel();
         tempCenterContent.setBackground(Color.WHITE);
-        tempCenterContent.add(new JLabel("Board"));
+        tempCenterContent.add(new JLabel("Model.Board"));
         setCenterContent(tempCenterContent);
 
         JPanel tempLeftContent = new JPanel();
@@ -68,7 +68,7 @@ public class ScrabbleFrame extends JFrame{
 
         JPanel tempSouthContent = new JPanel();
         tempSouthContent.setBackground(Color.YELLOW);
-        tempSouthContent.add(new JLabel("Hand"));
+        tempSouthContent.add(new JLabel("Model.Hand"));
         setSouthContent(tempSouthContent);
 
         JPanel tempRightContent = new JPanel();
