@@ -61,6 +61,15 @@ public class HandView extends JPanel implements HandChangeListener {
     }
 
     /**
+     * Keeps GUi up to date any time something is added/removed.
+     * Should be called at the end of each "update" method.
+     */
+    private void updateGUI(){
+        validate();
+        repaint();
+    }
+
+    /**
      * From the HandView perspective, toggling selection means switching a tile view's row.
      * Precondition: tile passed is in handTileMap (should be handled when creating the view instance)
      *
@@ -83,6 +92,8 @@ public class HandView extends JPanel implements HandChangeListener {
             unselected_row.add(view);
             selected_row.remove(view);
         }
+
+        updateGUI();
     }
 
     /**
@@ -105,10 +116,9 @@ public class HandView extends JPanel implements HandChangeListener {
             handTileMap.put(t, view);
         }
 
-        // Update GUI to show new hand
-        validate();
-        repaint();
+        updateGUI();
     }
+
 
     /**
      * Handles hand change events. This either indicates a selection, or a discard/draw event.

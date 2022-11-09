@@ -16,7 +16,7 @@ public class TileView extends HandTileController {
      *
      * @param tile The tile to view
      */
-    TileView(Tile tile){
+    public TileView(Tile tile){
         super(tile);
 
         setPreferredSize(new Dimension(80,80));
