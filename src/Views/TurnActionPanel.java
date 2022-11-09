@@ -3,7 +3,6 @@ package Views;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class TurnActionPanel extends JPanel{
 
     private JPanel turnPanel;
