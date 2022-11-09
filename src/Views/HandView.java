@@ -85,8 +85,7 @@ public class HandView extends JPanel implements HandChangeListener {
         }
 
         // Add in desired row, remove in other (since it should always be in a row, but not both)
-        final boolean selected = e.getSelection();
-        if(selected){ // Select tile
+        if(e.getSelection()){ // Select tile
             selected_row.add(view);
             unselected_row.remove(view);
         } else{ // Un-select tile
