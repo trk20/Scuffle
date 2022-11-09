@@ -1,3 +1,6 @@
+package Views;
+
+import Model.ScrabbleModel;
 
 import javax.swing.*;
 
