@@ -81,7 +81,7 @@ In case of a tie, the player with the highest score before adding or deducting u
 ### Model.Letter (enums)
 - Has information on frequency of appearence, a display character, and a point value.
 - Has static methods to return lists of Letters from strings or vice-versa
-### Class OptionPaneHandler:
+### Class Model.TextController:
 This class focuses on prompting and parsing the user input and ensuring that the input is in the desired format.
 This class follows a pattern of prompting/scanning method and a verifying method. The prompter runs in a loop 
 and everytime a user's input is entered, the verifier is called to verify the input and if it is valid,

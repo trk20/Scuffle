@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class ScrabbleModel implements SControllerListener {
     final private Board board;
-    final private OptionPaneHandler inputHandler;
+    final private TextController inputHandler;
     private ArrayList<Player> players;
     /** Player whose turn it is to play */
     private Player currentPlayer;
@@ -39,7 +39,7 @@ public class ScrabbleModel implements SControllerListener {
 
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
-        this.inputHandler = new OptionPaneHandler();
+        this.inputHandler = new TextController();
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
@@ -63,6 +63,7 @@ public class ScrabbleModel implements SControllerListener {
 
     private void initializePlayers(){
         String name = "";
+
 
         numPlayers = inputHandler.askForNumPlayers();
         players = new ArrayList<>(numPlayers);
@@ -136,7 +137,7 @@ public class ScrabbleModel implements SControllerListener {
      * @return boolean mapped to the action
      */
     private boolean getAction(){
-        return true;
+        return inputHandler.getUserAction();
     }
 
     /**
@@ -145,8 +146,13 @@ public class ScrabbleModel implements SControllerListener {
      * @author Kieran, Alexandre
      */
     private void handleDiscard(Player currentPlayer){
-        // TODO to be implemented later
-        ;
+        List<Letter> word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
+
+        // If discard returns false -> player does not have the letters to discard
+        while(!currentPlayer.discardLetters(word)){
+            System.out.println("You do not contain these letters please try again");
+            word = inputHandler.askForWord("What letters would you like to discard? Write them as one word");
+        }
     }
 
     /**
@@ -154,21 +160,34 @@ public class ScrabbleModel implements SControllerListener {
      * @param currentPlayer The player whose turn it is
      */
     private void handlePlace(Player currentPlayer){
-//        try{
-//            currentPlayer.placeLetters(word);
-//        }catch(NullPointerException e){
-//            System.out.println(e.getMessage());
-//            // if player is out of letters, end the game
-//            if(currentPlayer.outOfLetters()){
-//                this.gameFinished = true;
-//            }
-//        }
-//
-//        board.placeWord(word, x, y, direction);
-//        printBoard();
-//        currentPlayer.addPoints(board.boardScore(word, x, y, direction));
-        // TODO to be implemented later
-        ;
+        List<Letter> word = inputHandler.askForWord(null);
+        String coords = "";
+        boolean isValidInput = false;
+        int x, y;
+        boolean direction;
+
+        while(!isValidInput){
+            word = inputHandler.askForWord(null);
+            coords = inputHandler.askForCoords();
+            isValidInput = validateInput(coords, word, currentPlayer);
+        }
+        try{
+            currentPlayer.placeLetters(word);
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+            // if player is out of letters, end the game
+            if(currentPlayer.outOfLetters()){
+                this.gameFinished = true;
+            }
+        }
+
+        x = getXCoord(coords);
+        y = getYCoord(coords);
+        direction = getDirection(coords);
+
+        board.placeWord(word, x, y, direction);
+        printBoard();
+        currentPlayer.addPoints(board.boardScore(word, x, y, direction));
     }
 
     /**
