@@ -1,8 +1,10 @@
 package Model;
 
 import Controllers.OptionPaneHandler;
+import Events.*;
 import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
+import Views.TileView;
 import Events.ControllerEvent;
 import Events.ModelEvent;
 import Events.NewPlayerHandEvent;
@@ -40,8 +42,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
     /** False until something triggers a game to end (Model.Player out of Letters, or no more possible moves)*/
     boolean gameFinished; // FIXME: may become a controller signal in the future, with no need for a field
     /** Model listeners to notify on model change */
-
     List<ModelListener> modelListeners;
+    /** list of selected tiles (in order) to pass to the board when placing*/
+    List<Tile> selectedTiles;
 
     public ScrabbleModel() {
         this.board = new Board(BOARD_SIZE, BOARD_SIZE);
@@ -49,6 +52,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
+        this.selectedTiles = new ArrayList<>();
     }
 
     /**
@@ -207,6 +211,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
 //        currentPlayer = players.get(turn-1);
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
+        // FIXME: inject a signal to tile selection flip, select first tile in hand.
+        List<Tile> playerTiles = getCurPlayer().getHand().getHeldTiles();
+        // Need to pass in controller to make a click event
+        flipTileSelect(new TileClickEvent(new TileView(playerTiles.get(0))));
         /*
 //        System.out.println("==========================");
 //        System.out.printf("It is Model.Player %d's turn\n", turn);
@@ -252,16 +260,32 @@ public class ScrabbleModel implements SControllerListener, SModel{
     }
 
     /**
+     * Flip selection of the tile relating to the tile click event.
+     * @param tc Tile selection event
+     */
+    private void flipTileSelect(TileClickEvent tc) {
+        Tile t = tc.getTile();
+        // If tile is not in selection list yet, it becomes selected
+        final boolean selectedAfterClick = !(selectedTiles.contains(t));
+        // Add or remove from selection list depending on new desired state
+        if(selectedAfterClick){
+            selectedTiles.add(t);
+        } else {
+            selectedTiles.remove(t);
+        }
+        // Model changed, notify listeners of new state:
+        notifyModelListeners(new TileSelectEvent(this, t, selectedAfterClick));
+    }
+
+    /**
      * Process Controller events when one is raised.
      *
      * @param e the event to process
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
-        if(e instanceof TileClickEvent tc){
-            Tile tile = tc.getTile();
-            // TODO: do an == to select the same memory ref... may lead to issues if we pass copies instead
-        }
+//        System.out.println("Handle con");
+        if(e instanceof TileClickEvent tc) flipTileSelect(tc);
     }
 
     /**

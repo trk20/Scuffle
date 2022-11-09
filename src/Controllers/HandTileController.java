@@ -62,6 +62,7 @@ public abstract class HandTileController extends JPanel implements SController {
      * Flips the selection of the tile in the model.
      */
     protected void flipSelection(){
+//        System.out.println("SelFlip"); Works up to here
         notifyControllerListeners();
     }
 
