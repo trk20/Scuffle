@@ -18,29 +18,33 @@ import java.util.*;
  * @version NOV-11
  */
 public class ScrabbleModel implements SControllerListener, SModel{
-    final private Board board;
-    final private OptionPaneHandler inputHandler;
-    private ArrayList<Player> players;
-    /** Player whose turn it is to play */
-    private Player currentPlayer;
-    private int numPlayers;
-    private final int SIZE = 15;
-    private int turn = 0;
-    public static final Boolean DISCARD = false;
-    public static final Boolean PLACE = true;
-    /** Model's shared Model.DrawPile */
-    private final DrawPile drawPile;
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
     public static final int MIN_PLAYERS = 1;
+    public static final Boolean DISCARD = false;
+    public static final Boolean PLACE = true;
+    private static final int BOARD_SIZE = 15;
+
+    // Model components
+    final private Board board;
+    private ArrayList<Player> players;
+    /** Model's shared DrawPile */
+    private final DrawPile drawPile;
+
+    final private OptionPaneHandler inputHandler; // FIXME: Should be refactored out of the model eventually
+
+    /** Player whose turn it is to play */
+    private int numPlayers;
+    private int turn = 0;
     /** False until something triggers a game to end (Model.Player out of Letters, or no more possible moves)*/
-    boolean gameFinished;
+    boolean gameFinished; // FIXME: may become a controller signal in the future, with no need for a field
     /** Model listeners to notify on model change */
+
     List<ModelListener> modelListeners;
 
     public ScrabbleModel() {
-        this.board = new Board(SIZE, SIZE);
+        this.board = new Board(BOARD_SIZE, BOARD_SIZE);
         this.inputHandler = new OptionPaneHandler();
         this.drawPile = new DrawPile();
         this.gameFinished = false;
@@ -48,17 +52,16 @@ public class ScrabbleModel implements SControllerListener, SModel{
     }
 
     /**
-     * Increments turn
-     * @param turn: current value
-     * @return new value
+     * Increments turn, rolling back to the first turn after passing the last player.
      */
-    private int incrementTurn(int turn){
-        return turn == numPlayers ? 1 : ++turn;
+    private void incrementTurn(){
+        turn = turn == numPlayers ? 0 : turn+1;
     }
 
     /**
      * Prints Model.Board
      */
+    @Deprecated // View duty
     private void printBoard(){
         System.out.println(board);
     }
@@ -80,6 +83,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * @param coords String inputted by the user. Will be in the form 2f or f2.
      * @return The integer/boolean value from the input
      */
+    @Deprecated
     private int getYCoord(String coords){
         if(coords.length() == 3){
              return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(coords.substring(1, 2))
@@ -89,6 +93,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
                 : Integer.parseInt(String.valueOf(coords.charAt(0)));
     }
 
+    @Deprecated
     private int getXCoord(String coords){
         if (coords.length() == 3){
              return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65
@@ -98,6 +103,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
                 : (int) Character.toUpperCase(coords.charAt(1)) - 65;
     }
 
+    @Deprecated
     private boolean getDirection(String coords){
         return Character.isLetter(coords.charAt(0));
     }
@@ -198,11 +204,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
     private void nextTurn(){
         boolean action;
 
-        turn = incrementTurn(turn);
-        currentPlayer = players.get(turn-1);
+//        currentPlayer = players.get(turn-1);
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
-        while(true);
         /*
 //        System.out.println("==========================");
 //        System.out.printf("It is Model.Player %d's turn\n", turn);
@@ -217,6 +221,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
         }
         // Print player state after turn
         System.out.println(currentPlayer);*/
+        incrementTurn();
+
+        while(true); // Temp breakpoint
     }
 
     /**
@@ -233,7 +240,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * @return player whose turn it is to play
      */
     public Player getCurPlayer() {
-        return currentPlayer;
+        return players.get(turn);
     }
 
     /**
