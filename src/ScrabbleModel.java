@@ -141,6 +141,19 @@ public class ScrabbleModel {
      * @param currentPlayer The player whose turn it is
      */
     private void handlePlace(Player currentPlayer){
+//        try{
+//            currentPlayer.placeLetters(word);
+//        }catch(NullPointerException e){
+//            System.out.println(e.getMessage());
+//            // if player is out of letters, end the game
+//            if(currentPlayer.outOfLetters()){
+//                this.gameFinished = true;
+//            }
+//        }
+//
+//        board.placeWord(word, x, y, direction);
+//        printBoard();
+//        currentPlayer.addPoints(board.boardScore(word, x, y, direction));
         // TODO to be implemented later
         ;
     }
