@@ -16,7 +16,7 @@ public class Tile {
      *
      * @param letter The letter enum the Tile represents
      */
-    Tile(Letter letter){
+    public Tile(Letter letter){
         this.letter = letter;
     }
 
