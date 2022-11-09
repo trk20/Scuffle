@@ -1,3 +1,7 @@
+package Views;
+
+import Model.ScrabbleModel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,11 +17,12 @@ public class ScrabbleFrame extends JFrame{
     private final int HEIGHT = 720;
     private final int menuHeight = 50;
 
+    private final ScrabbleModel model;
 
 
-    
-    public ScrabbleFrame() throws HeadlessException {
+    public ScrabbleFrame(ScrabbleModel model) throws HeadlessException {
         super("Scrabble");
+        this.model = model;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
@@ -60,10 +65,10 @@ public class ScrabbleFrame extends JFrame{
         tempNorthContent.add(new JLabel("Menu"));
         setNorthContent(tempNorthContent);
 
-        JPanel tempSouthContent = new JPanel();
-        tempSouthContent.setBackground(Color.YELLOW);
-        tempSouthContent.add(new JLabel("Model.Hand"));
-        setSouthContent(tempSouthContent);
+//        JPanel tempSouthContent = new HandView();
+//        tempSouthContent.setBackground(Color.YELLOW);
+//        tempSouthContent.add(new JLabel("Model.Hand"));
+        setSouthContent(new HandView(model));
 
         JPanel tempRightContent = new JPanel();
         tempRightContent.setBackground(Color.CYAN);
@@ -113,8 +118,12 @@ public class ScrabbleFrame extends JFrame{
 
 
 
-    public static void main(String[] args) {
-        ScrabbleFrame frame = new ScrabbleFrame();
+    public static void main(String[] args){
+    // TODO: may change model placement, here for testing atm
+    ScrabbleModel model = new ScrabbleModel();
 
+    ScrabbleFrame frame = new ScrabbleFrame(model);
+
+    model.startGame();
     }
 }

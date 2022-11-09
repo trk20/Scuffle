@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class DrawPile {
     /** Contains all letter tiles not drawn in the game yet*/
-    private List<Letter> letterPile;
+    private List<Tile> letterPile;
 
     /**
      * Model.DrawPile constructor, initializes letterPile to its initial state.
@@ -42,7 +42,7 @@ public class DrawPile {
             // Add one copy of the letter until
             // there are as many copies as the letter's frequency
             for(int i = 0; i < l.getFrequency(); i++){
-                letterPile.add(l);
+                letterPile.add(new Tile(l));
             }
         }
         // Shuffle list for random draw order
@@ -56,7 +56,7 @@ public class DrawPile {
      * @param discarded List of discarded letters to add back to the pile
      * @author Alexandre Marques - 101189743
      */
-    public void addToPile(List<Letter> discarded) {
+    public void addToPile(List<Tile> discarded) {
         // Add all the discarded letters back to the pile
         letterPile.addAll(discarded);
         // Shuffle list for random draw order
@@ -68,10 +68,10 @@ public class DrawPile {
      * In the case of an empty pile, returns null.
      *
      * @return A randomly picked letter from the Model.DrawPile if possible,
-     *  otherwise null.
-     *  @author Alexandre Marques - 101189743
+     * otherwise null.
+     * @author Alexandre Marques - 101189743
      */
-    public Letter draw() {
+    public Tile draw() {
         // If list is empty, return null
         if(letterPile.isEmpty()) return null;
         // Pile order is already randomised so return first element

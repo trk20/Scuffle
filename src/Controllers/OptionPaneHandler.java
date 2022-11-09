@@ -1,3 +1,6 @@
+package Controllers;
+
+import Model.ScrabbleModel;
 
 import javax.swing.*;
 
@@ -51,7 +54,7 @@ public class OptionPaneHandler {
 
         // Makes sure the given input is within the model's max players
         while (!validNum){
-            numPlayers = JOptionPane.showInputDialog("How many players are playing? Maximum "+ScrabbleModel.MAX_PLAYERS);
+            numPlayers = JOptionPane.showInputDialog("How many players are playing? Maximum "+ ScrabbleModel.MAX_PLAYERS);
 
             // Checks if it's a single digit (0-9)
             validNum = isValidNum(numPlayers);
