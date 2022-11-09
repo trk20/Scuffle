@@ -29,6 +29,8 @@ public class HandView extends JPanel implements HandChangeListener {
     final private JPanel unselected_row;
     /** Maps model tiles to their respective tile view (for selection referencing)*/
     final private HashMap<Tile, TileView> handTileMap;
+    /** Model reference, needed to pass it to new controllers as a listener*/
+    final private ScrabbleModel model;
 
     /**
      * HandView constructor, initializes fields and components of the View.
@@ -37,6 +39,7 @@ public class HandView extends JPanel implements HandChangeListener {
         unselected_row = new JPanel();
         selected_row = new JPanel();
         handTileMap = new HashMap<>();
+        this.model = model;
 
         // Composed of two sections, selected tiles on top, unselected on the bottom.
         setLayout(new GridLayout(2, 1));
@@ -109,14 +112,27 @@ public class HandView extends JPanel implements HandChangeListener {
 
         // Set new Hand
         for(Tile t: h.getHeldTiles()){
-            System.out.println(t.getLetter());
-            TileView view = new TileView(t);
-            unselected_row.add(view);
-            // Update map for the new hand, for each tile
-            handTileMap.put(t, view);
+//            System.out.println(t.getLetter());
+            addNewTileView(t);
         }
 
         updateGUI();
+    }
+
+    /**
+     * Adds a new tile view to the HandView.
+     * Groups a set of operations that need to be done each time to ensure correct behavior.
+     *
+     * @param tile The tile to add to the hand
+     */
+    private void addNewTileView(Tile tile){
+
+        TileView view = new TileView(tile);
+        unselected_row.add(view);
+        // Add model listener to tile
+        view.addControllerListener(model);
+        // Update map for the new hand, for each tile
+        handTileMap.put(tile, view);
     }
 
 

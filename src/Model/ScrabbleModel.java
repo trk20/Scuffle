@@ -280,6 +280,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
+//        System.out.println("Handle con");
         if(e instanceof TileClickEvent tc) flipTileSelect(tc);
     }
 
