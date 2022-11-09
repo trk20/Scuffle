@@ -3,13 +3,11 @@ package Views;
 import Events.HandChangeEvent;
 import Events.Listeners.HandChangeListener;
 import Events.NewPlayerHandEvent;
-import Events.TileClickEvent;
 import Events.TileSelectEvent;
 import Model.Hand;
 import Model.Letter;
 import Model.ScrabbleModel;
 import Model.Tile;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,7 +102,7 @@ public class HandView extends JPanel implements HandChangeListener {
      * They are all considered "unselected" initially and go to the bottom row.
      * @param h The new hand to set in the unselected row
      */
-    private void updateNewHand(@NotNull Hand h){
+    private void updateNewHand(Hand h){
         // Clear old hand (including tile->view mappings from old hand)
         unselected_row.removeAll();
         selected_row.removeAll();

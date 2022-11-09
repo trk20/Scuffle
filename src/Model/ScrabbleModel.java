@@ -1,6 +1,5 @@
 package Model;
 
-import Controllers.OptionPaneHandler;
 import Events.*;
 import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
