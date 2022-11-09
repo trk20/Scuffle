@@ -5,6 +5,7 @@ import Model.ScrabbleModel;
 import javax.swing.*;
 import java.awt.*;
 
+
 public class ScrabbleFrame extends JFrame{
 
     private JPanel centerContent;
