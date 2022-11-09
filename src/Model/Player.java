@@ -1,27 +1,33 @@
+package Model;
+
+import Model.Hand;
+import Model.Letter;
+import Model.ScrabbleModel;
+
 import java.util.List;
 
 /**
- * Class Player takes care of information related to players.
+ * Class Model.Player takes care of information related to players.
  * They have names, letters to play, and a score to keep track of.
  *
  * @author Alexandre Marques - 101189743
  * @version 2022-10-23
  */
 public class Player {
-    /** Player's display name */
+    /** Model.Player's display name */
     final private String name;
-    /** Player's Hand (holds their letters) */
+    /** Model.Player's Model.Hand (holds their letters) */
     final private Hand hand;
-    /** Player's cumulative score for the game */
+    /** Model.Player's cumulative score for the game */
     private int score;
-    /** Game model, has a shared DrawPile, and a Board */
+    /** Game model, has a shared Model.DrawPile, and a Model.Board */
     final private ScrabbleModel model;
 
     /**
-     * Player constructor, sets a name from the name parameter,
+     * Model.Player constructor, sets a name from the name parameter,
      * initializes an empty hand, and sets score to 0 initially.
      *
-     * @param name the Player's display name
+     * @param name the Model.Player's display name
      * @param model the Scrabble game's model
      */
     public Player(String name, ScrabbleModel model) {
@@ -39,7 +45,7 @@ public class Player {
      * @param used List of letters to place (in order)
      * @return True if hand contains used letters, false otherwise.
      *
-     * @throws NullPointerException to indicate that the game's DrawPile is empty.
+     * @throws NullPointerException to indicate that the game's Model.DrawPile is empty.
      */
     public boolean placeLetters(List<Letter> used) throws NullPointerException{
         return hand.useLetters(used);
@@ -54,19 +60,19 @@ public class Player {
      * @author Alexandre Marques - 101189743
      */
     public boolean discardLetters(List<Letter> used){
-        // Add the letters to be removed to the model's DrawPile
+        // Add the letters to be removed to the model's Model.DrawPile
         model.getDrawPile().addToPile(used);
         // Remove the letters from the hand (return true if hand contains used letters)
         return hand.useLetters(used);
 
         /* Note: Will always be able to draw enough letters. -> no empty pile exception
-         * Worst case scenario: DrawPile is empty, discard hand, Player draws their own hand back.
+         * Worst case scenario: Model.DrawPile is empty, discard hand, Model.Player draws their own hand back.
          * This works only because "useLetters" is called after "addToPile" -> order is important!
          */
     }
 
     /**
-     * Add points from a placement to this Player's score.
+     * Add points from a placement to this Model.Player's score.
      *
      * @param points points to be added to the score
      * @author Alexandre Marques - 101189743
@@ -85,7 +91,7 @@ public class Player {
      *  Score: {score}
      *  {hand}"
      *
-     * @return Player's String representation
+     * @return Model.Player's String representation
      * @author Alexandre Marques - 101189743
      */
     @Override
@@ -101,11 +107,19 @@ public class Player {
     }
 
     /**
-     * Checks if the Player has no more letters to play.
-     * @return True if there are no more letters in the Hand.
+     * Checks if the Model.Player has no more letters to play.
+     * @return True if there are no more letters in the Model.Hand.
      */
     public boolean outOfLetters(){
         // No more letters in the hand -> size == 0
         return hand.getHeldLetters().size() == 0;
+    }
+
+    /**
+     * Get player's hand.
+     * @return the player's hand.
+     */
+    public Hand getHand() {
+        return hand;
     }
 }

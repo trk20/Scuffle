@@ -1,15 +1,17 @@
+package Model;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Enumeration class Letter, contains constants for each Scrabble letter.
- * Assigns a letter score (int), and a character (String) for each Letter.
+ * Enumeration class Model.Letter, contains constants for each Scrabble letter.
+ * Assigns a letter score (int), and a character (String) for each Model.Letter.
  *
  * @author Alexandre Marques - 101189743
  * @version 2022-10-19
  */
 public enum Letter {
-    // Letter enums, sorted by order of frequency, in tiles/game
+    // Model.Letter enums, sorted by order of frequency, in tiles/game
     E('E', 1, 12),
     A('A', 1, 9),
     I('I', 1, 9),
@@ -48,7 +50,7 @@ public enum Letter {
     /** Frequency of appearance, how many copies are in a fresh draw pile*/
     private final int frequency;
     /**
-     * Letter Constructor, initializes fields with given parameters.
+     * Model.Letter Constructor, initializes fields with given parameters.
      *
      * @param character Character to associate with letter
      * @param score     Score to associate with letter
@@ -62,20 +64,20 @@ public enum Letter {
     }
 
     /**
-     * Returns the score associated to this Letter.
+     * Returns the score associated to this Model.Letter.
      *
      * @author Alexandre Marques - 101189743
-     * @return Letter's Scrabble score.
+     * @return Model.Letter's Scrabble score.
      */
     public int getScore() {
         return score;
     }
 
     /**
-     * Returns the frequency associated to this Letter.
+     * Returns the frequency associated to this Model.Letter.
      *
      * @author Alexandre Marques - 101189743
-     * @return Letter's Scrabble frequency.
+     * @return Model.Letter's Scrabble frequency.
      */
     public int getFrequency() {
         return frequency;
@@ -86,7 +88,7 @@ public enum Letter {
      * Assumes all characters are valid.
      *
      * @author Vladimir Kovacina
-     * @param word a word to be seperated into individual Letter enums
+     * @param word a word to be seperated into individual Model.Letter enums
      * @return An ArrayList of letters corresponding to the word's characters.
      * @author Alexandre Marques - 101189743
      */
@@ -94,10 +96,10 @@ public enum Letter {
         ArrayList<Letter> letters = new ArrayList<>();
         //Go through the letters of the word
         for (int i =0; i<word.length(); i++){
-            //Look for the corresponding Letter
+            //Look for the corresponding Model.Letter
             for(Letter l: Letter.values()){
                 if(l.character == word.toUpperCase().charAt(i)){
-                    //Add the corresponding Letter to the returned ArrayList
+                    //Add the corresponding Model.Letter to the returned ArrayList
                     letters.add(l);
                 }
             }
@@ -123,10 +125,10 @@ public enum Letter {
     }
 
     /**
-     * Returns the String representation of Letter
+     * Returns the String representation of Model.Letter
      *
      * @author Alexandre Marques - 101189743
-     * @return The character associated to the Letter, as a string.
+     * @return The character associated to the Model.Letter, as a string.
      */
     @Override
     public String toString() {

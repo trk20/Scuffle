@@ -1,4 +1,4 @@
-import java.util.*;
+package Model;
 
 
 /**
@@ -25,7 +25,7 @@ public class BoardTile {
     private boolean taken;
 
     /**
-     * Constructor for creating a new BoardTile object
+     * Constructor for creating a new Model.BoardTile object
      *
      * @param type, the type of the board object
      */
@@ -122,9 +122,9 @@ public class BoardTile {
     }
 
     /**
-     * Creates a copy of this BoardTile object
+     * Creates a copy of this Model.BoardTile object
      *
-     * @return a copy of this BoardTile
+     * @return a copy of this Model.BoardTile
      */
     public BoardTile copy(){
         BoardTile copy = new BoardTile(tileType,x,y);

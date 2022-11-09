@@ -1,35 +1,48 @@
+package Model;
+
+import Events.Listeners.ModelListener;
+import Events.Listeners.SControllerListener;
+import Events.ControllerEvent;
+import Events.ModelEvent;
+import Events.TileClickEvent;
+
 import java.util.*;
 
 /**
  * Class that controls/models the overall scrabble game.
  * For Milestone 1, also acts as a text "view".
  *
- * @author Kieran Rourke
- * @version OCT-23
+ * @author Kieran Rourke, Alex
+ * @version NOV-11
  */
-public class ScrabbleModel {
+public class ScrabbleModel implements SControllerListener {
     final private Board board;
     final private TextController inputHandler;
     private ArrayList<Player> players;
+    /** Player whose turn it is to play */
+    private Player currentPlayer;
     private int numPlayers;
     private final int SIZE = 15;
     private int turn = 0;
     public static final Boolean DISCARD = false;
     public static final Boolean PLACE = true;
-    /** Model's shared DrawPile */
+    /** Model's shared Model.DrawPile */
     private final DrawPile drawPile;
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
     public static final int MIN_PLAYERS = 1;
-    /** False until something triggers a game to end (Player out of Letters, or no more possible moves)*/
+    /** False until something triggers a game to end (Model.Player out of Letters, or no more possible moves)*/
     boolean gameFinished;
+    /** Model listeners to notify on model change */
+    List<ModelListener> modelListeners;
 
     public ScrabbleModel() {
         this.board = new Board(SIZE, SIZE);
         this.inputHandler = new TextController();
         this.drawPile = new DrawPile();
         this.gameFinished = false;
+        this.modelListeners = new ArrayList<>();
     }
 
     /**
@@ -42,7 +55,7 @@ public class ScrabbleModel {
     }
 
     /**
-     * Prints Board
+     * Prints Model.Board
      */
     private void printBoard(){
         System.out.println(board);
@@ -194,12 +207,11 @@ public class ScrabbleModel {
      */
     private void nextTurn(){
         boolean action;
-        Player currentPlayer;
 
         turn = incrementTurn(turn);
         currentPlayer = players.get(turn-1);
         System.out.println("==========================");
-        System.out.printf("It is Player %d's turn\n", turn);
+        System.out.printf("It is Model.Player %d's turn\n", turn);
         // Print player state before turn
         System.out.println(currentPlayer);
         action = getAction();
@@ -216,7 +228,7 @@ public class ScrabbleModel {
     /**
      * Getter for model drawPile.
      * @author Alexandre marques - 101189743
-     * @return model's shared DrawPile
+     * @return model's shared Model.DrawPile
      */
     public DrawPile getDrawPile() {
         return drawPile;
@@ -224,5 +236,45 @@ public class ScrabbleModel {
     public static void main(String[] args){
         ScrabbleModel s = new ScrabbleModel();
         s.startGame();
+    }
+
+    /**
+     * Getter for player currently playing
+     * @return player whose turn it is to play
+     */
+    public Player getCurPlayer() {
+        return currentPlayer;
+    }
+
+    /**
+     * Getter for hand of the player currently playing
+     * @return hand of the player whose turn it is to play
+     */
+    public Hand getCurHand() {
+        return getCurPlayer().getHand();
+    }
+
+    /**
+     * Process Controller events when one is raised.
+     *
+     * @param e the event to process
+     */
+    @Override
+    public void handleControllerEvent(ControllerEvent e) {
+        if(e instanceof TileClickEvent tc){
+            Tile tile = tc.getTile();
+            // TODO: do an == to select the same memory ref... may lead to issues if we pass copies instead
+        }
+    }
+
+    /**
+     * Notify listeners about the model event
+     *
+     * @param e A model event to notify the listeners about
+     */
+    private void notifyModelListeners(ModelEvent e){
+        for (ModelListener l: modelListeners) {
+            l.handleModelEvent(e);
+        }
     }
 }

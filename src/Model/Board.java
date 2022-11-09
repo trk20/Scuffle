@@ -1,7 +1,9 @@
+package Model;
+
 import java.util.*;
 
 /**
- * Class that handles the Board for the Scrabble game
+ * Class that handles the Model.Board for the Scrabble game
  *
  * @author : Vladimir Kovacina
  * @version : 1.0
@@ -20,7 +22,7 @@ public class Board {
     private ArrayList<String> playedWords;
 
     /**
-     * Constructor for a Board object
+     * Constructor for a Model.Board object
      * @author Vladimir Kovacina
      * @author Timothy Kennedy
      *
@@ -399,7 +401,7 @@ public class Board {
         for(int index = 0; index < word.size(); index++){ //place word on the copy of the board
             board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setType(BoardTile.Type.BLANK);
         }
-//        System.out.println("Player Score:"+ score);
+//        System.out.println("Model.Player Score:"+ score);
         return score;
 
     }
@@ -413,7 +415,7 @@ public class Board {
      * @param direction whether the word is left-to-right
      * @return a list of all new words
      */
-    public List<PlacedWord> getNewWords(List<Letter> word,int row, int column, boolean direction){
+    public List<PlacedWord> getNewWords(List<Letter> word, int row, int column, boolean direction){
         List<PlacedWord> newWords = new ArrayList<>(allBoardWords(word, row, column, direction));
         for (PlacedWord aWord:currentWords) {
             if(newWords.contains(aWord)){
