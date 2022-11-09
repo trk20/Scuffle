@@ -9,7 +9,6 @@ import Model.Hand;
 import Model.Letter;
 import Model.ScrabbleModel;
 import Model.Tile;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -87,8 +86,7 @@ public class HandView extends JPanel implements HandChangeListener {
         }
 
         // Add in desired row, remove in other (since it should always be in a row, but not both)
-        final boolean selected = e.getSelection();
-        if(selected){ // Select tile
+        if(e.getSelection()){ // Select tile
             selected_row.add(view);
             unselected_row.remove(view);
         } else{ // Un-select tile
@@ -104,7 +102,7 @@ public class HandView extends JPanel implements HandChangeListener {
      * They are all considered "unselected" initially and go to the bottom row.
      * @param h The new hand to set in the unselected row
      */
-    private void updateNewHand(@NotNull Hand h){
+    private void updateNewHand(Hand h){
         // Clear old hand (including tile->view mappings from old hand)
         unselected_row.removeAll();
         selected_row.removeAll();

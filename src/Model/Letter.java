@@ -92,6 +92,7 @@ public enum Letter {
      * @return An ArrayList of letters corresponding to the word's characters.
      * @author Alexandre Marques - 101189743
      */
+    @Deprecated
     public static ArrayList<Letter> wordToLetters(String word){
         ArrayList<Letter> letters = new ArrayList<>();
         //Go through the letters of the word
@@ -116,6 +117,7 @@ public enum Letter {
      * @return A string corresponding to the word's letters.
      * @author Alexandre Marques - 101189743
      */
+    @Deprecated
     public static String lettersToString(List<Letter> word){
         StringBuilder str = new StringBuilder();
         for (Letter l: word) {

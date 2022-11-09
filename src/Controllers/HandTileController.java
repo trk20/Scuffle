@@ -86,7 +86,7 @@ public abstract class HandTileController extends JPanel implements SController {
          * @param e the event to be processed
          */
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             flipSelection();
         }
 
