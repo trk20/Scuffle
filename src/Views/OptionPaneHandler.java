@@ -37,7 +37,7 @@ public class OptionPaneHandler {
             System.out.println(String.format("Invalid input, %s is too long must be length 1 found "+num.length(), num));
             return false;
         }
-        if (!Character.isDigit(num.charAt(0))){
+        if (!Character.isDigit(num.charAt(0))) {
             System.out.println(String.format("Invalid input, %s is not a number", num));
             return false;
         }
@@ -58,13 +58,16 @@ public class OptionPaneHandler {
 
             // Checks if it's a single digit (0-9)
             validNum = isValidNum(numPlayers);
+
             if (!validNum){
                 JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a valid number",
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
             }else{
                 if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) >= ScrabbleModel.MAX_PLAYERS){
-                    JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a number below "+ScrabbleModel.MAX_PLAYERS,
-                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a number below "+ScrabbleModel.MAX_PLAYERS, "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    validNum = false;
+                }else if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) == 0){
+                    JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a number above 0", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                     validNum = false;
                 }
             }

@@ -1,6 +1,7 @@
 package Events;
 
 import Model.Hand;
+import Model.Player;
 import Model.ScrabbleModel;
 
 /**
@@ -28,5 +29,8 @@ public class NewPlayerHandEvent extends HandChangeEvent{
      */
     public Hand getHand(){
         return getModel().getCurHand();
+    }
+    public Player getPlayer(){
+        return getModel().getCurPlayer();
     }
 }
