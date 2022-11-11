@@ -3,13 +3,11 @@ package Views;
 import Events.HandChangeEvent;
 import Events.Listeners.HandChangeListener;
 import Events.NewPlayerHandEvent;
-import Events.TileClickEvent;
 import Events.TileSelectEvent;
 import Model.Hand;
 import Model.Letter;
 import Model.ScrabbleModel;
 import Model.Tile;
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,19 +46,19 @@ public class HandView extends JPanel implements HandChangeListener {
 
         model.addModelListener(this);
 
-        // FIXME: remove after testing
-//        selected_row.add(new TileView(new Tile(Letter.S)));
-        unselected_row.add(new TileView(new Tile(Letter.N)));
-        unselected_row.add(new TileView(new Tile(Letter.U)));
-        unselected_row.add(new TileView(new Tile(Letter.L)));
-        unselected_row.add(new TileView(new Tile(Letter.L)));
-
-        // Selection test
-        Tile st = new Tile(Letter.S);
-        TileView sv = new TileView(st);
-        handTileMap.put(st, sv);
-        unselected_row.add(sv);
-        updateSelectionRow(new TileSelectEvent(new ScrabbleModel(), st, true));
+//        // FIXME: remove after testing
+////        selected_row.add(new TileView(new Tile(Letter.S)));
+//        unselected_row.add(new TileView(new Tile(Letter.N)));
+//        unselected_row.add(new TileView(new Tile(Letter.U)));
+//        unselected_row.add(new TileView(new Tile(Letter.L)));
+//        unselected_row.add(new TileView(new Tile(Letter.L)));
+//
+//        // Selection test
+//        Tile st = new Tile(Letter.S);
+//        TileView sv = new TileView(st);
+//        handTileMap.put(st, sv);
+//        unselected_row.add(sv);
+//        updateSelectionRow(new TileSelectEvent(new ScrabbleModel(), st, true));
     }
 
     /**
@@ -87,8 +85,7 @@ public class HandView extends JPanel implements HandChangeListener {
         }
 
         // Add in desired row, remove in other (since it should always be in a row, but not both)
-        final boolean selected = e.getSelection();
-        if(selected){ // Select tile
+        if(e.getSelection()){ // Select tile
             selected_row.add(view);
             unselected_row.remove(view);
         } else{ // Un-select tile
@@ -104,7 +101,7 @@ public class HandView extends JPanel implements HandChangeListener {
      * They are all considered "unselected" initially and go to the bottom row.
      * @param h The new hand to set in the unselected row
      */
-    private void updateNewHand( Hand h){
+    private void updateNewHand(Hand h){
         // Clear old hand (including tile->view mappings from old hand)
         unselected_row.removeAll();
         selected_row.removeAll();

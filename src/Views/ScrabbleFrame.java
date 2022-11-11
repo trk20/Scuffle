@@ -27,7 +27,6 @@ public class ScrabbleFrame extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
-        //Current idea is to have containers wrap around the content to ensure sizing
         centerContent = new JPanel();
         leftContent = new JPanel();
         rightContent = new JPanel();
@@ -46,8 +45,6 @@ public class ScrabbleFrame extends JFrame{
 
 
         this.setSize(WIDTH, HEIGHT);
-        this.setVisible(true);
-
     }
 
     public void setDefaultContent(){
@@ -66,16 +63,14 @@ public class ScrabbleFrame extends JFrame{
 //        tempNorthContent.add(new JLabel("Menu"));
         setNorthContent(new MenuView(model));
 
-//        JPanel tempSouthContent = new HandView();
-//        tempSouthContent.setBackground(Color.YELLOW);
-//        tempSouthContent.add(new JLabel("Model.Hand"));
         setSouthContent(new HandView(model));
 
         JPanel tempRightContent = new JPanel();
         tempRightContent.setBackground(Color.CYAN);
         tempRightContent.add(new JLabel("Turns"));
 
-        setRightContent(new TurnActionPanel());
+        setRightContent(new TurnActionPanel(model));
+        setVisible(true);
     }
 
     public void setCenterContent(JPanel centerContent) {
@@ -122,9 +117,6 @@ public class ScrabbleFrame extends JFrame{
     public static void main(String[] args){
     // TODO: may change model placement, here for testing atm
     ScrabbleModel model = new ScrabbleModel();
-
-    ScrabbleFrame frame = new ScrabbleFrame(model);
-
     model.startGame();
     }
 }

@@ -1,6 +1,5 @@
 package Model;
 
-
 import Events.*;
 import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
@@ -46,6 +45,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
     List<ModelListener> modelListeners;
     /** list of selected tiles (in order) to pass to the board when placing*/
     List<Tile> selectedTiles;
+    Player currentPlayer;
+
+    private ScrabbleFrame mainFrame;
 
     public ScrabbleModel() {
         this.board = new Board(BOARD_SIZE, BOARD_SIZE);
@@ -60,7 +62,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Increments turn, rolling back to the first turn after passing the last player.
      */
     private void incrementTurn(){
-        turn = turn == numPlayers ? 0 : turn+1;
+        turn = turn == numPlayers-1 ? 0 : turn+1;
     }
 
     /**
@@ -163,21 +165,33 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return true;
     }
 
+    public void skipTurn(){
+        nextTurn();
+    }
+
+    public void discardHand() {
+        handleDiscard();
+    }
+
     /**
      * Handles the user wanting to discard letters
-     * @param currentPlayer The player whose turn it is
      * @author Kieran, Alexandre
      */
-    private void handleDiscard(Player currentPlayer){
+    private void handleDiscard(){
+        nextTurn();
         // TODO to be implemented later
         ;
     }
 
+    public void placeHand(){
+        handlePlace();
+    }
+
     /**
      * Handles the user wanting to place letters
-     * @param currentPlayer The player whose turn it is
      */
-    private void handlePlace(Player currentPlayer){
+    private void handlePlace(){
+        nextTurn();
 //        try{
 //            currentPlayer.placeLetters(word);
 //        }catch(NullPointerException e){
@@ -195,6 +209,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         ;
     }
 
+
     /**
      * Used to end the game
      * @param gameFinished boolean, true if the game should be finished, false otherwise
@@ -209,10 +224,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     public void startGame(){
         initializePlayers();
-        printBoard();
-        while(!gameFinished){
-            nextTurn();
-        }
+        mainFrame = new ScrabbleFrame(this);
+
+        nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
@@ -220,30 +234,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles running a turn, will be called in a loop until the game is over
      */
     private void nextTurn(){
-        boolean action;
-
-//        currentPlayer = players.get(turn-1);
+        incrementTurn();
+        currentPlayer = players.get(turn);
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
-        // FIXME: inject a signal to tile selection flip, select first tile in hand.
-        List<Tile> playerTiles = getCurPlayer().getHand().getHeldTiles();
-        // Need to pass in controller to make a click event
-        flipTileSelect(new TileClickEvent(new TileView(playerTiles.get(0))));
-        /*
-//        System.out.println("==========================");
-//        System.out.printf("It is Model.Player %d's turn\n", turn);
-//        // Print player state before turn
-//        System.out.println(currentPlayer);
-        action = getAction();
-
-        if(action == PLACE){
-            handlePlace(currentPlayer);
-        }else{
-            handleDiscard(currentPlayer);
-        }
-        // Print player state after turn
-        System.out.println(currentPlayer);*/
-        incrementTurn();
 
         //need to notify Score View here
         notifyModelListeners(new PlayerChangeEvent(this));
@@ -308,7 +302,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
-//        System.out.println("Handle con");
         if(e instanceof TileClickEvent tc) flipTileSelect(tc);
     }
 

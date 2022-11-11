@@ -122,8 +122,7 @@ public class Player {
     public Hand getHand() {
         return hand;
     }
-
-
+    
     /**
      * Get player's score
      * @return the player's score
