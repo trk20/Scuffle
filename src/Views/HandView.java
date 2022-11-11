@@ -46,19 +46,19 @@ public class HandView extends JPanel implements HandChangeListener {
 
         model.addModelListener(this);
 
-        // FIXME: remove after testing
-//        selected_row.add(new TileView(new Tile(Letter.S)));
-        unselected_row.add(new TileView(new Tile(Letter.N)));
-        unselected_row.add(new TileView(new Tile(Letter.U)));
-        unselected_row.add(new TileView(new Tile(Letter.L)));
-        unselected_row.add(new TileView(new Tile(Letter.L)));
-
-        // Selection test
-        Tile st = new Tile(Letter.S);
-        TileView sv = new TileView(st);
-        handTileMap.put(st, sv);
-        unselected_row.add(sv);
-        updateSelectionRow(new TileSelectEvent(new ScrabbleModel(), st, true));
+//        // FIXME: remove after testing
+////        selected_row.add(new TileView(new Tile(Letter.S)));
+//        unselected_row.add(new TileView(new Tile(Letter.N)));
+//        unselected_row.add(new TileView(new Tile(Letter.U)));
+//        unselected_row.add(new TileView(new Tile(Letter.L)));
+//        unselected_row.add(new TileView(new Tile(Letter.L)));
+//
+//        // Selection test
+//        Tile st = new Tile(Letter.S);
+//        TileView sv = new TileView(st);
+//        handTileMap.put(st, sv);
+//        unselected_row.add(sv);
+//        updateSelectionRow(new TileSelectEvent(new ScrabbleModel(), st, true));
     }
 
     /**
