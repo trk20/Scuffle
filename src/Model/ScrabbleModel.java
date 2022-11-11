@@ -225,10 +225,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
         currentPlayer = players.get(turn);
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
-        // FIXME: inject a signal to tile selection flip, select first tile in hand.
-        List<Tile> playerTiles = getCurPlayer().getHand().getHeldTiles();
-        // Need to pass in controller to make a click event
-        flipTileSelect(new TileClickEvent(new TileView(playerTiles.get(0))));
 
     }
 
