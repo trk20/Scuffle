@@ -122,8 +122,20 @@ public class Player {
     public Hand getHand() {
         return hand;
     }
+    
+    /**
+     * Get player's score
+     * @return the player's score
+     */
+    public int getScore() {
+        return score;
+    }
 
-    public String getName(){
+    /**
+     * Gets the player's name
+     * @return the player's name
+     */
+    public String getName() {
         return name;
     }
 }

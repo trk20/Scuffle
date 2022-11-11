@@ -11,12 +11,10 @@ public class ScrabbleFrame extends JFrame{
     private JPanel centerContent;
     private JPanel leftContent;
     private JPanel rightContent;
-    private JPanel northContent;
     private JPanel southContent;
 
     private final int WIDTH = 1280;
     private final int HEIGHT = 720;
-    private final int menuHeight = 50;
 
     private final ScrabbleModel model;
 
@@ -27,24 +25,26 @@ public class ScrabbleFrame extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
+        //Current idea is to have containers wrap around the content to ensure sizing
         centerContent = new JPanel();
         leftContent = new JPanel();
         rightContent = new JPanel();
         southContent = new JPanel();
-        northContent = new JPanel();
+//        menuBar = new JPanel();
 
 
         setDefaultContent();
 
         this.add(centerContent, BorderLayout.CENTER);
         this.add(leftContent, BorderLayout.WEST);
-        this.add(northContent, BorderLayout.NORTH);
         this.add(southContent, BorderLayout.SOUTH);
         this.add(rightContent, BorderLayout.EAST);
 
 
 
         this.setSize(WIDTH, HEIGHT);
+        this.setVisible(true);
+
     }
 
     public void setDefaultContent(){
@@ -53,24 +53,10 @@ public class ScrabbleFrame extends JFrame{
         tempCenterContent.add(new JLabel("Model.Board"));
         setCenterContent(tempCenterContent);
 
-        JPanel tempLeftContent = new JPanel();
-        tempLeftContent.setBackground(Color.green);
-        tempLeftContent.add(new JLabel("Scores"));
-        setLeftContent(tempLeftContent);
-
-        JPanel tempNorthContent = new JPanel();
-        tempNorthContent.setBackground(Color.blue);
-        tempNorthContent.add(new JLabel("Menu"));
-        setNorthContent(tempNorthContent);
-
-        setSouthContent(new HandView(model));
-
-        JPanel tempRightContent = new JPanel();
-        tempRightContent.setBackground(Color.CYAN);
-        tempRightContent.add(new JLabel("Turns"));
-
+        setMenu(new MenuView(model));
         setRightContent(new TurnActionPanel(model));
-        setVisible(true);
+        setLeftContent(new ScoreView(model));
+        setSouthContent(new HandView(model));
     }
 
     public void setCenterContent(JPanel centerContent) {
@@ -96,9 +82,8 @@ public class ScrabbleFrame extends JFrame{
         revalidate();
     }
 
-    public void setNorthContent(JPanel northContent) {
-        northContent.setPreferredSize(new Dimension(WIDTH, menuHeight));
-        this.northContent = northContent;
+    public void setMenu(JMenuBar menu) {
+        this.add(menu, BorderLayout.NORTH);
 
         repaint();
         revalidate();
@@ -114,9 +99,4 @@ public class ScrabbleFrame extends JFrame{
 
 
 
-    public static void main(String[] args){
-    // TODO: may change model placement, here for testing atm
-    ScrabbleModel model = new ScrabbleModel();
-    model.startGame();
-    }
 }
