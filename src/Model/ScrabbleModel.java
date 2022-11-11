@@ -60,7 +60,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Increments turn, rolling back to the first turn after passing the last player.
      */
     private void incrementTurn(){
-        turn = turn == numPlayers ? 0 : turn+1;
+        turn = turn == numPlayers-1 ? 0 : turn+1;
     }
 
     /**
