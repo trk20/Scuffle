@@ -56,15 +56,15 @@ public class ScrabbleFrame extends JFrame{
         tempCenterContent.add(new JLabel("Model.Board"));
         setCenterContent(tempCenterContent);
 
-        JPanel tempLeftContent = new JPanel();
-        tempLeftContent.setBackground(Color.green);
-        tempLeftContent.add(new JLabel("Scores"));
-        setLeftContent(tempLeftContent);
+//        JPanel tempLeftContent = new JPanel();
+//        tempLeftContent.setBackground(Color.green);
+//        tempLeftContent.add(new JLabel("Scores"));
+        setLeftContent(new ScoreView(model));
 
-        JPanel tempNorthContent = new JPanel();
-        tempNorthContent.setBackground(Color.blue);
-        tempNorthContent.add(new JLabel("Menu"));
-        setNorthContent(tempNorthContent);
+//        JPanel tempNorthContent = new JPanel();
+//        tempNorthContent.setBackground(Color.blue);
+//        tempNorthContent.add(new JLabel("Menu"));
+        setNorthContent(new MenuView(model));
 
 //        JPanel tempSouthContent = new HandView();
 //        tempSouthContent.setBackground(Color.YELLOW);

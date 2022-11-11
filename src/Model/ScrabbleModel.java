@@ -1,9 +1,10 @@
 package Model;
 
-import Controllers.OptionPaneHandler;
+
 import Events.*;
 import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
+import Views.ScrabbleFrame;
 import Views.TileView;
 import Events.ControllerEvent;
 import Events.ModelEvent;
@@ -80,6 +81,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
             name = inputHandler.askForPlayerName(i);
             players.add(i, new Player(name, this));
         }
+
+        //Need to notify Score View here
+
+        notifyModelListeners(new PlayerChangeEvent(this));
     }
 
     /**
@@ -191,6 +196,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
     }
 
     /**
+     * Used to end the game
+     * @param gameFinished boolean, true if the game should be finished, false otherwise
+     */
+    public void setGameFinished(boolean gameFinished) {
+        this.gameFinished = gameFinished;
+    }
+
+
+    /**
      * Handles starting the game
      */
     public void startGame(){
@@ -231,6 +245,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
         System.out.println(currentPlayer);*/
         incrementTurn();
 
+        //need to notify Score View here
+        notifyModelListeners(new PlayerChangeEvent(this));
         while(true); // Temp breakpoint
     }
 
@@ -275,6 +291,14 @@ public class ScrabbleModel implements SControllerListener, SModel{
         }
         // Model changed, notify listeners of new state:
         notifyModelListeners(new TileSelectEvent(this, t, selectedAfterClick));
+    }
+
+    /**
+     * Returns all the players in the game
+     * @return players ArrayList
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
     /**
