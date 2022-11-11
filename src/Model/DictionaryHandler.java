@@ -20,7 +20,7 @@ public class DictionaryHandler {
     /**
      * Constructs a new Model.DictionaryHandler object with all valid words loaded into an ArrayList
      */
-    DictionaryHandler() {
+    public DictionaryHandler() {
         allWords = new ArrayList<>();
         /*
          * Load all valid words from the 2019 version of Scrabble into an ArrayList

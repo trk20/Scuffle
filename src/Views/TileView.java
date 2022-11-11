@@ -33,7 +33,6 @@ public class TileView extends HandTileController {
     /**
      * Set visuals for the tile. This includes a border, and a background color,
      * There is also text indicating the letter it represents.
-     * // TODO: I'd like to have the score as well on the tile, bottom right if possible.
      */
     private void styleTile() {
         // Make a "raised" border, with margins outside (acts as padding instead it looks like?)
