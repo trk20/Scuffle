@@ -31,6 +31,7 @@ public class Hand {
         tiles = new ArrayList<>();
         // Start hand in filled state
         fillHand();
+        // TOOD: M2, reset hand, set tile, use selectedtiles field in useTiles.
     }
 
     /**
@@ -74,6 +75,7 @@ public class Hand {
      * Otherwise, return False.
      * @author Alexandre Marques - 101189743
      */
+    @Deprecated // We won't need to check this if they can't input their own tiles.
     public boolean containsTiles(List<Tile> used){
         for(Tile t: used){
             // If l is not in hand, return false
