@@ -9,11 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
-public class MenuController extends JPanel implements ActionListener {
+public class MenuController implements ActionListener {
     private ScrabbleModel model;
 
     public MenuController(ScrabbleModel model){
-        super();
         this.model = model;
     }
 
@@ -23,7 +22,7 @@ public class MenuController extends JPanel implements ActionListener {
             String s = e.getActionCommand();
 
             if(e.getActionCommand().equals("New Game")){//FIXME: Not finished yet
-                model.setGameFinished(true);
+                model.setGameFinished(true); // TODO: could be an event, on controller listeners in the future
 
             }
             if(e.getActionCommand().equals("Game Rules")){
@@ -35,7 +34,7 @@ public class MenuController extends JPanel implements ActionListener {
             }
     }
 
-    public static void openRules(String urlString) {
+    private void openRules(String urlString) {
         try {
             Desktop.getDesktop().browse(new URL(urlString).toURI());
         } catch (Exception e) {
