@@ -22,7 +22,7 @@ public class MenuController implements ActionListener {
             String s = e.getActionCommand();
 
             if(e.getActionCommand().equals("New Game")){//FIXME: Not finished yet
-                model.setGameFinished(true); // TODO: could be an event, on controller listeners in the future
+                model.setGameFinished(); // TODO: could be an event, on controller listeners in the future
 
             }
             if(e.getActionCommand().equals("Game Rules")){

@@ -7,8 +7,6 @@ import javax.swing.*;
 
 public class MenuView extends JMenuBar {
 
-    private ScrabbleModel model;
-
     private JMenu menu;
 
     private JMenuItem newGame, saveGame, help;
@@ -18,7 +16,6 @@ public class MenuView extends JMenuBar {
     public MenuView(ScrabbleModel model){
         super();
         //Get the model
-        this.model = model;
         mc = new MenuController(model);
         menu = new JMenu("Options");
 

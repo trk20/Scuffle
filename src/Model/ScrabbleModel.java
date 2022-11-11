@@ -45,7 +45,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
     List<ModelListener> modelListeners;
     /** list of selected tiles (in order) to pass to the board when placing*/
     List<Tile> selectedTiles;
-    Player currentPlayer;
 
     private ScrabbleFrame mainFrame;
 
@@ -62,7 +61,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Increments turn, rolling back to the first turn after passing the last player.
      */
     private void incrementTurn(){
-        turn = turn == numPlayers-1 ? 0 : turn+1;
+        turn = turn == numPlayers ? 0 : turn+1;
     }
 
     /**
@@ -165,17 +164,22 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return true;
     }
 
+
+    // We should not have these public accesses to the model
+    @Deprecated
     public void skipTurn(){
         nextTurn();
     }
 
+    // We should not have these public accesses to the model
+    @Deprecated
     public void discardHand() {
         handleDiscard();
     }
 
     /**
      * Handles the user wanting to discard letters
-     * @author Kieran, Alexandre
+     *  @author Kieran, Alexandre
      */
     private void handleDiscard(){
         nextTurn();
@@ -209,13 +213,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
         ;
     }
 
-
     /**
      * Used to end the game
-     * @param gameFinished boolean, true if the game should be finished, false otherwise
      */
-    public void setGameFinished(boolean gameFinished) {
-        this.gameFinished = gameFinished;
+    public void setGameFinished() {
+        this.gameFinished = true;
     }
 
 
@@ -226,6 +228,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
         initializePlayers();
         mainFrame = new ScrabbleFrame(this);
 
+//        while(!gameFinished){
+//            nextTurn();
+//        }
         nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
@@ -234,14 +239,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles running a turn, will be called in a loop until the game is over
      */
     private void nextTurn(){
-        incrementTurn();
-        currentPlayer = players.get(turn);
+        Player currentPlayer = players.get(turn);
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
 
-        //need to notify Score View here
-        notifyModelListeners(new PlayerChangeEvent(this));
-        while(true); // Temp breakpoint
+        incrementTurn();
     }
 
     /**

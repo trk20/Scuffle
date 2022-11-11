@@ -15,7 +15,6 @@ public class ScrabbleFrame extends JFrame{
 
     private final int WIDTH = 1280;
     private final int HEIGHT = 720;
-    private final int menuHeight = 50;
 
     private final ScrabbleModel model;
 
@@ -55,7 +54,7 @@ public class ScrabbleFrame extends JFrame{
         setCenterContent(tempCenterContent);
 
         setMenu(new MenuView(model));
-        setRightContent(new TurnActionPanel());
+        setRightContent(new TurnActionPanel(model));
         setLeftContent(new ScoreView(model));
         setSouthContent(new HandView(model));
     }
@@ -100,12 +99,4 @@ public class ScrabbleFrame extends JFrame{
 
 
 
-    public static void main(String[] args){
-    // TODO: may change model placement, here for testing atm
-    ScrabbleModel model = new ScrabbleModel();
-
-    ScrabbleFrame frame = new ScrabbleFrame(model);
-
-    model.startGame();
-    }
 }
