@@ -34,8 +34,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
     /** Model's shared DrawPile */
     private final DrawPile drawPile;
 
-    final private OptionPaneHandler inputHandler; // FIXME: Should be refactored out of the model eventually
-
     /** Player whose turn it is to play */
     private int numPlayers;
     private int turn = 0;
@@ -50,11 +48,12 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     public ScrabbleModel() {
         this.board = new Board(BOARD_SIZE, BOARD_SIZE);
-        this.inputHandler = new OptionPaneHandler();
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
+        this.turn = 0;
+        initializePlayers();
     }
 
     /**
@@ -72,9 +71,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
         System.out.println(board);
     }
 
-    private void initializePlayers(){
+    private void initializePlayers(){ // FIXME: This info should be passed as constructor parameters
         String name = "";
 
+        OptionPaneHandler inputHandler = new OptionPaneHandler();
         numPlayers = inputHandler.askForNumPlayers();
         players = new ArrayList<>(numPlayers);
 
@@ -83,9 +83,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
             players.add(i, new Player(name, this));
         }
 
-        //Need to notify Score View here
-
-        notifyModelListeners(new PlayerChangeEvent(this));
     }
 
     /**
@@ -224,13 +221,22 @@ public class ScrabbleModel implements SControllerListener, SModel{
     /**
      * Handles starting the game
      */
+    // Creating a model should be synonymous to creating a game, we should move towards removing this.
+    @Deprecated
     public void startGame(){
-        initializePlayers();
-        mainFrame = new ScrabbleFrame(this);
+        // Do not touch the views in the model!
+        // The main decides when to create views, or models. Possibly through controllers.
+//        mainFrame = new ScrabbleFrame(this);
+
 
 //        while(!gameFinished){
 //            nextTurn();
 //        }
+
+        //Need to notify Score View here
+
+        notifyModelListeners(new PlayerChangeEvent(this));
+
         nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
