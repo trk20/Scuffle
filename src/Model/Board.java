@@ -42,9 +42,10 @@ public class Board {
         playedWords = new ArrayList<>();
         validator = new BoardValidator(this);
         currentWords = new ArrayList<>();
+        // Set tile types to blank tiles
         for (int row = 0; row< BOARD_SIZE; row ++){
             for(int col = 0; col<BOARD_SIZE; col ++){
-                board[row][col] = new BoardTile(BoardTile.Type.BLANK, row, col);
+                board[row][col] = new BoardTile(row, col);
             }
         }
 
@@ -64,7 +65,7 @@ public class Board {
                 int randomInt = r.nextInt(14);
                 if(randomInt == 1){
                     //Set multiplier tiles at random
-                    board[row][col] = new BoardTile(BoardTile.Type.values()[2+r.nextInt(4)], row, col);
+                    board[row][col].setType(BoardTile.Type.values()[2+r.nextInt(4)]);
                 }
             }
         }

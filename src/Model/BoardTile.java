@@ -36,6 +36,16 @@ public class BoardTile {
     }
 
     /**
+     * Constructor for creating a new BoardTile object,
+     *  Default type is BLANK
+     * @param x The x location of the tile on the board
+     * @param y The y location of the tile on the board
+     */
+    public BoardTile(int x, int y) {
+        this(Type.BLANK, x, y);
+    }
+
+    /**
      * Method used for setting the X position of the board Tile
      *
      * @param x, the new x position of the tile
