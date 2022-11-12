@@ -15,11 +15,35 @@ class PlayerTest {
     List<String> playerNames;
     ArrayList<Player> players;
 
+    List<Tile> sampleHand;
+
+    List<Tile> word1;
+
+    List<Tile> word2;
+
     @org.junit.jupiter.api.BeforeEach
     public void setUp() {
         playerNames = Arrays.asList("Vlad","Alex","Kieran","Tim");
         model = new ScrabbleModel(playerNames);
         players = model.getPlayers();
+
+        sampleHand = new ArrayList<>();
+        sampleHand.add(new Tile(Letter.L));
+        sampleHand.add(new Tile(Letter.I));
+        sampleHand.add(new Tile(Letter.R));
+        sampleHand.add(new Tile(Letter.E));
+        sampleHand.add(new Tile(Letter.A));
+        sampleHand.add(new Tile(Letter.N));
+
+        word1 = new ArrayList<>();
+        word1.add(new Tile(Letter.L));
+        word1.add(new Tile(Letter.I));
+        word1.add(new Tile(Letter.E));
+
+        word2 = new ArrayList<>();
+        word2.add(new Tile(Letter.L));
+        word2.add(new Tile(Letter.I));
+        word2.add(new Tile(Letter.X));
 
     }
 
@@ -27,12 +51,7 @@ class PlayerTest {
 
     @org.junit.jupiter.api.Test
     public void placeTilesTest() {
-        List<Tile> sampleHand = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.E), new Tile(Letter.R),new Tile(Letter.A),new Tile(Letter.N));
-        List<Tile> word1 = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.E));
-        List<Tile> word2 = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.X));
+
         Hand newHand = new Hand(model.getDrawPile());
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
@@ -47,12 +66,7 @@ class PlayerTest {
 
     @org.junit.jupiter.api.Test
     public void discardTilesTest() {
-        List<Tile> sampleHand = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.E), new Tile(Letter.R),new Tile(Letter.A),new Tile(Letter.N));
-        List<Tile> word1 = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.E));
-        List<Tile> word2 = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.X));
+
         Hand newHand = new Hand(model.getDrawPile());
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
@@ -67,12 +81,7 @@ class PlayerTest {
 
     @org.junit.jupiter.api.Test
     public void containsTilesTest() {
-        List<Tile> sampleHand = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.E), new Tile(Letter.R),new Tile(Letter.A),new Tile(Letter.N));
-        List<Tile> word1 = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.E));
-        List<Tile> word2 = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.X));
+
         List<Tile> word3 = new ArrayList<>();
 
         Hand newHand = new Hand(model.getDrawPile());
