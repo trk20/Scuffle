@@ -22,7 +22,7 @@ public class BoardTile {
     private int x;
     private int y;
 
-    private boolean taken;
+    private boolean taken; // FIXME: not used, not needed
 
     /**
      * Constructor for creating a new Model.BoardTile object
@@ -89,7 +89,7 @@ public class BoardTile {
      * @param letter the letter the tile now has
      */
     public void setLetter(Letter letter){
-        this.letter = letter;
+        this.letter = letter; // FIXME: Can override letters!
         taken = true;
     }
 

@@ -25,7 +25,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public static final int MIN_PLAYERS = 1;
     public static final Boolean DISCARD = false;
     public static final Boolean PLACE = true;
-    private static final int BOARD_SIZE = 15;
+    public static final int BOARD_SIZE = 15;
 
     // Model components
     final private Board board;
