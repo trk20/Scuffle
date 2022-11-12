@@ -42,6 +42,7 @@ public class Board {
         playedWords = new ArrayList<>();
         validator = new BoardValidator(this);
         currentWords = new ArrayList<>();
+
         // Set tile types to blank tiles
         for (int row = 0; row< BOARD_SIZE; row ++){
             for(int col = 0; col<BOARD_SIZE; col ++){
@@ -53,6 +54,74 @@ public class Board {
         //Initialize the start tile:
         board[BOARD_SIZE/2][BOARD_SIZE/2].setType(BoardTile.Type.START);
 
+    }
+
+    /**
+     * Asks the board's validator if a placement would be valid in the current board configuration.
+     *
+     * @see BoardValidator#isValidPlacement
+     * @param placeEvent The event containing the placement details
+     * @return true if the placement is valid, false otherwise.
+     */
+    public boolean isValidPlacement(BoardPlaceEvent placeEvent) {
+        return validator.isValidPlacement(placeEvent);
+    }
+
+    /**
+     * Places a word on the board
+     * @author Timothy Kennedy
+     * @author Alex
+     *
+     * @param placeEvent The event containing the placement details
+     * @return -1 if it is an invalid placement, otherwise, the score resulting from the placement.
+     */
+    public int placeWord(BoardPlaceEvent placeEvent){
+        // Ensure valid placement
+        if(!isValidPlacement(placeEvent)) return -1;
+
+        // Unpack relevant event info
+        Point wordOrigin = placeEvent.getWordOrigin();
+        Direction placementDirection = placeEvent.getDirection();
+        List<Tile> word = placeEvent.getPlacedTiles();
+        int overlaps = 0; // Place tile one further if a tile already occupies its spot
+
+        // Place tiles in the board, skipping tiles that are already placed.
+        for(int i = 0; i < word.size(); i++) {
+            boolean overlapping = true; // (until proven otherwise)
+            Point placementLocation = new Point();
+            if (placementDirection == Board.Direction.RIGHT) {
+                // Increment Col (x), until no overlap
+                while (overlapping) {
+                    placementLocation.setLocation((wordOrigin.x + (i + overlaps)), wordOrigin.y);
+                    if (isTaken(placementLocation)) overlaps += 1;
+                    else overlapping = false;
+                }
+            } else {
+                // Decrement row (y), until no overlap
+                while (overlapping) {
+                    placementLocation.setLocation(wordOrigin.x, wordOrigin.y + (i + overlaps));
+                    if (isTaken(placementLocation)) overlaps += 1;
+                    else overlapping = false;
+                }
+            }
+            placeTile(placementLocation, word.get(i).getLetter());
+        }
+
+        currentWords = new ArrayList<>();
+        currentWords.addAll(allBoardWords(placeEvent));
+
+        // Return score after palcing
+        return getTurnScore(placeEvent);
+    }
+
+    /**
+     * Place a tile in the board.
+     * Precondition: The tile is verified to be empty beforehand
+     * @param p The point where the tile should be placed
+     * @param letter the letter to place at the board location.
+     */
+    private void placeTile(Point p, Letter letter) {
+        board[p.x][p.y].setLetter(letter);
     }
 
     /**
@@ -69,17 +138,6 @@ public class Board {
                 }
             }
         }
-    }
-
-    /**
-     * Asks the board's validator if a placement would be valid in the current board configuration.
-     *
-     * @see BoardValidator#isValidPlacement
-     * @param placeEvent The event containing the placement details
-     * @return true if the placement is valid, false otherwise.
-     */
-    public boolean isValidPlacement(BoardPlaceEvent placeEvent) {
-        return validator.isValidPlacement(placeEvent);
     }
 
     /**
@@ -146,14 +204,16 @@ public class Board {
      * Finds all words after a word placement
      * @author Timothy Kennedy
      *
-     * @param word the word being placed
-     * @param row the row the word starts on
-     * @param column the column the word starts on
-     * @param direction whether the word is left-to-right
+     * @param placeEvent The event containing the placement details
      * @return the list of words originating from the word placement
      */
     //FIXME: Move towards using place events
-    private List<PlacedWord> allBoardWords(List<Letter> word, int row, int column, Direction direction){
+    private List<PlacedWord> allBoardWords(BoardPlaceEvent placeEvent){
+        Direction direction = placeEvent.getDirection();
+        List<Tile> word = placeEvent.getPlacedTiles();
+        int row = placeEvent.getWordOrigin().y;
+        int col = placeEvent.getWordOrigin().x;
+
         //make a copy of the board
         BoardTile[][] boardCopy = new BoardTile[board.length][board[0].length];
         for(int i = 0; i < board.length; i++){
@@ -167,8 +227,8 @@ public class Board {
 
         for(int index = 0; index < word.size(); index++){ //place word on the copy of the board
             boardCopy[row+(direction==Direction.DOWN ? index : 0)]
-                    [column+(direction==Direction.RIGHT ? index : 0)]
-                    .setLetter(word.get(index));
+                    [col+(direction==Direction.RIGHT ? index : 0)]
+                    .setLetter(word.get(index).getLetter());
         }
 
         for(BoardTile[] currentRow:boardCopy){ //get all taken tiles
@@ -194,29 +254,6 @@ public class Board {
             }
         }
         return words;
-    }
-
-    /**
-     * Places a word on the board
-     * @author Timothy Kennedy
-     *
-     * @param word the word to be placed
-     * @param row the row of the board to start the word on
-     * @param column the column of the board to start the word on
-     * @param direction whether the word is left-to-right
-     */
-    public boolean placeWord(List<Letter> word, int row, int column, boolean direction){
-
-        for(int index = 0; index < word.size(); index++){
-            //place letters on the board
-            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setLetter(word.get(index));
-            board[row+((!direction) ? index : 0)][column+((direction) ? index : 0)].setType(BoardTile.Type.BLANK);
-        }
-
-        currentWords = new ArrayList<>();
-        currentWords.addAll(allBoardWords(word,row,column,boolDirToEnum(direction)));
-//        System.out.println("Played Words So far: "+ playedWords);
-        return true;
     }
 
     /**
@@ -398,18 +435,11 @@ public class Board {
      * @return a list of all new words
      */
     List<PlacedWord> getNewWords(BoardPlaceEvent placementEvent){
-        // FIXME: Should move towards using tiles I think
-        List<Letter> word = new ArrayList<>();
-        for(Tile t: placementEvent.getPlacedTiles()){
-            word.add(t.getLetter());
-        }
-        int row = placementEvent.getWordOrigin().y;
-        int col = placementEvent.getWordOrigin().x;
-
-        List<PlacedWord> newWords = new ArrayList<>(allBoardWords(word, row, col,  placementEvent.getDirection()));
+        // All words in the board - words that were in the board last turn.
+        List<PlacedWord> newWords = new ArrayList<>(allBoardWords(placementEvent));
         for (PlacedWord aWord:currentWords) {
             if(newWords.contains(aWord)){
-                newWords.remove(newWords.lastIndexOf(aWord));
+                newWords.remove(aWord);
             }
         }
         return newWords;
