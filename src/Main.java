@@ -1,4 +1,5 @@
 import Model.ScrabbleModel;
+import Views.OptionPaneHandler;
 import Views.ScrabbleFrame;
 
 /**
@@ -10,8 +11,9 @@ import Views.ScrabbleFrame;
  */
 public class Main {
     public static void main(String[] args){
+        OptionPaneHandler input = new OptionPaneHandler();
         // TODO: may change model placement, here for testing atm
-        ScrabbleModel model = new ScrabbleModel();
+        ScrabbleModel model = new ScrabbleModel(input.getNewPlayerNames());
 
         ScrabbleFrame frame = new ScrabbleFrame(model);
 
