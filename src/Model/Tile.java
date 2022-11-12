@@ -27,4 +27,25 @@ public class Tile {
     public Letter getLetter() {
         return letter;
     }
+
+    /**
+     * Compares two tiles to see if they are equal
+     * @param obj tile being compared
+     * @return true is tiles are the same, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        // If the object is compared with itself then return true
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Tile)) {
+            return false;
+        }
+
+        Tile t = (Tile) obj;
+
+        return this.getLetter() == t.getLetter();
+    }
 }

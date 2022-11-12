@@ -4,17 +4,20 @@ import Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DrawPileTest {
     ScrabbleModel model;
 
+    List<String> players;
+
     @BeforeEach
     void setUp() {
-         model = new ScrabbleModel();
+
+        players =Arrays.asList("Vlad");
+        model = new ScrabbleModel(players);
 
     }
 
