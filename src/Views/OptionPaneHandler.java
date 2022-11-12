@@ -63,7 +63,7 @@ public class OptionPaneHandler {
                 JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a valid number",
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
             }else{
-                if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) >= ScrabbleModel.MAX_PLAYERS){
+                if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) > ScrabbleModel.MAX_PLAYERS){
                     JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a number below "+ScrabbleModel.MAX_PLAYERS, "Invalid Input", JOptionPane.ERROR_MESSAGE);
                     validNum = false;
                 }else if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) == 0){
