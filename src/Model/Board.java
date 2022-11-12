@@ -37,29 +37,37 @@ public class Board {
      * @author Vladimir Kovacina
      * @author Timothy Kennedy
      */
-    public Board(){
+    public Board(boolean randomBoard){
         board = new BoardTile[BOARD_SIZE][BOARD_SIZE];
         playedWords = new ArrayList<>();
         validator = new BoardValidator(this);
-        // FIXME: We probably want a deterministic board
-        Random r = new Random();
         currentWords = new ArrayList<>();
+        for (int row = 0; row< BOARD_SIZE; row ++){
+            for(int col = 0; col<BOARD_SIZE; col ++){
+                board[row][col] = new BoardTile(BoardTile.Type.BLANK, row, col);
+            }
+        }
+
+        if(randomBoard) randomiseBoard();
+        //Initialize the start tile:
+        board[BOARD_SIZE/2][BOARD_SIZE/2].setType(BoardTile.Type.START);
+
+    }
+
+    /**
+     * Sets bonus tiles randomly throughout the board.
+     */
+    private void randomiseBoard(){
+        Random r = new Random();
         for (int row = 0; row< BOARD_SIZE; row ++){
             for(int col = 0; col<BOARD_SIZE; col ++){
                 int randomInt = r.nextInt(14);
                 if(randomInt == 1){
-                    //set multiplier tiles at random
+                    //Set multiplier tiles at random
                     board[row][col] = new BoardTile(BoardTile.Type.values()[2+r.nextInt(4)], row, col);
-
-                } else {
-                    //set all other tiles to blank
-                    board[row][col] = new BoardTile(BoardTile.Type.BLANK, row, col);
                 }
             }
         }
-        //Initialize the start tile:
-        board[BOARD_SIZE/2][BOARD_SIZE/2].setType(BoardTile.Type.START);
-
     }
 
     /**
