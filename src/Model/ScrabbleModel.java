@@ -52,6 +52,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
         this.turn = 0;
+        this.numPlayers = playerNames.size();
         initializePlayers(playerNames);
     }
 
