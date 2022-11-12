@@ -62,12 +62,22 @@ public class ScoreView extends JPanel implements ModelListener {
 
     }
 
+    /**
+     * Used to update the scoreboard
+     * @param updatedPlayers list of players to update the score from
+     */
+
     public void updateScores(ArrayList<Player> updatedPlayers){
         ArrayList<Player> players = updatedPlayers;
         for (int i =0; i < players.size();i++ ){
             playerLabels[i] .setText(players.get(i).getName()+ ":\t "+ players.get(i).getScore());
         }
     }
+
+    /**
+     * Handles receiving a ModelEvent
+     * @param e the ModelEvent
+     */
 
     @Override
     public void handleModelEvent(ModelEvent e) {

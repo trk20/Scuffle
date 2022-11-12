@@ -16,7 +16,16 @@ public class MenuController implements ActionListener {
         this.model = model;
     }
 
-
+    /**
+     * Used to handle the actions of the Menu based off of which event is selected
+     * The possible actions are:
+     *
+     * New game
+     * Show the Game Rules
+     * Save Game
+     *
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
             String s = e.getActionCommand();
@@ -33,6 +42,11 @@ public class MenuController implements ActionListener {
 
             }
     }
+
+    /**
+     * Opens the url to the website provided
+     * @param urlString the url to the website
+     */
 
     private void openRules(String urlString) {
         try {

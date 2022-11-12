@@ -21,6 +21,11 @@ class PlayerTest {
 
     List<Tile> word2;
 
+    /**
+     * Set up for each test case in the test suite,
+     * initializes some words, a hand and list of players
+     *
+     */
     @org.junit.jupiter.api.BeforeEach
     public void setUp() {
         playerNames = Arrays.asList("Vlad","Alex","Kieran","Tim");
@@ -47,7 +52,10 @@ class PlayerTest {
 
     }
 
-
+    /**
+     * Tests the placeTiles method, checks if it works properly when
+     * the word is and is not in the players hand
+     */
 
     @org.junit.jupiter.api.Test
     public void placeTilesTest() {
@@ -64,6 +72,10 @@ class PlayerTest {
 
     }
 
+    /**
+     * Tests the discardTiles method, checks if it works properly when
+     * the word is and is not in the players hand
+     */
     @org.junit.jupiter.api.Test
     public void discardTilesTest() {
 
@@ -78,6 +90,10 @@ class PlayerTest {
 
     }
 
+    /**
+     * Tests the containsTiles method, checks if it works properly when
+     * the word is and is not in the players hand
+     */
 
     @org.junit.jupiter.api.Test
     public void containsTilesTest() {
@@ -96,6 +112,10 @@ class PlayerTest {
         assertTrue(players.get(1).containsTiles(word3));
     }
 
+    /**
+     * Tests the outOfTiles method, checks if it works properly when
+     * the hand is empty and when it is not empty
+     */
     @org.junit.jupiter.api.Test
     public void outOfTilesTest() {
         //Make player hand empty
@@ -113,6 +133,10 @@ class PlayerTest {
         assertFalse(players.get(0).outOfTiles());
     }
 
+    /**
+     * Tests the getHand method, checks if it works properly and
+     * if the returned hand is the correct type
+     */
     @org.junit.jupiter.api.Test
     public void getHandTest() {
         Hand playerHand = players.get(0).getHand();
@@ -120,6 +144,10 @@ class PlayerTest {
         assertEquals(playerHand.getHeldTiles().size(), 7);
     }
 
+    /**
+     * Tests the getScore method, checks if it works properly with
+     * various different scores
+     */
     @org.junit.jupiter.api.Test
     public void getScoreTest() {
         assertEquals(0, players.get(0).getScore());
@@ -129,6 +157,10 @@ class PlayerTest {
         assertEquals(15, players.get(0).getScore());
     }
 
+    /**
+     * Tests the getName method, checks if it works properly with
+     * various different Names
+     */
     @org.junit.jupiter.api.Test
     void getNameTest() {
         assertEquals("Vlad", players.get(0).getName());

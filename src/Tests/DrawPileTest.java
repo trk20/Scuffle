@@ -13,6 +13,12 @@ class DrawPileTest {
 
     List<String> players;
 
+
+    /**
+     * Set up for each test case in the test suite,
+     * initializes a Scrabble model and list of players
+     *
+     */
     @BeforeEach
     void setUp() {
 
@@ -21,6 +27,10 @@ class DrawPileTest {
 
     }
 
+    /**
+     * Tests the initial drawPile to make sure it is the correct size, takes into account the number of players
+     * and their hand size, also checks that each tile is the correct type
+     */
     @Test
     void initialDrawPileSizeTest(){
         DrawPile dp = model.getDrawPile();
@@ -31,6 +41,10 @@ class DrawPileTest {
         }
 
     }
+    /**
+     * Tests the addToPile() method, checks if it works properly when
+     * multiple tiles are added and when no tiles are added
+     */
 
     @Test
     void addToPile() {
@@ -45,9 +59,18 @@ class DrawPileTest {
         }
         dp.addToPile(newTiles);
         assertEquals(98-7+5, dp.getLetterPile().size());
-
+        //Try adding no tiles (empty list)
+        newTiles = new ArrayList<>();
+        dp.addToPile(newTiles);
+        assertEquals(96, dp.getLetterPile().size());
 
     }
+
+    /**
+     * Tests the draw() method, checks to see if a tile type is drawn,
+     * also checks if the new drawPile is the correct size, and tests
+     * that is handles drawing from an empty drawPile
+     */
 
     @Test
     void draw() {
