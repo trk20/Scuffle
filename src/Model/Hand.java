@@ -25,7 +25,7 @@ public class Hand {
      *
      * @author Alexandre Marques - 101189743
      */
-    Hand(DrawPile pile){
+    public Hand(DrawPile pile){
         // Initialize fields to default / parameter values
         this.pile = pile;
         tiles = new ArrayList<>();
@@ -80,6 +80,7 @@ public class Hand {
         for(Tile t: used){
             // If l is not in hand, return false
             if(!(tiles.contains(t)))
+
                 return false;
         }
         // Every letter used is contained in the Model.Hand
@@ -141,5 +142,13 @@ public class Hand {
      */
     public List<Tile> getHeldTiles() {
         return tiles;
+    }
+
+    /**
+     * For Testing purposes, used to set the tiles in the Hand
+     * @param tiles List of Tiles in the Hand
+     */
+    public void setTiles(List<Tile> tiles) {
+        this.tiles = tiles;
     }
 }

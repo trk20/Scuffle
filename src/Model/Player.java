@@ -17,7 +17,7 @@ public class Player {
     /** Model.Player's display name */
     final private String name;
     /** Model.Player's Model.Hand (holds their letters) */
-    final private Hand hand;
+    private Hand hand;
     /** Model.Player's cumulative score for the game */
     private int score;
     /** Game model, has a shared Model.DrawPile, and a Model.Board */
@@ -137,5 +137,13 @@ public class Player {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * For testing purposes, sets the players hand
+     * @param hand the new players hand
+     */
+    public void setHand(Hand hand) {
+        this.hand = hand;
     }
 }

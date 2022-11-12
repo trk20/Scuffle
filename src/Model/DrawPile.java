@@ -77,4 +77,20 @@ public class DrawPile {
         // Pile order is already randomised so return first element
         return letterPile.remove(0);
     }
+
+    /**
+     * For Testing purposes, to get the size of the letter pile
+     * @return List of Tiles
+     */
+    public List<Tile> getLetterPile() {
+        return letterPile;
+    }
+
+    /**
+     * For testing purposes, to set the letterPile
+     * @param letterPile List of Tiles
+     */
+    public void setLetterPile(List<Tile> letterPile) {
+        this.letterPile = letterPile;
+    }
 }
