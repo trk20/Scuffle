@@ -65,6 +65,8 @@ public class ScrabbleFrame extends JFrame{
 
         setSouthContent(new HandView(model));
 
+        setCenterContent(new BoardView(model));
+
         JPanel tempRightContent = new JPanel();
         tempRightContent.setBackground(Color.CYAN);
         tempRightContent.add(new JLabel("Turns"));
@@ -75,7 +77,7 @@ public class ScrabbleFrame extends JFrame{
 
     public void setCenterContent(JPanel centerContent) {
         this.centerContent = centerContent;
-
+        centerContent.setPreferredSize(new Dimension(HEIGHT/4, HEIGHT/4));
         repaint();
         revalidate();
     }

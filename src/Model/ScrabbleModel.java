@@ -47,6 +47,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
     List<Tile> selectedTiles;
     Player currentPlayer;
 
+    int placementRow;
+    int placementCol;
+    boolean placementDirection;
+
+
     private ScrabbleFrame mainFrame;
 
     public ScrabbleModel() {
@@ -56,6 +61,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
+        this.placementDirection = true;
     }
 
     /**
@@ -115,6 +121,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return Character.isLetter(coords.charAt(0));
     }
 
+    public String getBoardTileText(int row,int col){
+        return board.getBoardTile(row,col).toString();
+    }
+
 
     /**
      * Validates User input to ensure that it can be placed on the board
@@ -168,6 +178,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public void discardHand() {
         handleDiscard();
     }
+
+    public void setPlacementLocation(int row,int col){
+        this.placementRow = row;
+        this.placementCol = col;
+        System.out.println("Placement " + ((placementDirection) ? "left to right": "top to bottom") + " at row "+row+", column " + col);
+    }
+
+    public void setPlacementDirection(boolean direction){this.placementDirection=direction;}
+
 
     /**
      * Handles the user wanting to discard letters

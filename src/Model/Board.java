@@ -424,7 +424,11 @@ public class Board {
         }
         return newWords;
     }
-  
+
+    public BoardTile getBoardTile(int row,int col){
+        return board[row][col];
+    }
+
     /**
      * Creates and returns a string representation of the board
      * @author Timothy Kennedy and Vladimir Kovacina
