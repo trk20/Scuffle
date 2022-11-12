@@ -1,11 +1,13 @@
 package Model;
 
 
+import java.util.Objects;
+
 /**
  * A class handling the board tiles,
  *
  * @author Vladimir Kovacina
- * @version 1.0
+ * @version 1.2
  *
  * @author Timothy Kennedy
  * @version 1.1
@@ -22,8 +24,6 @@ public class BoardTile {
     private int x;
     private int y;
 
-    private boolean taken; // FIXME: not used, not needed
-
     /**
      * Constructor for creating a new Model.BoardTile object
      *
@@ -31,7 +31,6 @@ public class BoardTile {
      */
     public BoardTile(Type type, int x, int y) {
         this.tileType = type;
-        this.taken =false;
         this.x = x;
         this.y = y;
     }
@@ -89,8 +88,9 @@ public class BoardTile {
      * @param letter the letter the tile now has
      */
     public void setLetter(Letter letter){
-        this.letter = letter; // FIXME: Can override letters!
-        taken = true;
+        if(!isTaken()) {
+            this.letter = letter;
+        }
     }
 
     /**
@@ -138,4 +138,13 @@ public class BoardTile {
         }
         return tileType.toString().replaceAll("BLANK"," -- ").replace("START", "ST").replace("X2WORD", "2W").replace("X3WORD", "3W").replace("X2LETTER", "2L").replace("X3LETTER", "3L");
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardTile boardTile = (BoardTile) o;
+        return letter == boardTile.letter && tileType == boardTile.tileType;
+    }
+
 }

@@ -98,7 +98,7 @@ class BoardTileTest {
     void testToString() {
         // Map every type to a string representation (we should have a toString in type...)
         HashMap<BoardTile.Type, String> typeToString = new HashMap<>();
-        typeToString.put(BoardTile.Type.BLANK, "--");
+        typeToString.put(BoardTile.Type.BLANK, " -- ");
         typeToString.put(BoardTile.Type.START, "ST");
         typeToString.put(BoardTile.Type.X2WORD, "2W");
         typeToString.put(BoardTile.Type.X3WORD, "3W");
