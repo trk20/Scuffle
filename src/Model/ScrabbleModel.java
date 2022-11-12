@@ -4,12 +4,11 @@ import Events.*;
 import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
 import Views.ScrabbleFrame;
-import Views.TileView;
 import Events.ControllerEvent;
 import Events.ModelEvent;
 import Events.NewPlayerHandEvent;
 import Events.TileClickEvent;
-import Views.OptionPaneHandler;
+
 import java.util.*;
 
 /**
@@ -46,14 +45,14 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     private ScrabbleFrame mainFrame;
 
-    public ScrabbleModel() {
+    public ScrabbleModel(List<String> playerNames) {
         this.board = new Board(BOARD_SIZE, BOARD_SIZE);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
         this.turn = 0;
-        initializePlayers();
+        initializePlayers(playerNames);
     }
 
     /**
@@ -71,18 +70,16 @@ public class ScrabbleModel implements SControllerListener, SModel{
         System.out.println(board);
     }
 
-    private void initializePlayers(){ // FIXME: This info should be passed as constructor parameters
-        String name = "";
-
-        OptionPaneHandler inputHandler = new OptionPaneHandler();
-        numPlayers = inputHandler.askForNumPlayers();
-        players = new ArrayList<>(numPlayers);
-
-        for (int i = 0; i < numPlayers; i++){
-            name = inputHandler.askForPlayerName(i);
-            players.add(i, new Player(name, this));
+    /**
+     * Creates Player models from a list of player names.
+     *
+     * @param names The list of names for each player in the model
+     */
+    private void initializePlayers(List<String> names){
+        players = new ArrayList<>();
+        for (String name: names) {
+            players.add(new Player(name, this));
         }
-
     }
 
     /**
@@ -333,10 +330,5 @@ public class ScrabbleModel implements SControllerListener, SModel{
         for (ModelListener l: modelListeners) {
             l.handleModelEvent(e);
         }
-    }
-
-    public static void main(String[] args){
-        ScrabbleModel s = new ScrabbleModel();
-        s.startGame();
     }
 }
