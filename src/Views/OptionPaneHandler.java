@@ -1,8 +1,11 @@
 package Views;
 
+import Model.Player;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that handles user console input
@@ -93,5 +96,24 @@ public class OptionPaneHandler {
             }
         }
         return word;
+    }
+
+    /**
+     * Asks for a name for each player that would like to play in a new game.
+     * Amount is limited by the model's player limits.
+     *
+     * @return List of player names for a new game.
+     */
+    public List<String> getNewPlayerNames() {
+        String name = "";
+
+        int numPlayers = this.askForNumPlayers();
+        ArrayList<String> names = new ArrayList<>(numPlayers);
+
+        for (int i = 0; i < numPlayers; i++){
+            name = this.askForPlayerName(i);
+            names.add(name);
+        }
+        return names;
     }
 }
