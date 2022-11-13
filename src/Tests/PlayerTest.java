@@ -23,6 +23,7 @@ class PlayerTest {
      * Set up for each test case in the test suite,
      * initializes some words, a hand and list of players
      *
+     * @author: Vladimir Kovacina
      */
     @org.junit.jupiter.api.BeforeEach
     public void setUp() {
@@ -53,6 +54,8 @@ class PlayerTest {
     /**
      * Tests the placeTiles method, checks if it works properly when
      * the word is and is not in the players hand
+     *
+     * @author: Vladimir Kovacina
      */
 
     @org.junit.jupiter.api.Test
@@ -73,6 +76,8 @@ class PlayerTest {
     /**
      * Tests the discardTiles method, checks if it works properly when
      * the word is and is not in the players hand
+     *
+     * @author: Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     public void discardTilesTest() {
@@ -91,6 +96,8 @@ class PlayerTest {
     /**
      * Tests the containsTiles method, checks if it works properly when
      * the word is and is not in the players hand
+     *
+     * @author: Vladimir Kovacina
      */
 
     @org.junit.jupiter.api.Test
@@ -113,6 +120,8 @@ class PlayerTest {
     /**
      * Tests the outOfTiles method, checks if it works properly when
      * the hand is empty and when it is not empty
+     *
+     * @author: Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     public void outOfTilesTest() {
@@ -134,6 +143,8 @@ class PlayerTest {
     /**
      * Tests the getHand method, checks if it works properly and
      * if the returned hand is the correct type
+     *
+     * @author: Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     public void getHandTest() {
@@ -145,6 +156,8 @@ class PlayerTest {
     /**
      * Tests the getScore method, checks if it works properly with
      * various different scores
+     *
+     * @author: Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     public void getScoreTest() {
@@ -158,6 +171,8 @@ class PlayerTest {
     /**
      * Tests the getName method, checks if it works properly with
      * various different Names
+     *
+     * @author: Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     void getNameTest() {

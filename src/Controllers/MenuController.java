@@ -24,6 +24,8 @@ public class MenuController implements ActionListener {
      * Show the Game Rules
      * Save Game
      *
+     * @author Vladimir Kovacina
+     *
      * @param e the event to be processed
      */
     @Override
@@ -45,6 +47,7 @@ public class MenuController implements ActionListener {
 
     /**
      * Opens the url to the website provided
+     * @author Vladimir Kovacina
      * @param urlString the url to the website
      */
 
