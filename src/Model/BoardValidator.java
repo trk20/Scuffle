@@ -163,7 +163,7 @@ public class BoardValidator {
      * @return True if the point is outside the bounds of the board, false otherwise.
      */
     private boolean isOutsideBoard(Point p) {
-        return p.getX() < BOARD_SIZE && p.getY() < BOARD_SIZE;
+        return !(p.getX() < BOARD_SIZE && p.getY() < BOARD_SIZE);
     }
 
     /**
