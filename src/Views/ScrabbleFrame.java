@@ -54,10 +54,12 @@ public class ScrabbleFrame extends JFrame{
         setCenterContent(tempCenterContent);
 
         setMenu(new MenuView(model));
-        setRightContent(new TurnActionPanel(model));
         setLeftContent(new ScoreView(model));
         setSouthContent(new HandView(model));
-        setCenterContent(new BoardView(model));
+        BoardView boardView = new BoardView(model);
+        setCenterContent(boardView);
+        // FIXME: probably not an ideal way to pass this
+        setRightContent(new TurnActionPanel(model, boardView.getControllers()));
     }
 
     public void setCenterContent(JPanel centerContent) {

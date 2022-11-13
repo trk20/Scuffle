@@ -1,5 +1,6 @@
 package Controllers;
 
+import Events.ControllerEvent;
 import Events.Listeners.SControllerListener;
 
 /**
@@ -17,6 +18,8 @@ public interface SController {
     void addControllerListener(SControllerListener l);
     /**
      * Notify listeners by sending them a controller event.
+     *
+     * @param e the event to send to the listeners
      */
-    void notifyControllerListeners();
+    void notifyControllerListeners(ControllerEvent e);
 }

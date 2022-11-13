@@ -1,13 +1,16 @@
 package Controllers;
 import Events.BoardClickEvent;
+import Events.ControllerEvent;
 import Events.Listeners.SControllerListener;
 import Model.ScrabbleModel;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardController implements SController{
+public class BoardController implements SController, ActionListener {
     private List<SControllerListener> listeners;
     private Point origin;
     private ScrabbleModel model;
@@ -18,21 +21,31 @@ public class BoardController implements SController{
         this.origin = origin;
     }
 
-    public void handleBoardClick(){
-        model.setPlacementLocation(origin);
-        notifyControllerListeners();
-    }
-
     public Point getOrigin(){
         return origin;
     }
     @Override
     public void addControllerListener(SControllerListener l) {listeners.add(l);}
 
+    /**
+     * Notify listeners by sending them a controller event.
+     *
+     * @param e the event to send to the listeners
+     */
     @Override
-    public void notifyControllerListeners() {
+    public void notifyControllerListeners(ControllerEvent e) {
         for (SControllerListener l: listeners) {
-            l.handleControllerEvent(new BoardClickEvent(this));
+            l.handleControllerEvent(e);
         }
+    }
+
+    /**
+     * Invoked when an action occurs, will send a board click event to listeners.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        notifyControllerListeners(new BoardClickEvent(this));
     }
 }

@@ -8,15 +8,15 @@ import Model.ScrabbleModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardView extends JPanel implements ModelListener {
 
     private JPanel boardPanel;
     private JButton[][] gridButtons;
-    private JButton selectRightToLeft;
-    private JButton selectTopToBottom;
     private int boardSize;
-    private BoardController controller;
+    private List<BoardController> controllers;
     private ScrabbleModel model;
     public BoardView(ScrabbleModel model) {
         boardSize = 15;
@@ -28,29 +28,20 @@ public class BoardView extends JPanel implements ModelListener {
         setAlignmentX(RIGHT_ALIGNMENT);
         boardPanel = new JPanel();
         Font buttonFont = new Font("Consolas",Font.PLAIN,10);
-        selectRightToLeft = new JButton();
-        selectRightToLeft.setText("→");
-        selectRightToLeft.setFont(buttonFont);
-        selectRightToLeft.addActionListener(e->model.setPlacementDirection(Board.Direction.RIGHT));
-        selectTopToBottom = new JButton();
-        selectTopToBottom.setAlignmentX(CENTER_ALIGNMENT);
-        selectTopToBottom.setText("↓");
-        selectTopToBottom.setFont(buttonFont);
-        selectTopToBottom.addActionListener(e->model.setPlacementDirection(Board.Direction.DOWN));
-        add(selectRightToLeft);
-        add(selectTopToBottom);
         add(boardPanel);
         add(Box.createHorizontalGlue());
         boardPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         boardPanel.setLayout(new GridLayout(boardSize,boardSize));
         boardPanel.setMaximumSize(new Dimension(boardSize*30,boardSize*30));
 
+        controllers = new ArrayList<>();
+
         gridButtons = new JButton[boardSize][boardSize];
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
-                controller = new BoardController(model,new Point(row, col));
+                controllers.add(new BoardController(model,new Point(row, col)));
                 gridButtons[row][col] = new JButton();
-                gridButtons[row][col].addActionListener(e->controller.handleBoardClick());
+                gridButtons[row][col].addActionListener(controllers.get(controllers.size()-1));
                 gridButtons[row][col].setText(model.getBoardTileText(row,col));
                 gridButtons[row][col].setMaximumSize(new Dimension(30,30));
                 boardPanel.add(gridButtons[row][col]);
@@ -70,4 +61,11 @@ public class BoardView extends JPanel implements ModelListener {
         if(e instanceof BoardPlaceEvent) update();
     }
 
+    /**
+     * Return all the board controllers (1/tile in the board)
+     * @return all the board controllers in the board view.
+     */
+    public List<BoardController> getControllers() {
+        return this.controllers;
+    }
 }
