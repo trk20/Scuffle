@@ -1,14 +1,9 @@
 package Views;
 
-import Controllers.BoardPlacementController;
-import Controllers.SController;
-import Controllers.TurnActionController;
-import Events.BoardPlaceEvent;
-import Events.HandChangeEvent;
+import Controllers.BoardController;
+import Events.*;
 import Events.Listeners.ModelListener;
-import Events.Listeners.SControllerListener;
-import Events.ModelEvent;
-import Events.ScrabbleEvent;
+import Model.Board;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
@@ -21,12 +16,12 @@ public class BoardView extends JPanel implements ModelListener {
     private JButton selectRightToLeft;
     private JButton selectTopToBottom;
     private int boardSize;
-    private BoardPlacementController controller;
+    private BoardController controller;
     private ScrabbleModel model;
-    public BoardView(ScrabbleModel model){
+    public BoardView(ScrabbleModel model) {
         boardSize = 15;
         this.model = model;
-        controller = new BoardPlacementController(model);
+        model.addModelListener(this);
         setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         add(Box.createHorizontalGlue());
         setSize(800,500);
@@ -36,12 +31,12 @@ public class BoardView extends JPanel implements ModelListener {
         selectRightToLeft = new JButton();
         selectRightToLeft.setText("→");
         selectRightToLeft.setFont(buttonFont);
-        selectRightToLeft.addActionListener(e->controller.handleBoardPlacementSelection(true));
+        selectRightToLeft.addActionListener(e->model.setPlacementDirection(Board.Direction.RIGHT));
         selectTopToBottom = new JButton();
         selectTopToBottom.setAlignmentX(CENTER_ALIGNMENT);
         selectTopToBottom.setText("↓");
         selectTopToBottom.setFont(buttonFont);
-        selectTopToBottom.addActionListener(e->controller.handleBoardPlacementSelection(false));
+        selectTopToBottom.addActionListener(e->model.setPlacementDirection(Board.Direction.DOWN));
         add(selectRightToLeft);
         add(selectTopToBottom);
         add(boardPanel);
@@ -53,9 +48,9 @@ public class BoardView extends JPanel implements ModelListener {
         gridButtons = new JButton[boardSize][boardSize];
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
+                controller = new BoardController(model,new Point(row, col));
                 gridButtons[row][col] = new JButton();
-                Point location = new Point(row,col);
-                gridButtons[row][col].addActionListener(e->controller.handleBoardPlacementSelection(location));
+                gridButtons[row][col].addActionListener(e->controller.handleBoardClick());
                 gridButtons[row][col].setText(model.getBoardTileText(row,col));
                 gridButtons[row][col].setMaximumSize(new Dimension(30,30));
                 boardPanel.add(gridButtons[row][col]);
@@ -72,8 +67,7 @@ public class BoardView extends JPanel implements ModelListener {
     }
     @Override
     public void handleModelEvent(ModelEvent e) {
-        if(e instanceof BoardPlaceEvent){
-            update();
-        }
+        if(e instanceof BoardPlaceEvent) update();
     }
+
 }

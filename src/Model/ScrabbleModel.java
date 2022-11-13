@@ -1,6 +1,7 @@
 package Model;
 
 import Events.*;
+import Events.Listeners.BoardClickListener;
 import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
 import Views.ScrabbleFrame;
@@ -45,10 +46,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
     List<ModelListener> modelListeners;
     /** list of selected tiles (in order) to pass to the board when placing*/
     List<Tile> selectedTiles;
-    Player currentPlayer;
-
     Point wordOrigin;
-    boolean placementDirection;
+    Board.Direction placementDirection;
 
 
     private ScrabbleFrame mainFrame;
@@ -63,7 +62,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.numPlayers = playerNames.size();
         this.wordOrigin = new Point(-1,-1);
         initializePlayers(playerNames);
-        this.placementDirection = true;
+        this.placementDirection = Board.Direction.RIGHT;
     }
 
     /**
@@ -195,11 +194,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     public void setPlacementLocation(Point wordOrigin){
         this.wordOrigin = wordOrigin;
-        System.out.println("Placement " + ((placementDirection) ? "left to right": "top to bottom") + " at " + wordOrigin);
+        //debugging purposes
+        System.out.println("Placement " + placementDirection + " at " + wordOrigin);
     }
 
-    public void setPlacementDirection(boolean direction){this.placementDirection=direction;}
-
+    public void setPlacementDirection(Board.Direction direction){this.placementDirection=direction;}
 
     /**
      * Handles the user wanting to discard letters
@@ -222,13 +221,13 @@ public class ScrabbleModel implements SControllerListener, SModel{
         //FIXME:not working
         System.out.println("Checking origin");
         if(wordOrigin.x != -1 && wordOrigin.y != -1) {
-            int placementScore = board.placeWord(new BoardPlaceEvent(this, selectedTiles, wordOrigin, ((placementDirection) ? Board.Direction.RIGHT : Board.Direction.DOWN)));
+            int placementScore = board.placeWord(new BoardPlaceEvent(this, selectedTiles, wordOrigin, placementDirection));
             System.out.println("Attempting to place word");
             if (placementScore != -1) {
                 System.out.println("Placing Word");
                 printBoard();
-                currentPlayer.placeTiles(selectedTiles);
-                currentPlayer.addPoints(placementScore);
+                getCurPlayer().placeTiles(selectedTiles);
+                getCurPlayer().addPoints(placementScore);
                 wordOrigin = new Point(-1,-1);
                 nextTurn();
             }
@@ -352,8 +351,12 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
+
         if(e instanceof TileClickEvent tc) flipTileSelect(tc);
+        if(e instanceof BoardClickEvent bc) System.out.println("fuck");
     }
+
+
 
     /**
      * Add a listener to notify when an event is raised.
