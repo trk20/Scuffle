@@ -103,6 +103,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
 
     /** Get board direction (for direction change events) */
     public Board.Direction getDir() {
+        System.out.println(dir.toString());
         return dir;
     }
 

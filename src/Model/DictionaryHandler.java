@@ -1,12 +1,9 @@
 package Model;
 
-import Model.Board;
-import Model.Letter;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * A class handling the loading of the set of valid words, and the evaluation of the validity of possible words

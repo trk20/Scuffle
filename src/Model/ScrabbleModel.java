@@ -49,7 +49,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     private ScrabbleFrame mainFrame;
 
     public ScrabbleModel(List<String> playerNames) {
-        this.board = new Board(true);
+        this.board = new Board(false);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();

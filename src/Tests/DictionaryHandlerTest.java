@@ -4,7 +4,6 @@ import Model.DictionaryHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class DictionaryHandlerTest {
     private DictionaryHandler dictionary;
@@ -78,6 +77,7 @@ class DictionaryHandlerTest {
         assert(!dictionary.isValidWord("1134erfre32"));
         assert(!dictionary.isValidWord("KENDRICK"));
         assert(!dictionary.isValidWord("FATALITOUS"));
+        assert(!dictionary.isValidWord("TNHMW"));
     }
 
     /**
