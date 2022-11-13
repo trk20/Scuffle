@@ -1,11 +1,9 @@
 package Model;
 
 import Events.*;
-import Events.Listeners.BoardClickListener;
 import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
 import Views.ScrabbleFrame;
-import Views.TileView;
 import Events.ControllerEvent;
 import Events.ModelEvent;
 import Events.NewPlayerHandEvent;
@@ -27,8 +25,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
     public static final int MIN_PLAYERS = 1;
-    public static final Boolean DISCARD = false;
-    public static final Boolean PLACE = true;
+    //    public static final Boolean DISCARD = false; FIXME: outdated, should not be using bool to indicate function.
+//    public static final Boolean PLACE = true;
     public static final int BOARD_SIZE = 15;
 
     // Model components
@@ -179,19 +177,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return true;
     }
 
-
-    // We should not have these public accesses to the model
-    @Deprecated
-    public void skipTurn(){
-        nextTurn();
-    }
-
-    // We should not have these public accesses to the model
-    @Deprecated
-    public void discardHand() {
-        handleDiscard();
-    }
-
     public void setPlacementLocation(Point wordOrigin){
         this.wordOrigin = wordOrigin;
         //debugging purposes
@@ -205,19 +190,14 @@ public class ScrabbleModel implements SControllerListener, SModel{
      *  @author Kieran, Alexandre
      */
     private void handleDiscard(){
+        getCurHand().discardSelected(selectedTiles);
         nextTurn();
-        // TODO to be implemented later
-        ;
-    }
-
-    public void placeHand(){
-        handlePlace();
     }
 
     /**
      * Handles the user wanting to place letters
      */
-    private void handlePlace(){
+    private void handlePlace(PlaceClickEvent pce){
         //FIXME:not working
         //System.out.println("Checking origin");
         if(wordOrigin.x != -1 && wordOrigin.y != -1) {
@@ -351,9 +331,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
-        if(e instanceof PlaceClickEvent) System.out.println("Place click event");
-        if(e instanceof DiscardClickEvent) System.out.println("DiscardClickEvent");
-        if(e instanceof TileClickEvent tc) flipTileSelect(tc);
+        if(e instanceof PlaceClickEvent pce) handlePlace(pce);
+        if(e instanceof DiscardClickEvent) handleDiscard();
+        if(e instanceof TileClickEvent tce) flipTileSelect(tce);
     }
 
 

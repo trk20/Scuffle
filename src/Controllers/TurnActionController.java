@@ -23,8 +23,9 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     /** Depending on the action, will send different action events to listeners*/
     public enum ActionState {
         PLACE (null), // Special case, event made outside
+        // FIXME: I'm realising, this might be the odd one out, might not need to make an event field
         DISCARD (new DiscardClickEvent(new TurnActionController())),
-        // TODO: FLIP_DIR(); ESSENTIAL FOR M2
+        FLIP_DIR(null),
         SKIP (null); // TODO (discard should work well enough for M2)
 
         private final TurnActionEvent event;
@@ -85,8 +86,19 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     public void actionPerformed(ActionEvent e) {
         // Only enter placing mode if placed was clicked, otherwise exit it
         placing = action == ActionState.PLACE;
+        if(action == ActionState.FLIP_DIR) flipDir();
         // Notify controller listeners (if action has an event)
         if(action.event != null) notifyControllerListeners(action.event);
+    }
+
+    /**
+     * Go to the next direction in the list of available directions
+     * (currently there are two: right, down; they alternate)
+     */
+    private void flipDir() {
+        int dirInt = dir.ordinal();
+        Board.Direction[] allDirections = Board.Direction.values();
+        dir = allDirections[dirInt+1%(allDirections.length)];
     }
 
     /**

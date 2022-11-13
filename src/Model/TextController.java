@@ -12,6 +12,7 @@ import java.util.*;
  * @Author: Kieran Rourke
  * @Version OCT-23
  */
+@Deprecated
 public class TextController {
 
     private Scanner inputHandler;
@@ -40,6 +41,7 @@ public class TextController {
      * Asks the user if they want to discard or place cards
      * @return: their answer
      */
+    @Deprecated
     public boolean getUserAction(){
         String input = "";
         boolean isValidInput = false;
@@ -50,7 +52,8 @@ public class TextController {
             input = inputHandler.nextLine();
             isValidInput = isValidAction(input);
         }
-        return input.equals("d") ? ScrabbleModel.DISCARD : ScrabbleModel.PLACE;
+//        return input.equals("d") ? ScrabbleModel.DISCARD : ScrabbleModel.PLACE;
+        return false; // Broken now
     }
     /**
      * Checks if a word is only letters
