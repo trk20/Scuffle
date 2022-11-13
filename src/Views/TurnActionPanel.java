@@ -13,6 +13,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
 
     private JPanel turnPanel;
     private JPanel actionPanel;
+    private JPanel directionPanel;
     private JPanel skipPanel;
 
     private JLabel turnLabel;
@@ -20,6 +21,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     private JButton placeButton;
     private JButton discardButton;
     private JButton skipButton;
+    private JButton directionButton;
     private final int width = 300;
     private final int height = 300;
 
@@ -31,27 +33,33 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         turnPanel = new JPanel();
         actionPanel = new JPanel();
         skipPanel = new JPanel();
+        directionPanel = new JPanel();
 
-        turnPanel.setPreferredSize(new Dimension(width, height/4));
+        turnPanel.setPreferredSize(new Dimension(width, height/5));
         turnPanel.setBackground(Color.BLACK);
 
-        actionPanel.setPreferredSize(new Dimension(width, height/2));
+        actionPanel.setPreferredSize(new Dimension(width, height/5 ));
         actionPanel.setBackground(Color.green);
 
-        skipPanel.setPreferredSize(new Dimension(width, height/4));
+        directionPanel.setPreferredSize(new Dimension(width, height/5));
+        directionPanel.setBackground(Color.WHITE);
+
+        skipPanel.setPreferredSize(new Dimension(width, height/5*2));
         skipPanel.setBackground(Color.blue);
 
 
         controller = new TurnActionController(model);
         currentPlayerName = model.getCurPlayer().getName();
 
-        setUpTurnLabel();
-        setUpActionButtons();
-        setUpSkipButton();
+        setUpTurnPanel();
+        setUpActionPanel();
+        setUpDirectionPanel();
+        setUpSkipPanel();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(turnPanel);
         add(actionPanel);
+        add(directionPanel);
         add(skipPanel);
 
         model.addModelListener(this);
@@ -59,7 +67,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
 
     }
 
-    private void setUpTurnLabel(){
+    private void setUpTurnPanel(){
         turnLabel = new JLabel("Turn: " + currentPlayerName);
 
         turnLabel.setFont(new Font("Serif", Font.BOLD, 15));
@@ -70,9 +78,10 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         turnPanel.add(turnLabel);
     }
 
-    private void setUpActionButtons(){
+    private void setUpActionPanel(){
         placeButton = new JButton("Place");
         discardButton = new JButton("Discard");
+
 
 
         placeButton.addActionListener(e -> controller.handleButtonPress(TurnActionController.ActionState.PLACE));
@@ -87,8 +96,24 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         actionPanel.add(discardButton, c);
 
     }
+    private void setUpDirectionPanel()
+    {
+        JLabel directionLabel = new JLabel("Direction:");
+        directionButton = new JButton("→");
+        directionButton.addActionListener(e -> controller.handleDirectionPress(e));
+        directionPanel.setLayout(new GridBagLayout());
 
-    private void setUpSkipButton(){
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+
+        directionPanel.add(directionLabel, c);
+        directionPanel.add(directionButton, c);
+
+    }
+
+    private void setUpSkipPanel(){
         skipButton = new JButton("Skip");
         skipButton.addActionListener(e -> controller.handleButtonPress(TurnActionController.ActionState.SKIP));
 
