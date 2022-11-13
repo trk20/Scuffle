@@ -138,6 +138,34 @@ public class BoardValidator {
     }
 
     /**
+     * Checks if a coordinate in the validator's board is taken (x = col, y = row), starting top left.
+     * @param p A point coordinate in the board to check
+     * @return True if a tile is placed at that location, false otherwise.
+     */
+    private boolean isTaken(Point p) {
+        return board.isTaken(p);
+    }
+
+    /**
+     * Asks the validator's board if a given point is outside the board.
+     *
+     * @param p The point coordinates of a placement in the board.
+     * @return True if the point is outside the bounds of the board, false otherwise.
+     */
+    private boolean isOutsideBoard(Point p) {
+        return !(p.getX() < BOARD_SIZE && p.getY() < BOARD_SIZE);
+    }
+
+    /**
+     * Checks if no words have been placed on the board yet.
+     * @return True if the board is empty, false otherwise.
+     */
+    private boolean boardIsEmpty(){
+        return board.boardIsEmpty();
+    }
+
+    /**
+
      * Checks if the word to be placed will cover the start tile
      * @return True if one of the tiles is placed on the start tile, false otherwise.
      */
