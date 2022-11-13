@@ -1,13 +1,17 @@
 package Tests;
+
+import Events.BoardPlaceEvent;
+import Model.Board;
+import Model.Letter;
+import Model.ScrabbleModel;
+import Model.Tile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Model.*;
-import Events.BoardPlaceEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardTest {
     ArrayList<Tile> placedTiles;
@@ -128,7 +132,7 @@ public class BoardTest {
         board.placeWord(event);
         placedTiles = new ArrayList<Tile>();
         placedTiles.add(new Tile(Letter.S));
-        placedTiles.add(new Tile(Letter.K));
+        placedTiles.add(new Tile(Letter.Q));
 
         event = new BoardPlaceEvent(model, placedTiles, new Point(8, 8), Board.Direction.DOWN);
         int result = board.placeWord(event);
@@ -136,7 +140,7 @@ public class BoardTest {
          * Should pass as this should look like
          *   C
          *   AS
-         *   TK
+         *   TQ (invalid word)
          */
         assertEquals(-1, result);
     }
