@@ -38,21 +38,6 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         }
     }
     
-    // TODO: move to view
-    public enum Direction {
-        HORIZONTAL("→"),
-        VERTICAL("↓");
-
-        private final String arrow;
-        
-        private Direction(String arrow){
-            this.arrow = arrow;
-        }
-        public String getArrow(){
-            return arrow;
-        }
-    }
-    
     private final ActionState action;
     private final List<SControllerListener> listeners;
     /** Flipped by FLIP_DIR action, for PLACE to use */

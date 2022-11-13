@@ -17,7 +17,16 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @version NOV-12
  */
 public class Board {
-    public enum Direction{DOWN, RIGHT;}
+    public enum Direction{
+        DOWN("↓"), RIGHT("→");
+        private final String dirStr;
+        Direction(String s){this.dirStr = s;}
+
+        @Override
+        public String toString() {
+            return dirStr;
+        }
+    }
     private BoardTile2DTable boardTileTable; // COLUMN (x), ROW (y)
     private ArrayList<PlacedWord> currentWords;
     /** Takes care of validating the board */
@@ -92,14 +101,14 @@ public class Board {
                     else overlapping = false;
                 }
             }
-            placeTile(placementLocation, word.get(i).getLetter());
+            placeTile(placementLocation, word.get(i).letter());
         }
 
         currentWords = new ArrayList<>();
         currentWords.addAll(allBoardWords(placeEvent));
 
         // Return score after placing
-        return getTurnScore(placeEvent);
+//        return getTurnScore(placeEvent);
     }
 
     /**
@@ -196,7 +205,7 @@ public class Board {
         for(int index = 0; index < word.size(); index++){
             Point location = new Point(col+(direction==Direction.RIGHT ? index : 0),
                     row+(direction==Direction.DOWN ? index : 0));
-            boardCopy.boardTileTable.setLetter(location, word.get(index).getLetter());
+            boardCopy.boardTileTable.setLetter(location, word.get(index).letter());
         }
 
         // Get all taken tiles FIXME: could probably only add new taken tiles, by making hashset persistent?
@@ -329,8 +338,8 @@ public class Board {
         return newWords;
     }
 
-    public BoardTile getBoardTile(int row,int col){
-        return board[row][col];
+    public BoardTile getBoardTile(Point p){
+        return boardTileTable.getTile(p);
     }
 
     /**

@@ -1,9 +1,10 @@
 package Views;
 
 import Controllers.BoardController;
-import Events.BoardPlaceEvent;
+import Events.BoardChangeEvent;
+import Events.Listeners.BoardChangeListener;
 import Events.Listeners.ModelListener;
-import Events.ModelEvent;
+import Model.Board;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
@@ -11,16 +12,15 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardView extends JPanel implements ModelListener {
+public class BoardView extends JPanel implements ModelListener, BoardChangeListener {
 
     private JPanel boardPanel;
     private JButton[][] gridButtons;
     private int boardSize;
     private List<BoardController> controllers;
-    private ScrabbleModel model;
+
     public BoardView(ScrabbleModel model) {
         boardSize = 15;
-        this.model = model;
         model.addModelListener(this);
         setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         add(Box.createHorizontalGlue());
@@ -37,28 +37,42 @@ public class BoardView extends JPanel implements ModelListener {
         controllers = new ArrayList<>();
 
         gridButtons = new JButton[boardSize][boardSize];
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
-                controllers.add(new BoardController(model,new Point(row, col)));
-                gridButtons[row][col] = new JButton();
-                gridButtons[row][col].addActionListener(controllers.get(controllers.size()-1));
-                gridButtons[row][col].setText(model.getBoardTileText(row,col));
-                gridButtons[row][col].setMaximumSize(new Dimension(30,30));
-                boardPanel.add(gridButtons[row][col]);
+        for (int col = 0; col < boardSize; col++) {
+            for (int row = 0; row < boardSize; row++) {
+                controllers.add(new BoardController(model,new Point(col, row)));
+                gridButtons[col][row] = new JButton();
+                gridButtons[col][row].addActionListener(controllers.get(controllers.size()-1));
+                gridButtons[col][row].setText(model.getBoardTileText(new Point(col, row)));
+                gridButtons[col][row].setMaximumSize(new Dimension(30,30));
+                boardPanel.add(gridButtons[col][row]);
             }
         }
         setVisible(true);
     }
-    public void update(){
+
+    /**
+     * Update the board view to represent the given board
+     * @param board A modeled board
+     */
+    public void update(Board board){
+        System.out.println("Updating");
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
-                gridButtons[row][col].setText(model.getBoardTileText(row,col));
+                gridButtons[col][row].setText(board.getBoardTile(new Point(col, row))
+                        .toString());
             }
         }
+        validate();
+        repaint();
     }
+
+    /**
+     * Handles board change events, updates view to show new board state
+     * @param e The event indicating a board change
+     */
     @Override
-    public void handleModelEvent(ModelEvent e) {
-        if(e instanceof BoardPlaceEvent) update();
+    public void handleBoardChangeEvent(BoardChangeEvent e) {
+        update(e.getBoard());
     }
 
     /**

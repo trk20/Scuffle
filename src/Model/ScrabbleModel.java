@@ -116,8 +116,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return Character.isLetter(coords.charAt(0));
     }
 
-    public String getBoardTileText(int row,int col){
-        return board.getBoardTile(row,col).toString();
+    public String getBoardTileText(Point p){
+        return board.getBoardTile(p).toString();
     }
 
 
