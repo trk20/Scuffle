@@ -24,7 +24,7 @@ public class DictionaryHandler {
          * If something goes wrong, print an error message
          */
         try {
-            System.out.println("preparing to load file");
+//            System.out.println("preparing to load file");
             File dictionary = new File("Collins Scrabble Words (2019).txt");
             Scanner scanner = new Scanner(dictionary);
             while (scanner.hasNextLine()) {
@@ -32,7 +32,7 @@ public class DictionaryHandler {
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("uh oh, something went wrong with loading the dictionary");
+            System.out.println("Something went wrong with loading the dictionary");
 
         }
 

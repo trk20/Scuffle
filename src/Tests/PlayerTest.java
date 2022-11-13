@@ -62,6 +62,9 @@ class PlayerTest {
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
 
+
+        // FIXME: relies on equals method but it cannot be changed!
+        //  (currently depend on it for the memory reference comparison)
         //Word is in hand
         assertTrue(players.get(1).placeTiles(word1));
         //Word is not in hand

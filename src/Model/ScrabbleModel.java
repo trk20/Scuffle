@@ -317,7 +317,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
     @Override
     public void addModelListener(ModelListener l) {
         this.modelListeners.add(l);
-        System.out.println("New listener: "+l);
     }
 
     /**

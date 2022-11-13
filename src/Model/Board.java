@@ -62,9 +62,10 @@ public class Board {
         // Ensure valid placement
         if(!validator.isValidPlacement(placeEvent)) return -1;
 
-        setWordTiles(placeEvent);
 
         int turnScore = getTurnScore(placeEvent);
+
+        setWordTiles(placeEvent);
 
         // Add new words to current words
         currentWords = new ArrayList<>();
@@ -84,9 +85,9 @@ public class Board {
         // Unpack relevant event info
         Point wordOrigin = placeEvent.getWordOrigin();
         Direction placementDirection = placeEvent.getDirection();
-        System.out.println("Dir in set: "+placementDirection);
+//        System.out.println("Dir in set: "+placementDirection);
         List<Tile> word = placeEvent.getPlacedTiles();
-        System.out.println(word);
+//        System.out.println(word);
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
         // Place tiles in the board, skipping tiles that are already placed.
@@ -203,7 +204,7 @@ public class Board {
 
         List<PlacedWord> words = new ArrayList<>();
         // Iterate through each col, and row to find possible words
-        // TODO: Code duplication here
+        // TODO: Refactor code duplication here
         for(int x = 0; x < BOARD_SIZE; x++){
             List<BoardTile> colWordBuilder = new ArrayList<>();
             for(int y = 0; y < BOARD_SIZE; y++){
@@ -215,12 +216,13 @@ public class Board {
                     if (colWordBuilder.size() == 1) colWordBuilder.remove(0);
                     if (colWordBuilder.size() >= 2){ // Store word in words, and reset builder
                         words.add(new PlacedWord(colWordBuilder));
+//                        System.out.println("New row word: "+(words.get(words.size()-1)));
                         colWordBuilder.clear();
                     }
                 }
             }
         }
-        // Same thing but for rows
+        // Same thing but for rows (directions are flipped I think)
         for(int y = 0; y < BOARD_SIZE; y++){
             List<BoardTile> rowWordBuilder = new ArrayList<>();
             for(int x = 0; x < BOARD_SIZE; x++){
@@ -232,6 +234,7 @@ public class Board {
                     if (rowWordBuilder.size() == 1) rowWordBuilder.remove(0);
                     if (rowWordBuilder.size() >= 2){ // Store word in words, and reset builder
                         words.add(new PlacedWord(rowWordBuilder));
+//                        System.out.println("New col word: "+(words.get(words.size()-1)));
                         rowWordBuilder.clear();
                     }
                 }
@@ -269,6 +272,7 @@ public class Board {
             int multiplier = 1;
 
             for (BoardTile tile:newWord.getTiles()) {
+//                System.out.println(tile);
                     switch (tile.getType()){
                         case X2LETTER:
                             wordScore+=tile.getLetter().getScore()*2;
@@ -289,6 +293,7 @@ public class Board {
                             break;
                     }
             }
+//            System.out.println("wordScore: "+wordScore+", multi: "+multiplier);
             turnScore += wordScore*multiplier;
         }
 
@@ -318,6 +323,7 @@ public class Board {
         for (PlacedWord aWord:currentWords) {
             newWords.remove(aWord);
         }
+//        System.out.println("Final new words "+newWords);
         return newWords;
     }
 
