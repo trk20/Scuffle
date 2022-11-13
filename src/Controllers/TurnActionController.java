@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * TurnActionController handles sending events resulting from clicking
  * buttons in the TurnActionView.
@@ -38,6 +37,22 @@ public class TurnActionController implements SController, BoardClickListener, Ac
             return event;
         }
     }
+    
+    // TODO: move to view
+    public enum Direction {
+        HORIZONTAL("→"),
+        VERTICAL("↓");
+
+        private final String arrow;
+        
+        private Direction(String arrow){
+            this.arrow = arrow;
+        }
+        public String getArrow(){
+            return arrow;
+        }
+    }
+    
     private final ActionState action;
     private final List<SControllerListener> listeners;
     /** Flipped by FLIP_DIR action, for PLACE to use */
@@ -67,7 +82,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
             c.addControllerListener(this);
         }
     }
-
+    
     /**
      * Null constructor for TurnActionController, temporary fix to create events in enum!
      */
@@ -90,7 +105,6 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         // Notify controller listeners (if action has an event)
         if(action.event != null) notifyControllerListeners(action.event);
     }
-
     /**
      * Go to the next direction in the list of available directions
      * (currently there are two: right, down; they alternate)
@@ -116,6 +130,20 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         }
     }
 
+
+   // TODO: move to view
+    public void handleDirectionPress(ActionEvent e) {
+        JButton button = (JButton) e.getSource();
+        if(currentDirection.equals(Direction.HORIZONTAL)){
+            currentDirection = Direction.VERTICAL;
+            button.setText(Direction.VERTICAL.getArrow());
+            return;
+        }
+        button.setText(Direction.HORIZONTAL.getArrow());
+        currentDirection = Direction.HORIZONTAL;
+    }
+
+        
     /**
      * Add a listener to notify when an event is raised.
      *
