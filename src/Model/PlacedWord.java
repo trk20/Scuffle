@@ -42,8 +42,8 @@ public class PlacedWord {
      * @return whether the word is placed left-to-right
      */
     private boolean getDirection(){
-        if(wordTiles.size()){
-
+        if(wordTiles.size() == 1){
+            return false; // FIXME: unintended behavior
         }
         return wordTiles.get(0).getX() > wordTiles.get(1).getX();
     }
