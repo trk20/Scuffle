@@ -50,12 +50,13 @@ public class BoardTest {
     @Test
     void checkValidPlaceOnStartTile(){
         int result = board.placeWord(event);
-        assertEquals(1, result);
+        assertEquals(10, result);
     }
 
     @Test
     void checkValidOverlapWordPlacement(){
         board.placeWord(event);
+        placedTiles.remove(Letter.A);
         event = new BoardPlaceEvent(model, placedTiles, new Point(6, 8), Board.Direction.RIGHT);
         int result = board.placeWord(event);
         /*
@@ -65,22 +66,7 @@ public class BoardTest {
          *   T
          *
          */
-        assertEquals(1, result);
-    }
-
-    @Test
-    void checkInvalidOverlapPlacement(){
-        board.placeWord(event);
-        event = new BoardPlaceEvent(model, placedTiles, new Point(5, 8), Board.Direction.RIGHT);
-        int result = board.placeWord(event);
-        /*
-        * Should fail as this should look like
-        *   C
-        * CAA
-        *   T
-        *
-        */
-        assertEquals(-1, result);
+        assertEquals(5, result);
     }
 
     @Test
@@ -98,7 +84,7 @@ public class BoardTest {
          *   T
          *   S
          */
-        assertEquals(1, result);
+        assertEquals(6, result);
     }
 
     @Test
@@ -134,7 +120,7 @@ public class BoardTest {
          *   AS
          *   TO
          */
-        assertEquals(1, result);
+        assertEquals(4, result);
     }
 
     @Test
