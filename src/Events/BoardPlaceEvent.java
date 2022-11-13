@@ -15,15 +15,17 @@ import java.util.List;
  * @author Alex
  */
 public class BoardPlaceEvent extends ModelEvent{
-    private List<Tile> placedTiles;
-    private Point wordOrigin;
-    private Direction direction;
+    private final List<Tile> placedTiles;
+    private final Point wordOrigin;
+    private final Direction direction;
 
     /**
      * Constructs a BoardPlaceEvent object with the model as a source object.
      *
      * @param model the model where the event originated
-     *
+     * @param placedTiles the tiles to be placed in the board
+     * @param wordOrigin the initial placement location in the board
+     * @param direction the direction of the tiles after the origin
      */
     public BoardPlaceEvent(ScrabbleModel model,
                            List<Tile> placedTiles,
