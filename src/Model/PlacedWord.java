@@ -42,6 +42,9 @@ public class PlacedWord {
      * @return whether the word is placed left-to-right
      */
     private boolean getDirection(){
+        if(wordTiles.size()){
+
+        }
         return wordTiles.get(0).getX() > wordTiles.get(1).getX();
     }
 
@@ -67,7 +70,8 @@ public class PlacedWord {
             return false;
         }
         PlacedWord word = (PlacedWord)obj;
-        return word.toString().equals(this.toString()) && word.getDirection() == this.getDirection() && Arrays.equals(word.getLocation(),this.getLocation());
+        return word.toString().equals(this.toString()) && word.getDirection() ==
+                this.getDirection() && Arrays.equals(word.getLocation(),this.getLocation());
     }
 
     /**

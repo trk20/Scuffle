@@ -103,12 +103,6 @@ public class Board {
             }
             placeTile(placementLocation, word.get(i).letter());
         }
-
-        currentWords = new ArrayList<>();
-        currentWords.addAll(allBoardWords(placeEvent));
-
-        // Return score after placing
-//        return getTurnScore(placeEvent);
     }
 
     /**
@@ -224,22 +218,19 @@ public class Board {
         // Find words
         for (BoardTile tile:takenTiles){
             // If tile is the start of a word, IE: no letters before it, and 1+ letters after it, add the word starting from that position to the list of words
-            if ((tile.getX() > 0
-                    && !boardCopy.isTaken(new Point(tile.getX() - 1,tile.getY()))
-                    || tile.getX() == 0)
+            if ((!boardCopy.isTaken(new Point(tile.getX() - 1,tile.getY())) || tile.getX() == 0)
                     && tile.getX() < 14
                     && boardCopy.isTaken(new Point(tile.getX() + 1,tile.getY()))) {
                 words.add(getWordStartingFrom(boardCopy,
                         new Point(tile.getX(), tile.getY()),
-                        Direction.RIGHT));
+                        Direction.DOWN));
             }
-            if ((tile.getY() > 0
-                    && !boardCopy.isTaken(new Point(tile.getX(),tile.getY()-1))
+            if ((!boardCopy.isTaken(new Point(tile.getX(),tile.getY()-1))
                     || tile.getY() == 0) && tile.getY() < 14
                     && boardCopy.isTaken(new Point(tile.getX(),tile.getY()+1))) {
                 words.add(getWordStartingFrom(boardCopy,
                         new Point(tile.getX(), tile.getY()),
-                        Direction.DOWN));
+                        Direction.RIGHT));
             }
         }
         return words;
@@ -254,18 +245,6 @@ public class Board {
         copiedBoard.boardTileTable = this.boardTileTable.copy();
         return copiedBoard;
     }
-
-//    /**
-//     * Temporary boolean to enum conversion until the board is fully refactored
-//     * to stop using boolean directions.
-//     *
-//     * @param direction boolean direction
-//     * @return enum representation of the direction
-//     */
-//    @Deprecated
-//    public static Direction boolDirToEnum(boolean direction) {
-//        return direction ? Direction.RIGHT : Direction.DOWN;
-//    }
 
     /**
      * Calculates the score of a given word placement, based off the value of the letters and tile multipliers
