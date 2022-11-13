@@ -24,6 +24,7 @@ public class MenuView extends JMenuBar {
         saveGame = new JMenuItem("Save Game");
         help = new JMenuItem("Game Rules");
 
+        //Set action listeners
         newGame.addActionListener(mc);
         saveGame.addActionListener(mc);
         help.addActionListener(mc);

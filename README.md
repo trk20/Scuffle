@@ -98,6 +98,24 @@ The Model.BoardTile Class uses two enums, Type enum and Model.Letter enum.
 The Type enum is created within the Model.BoardTile Class and it is used to assign types to the BoardTiles. Since the types are constant we decided to put them in an enum to avoid accidentally assigning a wrong type.
 The Model.Letter enum is also used in the Model.BoardTile class, each tile wil be able to hold one Model.Letter. Letters were made to be an enum since they are constant and contain values and frequencies of each letter.
 The Model.BoardTile also keeps track of its location on the board, using integers x and y to store the appropriate row and column values.
+### Class Controllers.MenuController:
+This class is used to handle the action that is selected from the Menu. 
+This controller class implements the ActionListener and therefore overrides the actionPerformed method to determine what to do when a MenuItem is selected.
+This class is used to implement the MVC design pattern for the Menu in the Scrabble game.
+### Class Views.MenuView:
+This class is used to create the GUI for the Menu, this is done by extending JMenuBar. The menu name and menu items are created in this class and all the actionListeners are initialized.  
+This class is the view part of the MVC design pattern for the GUI of the Menu in the Scrabble game.
+We chose to use the MVC pattern since it is easy to implement and makes it much easier to refactor our code.
+### Class Views.ScoreView:
+This class is used to create the GUI for the Score panel (left side of the Scrabble game GUI). This class extends JPanel (since it will be a JPanel when it is added to the main JFrame) and implements ModelListener (so that it gets notified when a player plays his turn).
+This class also uses the MVC design pattern, it is the view part of the pattern, it also uses Events, which are passed once a change has occured in the Model.
+These events contain enough information to update the View with the required information (in this case the new score of the players).
+### Class Tests.PlayerTest:
+This is a test class that tests the Player model, using JUnit5. The tests included in this class are tests for the getter methods (for Score, Name and Hand) and other functional methods of the Player class such as outOfTiles, containsTiles, discardTiles and placeTiles.
+We decided to implement tests for this class to help with code correctness and future regression testing when new features are implemented. 
+### Class Tests.DrawPileTest:
+This is a test class that tests the DrawPile class, using JUnit5. The tests in this test suite include tests for each of the methods used by drawPile (draw and addToPile), there is also one additional test to check the drawPile is created with the correct size.
+We decided to implement tests for this class to help with code correctness and future regression testing when new features are implemented.
 ### Class Model.TurnActionPanel:
 This class handles the view for the right content of the game. It contains a button for signalling a place action,
 discard action, the direction for the place action(Horizontal or Vertical) and a skip turn button. The main design choice

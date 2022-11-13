@@ -18,6 +18,8 @@ class DrawPileTest {
      * Set up for each test case in the test suite,
      * initializes a Scrabble model and list of players
      *
+     * @author: Vladimir Kovacina
+     *
      */
     @BeforeEach
     void setUp() {
@@ -30,6 +32,8 @@ class DrawPileTest {
     /**
      * Tests the initial drawPile to make sure it is the correct size, takes into account the number of players
      * and their hand size, also checks that each tile is the correct type
+     *
+     * @author: Vladimir Kovacina
      */
     @Test
     void initialDrawPileSizeTest(){
@@ -44,6 +48,8 @@ class DrawPileTest {
     /**
      * Tests the addToPile() method, checks if it works properly when
      * multiple tiles are added and when no tiles are added
+     *
+     * @author: Vladimir Kovacina
      */
 
     @Test
@@ -70,6 +76,8 @@ class DrawPileTest {
      * Tests the draw() method, checks to see if a tile type is drawn,
      * also checks if the new drawPile is the correct size, and tests
      * that is handles drawing from an empty drawPile
+     *
+     * @author: Vladimir Kovacina
      */
 
     @Test
