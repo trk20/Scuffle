@@ -113,25 +113,30 @@ public class BoardValidator {
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
         // Check if any tile is outside the board, using given info
-        for(int i = 0; i < numTiles; i++){
-            boolean overlapping = true; // (until proven otherwise)
-            Point placementLocation = new Point();
-            if(placementDirection == Board.Direction.RIGHT){
-                // Increment Col (x), until no overlap
-                while(overlapping){
-                    placementLocation.setLocation((wordOrigin.x+(i+overlaps)), wordOrigin.y);
-                    if(isTaken(placementLocation)) overlaps += 1;
-                    else overlapping = false;
+        try {
+            for (int i = 0; i < numTiles; i++) {
+                boolean overlapping = true; // (until proven otherwise)
+                Point placementLocation = new Point();
+                if (placementDirection == Board.Direction.RIGHT) {
+                    // Increment Col (x), until no overlap
+                    while (overlapping) {
+                        placementLocation.setLocation((wordOrigin.x + (i + overlaps)), wordOrigin.y);
+                        if (isTaken(placementLocation)) overlaps += 1;
+                        else overlapping = false;
+                    }
+                } else {
+                    // Decrement row (y), until no overlap
+                    while (overlapping) {
+                        placementLocation.setLocation(wordOrigin.x, wordOrigin.y + (i + overlaps));
+                        if (isTaken(placementLocation)) overlaps += 1;
+                        else overlapping = false;
+                    }
                 }
-            } else {
-                // Decrement row (y), until no overlap
-                while(overlapping){
-                    placementLocation.setLocation(wordOrigin.x, wordOrigin.y+(i+overlaps));
-                    if(isTaken(placementLocation)) overlaps += 1;
-                    else overlapping = false;
-                }
+                if (isOutsideBoard(placementLocation)) return false;
             }
-            if(isOutsideBoard(placementLocation)) return false;
+        }
+        catch(InvalidPlacementException e){
+            return false;
         }
         // No tile was outside the board
         return true;
@@ -187,8 +192,10 @@ public class BoardValidator {
      * a coordinate in the validator's board is taken (x = col, y = row), starting top left.
      * @param p A point coordinate in the board to check
      * @return True if a tile is placed at that location, false otherwise.
+     * @throws InvalidPlacementException if the checked placement is outside the board.
      */
-    private boolean isTaken(Point p) {
+    private boolean isTaken(Point p) throws InvalidPlacementException {
+        if (isOutsideBoard(p)) throw new InvalidPlacementException("Placement is outside board");
         return boardToValidate.isTaken(p);
     }
 
@@ -210,5 +217,15 @@ public class BoardValidator {
      */
     private boolean isBoardEmpty(){
         return boardToValidate.isBoardEmpty();
+    }
+
+    // TODO: Make a hierarchy of these in seperate classes later
+
+    /**
+     * Exception thrown during invalid placements
+     */
+    private class InvalidPlacementException extends RuntimeException {
+        public InvalidPlacementException(String placement_is_outside_board) {
+        }
     }
 }

@@ -15,8 +15,6 @@ public class BoardView extends JPanel implements ModelListener {
 
     private JPanel boardPanel;
     private JButton[][] gridButtons;
-    private JButton selectRightToLeft;
-    private JButton selectTopToBottom;
     private int boardSize;
     private List<BoardController> controllers;
     private ScrabbleModel model;
@@ -30,17 +28,6 @@ public class BoardView extends JPanel implements ModelListener {
         setAlignmentX(RIGHT_ALIGNMENT);
         boardPanel = new JPanel();
         Font buttonFont = new Font("Consolas",Font.PLAIN,10);
-        selectRightToLeft = new JButton();
-        selectRightToLeft.setText("→");
-        selectRightToLeft.setFont(buttonFont);
-        selectRightToLeft.addActionListener(e->model.setPlacementDirection(Board.Direction.RIGHT));
-        selectTopToBottom = new JButton();
-        selectTopToBottom.setAlignmentX(CENTER_ALIGNMENT);
-        selectTopToBottom.setText("↓");
-        selectTopToBottom.setFont(buttonFont);
-        selectTopToBottom.addActionListener(e->model.setPlacementDirection(Board.Direction.DOWN));
-        add(selectRightToLeft);
-        add(selectTopToBottom);
         add(boardPanel);
         add(Box.createHorizontalGlue());
         boardPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -54,7 +41,7 @@ public class BoardView extends JPanel implements ModelListener {
             for (int col = 0; col < boardSize; col++) {
                 controllers.add(new BoardController(model,new Point(row, col)));
                 gridButtons[row][col] = new JButton();
-                gridButtons[row][col].addActionListener(e->controllers.get(controllers.size()-1).handleBoardClick());
+                gridButtons[row][col].addActionListener(controllers.get(controllers.size()-1));
                 gridButtons[row][col].setText(model.getBoardTileText(row,col));
                 gridButtons[row][col].setMaximumSize(new Dimension(30,30));
                 boardPanel.add(gridButtons[row][col]);

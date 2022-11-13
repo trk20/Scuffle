@@ -5,10 +5,12 @@ import Events.Listeners.SControllerListener;
 import Model.ScrabbleModel;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardController implements SController{
+public class BoardController implements SController, ActionListener {
     private List<SControllerListener> listeners;
     private Point origin;
     private ScrabbleModel model;
@@ -17,11 +19,6 @@ public class BoardController implements SController{
         this.listeners = new ArrayList<>();
         this.model = model;
         this.origin = origin;
-    }
-
-    public void handleBoardClick(){
-        model.setPlacementLocation(origin);
-        notifyControllerListeners(new BoardClickEvent(this));
     }
 
     public Point getOrigin(){
@@ -40,5 +37,15 @@ public class BoardController implements SController{
         for (SControllerListener l: listeners) {
             l.handleControllerEvent(e);
         }
+    }
+
+    /**
+     * Invoked when an action occurs, will send a board click event to listeners.
+     *
+     * @param e the event to be processed
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        notifyControllerListeners(new BoardClickEvent(this));
     }
 }
