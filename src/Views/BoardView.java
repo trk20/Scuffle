@@ -8,6 +8,8 @@ import Model.ScrabbleModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardView extends JPanel implements ModelListener {
 
@@ -16,7 +18,7 @@ public class BoardView extends JPanel implements ModelListener {
     private JButton selectRightToLeft;
     private JButton selectTopToBottom;
     private int boardSize;
-    private BoardController controller;
+    private List<BoardController> controllers;
     private ScrabbleModel model;
     public BoardView(ScrabbleModel model) {
         boardSize = 15;
@@ -45,12 +47,14 @@ public class BoardView extends JPanel implements ModelListener {
         boardPanel.setLayout(new GridLayout(boardSize,boardSize));
         boardPanel.setMaximumSize(new Dimension(boardSize*30,boardSize*30));
 
+        controllers = new ArrayList<>();
+
         gridButtons = new JButton[boardSize][boardSize];
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
-                controller = new BoardController(model,new Point(row, col));
+                controllers.add(new BoardController(model,new Point(row, col)));
                 gridButtons[row][col] = new JButton();
-                gridButtons[row][col].addActionListener(e->controller.handleBoardClick());
+                gridButtons[row][col].addActionListener(e->controllers.get(controllers.size()-1).handleBoardClick());
                 gridButtons[row][col].setText(model.getBoardTileText(row,col));
                 gridButtons[row][col].setMaximumSize(new Dimension(30,30));
                 boardPanel.add(gridButtons[row][col]);
@@ -70,4 +74,11 @@ public class BoardView extends JPanel implements ModelListener {
         if(e instanceof BoardPlaceEvent) update();
     }
 
+    /**
+     * Return all the board controllers (1/tile in the board)
+     * @return all the board controllers in the board view.
+     */
+    public List<BoardController> getControllers() {
+        return this.controllers;
+    }
 }

@@ -1,5 +1,6 @@
 package Views;
 
+import Controllers.BoardController;
 import Controllers.TurnActionController;
 import Events.Listeners.ModelListener;
 import Events.ModelEvent;
@@ -8,6 +9,7 @@ import Model.ScrabbleModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class TurnActionPanel extends JPanel implements ModelListener {
 
@@ -27,7 +29,8 @@ public class TurnActionPanel extends JPanel implements ModelListener {
 
     private String currentPlayerName;
 
-    public TurnActionPanel(ScrabbleModel model) {
+    // FIXME: coupling with board controller, look for ways to decouple
+    public TurnActionPanel(ScrabbleModel model, List<BoardController> board) {
         turnPanel = new JPanel();
         actionPanel = new JPanel();
         skipPanel = new JPanel();
@@ -42,12 +45,11 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         skipPanel.setBackground(Color.blue);
 
 
-        controller = new TurnActionController(model);
         currentPlayerName = model.getCurPlayer().getName();
 
         setUpTurnLabel();
-        setUpActionButtons();
-        setUpSkipButton();
+        setUpActionButtons(model, board);
+        setUpSkipButton(model);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(turnPanel);
@@ -70,13 +72,13 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         turnPanel.add(turnLabel);
     }
 
-    private void setUpActionButtons(){
+    private void setUpActionButtons(ScrabbleModel model, List<BoardController> board){
         placeButton = new JButton("Place");
         discardButton = new JButton("Discard");
 
 
-        placeButton.addActionListener(e -> controller.handleButtonPress(TurnActionController.ActionState.PLACE));
-        discardButton.addActionListener(e -> controller.handleButtonPress(TurnActionController.ActionState.DISCARD));
+        placeButton.addActionListener(new TurnActionController(model, board));
+        discardButton.addActionListener(new TurnActionController(model, TurnActionController.ActionState.DISCARD));
 
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 0.5;
@@ -88,9 +90,9 @@ public class TurnActionPanel extends JPanel implements ModelListener {
 
     }
 
-    private void setUpSkipButton(){
+    private void setUpSkipButton(ScrabbleModel model){
         skipButton = new JButton("Skip");
-        skipButton.addActionListener(e -> controller.handleButtonPress(TurnActionController.ActionState.SKIP));
+        skipButton.addActionListener(new TurnActionController(model, TurnActionController.ActionState.SKIP));
 
         skipPanel.setLayout(new GridBagLayout());
         skipPanel.add(skipButton);

@@ -1,5 +1,6 @@
 package Controllers;
 
+import Events.ControllerEvent;
 import Events.Listeners.SControllerListener;
 import Events.TileClickEvent;
 import Model.Tile;
@@ -43,9 +44,9 @@ public abstract class HandTileController extends JPanel implements SController {
      * Notify listeners by sending them a controller event.
      */
     @Override
-    public void notifyControllerListeners() {
+    public void notifyControllerListeners(ControllerEvent e) {
         for (SControllerListener l: listeners) {
-            l.handleControllerEvent(new TileClickEvent(this));
+            l.handleControllerEvent(e);
         }
     }
 
@@ -62,8 +63,7 @@ public abstract class HandTileController extends JPanel implements SController {
      * Flips the selection of the tile in the model.
      */
     protected void flipSelection(){
-//        System.out.println("SelFlip"); Works up to here
-        notifyControllerListeners();
+        notifyControllerListeners(new TileClickEvent(this));
     }
 
     /**

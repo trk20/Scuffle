@@ -1,5 +1,6 @@
 package Controllers;
 import Events.BoardClickEvent;
+import Events.ControllerEvent;
 import Events.Listeners.SControllerListener;
 import Model.ScrabbleModel;
 
@@ -20,7 +21,7 @@ public class BoardController implements SController{
 
     public void handleBoardClick(){
         model.setPlacementLocation(origin);
-        notifyControllerListeners();
+        notifyControllerListeners(new BoardClickEvent(this));
     }
 
     public Point getOrigin(){
@@ -29,10 +30,15 @@ public class BoardController implements SController{
     @Override
     public void addControllerListener(SControllerListener l) {listeners.add(l);}
 
+    /**
+     * Notify listeners by sending them a controller event.
+     *
+     * @param e the event to send to the listeners
+     */
     @Override
-    public void notifyControllerListeners() {
+    public void notifyControllerListeners(ControllerEvent e) {
         for (SControllerListener l: listeners) {
-            l.handleControllerEvent(new BoardClickEvent(this));
+            l.handleControllerEvent(e);
         }
     }
 }
