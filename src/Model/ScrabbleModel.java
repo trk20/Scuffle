@@ -44,8 +44,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
     List<ModelListener> modelListeners;
     /** list of selected tiles (in order) to pass to the board when placing*/
     List<Tile> selectedTiles;
-    Point wordOrigin;
-    Board.Direction placementDirection;
 
 
     private ScrabbleFrame mainFrame;
@@ -58,9 +56,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.selectedTiles = new ArrayList<>();
         this.turn = 0;
         this.numPlayers = playerNames.size();
-        this.wordOrigin = new Point(-1,-1);
         initializePlayers(playerNames);
-        this.placementDirection = Board.Direction.RIGHT;
     }
 
     /**
@@ -177,14 +173,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return true;
     }
 
-    public void setPlacementLocation(Point wordOrigin){
-        this.wordOrigin = wordOrigin;
-        //debugging purposes
-        //System.out.println("Placement " + placementDirection + " at " + wordOrigin);
-    }
-
-    public void setPlacementDirection(Board.Direction direction){this.placementDirection=direction;}
-
     /**
      * Handles the user wanting to discard letters
      *  @author Kieran, Alexandre
@@ -198,38 +186,21 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles the user wanting to place letters
      */
     private void handlePlace(PlaceClickEvent pce){
-        //FIXME:not working
-        //System.out.println("Checking origin");
-        if(wordOrigin.x != -1 && wordOrigin.y != -1) {
-            int placementScore = board.placeWord(new BoardPlaceEvent(this, selectedTiles, wordOrigin, placementDirection));
-            //System.out.println("Attempting to place word");
-            if (placementScore != -1) {
-                //System.out.println("Placing Word");
-                printBoard();
-                getCurPlayer().placeTiles(selectedTiles);
-                getCurPlayer().addPoints(placementScore);
-                wordOrigin = new Point(-1,-1);
-                nextTurn();
-            }
-        }else{
-            //System.out.println("Invalid placement");
+        BoardPlaceEvent placeEvent = new BoardPlaceEvent(this, selectedTiles, pce.getOrigin(), pce.getDir());
+        int placementScore = board.placeWord(placeEvent);
+
+        if(placementScore<0){
+            // Display error, do nothing.
+        } else {
+            // Letters have been placed, get rid of them and bank the score.
+            getCurPlayer().placeTiles(selectedTiles);
+            getCurPlayer().addPoints(placementScore);
+            // Notify listeners about new board state
+            notifyModelListeners(new BoardChangeEvent(this));
+            nextTurn();
         }
-//        try{
-//            currentPlayer.placeLetters(word);
-//        }catch(NullPointerException e){
-//            System.out.println(e.getMessage());
-//            // if player is out of letters, end the game
-//            if(currentPlayer.outOfLetters()){
-//                this.gameFinished = true;
-//            }
-//        }
-//
-//        board.placeWord(word, x, y, direction);
-//        printBoard();
-//        currentPlayer.addPoints(board.boardScore(word, x, y, direction));
-        //
-        ;
     }
+
 
     /**
      * Used to end the game
@@ -358,5 +329,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
         for (ModelListener l: modelListeners) {
             l.handleModelEvent(e);
         }
+    }
+
+    /**
+     * Getter for board related events
+     * @return Model's board
+     */
+    // FIXME: in the future, should inherit SModel in ModelEvents
+    //  and then pass only the the relevant parts in model events
+    public Board getBoard() {
+        return board;
     }
 }
