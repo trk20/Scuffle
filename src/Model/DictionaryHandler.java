@@ -52,7 +52,7 @@ public class DictionaryHandler {
         return allWords.contains(maybeAWord.toUpperCase());
     }
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
         /*
         Model.DictionaryHandler dict = new Model.DictionaryHandler();
         System.out.println(dict.isValidWord("maybe"));
@@ -76,36 +76,36 @@ public class DictionaryHandler {
         //board.placeWord("spawn", 6,6,true);
 //        System.out.println(board);
 //        board.boardScore("yex",4,8,false);
-
-        Board board = new Board(15,15);
-        System.out.println(board);
-        System.out.println(board.getNewWords(Letter.wordToLetters("revoting"),5,7,false));
-        System.out.println(board.getWordScore(Letter.wordToLetters("revoting"),5,7,false));
-        board.placeWord(Letter.wordToLetters("revoting"),5,7,false);
-        System.out.println(board);
-        board.boardScore(Letter.wordToLetters("revoting"),5,7,false);
-
-        System.out.println(board.getNewWords(Letter.wordToLetters("joked"), 8,6,true));
-        System.out.println(board.getWordScore(Letter.wordToLetters("joked"), 8,6,true));
-        board.placeWord(Letter.wordToLetters("joked"), 8,6,true);
-        System.out.println(board);
-        board.boardScore(Letter.wordToLetters("joked"), 8,6,true);
-
-        System.out.println(board.getNewWords(Letter.wordToLetters("yex"),4,8,false));
-        System.out.println(board.getWordScore(Letter.wordToLetters("yex"),4,8,false));
-        board.placeWord(Letter.wordToLetters("yex"),4,8,false);
-        System.out.println(board);
-        board.boardScore(Letter.wordToLetters("yex"),4,8,false);
-
-        System.out.println(board.getNewWords(Letter.wordToLetters("jib"),8,6,false));
-        System.out.println(board.getWordScore(Letter.wordToLetters("jib"),8,6,false));
-        board.placeWord(Letter.wordToLetters("jib"),8,6,false);
-        System.out.println(board);
-        board.boardScore(Letter.wordToLetters("jib"),8,6,false);
+//
+//        Board board = new Board(15,15);
+//        System.out.println(board);
+//        System.out.println(board.getNewWords(Letter.wordToLetters("revoting"),5,7,false));
+//        System.out.println(board.getWordScore(Letter.wordToLetters("revoting"),5,7,false));
+//        board.placeWord(Letter.wordToLetters("revoting"),5,7,false);
+//        System.out.println(board);
+//        board.boardScore(Letter.wordToLetters("revoting"),5,7,false);
+//
+//        System.out.println(board.getNewWords(Letter.wordToLetters("joked"), 8,6,true));
+//        System.out.println(board.getWordScore(Letter.wordToLetters("joked"), 8,6,true));
+//        board.placeWord(Letter.wordToLetters("joked"), 8,6,true);
+//        System.out.println(board);
+//        board.boardScore(Letter.wordToLetters("joked"), 8,6,true);
+//
+//        System.out.println(board.getNewWords(Letter.wordToLetters("yex"),4,8,false));
+//        System.out.println(board.getWordScore(Letter.wordToLetters("yex"),4,8,false));
+//        board.placeWord(Letter.wordToLetters("yex"),4,8,false);
+//        System.out.println(board);
+//        board.boardScore(Letter.wordToLetters("yex"),4,8,false);
+//
+//        System.out.println(board.getNewWords(Letter.wordToLetters("jib"),8,6,false));
+//        System.out.println(board.getWordScore(Letter.wordToLetters("jib"),8,6,false));
+//        board.placeWord(Letter.wordToLetters("jib"),8,6,false);
+//        System.out.println(board);
+//        board.boardScore(Letter.wordToLetters("jib"),8,6,false);
 
         //Model.BoardTile[][] b1 = board.getBoard();
        // System.out.println(" Is it taken: " + b1[5][7].isTaken()+ " The x coord:"+b1[5][7].getX() + " The y coord: "+ b1[5][7].getY() );
 
-
-    }
+//
+//    }
 }

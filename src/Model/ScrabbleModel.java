@@ -10,14 +10,16 @@ import Events.ModelEvent;
 import Events.NewPlayerHandEvent;
 import Events.TileClickEvent;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Class that controls/models the overall scrabble game.
  * For Milestone 1, also acts as a text "view".
  *
  * @author Kieran Rourke, Alex
- * @version NOV-11
+ * @version NOV-12
  */
 public class ScrabbleModel implements SControllerListener, SModel{
     /** Max players limited by the four racks (see README setup rules) */
@@ -53,7 +55,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     private ScrabbleFrame mainFrame;
 
     public ScrabbleModel(List<String> playerNames) {
-        this.board = new Board(BOARD_SIZE, BOARD_SIZE);
+        this.board = new Board(true);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
@@ -133,6 +135,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * @param p: The current player
      * @return: True/false depending on if it is a valid placement
      */
+    @Deprecated
     private boolean validateInput(String coords, List<Letter> word, Player p){
         int x = getXCoord(coords);
         int y = getYCoord(coords);
@@ -150,15 +153,21 @@ public class ScrabbleModel implements SControllerListener, SModel{
             return false;
         }
 
-        if(!board.boardWordsAreValid(word, x, y, direction)){
-            System.out.println("Can not place word as it forms an invalid word");
-            return false;
-        }
-
-        if(!board.wordInBoard(word, x, y, direction)){
-            System.out.println("Coords are not valid based on current board arrangement");
-            return false;
-        }
+//        if(!board.boardWordsAreValid(word, x, y, direction)){
+//            System.out.println("Can not place word as it forms an invalid word");
+//            return false;
+//        }
+//
+//        if(!board.wordInBoard(word, x, y, direction)){
+//            System.out.println("Coords are not valid based on current board arrangement");
+//            return false;
+//        }
+//        if(!board.isValidPlacement(new BoardPlaceEvent(this,
+//                tileList,
+//                new Point(x,y),
+//                Board.boolDirToEnum(direction)))){
+//            System.out.println("Placement is invalid.");
+//        }
 
         return true;
     }
