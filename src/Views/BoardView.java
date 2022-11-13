@@ -56,8 +56,8 @@ public class BoardView extends JPanel implements ModelListener, BoardChangeListe
      */
     public void update(Board board){
         System.out.println("Updating");
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
+        for (int col = 0; col < boardSize; col++) {
+            for (int row = 0; row < boardSize; row++) {
                 gridButtons[col][row].setText(board.getBoardTile(new Point(col, row))
                         .toString());
             }

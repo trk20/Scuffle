@@ -23,6 +23,9 @@ public class PlacedWord {
     public PlacedWord(List<BoardTile> tiles){
         wordTiles = new ArrayList<>();
         wordTiles.addAll(tiles);
+//        if(wordTiles.size() <2){ //FIXME: idk how to do this w/o exceptions
+//            this = null;
+//        }
     }
 
     /**
@@ -43,7 +46,7 @@ public class PlacedWord {
      */
     private boolean getDirection(){
         if(wordTiles.size() == 1){
-            return false; // FIXME: unintended behavior
+            return false; // FIXME: bandaid, may cause unintended behavior
         }
         return wordTiles.get(0).getX() > wordTiles.get(1).getX();
     }

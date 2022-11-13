@@ -57,6 +57,7 @@ public class BoardTile2DTable {
     public void setLetter(Point p, Letter letter) {
         tile2DArray[p.x][p.y].setLetter(letter);
     }
+
     /**
      * Get a letter in the table (at the given location).
      * Precondition: The tile is verified to be empty beforehand

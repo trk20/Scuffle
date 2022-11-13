@@ -238,9 +238,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     private void nextTurn(){
         Player currentPlayer = players.get(turn);
+        selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
-
         incrementTurn();
     }
 
