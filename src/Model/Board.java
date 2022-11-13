@@ -54,17 +54,6 @@ public class Board {
     }
 
     /**
-     * Asks the board's validator if a placement would be valid in the current board configuration.
-     *
-     * @see BoardValidator#isValidPlacement
-     * @param placeEvent The event containing the placement details
-     * @return true if the placement is valid, false otherwise.
-     */
-    private boolean isValidPlacement(BoardPlaceEvent placeEvent) {
-        return validator.isValidPlacement(placeEvent);
-    }
-
-    /**
      * Places a word on the board
      * @author Timothy Kennedy
      * @author Alex
@@ -74,7 +63,7 @@ public class Board {
      */
     public int placeWord(BoardPlaceEvent placeEvent){
         // Ensure valid placement
-        if(!isValidPlacement(placeEvent)) return -1;
+        if(!validator.isValidPlacement(placeEvent)) return -1;
 
         // Unpack relevant event info
         Point wordOrigin = placeEvent.getWordOrigin();
