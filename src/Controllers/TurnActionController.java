@@ -89,11 +89,19 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         if(action.event != null) notifyControllerListeners(action.event);
     }
 
-    
+    /**
+     * Only send a board click event if place has been clicked last in the options,
+     * and you have clicked it during your own turn.
+     * If it is handled, sends the placement direction and location to the model.
+     *
+     * @param e BoardClickEvent with information on where the board was clicked
+     */
     @Override
     public void handleBoardClickEvent(BoardClickEvent e) {
-        if(placing)
+        if(placing) {
+            placing = false; // Disable place mode before next turn
             notifyControllerListeners(new PlaceClickEvent(this, dir, e.getOrigin()));
+        }
     }
 
     /**
