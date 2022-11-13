@@ -1,4 +1,5 @@
 package Controllers;
+import Model.Board;
 import Model.ScrabbleModel;
 
 
@@ -31,9 +32,9 @@ public class TurnActionController {
         System.out.println("CURRENT STATE "+ action.name());
         if(action.getName().equals("Place")){
             model.placeHand();
-        }else if (action.getName().equals("Discard")){
+        }else if (action.getName().equals("Discard")) {
             model.discardHand();
-        } else {
+        }else{
             model.skipTurn();
         }
     }
