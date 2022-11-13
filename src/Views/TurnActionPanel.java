@@ -144,7 +144,6 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     @Override
     public void handleModelEvent(ModelEvent e) {
         if(e instanceof NewPlayerHandEvent newHand){
-            System.out.println(newHand.getPlayer().getName() + " " + currentPlayerName);
             if(!newHand.getPlayer().getName().equals(currentPlayerName)){
                 currentPlayerName = newHand.getPlayer().getName();
                 turnLabel.setText("Turn: "+currentPlayerName);

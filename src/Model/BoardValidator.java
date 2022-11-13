@@ -42,15 +42,21 @@ public class BoardValidator {
      * @return True if the word passes all the checks, false otherwise.
      */
     public boolean isValidPlacement(BoardPlaceEvent placementEvent) {
+//        System.out.println("Checking validatity");
 
         // Attempt to go from the least intensive checks, to most intensive
         if(!newTilesAreInBoard(placementEvent)) return false;
+//        System.out.println("In board");
 
         if(isBoardEmpty()){
             if(!isPlacedOnStart(placementEvent)) return false;
         } else if (!isPlacedNextToWord(placementEvent)) return false;
 
+//        System.out.println("Passed adjacency test");
+
         if(!newWordsAreValid(placementEvent)) return false;
+
+//        System.out.println("All valid words");
 
         return true; // All tests passed
     }
@@ -223,7 +229,7 @@ public class BoardValidator {
     /**
      * Exception thrown during invalid placements
      */
-    private class InvalidPlacementException extends RuntimeException {
+    public class InvalidPlacementException extends RuntimeException {
         public InvalidPlacementException(String placement_is_outside_board) {
         }
     }

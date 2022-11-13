@@ -3,8 +3,10 @@ package Model;
 import Events.BoardPlaceEvent;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static Model.ScrabbleModel.BOARD_SIZE;
 
@@ -60,9 +62,10 @@ public class Board {
         // Ensure valid placement
         if(!validator.isValidPlacement(placeEvent)) return -1;
 
-        setWordTiles(placeEvent);
 
         int turnScore = getTurnScore(placeEvent);
+
+        setWordTiles(placeEvent);
 
         // Add new words to current words
         currentWords = new ArrayList<>();
@@ -78,12 +81,13 @@ public class Board {
      *
      * @param placeEvent The event containing the placement details
      */
-    private void setWordTiles(BoardPlaceEvent placeEvent) {
+    private void setWordTiles(BoardPlaceEvent placeEvent) throws BoardValidator.InvalidPlacementException {
         // Unpack relevant event info
         Point wordOrigin = placeEvent.getWordOrigin();
         Direction placementDirection = placeEvent.getDirection();
+//        System.out.println("Dir in set: "+placementDirection);
         List<Tile> word = placeEvent.getPlacedTiles();
-        System.out.println(word);
+//        System.out.println(word);
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
         // Place tiles in the board, skipping tiles that are already placed.
@@ -188,61 +192,55 @@ public class Board {
      * @return the list of words originating from the word placement
      */
     // FIXME: Is this function placing words down? it shouldn't. it seems to be lacking cohesion
-    private List<PlacedWord> allBoardWords(BoardPlaceEvent placeEvent){
+    private List<PlacedWord> allBoardWords(BoardPlaceEvent placeEvent) throws BoardValidator.InvalidPlacementException{
         // FIXME: Big function, cohesion could be improved (using helper methods)
-        Direction direction = placeEvent.getDirection();
-        List<Tile> word = placeEvent.getPlacedTiles();
-        int row = placeEvent.getWordOrigin().y;
-        int col = placeEvent.getWordOrigin().x;
 
-        //make a copy of the board
+        //make a copy of the board (why?)
         Board boardCopy = this.copy();
         Set<BoardTile> newTakenTiles = new HashSet<>();
-        ArrayList<PlacedWord> words = new ArrayList<>();
 
         // Place word on the copy of the board
-        for(int index = 0; index < word.size(); index++){
-            Point location = new Point(col+(direction==Direction.RIGHT ? index : 0),
-                    row+(direction==Direction.DOWN ? index : 0));
-            boardCopy.boardTileTable.setLetter(location, word.get(index).letter());
+        boardCopy.setWordTiles(placeEvent);
 
-//            BoardTile takenTile = new BoardTile(location);
-//            takenTile.setLetter(boardTileTable.getTile(location).getLetter());
-//            newTakenTiles.add(takenTile);
-        }
-
-        // FIXME: this is doing the letter duplication
-//         Get all taken tiles FIXME: could probably only add new taken tiles, by making hashset persistent?
+        List<PlacedWord> words = new ArrayList<>();
+        // Iterate through each col, and row to find possible words
+        // TODO: Refactor code duplication here
         for(int x = 0; x < BOARD_SIZE; x++){
+            List<BoardTile> colWordBuilder = new ArrayList<>();
             for(int y = 0; y < BOARD_SIZE; y++){
-                Point coords = new Point(x,y);
-                if(boardTileTable.isTaken(coords)){ // Add a copy of the tile at this location to the hashset
-                    BoardTile takenTile = new BoardTile(coords);
-                    takenTile.setLetter(boardTileTable.getTile(coords).getLetter());
-                    newTakenTiles.add(takenTile);
+                Point p = new Point(x,y);
+                if (boardCopy.isTaken(p)){
+                    colWordBuilder.add(boardCopy.getBoardTile(p));
+                } else { // Hit an empty tile, check if builder detected a word
+                    // Only accept words len 2 or more
+                    if (colWordBuilder.size() == 1) colWordBuilder.remove(0);
+                    if (colWordBuilder.size() >= 2){ // Store word in words, and reset builder
+                        words.add(new PlacedWord(colWordBuilder));
+//                        System.out.println("New row word: "+(words.get(words.size()-1)));
+                        colWordBuilder.clear();
+                    }
+                }
+            }
+        }
+        // Same thing but for rows (directions are flipped I think)
+        for(int y = 0; y < BOARD_SIZE; y++){
+            List<BoardTile> rowWordBuilder = new ArrayList<>();
+            for(int x = 0; x < BOARD_SIZE; x++){
+                Point p = new Point(x,y);
+                if (boardCopy.isTaken(p)){
+                    rowWordBuilder.add(boardCopy.getBoardTile(p));
+                } else { // Hit an empty tile, check if builder detected a word
+                    // Only accept words len 2 or more
+                    if (rowWordBuilder.size() == 1) rowWordBuilder.remove(0);
+                    if (rowWordBuilder.size() >= 2){ // Store word in words, and reset builder
+                        words.add(new PlacedWord(rowWordBuilder));
+//                        System.out.println("New col word: "+(words.get(words.size()-1)));
+                        rowWordBuilder.clear();
+                    }
                 }
             }
         }
 
-        // TODO: not convinced this works yet would need to test rigorously some other time
-        // Find words
-        for (BoardTile tile:newTakenTiles){
-            // If tile is the start of a word, IE: no letters before it, and 1+ letters after it, add the word starting from that position to the list of words
-            if ((!boardCopy.isTaken(new Point(tile.getX() - 1,tile.getY())) || tile.getX() == 0)
-                    && tile.getX() < 14
-                    && boardCopy.isTaken(new Point(tile.getX() + 1,tile.getY()))) {
-                words.add(getWordStartingFrom(boardCopy,
-                        new Point(tile.getX(), tile.getY()),
-                        Direction.RIGHT));
-            }
-            if ((!boardCopy.isTaken(new Point(tile.getX(),tile.getY()-1))
-                    || tile.getY() == 0) && tile.getY() < 14
-                    && boardCopy.isTaken(new Point(tile.getX(),tile.getY()+1))) {
-                words.add(getWordStartingFrom(boardCopy,
-                        new Point(tile.getX(), tile.getY()),
-                        Direction.DOWN));
-            }
-        }
         return words;
     }
 
@@ -274,6 +272,7 @@ public class Board {
             int multiplier = 1;
 
             for (BoardTile tile:newWord.getTiles()) {
+//                System.out.println(tile);
                     switch (tile.getType()){
                         case X2LETTER:
                             wordScore+=tile.getLetter().getScore()*2;
@@ -294,6 +293,7 @@ public class Board {
                             break;
                     }
             }
+//            System.out.println("wordScore: "+wordScore+", multi: "+multiplier);
             turnScore += wordScore*multiplier;
         }
 
@@ -323,6 +323,7 @@ public class Board {
         for (PlacedWord aWord:currentWords) {
             newWords.remove(aWord);
         }
+//        System.out.println("Final new words "+newWords);
         return newWords;
     }
 
