@@ -330,7 +330,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         if(selectedAfterClick){
             selectedTiles.add(t);
         } else {
-            selectedTiles.remove(t);
+            selectedTiles.remove(t); // This uses equals!!
         }
         // Model changed, notify listeners of new state:
         notifyModelListeners(new TileSelectEvent(this, t, selectedAfterClick));

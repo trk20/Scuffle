@@ -126,7 +126,7 @@ public class Hand {
         sb.append("Model.Hand: ");
         // Append each letter, + a trailing space
         for (Tile t: tiles) {
-            Letter l = t.getLetter();
+            Letter l = t.letter();
             // Format: "(A, 1) "
             sb.append("(").append(l).append(", ").append(l.getScore()).append(") ");
         }
