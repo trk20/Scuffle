@@ -195,7 +195,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public void setPlacementLocation(Point wordOrigin){
         this.wordOrigin = wordOrigin;
         //debugging purposes
-        System.out.println("Placement " + placementDirection + " at " + wordOrigin);
+        //System.out.println("Placement " + placementDirection + " at " + wordOrigin);
     }
 
     public void setPlacementDirection(Board.Direction direction){this.placementDirection=direction;}
@@ -219,12 +219,12 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     private void handlePlace(){
         //FIXME:not working
-        System.out.println("Checking origin");
+        //System.out.println("Checking origin");
         if(wordOrigin.x != -1 && wordOrigin.y != -1) {
             int placementScore = board.placeWord(new BoardPlaceEvent(this, selectedTiles, wordOrigin, placementDirection));
-            System.out.println("Attempting to place word");
+            //System.out.println("Attempting to place word");
             if (placementScore != -1) {
-                System.out.println("Placing Word");
+                //System.out.println("Placing Word");
                 printBoard();
                 getCurPlayer().placeTiles(selectedTiles);
                 getCurPlayer().addPoints(placementScore);
@@ -232,7 +232,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
                 nextTurn();
             }
         }else{
-            System.out.println("Invalid placement");
+            //System.out.println("Invalid placement");
         }
 //        try{
 //            currentPlayer.placeLetters(word);
@@ -353,7 +353,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public void handleControllerEvent(ControllerEvent e) {
 
         if(e instanceof TileClickEvent tc) flipTileSelect(tc);
-        if(e instanceof BoardClickEvent bc) System.out.println("fuck");
     }
 
 
