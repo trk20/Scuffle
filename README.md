@@ -116,6 +116,14 @@ We decided to implement tests for this class to help with code correctness and f
 ### Class Tests.DrawPileTest:
 This is a test class that tests the DrawPile class, using JUnit5. The tests in this test suite include tests for each of the methods used by drawPile (draw and addToPile), there is also one additional test to check the drawPile is created with the correct size.
 We decided to implement tests for this class to help with code correctness and future regression testing when new features are implemented.
+### Class Model.TurnActionPanel:
+This class handles the view for the right content of the game. It contains a button for signalling a place action,
+discard action, the direction for the place action(Horizontal or Vertical) and a skip turn button. The main design choice
+is to have a seperate panel for each sections of button. This allows for easy position manipulation should it be needed in the future  .
+### Class Model.TurnActionController:
+This class handles the buton presses from the panel itself. Currently this class also listens for board click events in order 
+to save the origin point. Therefore sending complete context for placing a word to the model. 
+When sending actions to the model  
 
 ## Missing Features and bugs (see issues)
 ### Milestone 1

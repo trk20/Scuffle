@@ -1,12 +1,9 @@
 package Model;
 
-import Model.Board;
-import Model.Letter;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * A class handling the loading of the set of valid words, and the evaluation of the validity of possible words
@@ -27,7 +24,7 @@ public class DictionaryHandler {
          * If something goes wrong, print an error message
          */
         try {
-            System.out.println("preparing to load file");
+//            System.out.println("preparing to load file");
             File dictionary = new File("Collins Scrabble Words (2019).txt");
             Scanner scanner = new Scanner(dictionary);
             while (scanner.hasNextLine()) {
@@ -35,7 +32,7 @@ public class DictionaryHandler {
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("uh oh, something went wrong with loading the dictionary");
+            System.out.println("Something went wrong with loading the dictionary");
 
         }
 

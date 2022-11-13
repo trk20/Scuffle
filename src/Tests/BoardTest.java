@@ -59,10 +59,11 @@ public class BoardTest {
 
     @Test
     void checkValidOverlapWordPlacement(){
-        board.placeWord(event);
-        placedTiles.remove(Letter.A);
-        event = new BoardPlaceEvent(model, placedTiles, new Point(6, 8), Board.Direction.RIGHT);
         int result = board.placeWord(event);
+        assertEquals(5, result);
+        placedTiles.remove(1);
+        event = new BoardPlaceEvent(model, placedTiles, new Point(6, 8), Board.Direction.RIGHT);
+        result = board.placeWord(event);
         /*
          * Should pass as this should look like
          *   C

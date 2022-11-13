@@ -49,7 +49,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     private ScrabbleFrame mainFrame;
 
     public ScrabbleModel(List<String> playerNames) {
-        this.board = new Board(true);
+        this.board = new Board(false);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
@@ -116,8 +116,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return Character.isLetter(coords.charAt(0));
     }
 
-    public String getBoardTileText(int row,int col){
-        return board.getBoardTile(row,col).toString();
+    public String getBoardTileText(Point p){
+        return board.getBoardTile(p).toString();
     }
 
 
@@ -238,9 +238,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     private void nextTurn(){
         Player currentPlayer = players.get(turn);
+        selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
-
         incrementTurn();
     }
 
@@ -317,7 +317,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
     @Override
     public void addModelListener(ModelListener l) {
         this.modelListeners.add(l);
-        System.out.println("New listener: "+l);
     }
 
     /**

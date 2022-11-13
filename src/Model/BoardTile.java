@@ -153,7 +153,12 @@ public class BoardTile {
         if(this.isTaken()){
             return String.valueOf(letter);
         }
-        return tileType.toString().replaceAll("BLANK"," -- ").replace("START", "ST").replace("X2WORD", "2W").replace("X3WORD", "3W").replace("X2LETTER", "2L").replace("X3LETTER", "3L");
+        return tileType.toString().replaceAll("BLANK"," -- ")
+                .replace("START", "ST")
+                .replace("X2WORD", "2W")
+                .replace("X3WORD", "3W")
+                .replace("X2LETTER", "2L")
+                .replace("X3LETTER", "3L");
     }
 
     @Override

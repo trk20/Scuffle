@@ -1,6 +1,5 @@
 package Views;
 
-import Model.Player;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
@@ -22,6 +21,7 @@ public class OptionPaneHandler {
      * @param word: input
      * @return: True/False depending on if it's valid
      */
+    @Deprecated
     private boolean isValidWord(String word){
         if (!word.chars().allMatch(Character::isLetter)){
             System.out.println("Invalid Characters entered please only enter letters");

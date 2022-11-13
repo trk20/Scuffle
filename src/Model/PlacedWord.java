@@ -23,6 +23,9 @@ public class PlacedWord {
     public PlacedWord(List<BoardTile> tiles){
         wordTiles = new ArrayList<>();
         wordTiles.addAll(tiles);
+//        if(wordTiles.size() <2){ //FIXME: idk how to do this w/o exceptions
+//            this = null;
+//        }
     }
 
     /**
@@ -42,6 +45,9 @@ public class PlacedWord {
      * @return whether the word is placed left-to-right
      */
     private boolean getDirection(){
+        if(wordTiles.size() == 1){
+            return false; // FIXME: bandaid, may cause unintended behavior
+        }
         return wordTiles.get(0).getX() > wordTiles.get(1).getX();
     }
 
@@ -67,7 +73,8 @@ public class PlacedWord {
             return false;
         }
         PlacedWord word = (PlacedWord)obj;
-        return word.toString().equals(this.toString()) && word.getDirection() == this.getDirection() && Arrays.equals(word.getLocation(),this.getLocation());
+        return word.toString().equals(this.toString()) && word.getDirection() ==
+                this.getDirection() && Arrays.equals(word.getLocation(),this.getLocation());
     }
 
     /**
