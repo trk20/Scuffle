@@ -1,13 +1,17 @@
 package Tests;
+
+import Events.BoardPlaceEvent;
+import Model.Board;
+import Model.Letter;
+import Model.ScrabbleModel;
+import Model.Tile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Model.*;
-import Events.BoardPlaceEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardTest {
     ArrayList<Tile> placedTiles;

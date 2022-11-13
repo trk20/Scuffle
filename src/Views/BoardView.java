@@ -1,9 +1,9 @@
 package Views;
 
 import Controllers.BoardController;
-import Events.*;
+import Events.BoardPlaceEvent;
 import Events.Listeners.ModelListener;
-import Model.Board;
+import Events.ModelEvent;
 import Model.ScrabbleModel;
 
 import javax.swing.*;

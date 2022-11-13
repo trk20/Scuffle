@@ -1,14 +1,12 @@
 package Tests;
 
 import Model.*;
-import com.sun.source.tree.AssertTree;
-import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
     ScrabbleModel model;
