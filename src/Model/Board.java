@@ -94,6 +94,12 @@ public class Board {
             }
             placeTile(placementLocation, word.get(i).getLetter());
         }
+
+        currentWords = new ArrayList<>();
+        currentWords.addAll(allBoardWords(placeEvent));
+
+        // Return score after placing
+        return getTurnScore(placeEvent);
     }
 
     /**
@@ -121,7 +127,7 @@ public class Board {
      * @return True if the board is empty, false otherwise.
      */
     // Package private: only accessible by model classes (for the validator)
-    boolean boardIsEmpty(){
+    boolean isBoardEmpty(){
         return currentWords.size() == 0;
     }
 
@@ -322,7 +328,11 @@ public class Board {
         }
         return newWords;
     }
-  
+
+    public BoardTile getBoardTile(int row,int col){
+        return board[row][col];
+    }
+
     /**
      * Returns the string representation of its internal BoardTile2DTable
      *
