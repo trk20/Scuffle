@@ -21,9 +21,6 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @version NOV-12
  */
 public class Board {
-
-
-
     public enum Direction{DOWN, RIGHT;}
     private BoardTile[][] board;
     private final String[] columnLabels = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"};
@@ -63,7 +60,7 @@ public class Board {
      * @param placeEvent The event containing the placement details
      * @return true if the placement is valid, false otherwise.
      */
-    public boolean isValidPlacement(BoardPlaceEvent placeEvent) {
+    private boolean isValidPlacement(BoardPlaceEvent placeEvent) {
         return validator.isValidPlacement(placeEvent);
     }
 
@@ -207,8 +204,8 @@ public class Board {
      * @param placeEvent The event containing the placement details
      * @return the list of words originating from the word placement
      */
-    //FIXME: Move towards using place events
     private List<PlacedWord> allBoardWords(BoardPlaceEvent placeEvent){
+        // FIXME: Big function, cohesion could be improved (using helper methods)
         Direction direction = placeEvent.getDirection();
         List<Tile> word = placeEvent.getPlacedTiles();
         int row = placeEvent.getWordOrigin().y;

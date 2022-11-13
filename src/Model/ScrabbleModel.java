@@ -123,6 +123,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * @param p: The current player
      * @return: True/false depending on if it is a valid placement
      */
+    @Deprecated
     private boolean validateInput(String coords, List<Letter> word, Player p){
         int x = getXCoord(coords);
         int y = getYCoord(coords);
@@ -149,12 +150,12 @@ public class ScrabbleModel implements SControllerListener, SModel{
 //            System.out.println("Coords are not valid based on current board arrangement");
 //            return false;
 //        }
-        if(!board.isValidPlacement(new BoardPlaceEvent(this,
-                tileList,
-                new Point(x,y),
-                Board.boolDirToEnum(direction)))){
-            System.out.println("Placement is invalid.");
-        }
+//        if(!board.isValidPlacement(new BoardPlaceEvent(this,
+//                tileList,
+//                new Point(x,y),
+//                Board.boolDirToEnum(direction)))){
+//            System.out.println("Placement is invalid.");
+//        }
 
         return true;
     }
