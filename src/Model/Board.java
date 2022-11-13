@@ -16,6 +16,7 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @author Alex
  * @version NOV-12
  */
+// TODO: could become a model listener, listening to board placement events
 public class Board {
     public enum Direction{DOWN, RIGHT;}
     private BoardTile[][] board;
@@ -86,7 +87,7 @@ public class Board {
                     else overlapping = false;
                 }
             }
-            placeTile(placementLocation, word.get(i).getLetter());
+            placeTile(placementLocation, word.get(i).letter());
         }
 
         currentWords = new ArrayList<>();
@@ -210,7 +211,7 @@ public class Board {
         for(int index = 0; index < word.size(); index++){ //place word on the copy of the board
             boardCopy[row+(direction==Direction.DOWN ? index : 0)]
                     [col+(direction==Direction.RIGHT ? index : 0)]
-                    .setLetter(word.get(index).getLetter());
+                    .setLetter(word.get(index).letter());
         }
 
         for(BoardTile[] currentRow:boardCopy){ //get all taken tiles

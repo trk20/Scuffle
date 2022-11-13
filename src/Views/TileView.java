@@ -5,7 +5,6 @@ import Model.Tile;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 import java.awt.*;
 
 /**
@@ -62,11 +61,11 @@ public class TileView extends HandTileController {
         JLabel[][] labelHolder = new JLabel[size][size];
 
         // Letter label
-        JLabel letterLabel = new JLabel(getTile().getLetter().toString());
+        JLabel letterLabel = new JLabel(getTile().letter().toString());
         letterLabel.setHorizontalAlignment(JLabel.CENTER);
         labelHolder[1][1] = letterLabel; // Add text at grid center.
         // Score label
-        JLabel scoreLabel = new JLabel(getTile().getLetter().getScore()+"");
+        JLabel scoreLabel = new JLabel(getTile().letter().getScore()+"");
         scoreLabel.setHorizontalAlignment(JLabel.CENTER);
         labelHolder[size-1][size-1] = scoreLabel; // Add score at bottom right corner.
 
