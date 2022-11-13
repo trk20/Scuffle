@@ -138,15 +138,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
             return false;
         }
 
-        if(!board.boardWordsAreValid(word, x, y, direction)){
-            System.out.println("Can not place word as it forms an invalid word");
-            return false;
-        }
-
-        if(!board.wordInBoard(word, x, y, direction)){
-            System.out.println("Coords are not valid based on current board arrangement");
-            return false;
-        }
+//        if(!board.boardWordsAreValid(word, x, y, direction)){
+//            System.out.println("Can not place word as it forms an invalid word");
+//            return false;
+//        }
+//
+//        if(!board.wordInBoard(word, x, y, direction)){
+//            System.out.println("Coords are not valid based on current board arrangement");
+//            return false;
+//        }
 
         return true;
     }
@@ -287,7 +287,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         if(selectedAfterClick){
             selectedTiles.add(t);
         } else {
-            selectedTiles.remove(t);
+            selectedTiles.remove(t); // This uses equals!!
         }
         // Model changed, notify listeners of new state:
         notifyModelListeners(new TileSelectEvent(this, t, selectedAfterClick));
