@@ -3,14 +3,18 @@ package Views;
 import Controllers.BoardPlacementController;
 import Controllers.SController;
 import Controllers.TurnActionController;
+import Events.BoardPlaceEvent;
+import Events.HandChangeEvent;
+import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
+import Events.ModelEvent;
 import Events.ScrabbleEvent;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class BoardView extends JPanel{
+public class BoardView extends JPanel implements ModelListener {
 
     private JPanel boardPanel;
     private JButton[][] gridButtons;
@@ -50,9 +54,8 @@ public class BoardView extends JPanel{
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
                 gridButtons[row][col] = new JButton();
-                int buttonRow = row;
-                int buttonCol = col;
-                gridButtons[row][col].addActionListener(e->controller.handleBoardPlacementSelection(buttonRow,buttonCol));
+                Point location = new Point(row,col);
+                gridButtons[row][col].addActionListener(e->controller.handleBoardPlacementSelection(location));
                 gridButtons[row][col].setText(model.getBoardTileText(row,col));
                 gridButtons[row][col].setMaximumSize(new Dimension(30,30));
                 boardPanel.add(gridButtons[row][col]);
@@ -65,6 +68,12 @@ public class BoardView extends JPanel{
             for (int col = 0; col < boardSize; col++) {
                 gridButtons[row][col].setText(model.getBoardTileText(row,col));
             }
+        }
+    }
+    @Override
+    public void handleModelEvent(ModelEvent e) {
+        if(e instanceof BoardPlaceEvent){
+            update();
         }
     }
 }

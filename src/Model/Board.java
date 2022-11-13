@@ -60,7 +60,6 @@ public class Board {
     public int placeWord(BoardPlaceEvent placeEvent){
         // Ensure valid placement
         if(!validator.isValidPlacement(placeEvent)) return -1;
-
         // Unpack relevant event info
         Point wordOrigin = placeEvent.getWordOrigin();
         Direction placementDirection = placeEvent.getDirection();
@@ -92,7 +91,7 @@ public class Board {
         currentWords = new ArrayList<>();
         currentWords.addAll(allBoardWords(placeEvent));
 
-        // Return score after palcing
+        // Return score after placing
         return getTurnScore(placeEvent);
     }
 

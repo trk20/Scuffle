@@ -47,8 +47,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     List<Tile> selectedTiles;
     Player currentPlayer;
 
-    int placementRow;
-    int placementCol;
+    Point wordOrigin;
     boolean placementDirection;
 
 
@@ -62,6 +61,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.selectedTiles = new ArrayList<>();
         this.turn = 0;
         this.numPlayers = playerNames.size();
+        this.wordOrigin = new Point(-1,-1);
         initializePlayers(playerNames);
         this.placementDirection = true;
     }
@@ -193,10 +193,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
         handleDiscard();
     }
 
-    public void setPlacementLocation(int row,int col){
-        this.placementRow = row;
-        this.placementCol = col;
-        System.out.println("Placement " + ((placementDirection) ? "left to right": "top to bottom") + " at row "+row+", column " + col);
+    public void setPlacementLocation(Point wordOrigin){
+        this.wordOrigin = wordOrigin;
+        System.out.println("Placement " + ((placementDirection) ? "left to right": "top to bottom") + " at " + wordOrigin);
     }
 
     public void setPlacementDirection(boolean direction){this.placementDirection=direction;}
@@ -220,7 +219,22 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles the user wanting to place letters
      */
     private void handlePlace(){
-        nextTurn();
+        //FIXME:not working
+        System.out.println("Checking origin");
+        if(wordOrigin.x != -1 && wordOrigin.y != -1) {
+            int placementScore = board.placeWord(new BoardPlaceEvent(this, selectedTiles, wordOrigin, ((placementDirection) ? Board.Direction.RIGHT : Board.Direction.DOWN)));
+            System.out.println("Attempting to place word");
+            if (placementScore != -1) {
+                System.out.println("Placing Word");
+                printBoard();
+                currentPlayer.placeTiles(selectedTiles);
+                currentPlayer.addPoints(placementScore);
+                wordOrigin = new Point(-1,-1);
+                nextTurn();
+            }
+        }else{
+            System.out.println("Invalid placement");
+        }
 //        try{
 //            currentPlayer.placeLetters(word);
 //        }catch(NullPointerException e){
@@ -234,7 +248,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
 //        board.placeWord(word, x, y, direction);
 //        printBoard();
 //        currentPlayer.addPoints(board.boardScore(word, x, y, direction));
-        // TODO to be implemented later
+        //
         ;
     }
 
