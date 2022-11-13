@@ -9,7 +9,7 @@ import Events.ControllerEvent;
 import Events.ModelEvent;
 import Events.NewPlayerHandEvent;
 import Events.TileClickEvent;
-import Views.OptionPaneHandler;
+
 import java.util.*;
 
 /**
@@ -26,15 +26,13 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public static final int MIN_PLAYERS = 1;
     public static final Boolean DISCARD = false;
     public static final Boolean PLACE = true;
-    private static final int BOARD_SIZE = 15;
+    public static final int BOARD_SIZE = 15;
 
     // Model components
     final private Board board;
     private ArrayList<Player> players;
     /** Model's shared DrawPile */
     private final DrawPile drawPile;
-
-    final private OptionPaneHandler inputHandler; // FIXME: Should be refactored out of the model eventually
 
     /** Player whose turn it is to play */
     private int numPlayers;
@@ -54,13 +52,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     private ScrabbleFrame mainFrame;
 
-    public ScrabbleModel() {
+    public ScrabbleModel(List<String> playerNames) {
         this.board = new Board(BOARD_SIZE, BOARD_SIZE);
-        this.inputHandler = new OptionPaneHandler();
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
+        this.turn = 0;
+        this.numPlayers = playerNames.size();
+        initializePlayers(playerNames);
         this.placementDirection = true;
     }
 
@@ -68,7 +68,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Increments turn, rolling back to the first turn after passing the last player.
      */
     private void incrementTurn(){
-        turn = turn == numPlayers-1 ? 0 : turn+1;
+        turn = turn == numPlayers -1 ? 0 : turn+1;
     }
 
     /**
@@ -79,15 +79,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
         System.out.println(board);
     }
 
-    private void initializePlayers(){
-        String name = "";
-
-        numPlayers = inputHandler.askForNumPlayers();
-        players = new ArrayList<>(numPlayers);
-
-        for (int i = 0; i < numPlayers; i++){
-            name = inputHandler.askForPlayerName(i);
-            players.add(i, new Player(name, this));
+    /**
+     * Creates Player models from a list of player names.
+     *
+     * @param names The list of names for each player in the model
+     */
+    private void initializePlayers(List<String> names){
+        players = new ArrayList<>();
+        for (String name: names) {
+            players.add(new Player(name, this));
         }
     }
 
@@ -171,10 +171,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return true;
     }
 
+
+    // We should not have these public accesses to the model
+    @Deprecated
     public void skipTurn(){
         nextTurn();
     }
 
+    // We should not have these public accesses to the model
+    @Deprecated
     public void discardHand() {
         handleDiscard();
     }
@@ -190,7 +195,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     /**
      * Handles the user wanting to discard letters
-     * @author Kieran, Alexandre
+     *  @author Kieran, Alexandre
      */
     private void handleDiscard(){
         nextTurn();
@@ -224,13 +229,32 @@ public class ScrabbleModel implements SControllerListener, SModel{
         ;
     }
 
+    /**
+     * Used to end the game
+     */
+    public void setGameFinished() {
+        this.gameFinished = true;
+    }
+
 
     /**
      * Handles starting the game
      */
+    // Creating a model should be synonymous to creating a game, we should move towards removing this.
+    @Deprecated
     public void startGame(){
-        initializePlayers();
-        mainFrame = new ScrabbleFrame(this);
+        // Do not touch the views in the model!
+        // The main decides when to create views, or models. Possibly through controllers.
+//        mainFrame = new ScrabbleFrame(this);
+
+
+//        while(!gameFinished){
+//            nextTurn();
+//        }
+
+        //Need to notify Score View here
+
+        notifyModelListeners(new PlayerChangeEvent(this));
 
         nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
@@ -240,15 +264,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles running a turn, will be called in a loop until the game is over
      */
     private void nextTurn(){
-        incrementTurn();
-        currentPlayer = players.get(turn);
+        Player currentPlayer = players.get(turn);
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
-        // FIXME: inject a signal to tile selection flip, select first tile in hand.
-        List<Tile> playerTiles = getCurPlayer().getHand().getHeldTiles();
-        // Need to pass in controller to make a click event
-        flipTileSelect(new TileClickEvent(new TileView(playerTiles.get(0))));
 
+        incrementTurn();
     }
 
     /**
@@ -295,6 +315,14 @@ public class ScrabbleModel implements SControllerListener, SModel{
     }
 
     /**
+     * Returns all the players in the game
+     * @return players ArrayList
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    /**
      * Process Controller events when one is raised.
      *
      * @param e the event to process
@@ -324,10 +352,5 @@ public class ScrabbleModel implements SControllerListener, SModel{
         for (ModelListener l: modelListeners) {
             l.handleModelEvent(e);
         }
-    }
-
-    public static void main(String[] args){
-        ScrabbleModel s = new ScrabbleModel();
-        s.startGame();
     }
 }

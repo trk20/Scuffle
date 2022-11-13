@@ -25,12 +25,13 @@ public class Hand {
      *
      * @author Alexandre Marques - 101189743
      */
-    Hand(DrawPile pile){
+    public Hand(DrawPile pile){
         // Initialize fields to default / parameter values
         this.pile = pile;
         tiles = new ArrayList<>();
         // Start hand in filled state
         fillHand();
+        // TOOD: M2, reset hand, set tile, use selectedtiles field in useTiles.
     }
 
     /**
@@ -74,10 +75,12 @@ public class Hand {
      * Otherwise, return False.
      * @author Alexandre Marques - 101189743
      */
+    @Deprecated // We won't need to check this if they can't input their own tiles.
     public boolean containsTiles(List<Tile> used){
         for(Tile t: used){
             // If l is not in hand, return false
             if(!(tiles.contains(t)))
+
                 return false;
         }
         // Every letter used is contained in the Model.Hand
@@ -139,5 +142,13 @@ public class Hand {
      */
     public List<Tile> getHeldTiles() {
         return tiles;
+    }
+
+    /**
+     * For Testing purposes, used to set the tiles in the Hand
+     * @param tiles List of Tiles in the Hand
+     */
+    public void setTiles(List<Tile> tiles) {
+        this.tiles = tiles;
     }
 }

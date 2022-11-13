@@ -1,8 +1,11 @@
 package Views;
 
+import Model.Player;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that handles user console input
@@ -63,7 +66,7 @@ public class OptionPaneHandler {
                 JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a valid number",
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
             }else{
-                if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) >= ScrabbleModel.MAX_PLAYERS){
+                if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) > ScrabbleModel.MAX_PLAYERS){
                     JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a number below "+ScrabbleModel.MAX_PLAYERS, "Invalid Input", JOptionPane.ERROR_MESSAGE);
                     validNum = false;
                 }else if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) == 0){
@@ -93,5 +96,24 @@ public class OptionPaneHandler {
             }
         }
         return word;
+    }
+
+    /**
+     * Asks for a name for each player that would like to play in a new game.
+     * Amount is limited by the model's player limits.
+     *
+     * @return List of player names for a new game.
+     */
+    public List<String> getNewPlayerNames() {
+        String name = "";
+
+        int numPlayers = this.askForNumPlayers();
+        ArrayList<String> names = new ArrayList<>(numPlayers);
+
+        for (int i = 0; i < numPlayers; i++){
+            name = this.askForPlayerName(i);
+            names.add(name);
+        }
+        return names;
     }
 }
