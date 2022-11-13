@@ -116,8 +116,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return Character.isLetter(coords.charAt(0));
     }
 
-    public String getBoardTileText(int row,int col){
-        return board.getBoardTile(row,col).toString();
+    public String getBoardTileText(Point p){
+        return board.getBoardTile(p).toString();
     }
 
 
@@ -238,9 +238,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     private void nextTurn(){
         Player currentPlayer = players.get(turn);
+        selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
         notifyModelListeners(new NewPlayerHandEvent(this));
-
         incrementTurn();
     }
 

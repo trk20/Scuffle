@@ -17,7 +17,16 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @version NOV-12
  */
 public class Board {
-    public enum Direction{DOWN, RIGHT;}
+    public enum Direction{
+        DOWN("↓"), RIGHT("→");
+        private final String dirStr;
+        Direction(String s){this.dirStr = s;}
+
+        @Override
+        public String toString() {
+            return dirStr;
+        }
+    }
     private BoardTile2DTable boardTileTable; // COLUMN (x), ROW (y)
     private ArrayList<PlacedWord> currentWords;
     /** Takes care of validating the board */
@@ -53,11 +62,14 @@ public class Board {
 
         setWordTiles(placeEvent);
 
+        int turnScore = getTurnScore(placeEvent);
+
+        // Add new words to current words
         currentWords = new ArrayList<>();
-        currentWords.addAll(allBoardWords(placeEvent));
+        currentWords.addAll(getNewWords(placeEvent));
 
         // Return score after placing
-        return getTurnScore(placeEvent);
+        return turnScore;
     }
 
     /**
@@ -71,6 +83,7 @@ public class Board {
         Point wordOrigin = placeEvent.getWordOrigin();
         Direction placementDirection = placeEvent.getDirection();
         List<Tile> word = placeEvent.getPlacedTiles();
+        System.out.println(word);
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
         // Place tiles in the board, skipping tiles that are already placed.
@@ -92,14 +105,8 @@ public class Board {
                     else overlapping = false;
                 }
             }
-            placeTile(placementLocation, word.get(i).getLetter());
+            placeTile(placementLocation, word.get(i).letter());
         }
-
-        currentWords = new ArrayList<>();
-        currentWords.addAll(allBoardWords(placeEvent));
-
-        // Return score after placing
-        return getTurnScore(placeEvent);
     }
 
     /**
@@ -180,6 +187,7 @@ public class Board {
      * @param placeEvent The event containing the placement details
      * @return the list of words originating from the word placement
      */
+    // FIXME: Is this function placing words down? it shouldn't. it seems to be lacking cohesion
     private List<PlacedWord> allBoardWords(BoardPlaceEvent placeEvent){
         // FIXME: Big function, cohesion could be improved (using helper methods)
         Direction direction = placeEvent.getDirection();
@@ -189,43 +197,45 @@ public class Board {
 
         //make a copy of the board
         Board boardCopy = this.copy();
-        Set<BoardTile> takenTiles = new HashSet<>();
+        Set<BoardTile> newTakenTiles = new HashSet<>();
         ArrayList<PlacedWord> words = new ArrayList<>();
 
         // Place word on the copy of the board
         for(int index = 0; index < word.size(); index++){
             Point location = new Point(col+(direction==Direction.RIGHT ? index : 0),
                     row+(direction==Direction.DOWN ? index : 0));
-            boardCopy.boardTileTable.setLetter(location, word.get(index).getLetter());
+            boardCopy.boardTileTable.setLetter(location, word.get(index).letter());
+
+//            BoardTile takenTile = new BoardTile(location);
+//            takenTile.setLetter(boardTileTable.getTile(location).getLetter());
+//            newTakenTiles.add(takenTile);
         }
 
-        // Get all taken tiles FIXME: could probably only add new taken tiles, by making hashset persistent?
+        // FIXME: this is doing the letter duplication
+//         Get all taken tiles FIXME: could probably only add new taken tiles, by making hashset persistent?
         for(int x = 0; x < BOARD_SIZE; x++){
             for(int y = 0; y < BOARD_SIZE; y++){
                 Point coords = new Point(x,y);
                 if(boardTileTable.isTaken(coords)){ // Add a copy of the tile at this location to the hashset
                     BoardTile takenTile = new BoardTile(coords);
                     takenTile.setLetter(boardTileTable.getTile(coords).getLetter());
-                    takenTiles.add(takenTile);
+                    newTakenTiles.add(takenTile);
                 }
             }
         }
 
         // TODO: not convinced this works yet would need to test rigorously some other time
         // Find words
-        for (BoardTile tile:takenTiles){
+        for (BoardTile tile:newTakenTiles){
             // If tile is the start of a word, IE: no letters before it, and 1+ letters after it, add the word starting from that position to the list of words
-            if ((tile.getX() > 0
-                    && !boardCopy.isTaken(new Point(tile.getX() - 1,tile.getY()))
-                    || tile.getX() == 0)
+            if ((!boardCopy.isTaken(new Point(tile.getX() - 1,tile.getY())) || tile.getX() == 0)
                     && tile.getX() < 14
                     && boardCopy.isTaken(new Point(tile.getX() + 1,tile.getY()))) {
                 words.add(getWordStartingFrom(boardCopy,
                         new Point(tile.getX(), tile.getY()),
                         Direction.RIGHT));
             }
-            if ((tile.getY() > 0
-                    && !boardCopy.isTaken(new Point(tile.getX(),tile.getY()-1))
+            if ((!boardCopy.isTaken(new Point(tile.getX(),tile.getY()-1))
                     || tile.getY() == 0) && tile.getY() < 14
                     && boardCopy.isTaken(new Point(tile.getX(),tile.getY()+1))) {
                 words.add(getWordStartingFrom(boardCopy,
@@ -246,18 +256,6 @@ public class Board {
         return copiedBoard;
     }
 
-//    /**
-//     * Temporary boolean to enum conversion until the board is fully refactored
-//     * to stop using boolean directions.
-//     *
-//     * @param direction boolean direction
-//     * @return enum representation of the direction
-//     */
-//    @Deprecated
-//    public static Direction boolDirToEnum(boolean direction) {
-//        return direction ? Direction.RIGHT : Direction.DOWN;
-//    }
-
     /**
      * Calculates the score of a given word placement, based off the value of the letters and tile multipliers
      *
@@ -270,6 +268,7 @@ public class Board {
     private int getTurnScore(BoardPlaceEvent placeEvent){
         int turnScore = 0;
 
+        // TODO: Parameter should probably be new words, not concise atm
         for (PlacedWord newWord:getNewWords(placeEvent)) {
             int wordScore = 0;
             int multiplier = 1;
@@ -322,15 +321,13 @@ public class Board {
         // All words in the board - words that were in the board last turn.
         List<PlacedWord> newWords = new ArrayList<>(allBoardWords(placementEvent));
         for (PlacedWord aWord:currentWords) {
-            if(newWords.contains(aWord)){
-                newWords.remove(aWord);
-            }
+            newWords.remove(aWord);
         }
         return newWords;
     }
 
-    public BoardTile getBoardTile(int row,int col){
-        return board[row][col];
+    public BoardTile getBoardTile(Point p){
+        return boardTileTable.getTile(p);
     }
 
     /**

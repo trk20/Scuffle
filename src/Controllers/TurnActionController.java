@@ -38,25 +38,9 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         }
     }
     
-    // TODO: move to view
-    public enum Direction {
-        HORIZONTAL("→"),
-        VERTICAL("↓");
-
-        private final String arrow;
-        
-        private Direction(String arrow){
-            this.arrow = arrow;
-        }
-        public String getArrow(){
-            return arrow;
-        }
-    }
-    
     private final ActionState action;
     private final List<SControllerListener> listeners;
-    /** Flipped by FLIP_DIR action, for PLACE to use */
-    private static Board.Direction dir = Board.Direction.DOWN;
+    private static Board.Direction dir = Board.Direction.RIGHT;
     /** Indicates if placed was selected, and waiting for a board click*/
     private static boolean placing = false;
 
@@ -105,6 +89,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         // Notify controller listeners (if action has an event)
         if(action.event != null) notifyControllerListeners(action.event);
     }
+
     /**
      * Go to the next direction in the list of available directions
      * (currently there are two: right, down; they alternate)
@@ -112,7 +97,13 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     private void flipDir() {
         int dirInt = dir.ordinal();
         Board.Direction[] allDirections = Board.Direction.values();
-        dir = allDirections[dirInt+1%(allDirections.length)];
+        dir = allDirections[(dirInt+1)%(allDirections.length)];
+        notifyControllerListeners(new DirectionChangeEvent(this));
+    }
+
+    /** Get board direction (for direction change events) */
+    public Board.Direction getDir() {
+        return dir;
     }
 
     /**
@@ -129,20 +120,6 @@ public class TurnActionController implements SController, BoardClickListener, Ac
             notifyControllerListeners(new PlaceClickEvent(this, dir, e.getOrigin()));
         }
     }
-
-
-   // TODO: move to view
-    public void handleDirectionPress(ActionEvent e) {
-        JButton button = (JButton) e.getSource();
-        if(currentDirection.equals(Direction.HORIZONTAL)){
-            currentDirection = Direction.VERTICAL;
-            button.setText(Direction.VERTICAL.getArrow());
-            return;
-        }
-        button.setText(Direction.HORIZONTAL.getArrow());
-        currentDirection = Direction.HORIZONTAL;
-    }
-
         
     /**
      * Add a listener to notify when an event is raised.
