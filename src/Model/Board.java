@@ -60,7 +60,6 @@ public class Board {
     public int placeWord(BoardPlaceEvent placeEvent){
         // Ensure valid placement
         if(!validator.isValidPlacement(placeEvent)) return -1;
-
         // Unpack relevant event info
         Point wordOrigin = placeEvent.getWordOrigin();
         Direction placementDirection = placeEvent.getDirection();
@@ -92,7 +91,7 @@ public class Board {
         currentWords = new ArrayList<>();
         currentWords.addAll(allBoardWords(placeEvent));
 
-        // Return score after palcing
+        // Return score after placing
         return getTurnScore(placeEvent);
     }
 
@@ -136,7 +135,7 @@ public class Board {
      * @return True if the board is empty, false otherwise.
      */
     // Package private: only accessible by model classes (for the validator)
-    boolean boardIsEmpty(){
+    boolean isBoardEmpty(){
         return currentWords.size() == 0;
     }
 
@@ -426,7 +425,11 @@ public class Board {
         }
         return newWords;
     }
-  
+
+    public BoardTile getBoardTile(int row,int col){
+        return board[row][col];
+    }
+
     /**
      * Creates and returns a string representation of the board
      * @author Timothy Kennedy and Vladimir Kovacina

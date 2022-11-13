@@ -18,8 +18,8 @@ import static Model.ScrabbleModel.BOARD_SIZE;
 //  (subclasses of InvalidPlacementException?),
 //  alternatively could set flags in the validator to get later?
 public class BoardValidator {
-    private Board board;
-    private DictionaryHandler dictionary;
+    private final Board boardToValidate;
+    private final DictionaryHandler dictionary;
 
     /**
      * Constructor for BoardValidator, initializes fields.
@@ -27,7 +27,7 @@ public class BoardValidator {
      * @param board reference to the board to validate.
      */
     BoardValidator(Board board){
-        this.board = board;
+        this.boardToValidate = board;
         this.dictionary = new DictionaryHandler();
     }
 
@@ -46,23 +46,13 @@ public class BoardValidator {
         // Attempt to go from the least intensive checks, to most intensive
         if(!newTilesAreInBoard(placementEvent)) return false;
 
-        if(boardIsEmpty()){
+        if(isBoardEmpty()){
             if(!isPlacedOnStart(placementEvent)) return false;
         } else if (!isPlacedNextToWord(placementEvent)) return false;
 
         if(!newWordsAreValid(placementEvent)) return false;
 
         return true; // All tests passed
-    }
-
-    /**
-     * Checks if each word created as a result of the placement is a valid word in the model's dictionary
-     * @return True if each new word is valid.
-     */
-    private boolean newWordsAreValid(BoardPlaceEvent placementEvent) {
-        for (PlacedWord newWord: board.getNewWords(placementEvent))
-            if (!dictionary.isValidWord(newWord.toString())) return false; // invalid word
-        return true; // All words valid
     }
 
     /**
@@ -175,6 +165,7 @@ public class BoardValidator {
     }
 
     /**
+
      * Checks if the word to be placed will cover the start tile
      * @return True if one of the tiles is placed on the start tile, false otherwise.
      */
@@ -199,12 +190,53 @@ public class BoardValidator {
     }
 
     /**
-     * Asks the validator's board if the given point on the board is a start tile
+     * Check if a given point is outside the board.
+     *
+     * @param p The point coordinates of a placement in the board.
+     * @return True if the point is outside the bounds of the board, false otherwise.
+     */
+    private boolean isOutsideBoard(Point p) {
+        return p.getX() > BOARD_SIZE || p.getY() > BOARD_SIZE;
+    }
+
+    /**
+     * Asks the validator's board if
+     * each word created as a result of the placement is a valid word in the model's dictionary
+     * @return True if each new word is valid.
+     */
+    private boolean newWordsAreValid(BoardPlaceEvent placementEvent) {
+        for (PlacedWord newWord: boardToValidate.getNewWords(placementEvent))
+            if (!dictionary.isValidWord(newWord.toString())) return false; // invalid word
+        return true; // All words valid
+    }
+
+    /**
+     * Asks the validator's board if
+     * a coordinate in the validator's board is taken (x = col, y = row), starting top left.
+     * @param p A point coordinate in the board to check
+     * @return True if a tile is placed at that location, false otherwise.
+     */
+    private boolean isTaken(Point p) {
+        return boardToValidate.isTaken(p);
+    }
+
+    /**
+     * Asks the validator's board if
+     * the given point on the board is a start tile
      *
      * @param p the coordinates of the tile to check for the "start" type
      * @return True if the given board tile is the board's start tile, false otherwise.
      */
     private boolean isStartTile(Point p) {
-        return board.isStartTile(p);
+        return boardToValidate.isStartTile(p);
+    }
+
+    /**
+     * Asks the validator's board if
+     * no words have been placed on the board yet.
+     * @return True if the board is empty, false otherwise.
+     */
+    private boolean isBoardEmpty(){
+        return boardToValidate.isBoardEmpty();
     }
 }
