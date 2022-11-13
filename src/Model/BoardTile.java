@@ -1,7 +1,5 @@
 package Model;
 
-import java.awt.*;
-
 /**
  * A class handling the board tiles.
  * Stores information on the board tile's type (score multiplier, score, neither),
@@ -41,15 +39,6 @@ public class BoardTile {
      */
     public BoardTile(int x, int y) {
         this(Type.BLANK, x, y);
-    }
-
-    /**
-     * Constructor for creating a new BoardTile object,
-     *  Default type is BLANK
-     * @param p The Point location of the tile on the board
-     */
-    public BoardTile(Point p) {
-        this(p.x, p.y);
     }
 
     /**
