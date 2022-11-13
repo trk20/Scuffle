@@ -11,12 +11,8 @@ import static Model.ScrabbleModel.BOARD_SIZE;
 /**
  * Class that handles the Model.Board for the Scrabble game
  *
- * @author : Vladimir Kovacina
- * @version : 1.0
- *
+ * @author Vladimir Kovacina
  * @author Timothy Kennedy
- * @version 2022-11-6
- *
  * @author Alex
  * @version NOV-12
  */

@@ -18,7 +18,7 @@ import java.util.List;
  * For Milestone 1, also acts as a text "view".
  *
  * @author Kieran Rourke, Alex
- * @version NOV-11
+ * @version NOV-12
  */
 public class ScrabbleModel implements SControllerListener, SModel{
     /** Max players limited by the four racks (see README setup rules) */

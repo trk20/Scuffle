@@ -1,19 +1,15 @@
 package Model;
 
-
-import java.util.Objects;
-
 /**
- * A class handling the board tiles,
+ * A class handling the board tiles.
+ * Stores information on the board tile's type (score multiplier, score, neither),
+ * location, and letter (if it is taken).
  *
  * @author Vladimir Kovacina
- * @version 1.2
- *
  * @author Timothy Kennedy
- * @version 1.1
+ * @author Alex
+ * @version NOV-12
  */
-
-
 public class BoardTile {
 
     private Letter letter;
