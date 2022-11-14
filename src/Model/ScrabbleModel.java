@@ -86,84 +86,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
         }
     }
 
-    /**
-     * Following Methods handle parsing the user coord input
-     * @param coords String inputted by the user. Will be in the form 2f or f2.
-     * @return The integer/boolean value from the input
-     */
-    @Deprecated
-    private int getYCoord(String coords){
-        if(coords.length() == 3){
-             return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(coords.substring(1, 2))
-                     : Integer.parseInt(coords.substring(0, 1));
-        }
-        return Character.isLetter(coords.charAt(0)) ? Integer.parseInt(String.valueOf(coords.charAt(1)))
-                : Integer.parseInt(String.valueOf(coords.charAt(0)));
-    }
-
-    @Deprecated
-    private int getXCoord(String coords){
-        if (coords.length() == 3){
-             return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65
-                     : (int) Character.toUpperCase(coords.charAt(2)) - 65;
-        }
-        return Character.isLetter(coords.charAt(0)) ? (int) Character.toUpperCase(coords.charAt(0)) - 65
-                : (int) Character.toUpperCase(coords.charAt(1)) - 65;
-    }
-
-    @Deprecated
-    private boolean getDirection(String coords){
-        return Character.isLetter(coords.charAt(0));
-    }
 
     public String getBoardTileText(Point p){
         return board.getBoardTile(p).toString();
     }
 
-
-    /**
-     * Validates User input to ensure that it can be placed on the board
-     * @param coords: The coords for the placement
-     * @param word: The word to be placed
-     * @param p: The current player
-     * @return: True/false depending on if it is a valid placement
-     */
-    @Deprecated
-    private boolean validateInput(String coords, List<Letter> word, Player p){
-        int x = getXCoord(coords);
-        int y = getYCoord(coords);
-        boolean direction = getDirection(coords);
-
-        // FIXME: Have not gone through and refactored board to use tiles yet,
-        //  so a conversion Letter->Tile is needed here for now
-        List<Tile> tileList = new ArrayList<>();
-        for (Letter l: word) {
-            tileList.add(new Tile(l));
-        }
-
-        if (!p.containsTiles(tileList)){
-            System.out.println("You do not contain the letters needed for the word");
-            return false;
-        }
-
-//        if(!board.boardWordsAreValid(word, x, y, direction)){
-//            System.out.println("Can not place word as it forms an invalid word");
-//            return false;
-//        }
-//
-//        if(!board.wordInBoard(word, x, y, direction)){
-//            System.out.println("Coords are not valid based on current board arrangement");
-//            return false;
-//        }
-//        if(!board.isValidPlacement(new BoardPlaceEvent(this,
-//                tileList,
-//                new Point(x,y),
-//                Board.boolDirToEnum(direction)))){
-//            System.out.println("Placement is invalid.");
-//        }
-
-        return true;
-    }
 
     /**
      * Gets the user action either place or discard
@@ -178,7 +105,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      *  @author Kieran, Alexandre
      */
     private void handleDiscard(){
-        getCurHand().discardSelected(selectedTiles);
+        getCurPlayer().discardTiles(selectedTiles);
         nextTurn();
     }
 
