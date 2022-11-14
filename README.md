@@ -160,6 +160,8 @@ When sending actions to the model
 - Direction arrow is inversed at the moment
 - Model needs a lot of refactoring. A lot of outdated code is causing issues.
 - Class diagrams, sequence diagrams not fully up to date
+- Some model tests missing for the newer classes
+  - Some existing tests are outdated due to evolving class interfaces
 
 ### Future Milestones 
 Note: these do not include all future features yet
