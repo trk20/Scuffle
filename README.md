@@ -1,5 +1,19 @@
 # 3110 Group Project: Scrabble
-### Version: Milestone 1
+### Version: Milestone 2
+
+## GUI instructions:
+- The game will give you prompts to set up the players when you run it initially (# of players, their names).
+- Afterwards, on the right there are actions, and at the bottom is your hand with your tiles.
+- You can select tiles in the hand, and then choose an action to either
+  - Discard them (and draw that amount back) to end your turn
+  - Place them
+  - Or flip the direction you would like to place them in 
+    - (Currently, the display is inversed, the right arrow will actually place downwards, and vice versa)
+  - Skipping is not implemented as of Milestone 2
+- Additional placing instructions: After clicking place, you need to click the tile on the board where you would like the word to start
+    - If the placement fails, it will still be your turn and nothing will have changed (No feedback except the lack of word placement as of Milestone 2)
+    - If you click on the board, or another option, you need to click place again to enter "placing" mode (Otherwise, your board clicks are ignored)
+- The options menu has only one functional button, and that is the game rules. Will bring you to the same rule set webpage linked in this read me.
 
 ## Rule set [adapted from hasbro](https://scrabble.hasbro.com/en-us/rules)
 ### Setup:
@@ -65,7 +79,7 @@ In case of a tie, the player with the highest score before adding or deducting u
 [Unimplemented](#milestone-1)
 
 ## Design
-### Draw Pile
+### Model.DrawPile
 - Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
 - Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
 - Letters can be added back in (for discarding) and drawn from the pile (to remove them)
@@ -125,20 +139,28 @@ This class handles the buton presses from the panel itself. Currently this class
 to save the origin point. Therefore sending complete context for placing a word to the model. 
 When sending actions to the model  
 
-## Missing Features and bugs (see issues)
+## Missing Features and bugs
 ### Milestone 1
-- BUG: checking if player has letters can have issues when using multiple copies of a letter
 - End game score adjustments
   - Remove remaining letters' point value from score at the end of the game
-  - Determine winner -> Have an end "screen" / print block
+  - Determine winner -> Have an end "screen"
     - Tie breaking
 - Have a way to end the game
-    - Partially implemented. Does not end when there are no valid moves, only when a player empties their hand.
 - Determine player order by drawing from the letter bag
 - Special scoring -> BINGO
+### Milestone 2
+- Some of the scoring is not quite right when placing 
+  - (Some words get counted when they should not, causig some score inflation)
+- GUI user feedback: indicate why the user cannot place, a tile.
+  - Have instructions / a tutorial on how to use the GUI
+- Some GUI features not implemented, Skip button not working, menu save/loard not working (M3 feature)
+  - (low priority because discarding 0 tiles can be used to skip your turn already)
+- Direction arrow is inversed at the moment
+- Model needs a lot of refactoring. A lot of outdated code is causing issues.
+- Class diagrams, sequence diagrams not fully up to date
+
 ### Future Milestones 
 Note: these do not include all future features yet
-- Change view/controller to use a GUI (Milestone 2)
 - Add blank tiles (Milestone 3)
 - Premium tile scoring (Milestone 3)
 - Choose from a set of dictionaries before starting (Low priority)
