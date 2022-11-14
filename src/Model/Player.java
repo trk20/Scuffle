@@ -1,9 +1,5 @@
 package Model;
 
-import Model.Hand;
-import Model.Letter;
-import Model.ScrabbleModel;
-
 import java.util.List;
 
 /**
@@ -43,12 +39,12 @@ public class Player {
      * Does not do any board verification!
      *
      * @param used List of letters to place (in order)
-     * @return True if hand contains used letters, false otherwise.
      *
      * @throws NullPointerException to indicate that the game's Model.DrawPile is empty.
      */
-    public boolean placeTiles(List<Tile> used) throws NullPointerException{
-        return hand.useTiles(used);
+    // TODO: now that its void, can return a bool for empty draw piles
+    public void placeTiles(List<Tile> used) throws NullPointerException{
+        hand.useTiles(used);
     }
 
     /**
@@ -59,11 +55,12 @@ public class Player {
      *
      * @author Alexandre Marques - 101189743
      */
-    public boolean discardTiles(List<Tile> used){
+    @Deprecated
+    public void discardTiles(List<Tile> used){
         // Add the letters to be removed to the model's Model.DrawPile
         model.getDrawPile().addToPile(used);
         // Remove the letters from the hand (return true if hand contains used letters)
-        return hand.useTiles(used);
+        hand.useTiles(used);
 
         /* Note: Will always be able to draw enough letters. -> no empty pile exception
          * Worst case scenario: Model.DrawPile is empty, discard hand, Model.Player draws their own hand back.
@@ -79,10 +76,6 @@ public class Player {
      */
     public void addPoints(int points){
         this.score += points;
-    }
-
-    public boolean containsTiles(List<Tile> word){
-        return hand.containsTiles(word);
     }
 
     /**

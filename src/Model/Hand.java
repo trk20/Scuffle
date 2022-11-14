@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -76,7 +77,7 @@ public class Hand {
      * @author Alexandre Marques - 101189743
      */
     @Deprecated // We won't need to check this if they can't input their own tiles.
-    public boolean containsTiles(List<Tile> used){
+    private boolean containsTiles(List<Tile> used){
         for(Tile t: used){
             // If l is not in hand, return false
             if(!(tiles.contains(t)))
@@ -89,28 +90,27 @@ public class Hand {
 
     /**
      * Remove letters used from the hand,
+     * Precondition: Assumes tiles are contained
      *
-     * @return If the letters used are all in the hand, returns true.
-     *  Otherwise, return False.
      * @author Alexandre Marques - 101189743
-     *
      * @throws NullPointerException to indicate that the game's Model.DrawPile is empty.
      */
-    public boolean useTiles(List<Tile> used) throws NullPointerException{
-        if(!containsTiles(used)){
-            return false;
-        }
+    public void useTiles(List<Tile> used) throws NullPointerException{
+//        if(!containsTiles(used)){
+//            return false;
+//        }
 
         // For each used letter, remove it from the hand
-        for(Tile t: used){
-            tiles.remove(t);
+        Iterator tileIterator = tiles.listIterator();
+        while(tileIterator.hasNext()){
+            if(used.contains(tileIterator.next())) tileIterator.remove();
         }
 
         /* Letters were used, so Model.Hand needs to be filled.
          * Note: Throws exception for empty draw pile!
          */
         fillHand();
-        return true;
+//        return true;
     }
 
     /**
@@ -152,15 +152,16 @@ public class Hand {
         this.tiles = tiles;
     }
 
-    /**
-     * Discards the tiles selected, and draws back from the draw pile afterwards.
-     * Precondition: Assumes all selected tiles are in the hand
-     * @param selectedTiles list of tiles to remove from the hand
-     */
-    public void discardSelected(List<Tile> selectedTiles) {
-        for(Tile t: selectedTiles){
-            tiles.remove(t);
-        }
-        fillHand();
-    }
+//    /**
+//     * Discards the tiles selected, and draws back from the draw pile afterwards.
+//     * Precondition: Assumes all selected tiles are in the hand
+//     * @param selectedTiles list of tiles to remove from the hand
+//     */
+//    // TODO: change this call to use tiles
+//    public void discardSelected(List<Tile> selectedTiles) {
+//        for(Tile t: selectedTiles){
+//            tiles.remove(t);
+//        }
+//        fillHand();
+//    }
 }

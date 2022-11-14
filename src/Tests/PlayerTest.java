@@ -66,12 +66,11 @@ class PlayerTest {
         players.get(1).setHand(newHand);
 
 
-        // FIXME: relies on equals method but it cannot be changed!
-        //  (currently depend on it for the memory reference comparison)
-        //Word is in hand
-        assertTrue(players.get(1).placeTiles(word1));
-        //Word is not in hand
-        assertFalse(players.get(1).placeTiles(word2));
+        // FIXME: Player interface changed, it doesn't return true/false now
+//        //Word is in hand
+//        assertTrue(players.get(1).placeTiles(word1));
+//        //Word is not in hand
+//        assertFalse(players.get(1).placeTiles(word2));
 
 
     }
@@ -89,35 +88,13 @@ class PlayerTest {
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
 
-        //Word is in hand
-        assertTrue(players.get(1).discardTiles(word1));
-        //Word is not in hand
-        assertFalse(players.get(1).discardTiles(word2));
 
-    }
+        // FIXME: discard tiles does not return boolean anymore
+//        //Word is in hand
+//        assertTrue(players.get(1).discardTiles(word1));
+//        //Word is not in hand
+//        assertFalse(players.get(1).discardTiles(word2));
 
-    /**
-     * Tests the containsTiles method, checks if it works properly when
-     * the word is and is not in the players hand
-     *
-     * @author: Vladimir Kovacina
-     */
-
-    @org.junit.jupiter.api.Test
-    public void containsTilesTest() {
-
-        List<Tile> word3 = new ArrayList<>();
-
-        Hand newHand = new Hand(model.getDrawPile());
-        newHand.setTiles(sampleHand);
-        players.get(1).setHand(newHand);
-
-        //Word is in hand
-        assertTrue(players.get(1).containsTiles(word1));
-        //Word is not in hand
-        assertFalse(players.get(1).containsTiles(word2));
-        //Word is Null
-        assertTrue(players.get(1).containsTiles(word3));
     }
 
     /**
