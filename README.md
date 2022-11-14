@@ -80,7 +80,7 @@ In case of a tie, the player with the highest score before adding or deducting u
 
 ## Design
 ### Events and listeners
-See [event package](/src/Events/README.md)
+See event package [README](/src/Events/README.md)
 ### Model.DrawPile
 - Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
 - Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
