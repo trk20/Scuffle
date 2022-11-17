@@ -135,7 +135,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             getCurPlayer().placeTiles(selectedTiles);
             getCurPlayer().addPoints(placementScore);
             // Notify listeners about new board state
-            notifyModelListeners(new BoardChangeEvent(board));
+            notifyModelListeners(new BoardChangeEvent(this));
+            notifyModelListeners(new PlayerChangeEvent(this));
             nextTurn();
         }
     }
@@ -166,9 +167,9 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 
         //Need to notify Score View here
 
-        notifyModelListeners(new PlayerChangeEvent(players));
-
-        nextTurn();
+        notifyModelListeners(new PlayerChangeEvent(this));
+        notifyModelListeners(new NewPlayerHandEvent(this));
+        //nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
@@ -179,8 +180,10 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 //        Player currentPlayer = players.get(turn);
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
-        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+
         incrementTurn();
+        notifyModelListeners(new NewPlayerHandEvent(this));
+        notifyModelListeners(new PlayerChangeEvent(this));
     }
 
     /**
@@ -241,10 +244,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
-        // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
-        if(e instanceof C_SkipEvent skip) nextTurn();
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
     }
 
