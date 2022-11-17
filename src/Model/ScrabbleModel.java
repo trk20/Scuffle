@@ -119,11 +119,16 @@ public class ScrabbleModel implements SControllerListener, SModel{
         if(placementScore<0){
             // Display error, do nothing.
         } else {
+            System.out.println("Turn: " + turn);
+            System.out.println(" The player whos turn it is: " +getPlayers().get(turn));
+            System.out.println("Current player: "+ getCurPlayer());
             // Letters have been placed, get rid of them and bank the score.
             getCurPlayer().placeTiles(selectedTiles);
             getCurPlayer().addPoints(placementScore);
+            System.out.println(getCurPlayer() + " has scored: "+ getCurPlayer().getScore());
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(this));
+            notifyModelListeners(new PlayerChangeEvent(this));
             nextTurn();
         }
     }
@@ -155,8 +160,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
         //Need to notify Score View here
 
         notifyModelListeners(new PlayerChangeEvent(this));
-
-        nextTurn();
+        notifyModelListeners(new NewPlayerHandEvent(this));
+        //nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
@@ -167,8 +172,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
         Player currentPlayer = players.get(turn);
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
-        notifyModelListeners(new NewPlayerHandEvent(this));
+
         incrementTurn();
+        notifyModelListeners(new NewPlayerHandEvent(this));
+        notifyModelListeners(new PlayerChangeEvent(this));
     }
 
     /**
@@ -266,4 +273,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public Board getBoard() {
         return board;
     }
+
 }
+
+

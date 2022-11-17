@@ -2,11 +2,8 @@ package Views;
 
 import Controllers.BoardController;
 import Controllers.TurnActionController;
-import Events.ControllerEvent;
-import Events.DirectionChangeEvent;
+import Events.*;
 import Events.Listeners.ModelListener;
-import Events.ModelEvent;
-import Events.NewPlayerHandEvent;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
@@ -32,6 +29,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     TurnActionController controller;
 
     private String currentPlayerName;
+
 
     // FIXME: coupling with board controller, look for ways to decouple
     public TurnActionPanel(ScrabbleModel model, List<BoardController> board) {
@@ -148,7 +146,9 @@ public class TurnActionPanel extends JPanel implements ModelListener {
                 currentPlayerName = newHand.getPlayer().getName();
                 turnLabel.setText("Turn: "+currentPlayerName);
 
+
             }
+
         }
 
     }

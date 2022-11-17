@@ -327,6 +327,10 @@ public class Board {
         return newWords;
     }
 
+    public BoardValidator getValidator() {
+        return validator;
+    }
+
     public BoardTile getBoardTile(Point p){
         return boardTileTable.getTile(p);
     }
