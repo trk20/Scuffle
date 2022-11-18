@@ -1,8 +1,7 @@
-package Events;
+package Events.ModelEvents;
 
-import Model.Hand;
+import Events.ModelEvents.HandChangeEvent;
 import Model.Player;
-import Model.ScrabbleModel;
 
 /**
  * NewPlayerHandEvent is an Event class
@@ -11,14 +10,14 @@ import Model.ScrabbleModel;
  * @version NOV-9
  * @author Alex
  */
-public class NewPlayerHandEvent extends HandChangeEvent{
+public class NewPlayerEvent extends HandChangeEvent {
+    private final Player player;
+
     /**
      * Constructs a HandEvent object with the model as a source object.
-     *
-     * @param model the model where the event originated
      */
-    public NewPlayerHandEvent(ScrabbleModel model) {
-        super(model);
+    public NewPlayerEvent(Player player) {
+        this.player = player;
     }
 
     /**
@@ -27,10 +26,7 @@ public class NewPlayerHandEvent extends HandChangeEvent{
      *
      * @return the hand of the current player.
      */
-    public Hand getHand(){
-        return getModel().getCurHand();
-    }
     public Player getPlayer(){
-        return getModel().getCurPlayer();
+        return player;
     }
 }

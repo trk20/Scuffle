@@ -1,7 +1,7 @@
 package Events.Listeners;
 
-import Events.BoardChangeEvent;
-import Events.ModelEvent;
+import Events.ModelEvents.BoardChangeEvent;
+import Events.ModelEvents.ModelEvent;
 
 /**
  * ModelListener interface, handles BoardChangeEvents.

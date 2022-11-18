@@ -2,11 +2,11 @@ package Views;
 
 import Controllers.BoardController;
 import Controllers.TurnActionController;
-import Events.ControllerEvent;
-import Events.DirectionChangeEvent;
+import Events.ControllerEvents.ControllerEvent;
+import Events.ControllerEvents.C_DirectionChangeEvent;
 import Events.Listeners.ModelListener;
-import Events.ModelEvent;
-import Events.NewPlayerHandEvent;
+import Events.ModelEvents.ModelEvent;
+import Events.ModelEvents.NewPlayerEvent;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
@@ -107,8 +107,6 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         TurnActionController directionControl = new TurnActionController(model, TurnActionController.ActionState.FLIP_DIR);
         directionButton.addActionListener(directionControl);
         directionControl.addControllerListener(e -> setDirectionViewText(e, directionButton));
-        // Update button display
-        directionControl.notifyControllerListeners(new DirectionChangeEvent(directionControl));
 
         directionPanel.setLayout(new GridBagLayout());
 
@@ -129,7 +127,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
      * @param button The button to modify if applicable
      */
     private void setDirectionViewText(ControllerEvent e, JButton button) {
-        if(e instanceof DirectionChangeEvent de) button.setText(de.getDir().toString());
+        if(e instanceof C_DirectionChangeEvent de) button.setText(de.getDir().toString());
     }
 
     private void setUpSkipButton(ScrabbleModel model){
@@ -143,9 +141,9 @@ public class TurnActionPanel extends JPanel implements ModelListener {
 
     @Override
     public void handleModelEvent(ModelEvent e) {
-        if(e instanceof NewPlayerHandEvent newHand){
-            if(!newHand.getPlayer().getName().equals(currentPlayerName)){
-                currentPlayerName = newHand.getPlayer().getName();
+        if(e instanceof NewPlayerEvent newPlayer){
+            if(!newPlayer.getPlayer().getName().equals(currentPlayerName)){
+                currentPlayerName = newPlayer.getPlayer().getName(); // FIXME: redundant?
                 turnLabel.setText("Turn: "+currentPlayerName);
 
             }

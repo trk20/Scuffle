@@ -1,7 +1,6 @@
-package Events;
+package Events.ModelEvents;
 
 import Model.Board.Direction;
-import Model.ScrabbleModel;
 import Model.Tile;
 
 import java.awt.*;
@@ -14,7 +13,7 @@ import java.util.List;
  * @version NOV-12
  * @author Alex
  */
-public class BoardPlaceEvent extends ModelEvent{
+public class BoardPlaceEvent extends ModelEvent {
     private final List<Tile> placedTiles;
     private final Point wordOrigin;
     private final Direction direction;
@@ -22,16 +21,13 @@ public class BoardPlaceEvent extends ModelEvent{
     /**
      * Constructs a BoardPlaceEvent object with the model as a source object.
      *
-     * @param model the model where the event originated
      * @param placedTiles the tiles to be placed in the board
      * @param wordOrigin the initial placement location in the board
      * @param direction the direction of the tiles after the origin
      */
-    public BoardPlaceEvent(ScrabbleModel model,
-                           List<Tile> placedTiles,
+    public BoardPlaceEvent(List<Tile> placedTiles,
                            Point wordOrigin,
                            Direction direction){
-        super(model);
         this.placedTiles = placedTiles;
         this.wordOrigin = wordOrigin;
         this.direction = direction;

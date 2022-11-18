@@ -1,6 +1,6 @@
 package Events.Listeners;
 
-import Events.ModelEvent;
+import Events.ModelEvents.ModelEvent;
 
 /**
  * ModelListener interface, handles ModelEvent.

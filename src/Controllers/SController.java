@@ -1,6 +1,6 @@
 package Controllers;
 
-import Events.ControllerEvent;
+import Events.ControllerEvents.ControllerEvent;
 import Events.Listeners.SControllerListener;
 
 /**

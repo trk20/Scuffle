@@ -136,6 +136,7 @@ public class Player {
      * For testing purposes, sets the players hand
      * @param hand the new players hand
      */
+    @Deprecated
     public void setHand(Hand hand) {
         this.hand = hand;
     }
