@@ -1,11 +1,11 @@
 package Tests;
 
-import Events.ControllerEvents.C_SkipEvent;
-import Events.ControllerEvents.ControllerEvent;
-import Events.ControllerEvents.DiscardClickEvent;
-import Events.ControllerEvents.PlaceClickEvent;
-import Events.Listeners.SControllerListener;
-import Events.ModelEvents.NewPlayerEvent;
+import ScrabbleEvents.ControllerEvents.C_SkipEvent;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.ControllerEvents.DiscardClickEvent;
+import ScrabbleEvents.ControllerEvents.PlaceClickEvent;
+import ScrabbleEvents.Listeners.SControllerListener;
+import ScrabbleEvents.ModelEvents.NewPlayerEvent;
 import Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class AIPlayerTest {
         // On a new turn, grab the new player event from the model
         AtomicReference<String> newPlayerStr = null;
         model.addModelListener(e-> {if (e instanceof NewPlayerEvent ev)
-            newPlayerStr.set(ev.getPlayer().getName());});
+            newPlayerStr.set(ev.player().getName());});
 
         model.handleControllerEvent(skipEvent); // Passes turn, raise NewPlayerEvent with second player
         assertEquals(newPlayerStr, "Comp2");

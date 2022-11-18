@@ -1,7 +1,7 @@
-package Events.Listeners;
+package ScrabbleEvents.Listeners;
 
-import Events.ModelEvents.BoardChangeEvent;
-import Events.ModelEvents.ModelEvent;
+import ScrabbleEvents.ModelEvents.BoardChangeEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
 /**
  * ModelListener interface, handles BoardChangeEvents.

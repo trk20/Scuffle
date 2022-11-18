@@ -1,9 +1,9 @@
 package Model;
 
 import Controllers.SController;
-import Events.ControllerEvents.ControllerEvent;
-import Events.Listeners.ModelListener;
-import Events.Listeners.SControllerListener;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.Listeners.SControllerListener;
 
 import java.util.ArrayList;
 import java.util.List;

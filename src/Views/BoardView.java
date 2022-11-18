@@ -1,9 +1,9 @@
 package Views;
 
 import Controllers.BoardController;
-import Events.ModelEvents.BoardChangeEvent;
-import Events.Listeners.BoardChangeListener;
-import Events.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.BoardChangeEvent;
+import ScrabbleEvents.Listeners.BoardChangeListener;
+import ScrabbleEvents.Listeners.ModelListener;
 import Model.Board;
 import Model.ScrabbleModel;
 
@@ -72,7 +72,7 @@ public class BoardView extends JPanel implements ModelListener, BoardChangeListe
      */
     @Override
     public void handleBoardChangeEvent(BoardChangeEvent e) {
-        update(e.getBoard());
+        update(e.board());
     }
 
     /**

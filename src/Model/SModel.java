@@ -1,7 +1,7 @@
 package Model;
 
-import Events.Listeners.ModelListener;
-import Events.ModelEvents.ModelEvent;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
 /**
  * Interface for Scrabble Models (SModel).

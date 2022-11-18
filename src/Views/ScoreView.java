@@ -1,8 +1,8 @@
 package Views;
 
-import Events.Listeners.ModelListener;
-import Events.ModelEvents.ModelEvent;
-import Events.ModelEvents.PlayerChangeEvent;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.ModelEvent;
+import ScrabbleEvents.ModelEvents.PlayerChangeEvent;
 import Model.Player;
 import Model.ScrabbleModel;
 
@@ -69,7 +69,8 @@ public class ScoreView extends JPanel implements ModelListener {
      * @author: Vladimir Kovacina
      * @param updatedPlayers list of players to update the score from
      */
-
+    // TODO: if players are a map, only need the changed player's score (less updates needed most of the time)
+    //  Will also allow us to eliminate an event
     public void updateScores(List<Player> updatedPlayers){
         List<Player> players = updatedPlayers;
         for (int i =0; i < players.size();i++ ){
@@ -87,6 +88,6 @@ public class ScoreView extends JPanel implements ModelListener {
 
     @Override
     public void handleModelEvent(ModelEvent e) {
-        if(e instanceof PlayerChangeEvent newPlayers) updateScores(newPlayers.getPlayers());
+        if(e instanceof PlayerChangeEvent newPlayers) updateScores(newPlayers.players());
     }
 }

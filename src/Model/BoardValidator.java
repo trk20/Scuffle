@@ -1,6 +1,6 @@
 package Model;
 
-import Events.ModelEvents.BoardPlaceEvent;
+import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
 
@@ -68,9 +68,9 @@ public class BoardValidator {
      */
     private boolean isPlacedNextToWord(BoardPlaceEvent placementEvent) {
         // Unpack relevant event info
-        Point wordOrigin = placementEvent.getWordOrigin();
-        Board.Direction placementDirection = placementEvent.getDirection();
-        int numTiles = placementEvent.getPlacedTiles().size();
+        Point wordOrigin = placementEvent.wordOrigin();
+        Board.Direction placementDirection = placementEvent.direction();
+        int numTiles = placementEvent.placedTiles().size();
 
         // Check if any tile is on adjacent to another tile, using given info
         for(int i = 0; i < numTiles; i++){
@@ -112,9 +112,9 @@ public class BoardValidator {
      */
     private boolean newTilesAreInBoard(BoardPlaceEvent placementEvent) {
         // Unpack relevant event info
-        Point wordOrigin = placementEvent.getWordOrigin();
-        Board.Direction placementDirection = placementEvent.getDirection();
-        int numTiles = placementEvent.getPlacedTiles().size();
+        Point wordOrigin = placementEvent.wordOrigin();
+        Board.Direction placementDirection = placementEvent.direction();
+        int numTiles = placementEvent.placedTiles().size();
 
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
@@ -155,9 +155,9 @@ public class BoardValidator {
         // TODO: this unpack/check loop (mostly) repeats itself across checks. Might be refactorable... lambdas maybe?
 
         // Unpack relevant event info
-        Point wordOrigin = placementEvent.getWordOrigin();
-        Board.Direction placementDirection = placementEvent.getDirection();
-        int numTiles = placementEvent.getPlacedTiles().size();
+        Point wordOrigin = placementEvent.wordOrigin();
+        Board.Direction placementDirection = placementEvent.direction();
+        int numTiles = placementEvent.placedTiles().size();
 
         // Check if any tile is on start tile, using given info
         for(int i = 0; i < numTiles; i++){

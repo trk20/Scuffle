@@ -1,7 +1,7 @@
-package Events.Listeners;
+package ScrabbleEvents.Listeners;
 
-import Events.ModelEvents.HandChangeEvent;
-import Events.ModelEvents.ModelEvent;
+import ScrabbleEvents.ModelEvents.HandChangeEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
 /**
  * HandChangeListener interface handles HandChangeEvents.

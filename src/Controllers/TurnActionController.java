@@ -1,7 +1,7 @@
 package Controllers;
-import Events.ControllerEvents.*;
-import Events.Listeners.BoardClickListener;
-import Events.Listeners.SControllerListener;
+import ScrabbleEvents.ControllerEvents.*;
+import ScrabbleEvents.Listeners.BoardClickListener;
+import ScrabbleEvents.Listeners.SControllerListener;
 import Model.Board;
 import Model.ScrabbleModel;
 
@@ -31,10 +31,6 @@ public class TurnActionController implements SController, BoardClickListener, Ac
 
         ActionState(TurnActionEvent e){
             event = e;
-        }
-
-        private TurnActionEvent getEvent() {
-            return event;
         }
     }
     
@@ -106,13 +102,13 @@ public class TurnActionController implements SController, BoardClickListener, Ac
      * and you have clicked it during your own turn.
      * If it is handled, sends the placement direction and location to the model.
      *
-     * @param e BoardClickEvent with information on where the board was clicked
+     * @param e C_BoardClickEvent with information on where the board was clicked
      */
     @Override
-    public void handleBoardClickEvent(BoardClickEvent e) {
+    public void handleBoardClickEvent(C_BoardClickEvent e) {
         if(placing) {
             placing = false; // Disable place mode before next turn
-            notifyControllerListeners(new PlaceClickEvent(dir, e.getOrigin()));
+            notifyControllerListeners(new PlaceClickEvent(dir, e.origin()));
         }
     }
         

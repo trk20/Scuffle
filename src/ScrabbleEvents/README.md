@@ -1,4 +1,4 @@
-# Events design
+# ScrabbleEvents design
 The event classes can be seen as an inheritence tree, our root event being ScrabbleEvent (which simply indicates an event defined for our game), 
 and two main branches: The ModelEvents and the ControllerEvents. In general, the goal of the events is to trigger behavior in the listeners, but also to encapsulate all the information they need to act upon the event, and nothing more (ideally).
 For example: 

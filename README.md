@@ -79,8 +79,8 @@ In case of a tie, the player with the highest score before adding or deducting u
 [Unimplemented](#milestone-1)
 
 ## Design
-### Events and listeners
-See event package [README](/src/Events/README.md)
+### ScrabbleEvents and listeners
+See event package [README](/src/ScrabbleEvents/README.md)
 ### Model.DrawPile
 - Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
 - Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
@@ -124,7 +124,7 @@ This class is the view part of the MVC design pattern for the GUI of the Menu in
 We chose to use the MVC pattern since it is easy to implement and makes it much easier to refactor our code.
 ### Class Views.ScoreView:
 This class is used to create the GUI for the Score panel (left side of the Scrabble game GUI). This class extends JPanel (since it will be a JPanel when it is added to the main JFrame) and implements ModelListener (so that it gets notified when a player plays his turn).
-This class also uses the MVC design pattern, it is the view part of the pattern, it also uses Events, which are passed once a change has occured in the Model.
+This class also uses the MVC design pattern, it is the view part of the pattern, it also uses ScrabbleEvents, which are passed once a change has occured in the Model.
 These events contain enough information to update the View with the required information (in this case the new score of the players).
 ### Class Tests.PlayerTest:
 This is a test class that tests the Player model, using JUnit5. The tests included in this class are tests for the getter methods (for Score, Name and Hand) and other functional methods of the Player class such as outOfTiles, containsTiles, discardTiles and placeTiles.
