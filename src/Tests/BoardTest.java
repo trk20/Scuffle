@@ -1,6 +1,6 @@
 package Tests;
 
-import Events.BoardPlaceEvent;
+import Events.ModelEvents.BoardPlaceEvent;
 import Model.Board;
 import Model.Letter;
 import Model.ScrabbleModel;
@@ -30,14 +30,14 @@ public class BoardTest {
         model = new ScrabbleModel(new ArrayList<String>(1));
         board = new Board(false);
         point = new Point(7,7);
-        event = new BoardPlaceEvent(model, placedTiles, point, Board.Direction.DOWN);
+        event = new BoardPlaceEvent(placedTiles, point, Board.Direction.DOWN);
     }
 
     //Currently all valid placement tests will fail due to scoring being incomplete
 
     @Test
     void checkInvalidPlacement(){
-        event = new BoardPlaceEvent(model, placedTiles, new Point(0,0), Board.Direction.DOWN);
+        event = new BoardPlaceEvent(placedTiles, new Point(0,0), Board.Direction.DOWN);
         int result = board.placeWord(event);
         assertEquals(-1, result);
     }
@@ -62,7 +62,7 @@ public class BoardTest {
         int result = board.placeWord(event);
         assertEquals(5, result);
         placedTiles.remove(1);
-        event = new BoardPlaceEvent(model, placedTiles, new Point(6, 8), Board.Direction.RIGHT);
+        event = new BoardPlaceEvent(placedTiles, new Point(6, 8), Board.Direction.RIGHT);
         result = board.placeWord(event);
         /*
          * Should pass as this should look like
@@ -80,7 +80,7 @@ public class BoardTest {
         placedTiles = new ArrayList<Tile>();
         placedTiles.add(new Tile(Letter.S));
 
-        event = new BoardPlaceEvent(model, placedTiles, new Point(7, 10), Board.Direction.DOWN);
+        event = new BoardPlaceEvent(placedTiles, new Point(7, 10), Board.Direction.DOWN);
         int result = board.placeWord(event);
         /*
          * Should pass as this should look like
@@ -98,7 +98,7 @@ public class BoardTest {
         placedTiles = new ArrayList<Tile>();
         placedTiles.add(new Tile(Letter.K));
 
-        event = new BoardPlaceEvent(model, placedTiles, new Point(7, 10), Board.Direction.DOWN);
+        event = new BoardPlaceEvent(placedTiles, new Point(7, 10), Board.Direction.DOWN);
         int result = board.placeWord(event);
         /*
          * Should fail as this should look like
@@ -117,7 +117,7 @@ public class BoardTest {
         placedTiles.add(new Tile(Letter.S));
         placedTiles.add(new Tile(Letter.O));
 
-        event = new BoardPlaceEvent(model, placedTiles, new Point(8, 8), Board.Direction.DOWN);
+        event = new BoardPlaceEvent(placedTiles, new Point(8, 8), Board.Direction.DOWN);
         int result = board.placeWord(event);
         /*
          * Should pass as this should look like
@@ -135,7 +135,7 @@ public class BoardTest {
         placedTiles.add(new Tile(Letter.S));
         placedTiles.add(new Tile(Letter.Q));
 
-        event = new BoardPlaceEvent(model, placedTiles, new Point(8, 8), Board.Direction.DOWN);
+        event = new BoardPlaceEvent(placedTiles, new Point(8, 8), Board.Direction.DOWN);
         int result = board.placeWord(event);
         /*
          * Should pass as this should look like

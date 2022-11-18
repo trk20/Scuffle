@@ -1,7 +1,7 @@
 package Events.Listeners;
 
-import Events.HandChangeEvent;
-import Events.ModelEvent;
+import Events.ModelEvents.HandChangeEvent;
+import Events.ModelEvents.ModelEvent;
 
 /**
  * HandChangeListener interface handles HandChangeEvents.
