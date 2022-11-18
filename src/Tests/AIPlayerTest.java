@@ -33,16 +33,16 @@ class AIPlayerTest {
     @Test
     public void testAINaming(){
         // On a new turn, grab the new player event from the model
-        AtomicReference<String> newPlayerStr = null;
+        AtomicReference<String> newPlayerStr = new AtomicReference<>();
         model.addModelListener(e-> {if (e instanceof NewPlayerEvent ev)
             newPlayerStr.set(ev.getPlayer().getName());});
 
         model.handleControllerEvent(skipEvent); // Passes turn, raise NewPlayerEvent with second player
-        assertEquals(newPlayerStr, "Comp2");
+        assertEquals(newPlayerStr.get(), "Comp2");
         model.handleControllerEvent(skipEvent); // Passes turn
-        assertEquals(newPlayerStr, "Comp3");
+        assertEquals(newPlayerStr.get(), "Comp3");
         model.handleControllerEvent(skipEvent); // Passes turn
-        assertEquals(newPlayerStr, "Comp1");
+        assertEquals(newPlayerStr.get(), "Comp1");
         model.handleControllerEvent(skipEvent); // Passes turn (goes back to second player)
         assertEquals(model.getCurPlayer().getName(), "Comp2");
     }
