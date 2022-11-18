@@ -1,7 +1,7 @@
 package Events.Listeners;
 
-import Events.BoardClickEvent;
-import Events.ControllerEvent;
+import Events.ControllerEvents.BoardClickEvent;
+import Events.ControllerEvents.ControllerEvent;
 
 public interface BoardClickListener extends SControllerListener{
 

@@ -1,6 +1,6 @@
 package Model;
 
-import Events.BoardPlaceEvent;
+import Events.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
 import java.util.ArrayList;

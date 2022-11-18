@@ -1,8 +1,9 @@
 package Tests;
 
 import Controllers.BoardController;
-import Controllers.HandTileController;
-import Events.*;
+import Events.ControllerEvents.DiscardClickEvent;
+import Events.ControllerEvents.PlaceClickEvent;
+import Events.ControllerEvents.TileClickEvent;
 import Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,15 +70,8 @@ class ScrabbleModelTest {
         model.getCurHand().getHeldTiles().add(0,new Tile(Letter.A));
         model.getCurHand().getHeldTiles().add(1,new Tile(Letter.Y));
         // send a TileClickEvent to select the first tile, then place it with a PlaceClickEvent
-        model.handleControllerEvent(new TileClickEvent(new HandTileController(model.getCurHand().getHeldTiles().get(0)) {
-            @Override
-            protected void highlight() {
-            }
-            @Override
-            protected void undoHighlight() {
-            }
-        }));
-        model.handleControllerEvent(new PlaceClickEvent(boardController,Board.Direction.RIGHT, boardController.getOrigin()));
+        model.handleControllerEvent(new TileClickEvent(model.getCurHand().getHeldTiles().get(0)));
+        model.handleControllerEvent(new PlaceClickEvent(Board.Direction.RIGHT, boardController.getOrigin()));
         // Active player should be changed
         assertNotEquals(player,model.getCurPlayer());
         // Tile should have been played
@@ -86,15 +80,8 @@ class ScrabbleModelTest {
         model.getCurHand().getHeldTiles().add(0,new Tile(Letter.A));
         model.getCurHand().getHeldTiles().add(1,new Tile(Letter.Y));
         // send a TileClickEvent to select the first tile, then discard it with a DiscardClickEvent
-        model.handleControllerEvent(new TileClickEvent(new HandTileController(model.getCurHand().getHeldTiles().get(0)) {
-            @Override
-            protected void highlight() {
-            }
-            @Override
-            protected void undoHighlight() {
-            }
-        }));
-        model.handleControllerEvent(new DiscardClickEvent(boardController));
+        model.handleControllerEvent(new TileClickEvent(model.getCurHand().getHeldTiles().get(0)));
+        model.handleControllerEvent(new DiscardClickEvent());
         // Tile should have been discarded
         assertEquals(Letter.Y,player.getHand().getHeldTiles().get(0).letter());
     }

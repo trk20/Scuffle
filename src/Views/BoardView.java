@@ -1,7 +1,7 @@
 package Views;
 
 import Controllers.BoardController;
-import Events.BoardChangeEvent;
+import Events.ModelEvents.BoardChangeEvent;
 import Events.Listeners.BoardChangeListener;
 import Events.Listeners.ModelListener;
 import Model.Board;

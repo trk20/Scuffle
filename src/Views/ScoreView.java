@@ -1,17 +1,14 @@
 package Views;
 
-import Events.Listeners.HandChangeListener;
 import Events.Listeners.ModelListener;
-import Events.ModelEvent;
-import Events.NewPlayerHandEvent;
-import Events.PlayerChangeEvent;
+import Events.ModelEvents.ModelEvent;
+import Events.ModelEvents.PlayerChangeEvent;
 import Model.Player;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Score view is responsible for displaying the Players scores during the game
@@ -73,8 +70,8 @@ public class ScoreView extends JPanel implements ModelListener {
      * @param updatedPlayers list of players to update the score from
      */
 
-    public void updateScores(ArrayList<Player> updatedPlayers){
-        ArrayList<Player> players = updatedPlayers;
+    public void updateScores(List<Player> updatedPlayers){
+        List<Player> players = updatedPlayers;
         for (int i =0; i < players.size();i++ ){
             //Change the JLabels to display the players names and scores
             playerLabels[i] .setText(players.get(i).getName()+ ":\t "+ players.get(i).getScore());

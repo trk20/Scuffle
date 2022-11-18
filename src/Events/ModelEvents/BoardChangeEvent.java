@@ -1,18 +1,17 @@
-package Events;
+package Events.ModelEvents;
 
 import Model.Board;
-import Model.SModel;
-import Model.ScrabbleModel;
 
 public class BoardChangeEvent extends ModelEvent {
+    private final Board board;
 
     /**
      * Constructs a BoardChangeEvent object with the board as a source object.
      *
-     * @param model the model where the event originated
+     * @param board the board which changed
      */
-    public BoardChangeEvent(ScrabbleModel model) {
-        super(model);
+    public BoardChangeEvent(Board board) {
+        this.board = board;
     }
 
     /**
@@ -20,6 +19,6 @@ public class BoardChangeEvent extends ModelEvent {
      * @return board held by the model
      */
     public Board getBoard(){
-        return getModel().getBoard();
+        return board;
     }
 }

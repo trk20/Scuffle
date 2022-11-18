@@ -1,13 +1,10 @@
 package Model;
 
-import Events.*;
+import Events.ControllerEvents.*;
 import Events.Listeners.ModelListener;
 import Events.Listeners.SControllerListener;
+import Events.ModelEvents.*;
 import Views.ScrabbleFrame;
-import Events.ControllerEvent;
-import Events.ModelEvent;
-import Events.NewPlayerHandEvent;
-import Events.TileClickEvent;
 
 import java.awt.*;
 import java.util.*;
@@ -20,7 +17,7 @@ import java.util.List;
  * @author Kieran Rourke, Alex
  * @version NOV-12
  */
-public class ScrabbleModel implements SControllerListener, SModel{
+public class ScrabbleModel implements SControllerListener, SModel, ModelListener{
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
@@ -54,9 +51,24 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
+        this.players = new ArrayList<>();
         this.turn = 0;
-        this.numPlayers = playerNames.size();
-        initializePlayers(playerNames);
+        this.numPlayers = 0; // In case of null players
+        // Guard against null human players
+        if(playerNames != null){
+            this.numPlayers = playerNames.size();
+            initializePlayers(playerNames);
+        }
+    }
+
+    public ScrabbleModel(List<String> playerNames, int numAI){
+        this(playerNames);
+        initializeAI(numAI);
+    }
+
+    private void initializeAI(int numAI) {
+        // TODO: implement
+        return;
     }
 
     /**
@@ -113,20 +125,17 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles the user wanting to place letters
      */
     private void handlePlace(PlaceClickEvent pce){
-        BoardPlaceEvent placeEvent = new BoardPlaceEvent(this, selectedTiles, pce.getOrigin(), pce.getDir());
+        BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.getOrigin(), pce.getDir());
         int placementScore = board.placeWord(placeEvent);
 
         if(placementScore<0){
             // Display error, do nothing.
         } else {
-
             // Letters have been placed, get rid of them and bank the score.
             getCurPlayer().placeTiles(selectedTiles);
             getCurPlayer().addPoints(placementScore);
-
             // Notify listeners about new board state
-            notifyModelListeners(new BoardChangeEvent(this));
-            notifyModelListeners(new PlayerChangeEvent(this));
+            notifyModelListeners(new BoardChangeEvent(board));
             nextTurn();
         }
     }
@@ -157,9 +166,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
         //Need to notify Score View here
 
-        notifyModelListeners(new PlayerChangeEvent(this));
-        notifyModelListeners(new NewPlayerHandEvent(this));
-        //nextTurn();
+        notifyModelListeners(new PlayerChangeEvent(players));
+
+        nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
@@ -167,13 +176,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles running a turn, will be called in a loop until the game is over
      */
     private void nextTurn(){
-        Player currentPlayer = players.get(turn);
+//        Player currentPlayer = players.get(turn);
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
-
+        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         incrementTurn();
-        notifyModelListeners(new NewPlayerHandEvent(this));
-        notifyModelListeners(new PlayerChangeEvent(this));
     }
 
     /**
@@ -234,8 +241,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
+        // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
+        if(e instanceof C_SkipEvent skip) nextTurn();
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
     }
 
@@ -272,8 +281,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return board;
     }
 
+    @Override
+    public void handleModelEvent(ModelEvent e) {
 
+    }
 }
-
-
-
