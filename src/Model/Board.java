@@ -54,11 +54,42 @@ public class Board {
 
     /**
      * Get a board tile at the given coordinates
+     *
      * @param p The point coordinates of the tile in the board grid
      * @return The tile at coordinate p
      */
     public BoardTile getBoardTile(Point p){
         return boardGrid.get(p);
+    }
+
+    /**
+     * Places a word on the board, and calculates the resulting score from the placement.
+     * For invalid placements, will cancel the operation and indicate an exception.
+     *
+     * @param placeEvent The event containing the placement details
+     * @return -1 if it is an invalid placement, otherwise, the score resulting from the placement.
+     */
+    public int placeWord(BoardPlaceEvent placeEvent){
+        // Ensure valid placement
+        if(!validator.isValidLocation(placeEvent)) return -1;
+        // Save board state
+        Grid2DArray<BoardTile> savedBoardGrid = boardGrid.copy();
+
+        // Place word on board, abort placement if it results in invalid words
+        setWordTiles(placeEvent);
+        List<BoardWord> curWords = getCurrentWords();
+        if(validator.isInvalidWordInBoard(curWords)){
+            // Load board state
+            boardGrid = savedBoardGrid;
+            return -1;
+        }
+
+        // Calculate score of the words formed this placement
+        int score = getPlacedScore(getPlacedWords(curWords));
+
+        // Store words from this turn (for next placement)
+        lastPlacedWords = curWords;
+        return score;
     }
 
     /**
@@ -76,7 +107,7 @@ public class Board {
      *
      * @return a list of all new words
      */
-    List<BoardWord> getNewWords(List<BoardWord> currentWords){
+    List<BoardWord> getPlacedWords(List<BoardWord> currentWords){
         // All words in the board - words that were in the board last turn.
         List<BoardWord> newWords = new ArrayList<>(currentWords);
         for (BoardWord word:lastPlacedWords) {
@@ -104,6 +135,7 @@ public class Board {
      * Set premium score tiles in the board.
      * Currently, randomly places them on the board.
      */
+    // TODO: M4 will be using XML loading for the configuration
     private void setPremiumTiles() {
         Random r = new Random();
         for (int x = 0; x< BOARD_SIZE; x ++){
@@ -120,34 +152,26 @@ public class Board {
     }
 
     /**
-     * Places a word on the board
-     * @author Timothy Kennedy
-     * @author Alex
-     *
-     * @param placeEvent The event containing the placement details
-     * @return -1 if it is an invalid placement, otherwise, the score resulting from the placement.
+     * Place a tile in the board.
+     * Precondition: The tile is not taken
+     * @param p The point where the tile should be placed
+     * @param letter the letter to place at the board location.
      */
-    public int placeWord(BoardPlaceEvent placeEvent){
-        // Ensure valid placement
-        if(!validator.isValidPlacement(placeEvent)) return -1;
-
-        // Place word on board
-        Grid2DArray<BoardTile> savedBoardGrid = boardGrid.copy();
-        setWordTiles(placeEvent);
-        List<BoardWord> curWords = getCurrentWords();
-        // If placement results in invalid words, abort placement, reload previous state
-        if(validator.isInvalidWordInBoard(curWords)){
-            boardGrid = savedBoardGrid;
-            return -1;
-        }
-
-        // Calculate score
-        int score = getTurnScore(getNewWords(curWords));
-
-        // Store words from this turn (for new word difference)
-        lastPlacedWords = curWords;
-        return score;
+    private void placeTile(Point p, Letter letter) {
+        assert(!boardGrid.get(p).isTaken()); // Precondition: Tile is empty
+        boardGrid.get(p).setLetter(letter);
     }
+
+    /**
+     * Checks if a coordinate in the board is taken (x = col, y = row), starting top left.
+     * @param p A point coordinate in the board to check
+     * @return True if a tile is placed at that location, false otherwise.
+     */
+    boolean isTaken(Point p) {
+        return boardGrid.get(p).isTaken();
+    }
+
+    // TODO: Check style past this line
 
     /**
      * Places tiles in the board, skipping over tiles that are already placed.
@@ -185,25 +209,6 @@ public class Board {
         }
     }
 
-    /**
-     * Place a tile in the board.
-     * Precondition: The tile is verified to be empty beforehand
-     * @param p The point where the tile should be placed
-     * @param letter the letter to place at the board location.
-     */
-    private void placeTile(Point p, Letter letter) {
-        boardGrid.get(p).setLetter(letter);
-    }
-
-
-    /**
-     * Checks if a coordinate in the board is taken (x = col, y = row), starting top left.
-     * @param p A point coordinate in the board to check
-     * @return True if a tile is placed at that location, false otherwise.
-     */
-    boolean isTaken(Point p) {
-        return boardGrid.get(p).isTaken();
-    }
 
     /**
      * Checks if no words have been placed on the board yet.
@@ -274,7 +279,7 @@ public class Board {
      *
      * @return int The score of the word
      */
-    private int getTurnScore(List<BoardWord> newWords){
+    private int getPlacedScore(List<BoardWord> newWords){
         int turnScore = 0;
 
         for (BoardWord newWord:newWords) {

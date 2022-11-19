@@ -19,8 +19,8 @@ public class BoardTile {
     public enum Type {START, BLANK, X2WORD, X3WORD, X2LETTER, X3LETTER}
 
     private Type tileType;
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     /**
      * Constructor for creating a new Model.BoardTile object
@@ -50,43 +50,6 @@ public class BoardTile {
      */
     public BoardTile(Point p) {
         this(p.x, p.y);
-    }
-
-    /**
-     * Method used for setting the X position of the board Tile
-     *
-     * @param x, the new x position of the tile
-     */
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    /**
-     * Method used for getting the X position of the board tile
-     *
-     * @return x, returns the x position of the tile
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * Method used for setting the Y position of the board tile
-     *
-     * @param y, the y position of the tile
-     */
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    /**
-     * Method used for getting to Y position of the board tile
-     *
-     * @return y, returns the y position of the tile
-     */
-    public int getY() {
-        return y;
     }
 
 
@@ -164,9 +127,12 @@ public class BoardTile {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BoardTile boardTile = (BoardTile) o;
-        return letter == boardTile.letter && tileType == boardTile.tileType;
+        if (!(o instanceof BoardTile boardTile)) return false;
+
+        return letter == boardTile.letter &&
+                tileType == boardTile.tileType &&
+                x == boardTile.x &&
+                y == boardTile.y;
     }
 
 }

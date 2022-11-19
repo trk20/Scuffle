@@ -22,8 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BoardValidatorTest {
 
-    private ScrabbleModel model;
-    private List<String> playerNames;
     private Board board;
     private List<Tile> validWord,validWord2,invalidWord, wordToPlace;
 
@@ -35,8 +33,8 @@ class BoardValidatorTest {
     void setUp() {
 
         //Initialized model and board
-        playerNames = Arrays.asList("Vlad","Alex","Kieran","Tim");
-        model = new ScrabbleModel(playerNames);
+        List<String> playerNames = Arrays.asList("Vlad", "Alex", "Kieran", "Tim");
+        ScrabbleModel model = new ScrabbleModel(playerNames);
         board = model.getBoard();
 
         //Initialize Words
@@ -87,14 +85,14 @@ class BoardValidatorTest {
 
         //Placed outside board vertically
         BoardPlaceEvent outsideBoardV = new BoardPlaceEvent(validWord, outside, Board.Direction.DOWN);
-        assertFalse(validator.isValidPlacement(outsideBoardV));
+        assertFalse(validator.isValidLocation(outsideBoardV));
         //Placed outside board horizontally
         BoardPlaceEvent outsideBoardH = new BoardPlaceEvent(validWord, outside, Board.Direction.RIGHT);
-        assertFalse(validator.isValidPlacement(outsideBoardH));
+        assertFalse(validator.isValidLocation(outsideBoardH));
 
         //Placed inside board but goes out horizontally
         BoardPlaceEvent edgeBoardH = new BoardPlaceEvent(validWord, onEdge, Board.Direction.RIGHT);
-        assertFalse(validator.isValidPlacement(edgeBoardH));
+        assertFalse(validator.isValidLocation(edgeBoardH));
     }
 
     /**
@@ -105,28 +103,28 @@ class BoardValidatorTest {
     void isValidPlacementStartTileBoardTest() {
         //Placing invalid word at start
         BoardPlaceEvent invalidStart = new BoardPlaceEvent(invalidWord, start, Board.Direction.RIGHT);
-        assertFalse(validator.isValidPlacement(invalidStart));
+        assertFalse(validator.isValidLocation(invalidStart));
 
         //Placing valid word at start tile
         BoardPlaceEvent validStart1 = new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT);
-        assertTrue(validator.isValidPlacement(validStart1));
+        assertTrue(validator.isValidLocation(validStart1));
 
         //Placing valid word but not at start tile initially (horizontally)
         BoardPlaceEvent invalidStart2 = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.RIGHT);
-        assertFalse(validator.isValidPlacement(invalidStart2));
+        assertFalse(validator.isValidLocation(invalidStart2));
 
         //Placing valid word but not at start tile initially (vertically)
         BoardPlaceEvent invalidStart3 = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
-        assertFalse(validator.isValidPlacement(invalidStart3));
+        assertFalse(validator.isValidLocation(invalidStart3));
 
 
         //Placing valid word across (horizontal) start tile (so that is doesn't start on it but still hits it)
         BoardPlaceEvent validStart2 = new BoardPlaceEvent(validWord, leftStart, Board.Direction.RIGHT);
-        assertTrue(validator.isValidPlacement(validStart2));
+        assertTrue(validator.isValidLocation(validStart2));
 
         //Placing valid word across (vertical) start tile (so that is doesn't start on it but still hits it)
         BoardPlaceEvent validStart3 = new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN);
-        assertTrue(validator.isValidPlacement(validStart3));
+        assertTrue(validator.isValidLocation(validStart3));
     }
 
     /**
@@ -139,7 +137,7 @@ class BoardValidatorTest {
         //Place Hello (horizontally) at start and place Hello across it (vertically) to see if adjacent words work
         board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT));
         BoardPlaceEvent acrossVert = new BoardPlaceEvent(wordToPlace, acrossWord1, Board.Direction.DOWN);
-        assertTrue(validator.isValidPlacement(acrossVert));
+        assertTrue(validator.isValidLocation(acrossVert));
 
     }
 
@@ -152,7 +150,7 @@ class BoardValidatorTest {
         //Place Hello (vertically) at start and place Hello across it (horizontally) to see if adjacent words work
         board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN));
         BoardPlaceEvent acrossHoriz = new BoardPlaceEvent(wordToPlace, acrossWord2, Board.Direction.RIGHT);
-        assertTrue(validator.isValidPlacement(acrossHoriz));
+        assertTrue(validator.isValidLocation(acrossHoriz));
     }
 
     /**
@@ -166,12 +164,12 @@ class BoardValidatorTest {
 
         board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT));//place validStart1
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.RIGHT);
-        assertFalse(validator.isValidPlacement(invalidPlace));
+        assertFalse(validator.isValidLocation(invalidPlace));
 
         //Place Hello (vertically) at start and place Hello again but not adjacent to the first word
         board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN)); //place validStart3
         invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
-        assertFalse(validator.isValidPlacement(invalidPlace));
+        assertFalse(validator.isValidLocation(invalidPlace));
 
     }
     /**
@@ -184,7 +182,7 @@ class BoardValidatorTest {
         //Place Hello twice in the same place (on top of each other)
         board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN));
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN);
-        assertFalse(validator.isValidPlacement(invalidPlace));
+        assertFalse(validator.isValidLocation(invalidPlace));
     }
 
     /**
@@ -205,7 +203,7 @@ class BoardValidatorTest {
         wordToPlace2.add(new Tile(Letter.O));
         Point newPoint = new Point(6,8);
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent( wordToPlace2, newPoint, Board.Direction.RIGHT);
-        assertFalse(validator.isValidPlacement(invalidPlace));
+        assertFalse(validator.isValidLocation(invalidPlace));
     }
 
     /**
@@ -225,7 +223,7 @@ class BoardValidatorTest {
         wordToPlace2.add(new Tile(Letter.O));
         board.placeWord(new BoardPlaceEvent(wordToPlace2, start, Board.Direction.DOWN));
         BoardPlaceEvent validPlace = new BoardPlaceEvent(validWord2, newPoint, Board.Direction.DOWN);
-        assertTrue(validator.isValidPlacement(validPlace));
+        assertTrue(validator.isValidLocation(validPlace));
 
     }
 

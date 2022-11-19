@@ -42,7 +42,7 @@ public class BoardValidator {
      * @param placementEvent The event representing a placement attempt
      * @return True if the word passes all the checks, false otherwise.
      */
-    public boolean isValidPlacement(BoardPlaceEvent placementEvent) {
+    public boolean isValidLocation(BoardPlaceEvent placementEvent) {
         // Attempt to go from the least intensive checks, to most intensive
         if(!areNewTilesAreInBoard(placementEvent)) return false;
 
