@@ -13,6 +13,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests the Board Validator Class, more specifcally the isValidPlacement method
+ *
+ * @author Vladimir Kovacina
+ */
+
 class BoardValidatorTest {
 
     private ScrabbleModel model;
@@ -27,10 +33,12 @@ class BoardValidatorTest {
     @BeforeEach
     void setUp() {
 
+        //Initialized model and board
         playerNames = Arrays.asList("Vlad","Alex","Kieran","Tim");
         model = new ScrabbleModel(playerNames);
         board = model.getBoard();
 
+        //Initialize Words
         validWord = new ArrayList<>();
         validWord.add(new Tile(Letter.H));
         validWord.add(new Tile(Letter.E));
@@ -69,7 +77,10 @@ class BoardValidatorTest {
 
     }
 
-
+    /**
+     * Tests placing words that go outside the board
+     * @author Vladimir Kovacina
+     */
     @Test
     void isValidPlacementOutsideBoardTest() {
 
@@ -85,6 +96,10 @@ class BoardValidatorTest {
         assertFalse(validator.isValidPlacement(edgeBoardH));
     }
 
+    /**
+     * Tests placing words on the start tile
+     * @author Vladimir Kovacina
+     */
     @Test
     void isValidPlacementStartTileBoardTest() {
         //Placing invalid word at start
@@ -113,6 +128,11 @@ class BoardValidatorTest {
         assertTrue(validator.isValidPlacement(validStart3));
     }
 
+    /**
+     * Tests 2 words that intersect, first word is placed horizontally
+     * @author Vladimir Kovacina
+     */
+
     @Test
     void isValidPlacement2WordsHorizThenVertTest() {
         //Place Hello (horizontally) at start and place Hello across it (vertically) to see if adjacent words work
@@ -121,6 +141,11 @@ class BoardValidatorTest {
         assertTrue(validator.isValidPlacement(acrossVert));
 
     }
+
+    /**
+     * Tests 2 words that intersect, first word is placed vertically
+     * @author Vladimir Kovacina
+     */
     @Test
     void isValidPlacement2WordsVertThenHorizTest() {
         //Place Hello (vertically) at start and place Hello across it (horizontally) to see if adjacent words work
@@ -131,6 +156,11 @@ class BoardValidatorTest {
         BoardPlaceEvent acrossHoriz = new BoardPlaceEvent(model,wordToPlace, acrossWord2, Board.Direction.RIGHT);
         assertTrue(validator.isValidPlacement(acrossHoriz));
     }
+
+    /**
+     * Tests 2 words that are not intersecting, first word is on start tile
+     * @author Vladimir Kovacina
+     */
 
     @Test
     void isValidPlacement2WordsNotAdjacentTest() {
@@ -146,14 +176,23 @@ class BoardValidatorTest {
         assertFalse(validator.isValidPlacement(invalidPlace));
 
     }
+    /**
+     * Tests placing 2 words that completly overlap
+     * @author Vladimir Kovacina
+     */
 
     @Test
     void isValidPlacementOverlapTest() {
         //Place Hello twice in the same place (on top of each other)
+        board.placeWord(new BoardPlaceEvent(model,validWord, upStart, Board.Direction.DOWN));
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(model,validWord, upStart, Board.Direction.DOWN);
         assertFalse(validator.isValidPlacement(invalidPlace));
     }
 
+    /**
+     * Tests placing 3 and a new word is created from the placement, but it is an invalid word
+     * @author Vladimir Kovacina
+     */
     @Test
     void isValidPlacement3WordsInvalidComboTest() {
         //Place Hello twice (once horizontally and once vertically) then place it
@@ -171,6 +210,10 @@ class BoardValidatorTest {
         assertFalse(validator.isValidPlacement(invalidPlace));
     }
 
+    /**
+     * Tests placing 3 and a new word is created from the placement, but it is a valid word
+     * @author Vladimir Kovacina
+     */
     @Test
     void isValidPlacement3WordsValidComboTest() {
         //Place Hello twice (once horizontally and once vertically) then place it
