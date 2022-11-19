@@ -112,7 +112,7 @@ public class Board {
                 }
             }
             //System.out.println(word.get(i).letter());
-            placeTile(placementLocation, word.get(i).letter());
+            placeTile(placementLocation, word.get(i).getLetter());
             //System.out.println("Placed letter:" + word.get(i).letter());
             //System.out.println(this);
         }

@@ -81,6 +81,9 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     public void actionPerformed(ActionEvent e) {
         // Only enter placing mode if placed was clicked, otherwise exit it
         placing = action == ActionState.PLACE;
+        if(!placing && action == ActionState.PLACE){
+            placing = true;
+        }
         if(action == ActionState.FLIP_DIR) flipDir();
         // Notify controller listeners (if action has an event)
         if(action.event != null) notifyControllerListeners(action.event);
@@ -109,6 +112,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         if(placing) {
             placing = false; // Disable place mode before next turn
             notifyControllerListeners(new PlaceClickEvent(dir, e.origin()));
+
         }
     }
         

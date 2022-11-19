@@ -4,6 +4,7 @@ import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
+import Views.OptionPaneHandler;
 import Views.ScrabbleFrame;
 
 import java.awt.*;
@@ -42,6 +43,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     /** list of selected tiles (in order) to pass to the board when placing*/
     List<Tile> selectedTiles;
 
+    private OptionPaneHandler input;
+
 
     private ScrabbleFrame mainFrame;
 
@@ -59,6 +62,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             this.numPlayers = playerNames.size();
             initializePlayers(playerNames);
         }
+        input = new OptionPaneHandler();
     }
 
     public ScrabbleModel(List<String> playerNames, int numAI){
@@ -126,10 +130,24 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      */
     private void handlePlace(PlaceClickEvent pce){
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
+
+        //Check for Blank tile in selected tiles:
+        for(int i =0; i< selectedTiles.size(); i++){
+            if(selectedTiles.get(i).getLetter() == Letter.BLANK){
+                selectedTiles.get(i).setLetter(input.getChosenLetter());
+            }
+        }
+
         int placementScore = board.placeWord(placeEvent);
 
         if(placementScore<0){
             // Display error, do nothing.
+            //Reset Blank tile
+            for(int i=0; i< selectedTiles.size(); i++){
+                if(selectedTiles.get(i).getScore() == 0){
+                    selectedTiles.get(i).setLetter(Letter.BLANK);
+                }
+            }
         } else {
             // Letters have been placed, get rid of them and bank the score.
             getCurPlayer().placeTiles(selectedTiles);
