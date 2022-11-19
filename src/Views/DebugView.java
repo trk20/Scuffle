@@ -9,6 +9,14 @@ import ScrabbleEvents.ModelEvents.*;
 
 import java.util.List;
 
+/**
+ * Debug view used to print to terminal event information from the game.
+ * Can enable entire class with "DEBUG_VIEW"
+ * or specific event traces with their respective methods' traces: "TRACE_ON".
+ *
+ * @author Alex
+ * @version NOV-19
+ */
 public class DebugView implements ModelListener, SControllerListener {
     final public static boolean DEBUG_VIEW = true;
     public DebugView(ScrabbleModel model) {
@@ -18,8 +26,8 @@ public class DebugView implements ModelListener, SControllerListener {
     @Override
     public void handleModelEvent(ModelEvent e) {
         System.out.print("Model Event: ");
-        if(e instanceof BoardChangeEvent){
-            System.out.println("BoardChangeEvent received");
+        if(e instanceof BoardChangeEvent ev){
+            showBoardChangeEvent(ev);
         } else if(e instanceof BoardPlaceEvent){
             System.out.println("BoardPlaceEvent received");
         } else if(e instanceof NewPlayerEvent){
@@ -60,6 +68,17 @@ public class DebugView implements ModelListener, SControllerListener {
         }
     }
 
+    @SuppressWarnings({"ConstantConditions"})
+    private void showBoardChangeEvent(BoardChangeEvent e) {
+
+        final boolean TRACE_ON = true; // Can disable hard code trace here
+        if(TRACE_ON) {
+            System.out.println("BoardChangeEvent received");
+            System.out.println("Board: "+ e.board());
+        }
+    }
+
+    @SuppressWarnings({"ConstantConditions"})
     private void showDirectionEvent(C_DirectionChangeEvent e) {
         final boolean TRACE_ON = true; // Can disable hard code trace here
         if(TRACE_ON) {
@@ -68,6 +87,7 @@ public class DebugView implements ModelListener, SControllerListener {
         }
     }
 
+    @SuppressWarnings({"ConstantConditions"})
     private void showPlaceClickEvent(PlaceClickEvent e) {
         final boolean TRACE_ON = true; // Can disable hard code trace here
         if(TRACE_ON) {

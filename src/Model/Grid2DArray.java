@@ -33,6 +33,7 @@ public class Grid2DArray<T>{
      *
      * @param size The length of the "grid"
      */
+    @SuppressWarnings("Convert2Diamond")
     public Grid2DArray(int size){
         this(size, new ArrayList<ArrayList<T>>(size));
         // Initialize grid array with empty inner lists
@@ -84,5 +85,31 @@ public class Grid2DArray<T>{
     private boolean isInArray(Point p) {
         return  p.x<size && p.y <size && // Within size bound
                 p.x >= 0 && p.y >= 0; // Positive coords
+    }
+
+    /**
+     * String shows the grid of elements in this format:
+     * | element(0,0).toString | element(1,0).toString | (...) | element(size-1,0).toString |
+     * | element(0,1).toString | element(1,1).toString | (...) |
+     *  (...)
+     * | element(0,size-1).toString  | (...) |
+     *
+     * @return String representation of grid
+     */
+    @Override
+    public String toString() {
+        // Note: Final result doesn't preserve the grid shape well (visually) because
+        // BoardTile character amount (4 to 2) != Letter character amount (1)
+
+        StringBuilder sb = new StringBuilder();
+        for(int y = 0; y < size; y++){
+            sb.append("|");
+            for(int x = 0; x < size; x++){ // Go row by row (x in inner loop)
+                Point p = new Point(x,y);
+                sb.append(" ").append(get(p).toString()).append(" |");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

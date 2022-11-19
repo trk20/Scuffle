@@ -28,8 +28,8 @@ public class Board {
 
         @Override
         public String toString() {return dirStr;}
-    }
 
+    }
     public static int MIN_WORD_SIZE = 2;
     private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
@@ -50,6 +50,16 @@ public class Board {
         if(premiumBoard) setPremiumTiles();
         Point middleOfBoard = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
         boardGrid.get(middleOfBoard).setType(BoardTile.Type.START);
+    }
+
+    /**
+     * Returns the string representation of the board's internal grid
+     *
+     * @return a string representation of the board
+     */
+    @Override
+    public String toString() {
+        return boardGrid.toString();
     }
 
     /**
@@ -299,15 +309,5 @@ public class Board {
 
     public BoardTile getBoardTile(Point p){
         return boardGrid.get(p);
-    }
-
-    /**
-     * Returns the string representation of its internal BoardTile2DTable
-     *
-     * @return a string representation of the board
-     */
-    @Override
-    public String toString() {
-        return boardGrid.toString();
     }
 }
