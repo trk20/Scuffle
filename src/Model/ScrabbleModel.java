@@ -181,7 +181,6 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 //        Player currentPlayer = players.get(turn);
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
-
         incrementTurn();
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         notifyModelListeners(new PlayerChangeEvent(players));
@@ -245,8 +244,10 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
+        // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
+        if(e instanceof C_SkipEvent skip) nextTurn();
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
     }
 
