@@ -45,6 +45,7 @@ public class BoardValidator {
 //        System.out.println("Checking validatity");
 
         // Attempt to go from the least intensive checks, to most intensive
+
         if(!newTilesAreInBoard(placementEvent)) return false;
 //        System.out.println("In board");
 

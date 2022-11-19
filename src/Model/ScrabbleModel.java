@@ -119,13 +119,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
         if(placementScore<0){
             // Display error, do nothing.
         } else {
-            System.out.println("Turn: " + turn);
-            System.out.println(" The player whos turn it is: " +getPlayers().get(turn));
-            System.out.println("Current player: "+ getCurPlayer());
+
             // Letters have been placed, get rid of them and bank the score.
             getCurPlayer().placeTiles(selectedTiles);
             getCurPlayer().addPoints(placementScore);
-            System.out.println(getCurPlayer() + " has scored: "+ getCurPlayer().getScore());
+
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(this));
             notifyModelListeners(new PlayerChangeEvent(this));
@@ -274,6 +272,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
         return board;
     }
 
+
 }
+
 
 

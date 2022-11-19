@@ -87,7 +87,7 @@ public class Board {
         Direction placementDirection = placeEvent.getDirection();
 //        System.out.println("Dir in set: "+placementDirection);
         List<Tile> word = placeEvent.getPlacedTiles();
-//        System.out.println(word);
+        //System.out.println(word);
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
         // Place tiles in the board, skipping tiles that are already placed.
@@ -97,10 +97,12 @@ public class Board {
             if (placementDirection == Board.Direction.RIGHT) {
                 // Increment Col (x), until no overlap
                 while (overlapping) {
+                    //System.out.println("Overladps: "+ overlaps);
                     placementLocation.setLocation((wordOrigin.x + (i + overlaps)), wordOrigin.y);
                     if (isTaken(placementLocation)) overlaps += 1;
                     else overlapping = false;
                 }
+                //System.out.println("Done overlapping");
             } else {
                 // Decrement row (y), until no overlap
                 while (overlapping) {
@@ -109,7 +111,10 @@ public class Board {
                     else overlapping = false;
                 }
             }
+            //System.out.println(word.get(i).letter());
             placeTile(placementLocation, word.get(i).letter());
+            //System.out.println("Placed letter:" + word.get(i).letter());
+            //System.out.println(this);
         }
     }
 
