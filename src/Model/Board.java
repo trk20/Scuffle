@@ -1,12 +1,10 @@
 package Model;
 
-import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
+import Events.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static Model.ScrabbleModel.BOARD_SIZE;
 
@@ -16,7 +14,7 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @author Vladimir Kovacina
  * @author Timothy Kennedy
  * @author Alex
- * @version NOV-12
+ * @version NOV-18
  */
 public class Board {
     public enum Direction{
@@ -29,25 +27,41 @@ public class Board {
             return dirStr;
         }
     }
-    private BoardTile2DTable boardTileTable; // COLUMN (x), ROW (y)
-    private ArrayList<PlacedWord> currentWords;
+
+    public static int MIN_WORD_SIZE = 2;
+    private Grid2DArray<BoardTile> boardGrid; // COLUMN (x), ROW (y)
+    private List<BoardWord> lastPlacedWords;
     /** Takes care of validating the board */
-    private BoardValidator validator;
+    private final BoardValidator validator;
 
     /**
      * Constructor for a Model.Board object
-     * @author Vladimir Kovacina
-     * @author Timothy Kennedy
      */
     public Board(boolean randomBoard){
-        boardTileTable = new BoardTile2DTable();
         validator = new BoardValidator(this);
-        currentWords = new ArrayList<>();
+        lastPlacedWords = new ArrayList<>();
 
-        if(randomBoard) boardTileTable.randomiseTable();
+        // TODO: add randomisation back in
+//        if(randomBoard) boardTileTable.randomiseTable();
 
-        //Initialize the start tile at the middle of the board
-        boardTileTable.setType(new Point(BOARD_SIZE/2, BOARD_SIZE/2), BoardTile.Type.START);
+        // Initialize the start tile in the middle of the board
+        initializeGrid();
+        Point middleOfBoard = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
+        boardGrid.get(middleOfBoard).setType(BoardTile.Type.START);
+    }
+
+    /**
+     * Initialize the board grid with blank board tiles.
+     */
+    private void initializeGrid(){
+        boardGrid = new Grid2DArray<>(BOARD_SIZE);
+        // Fill tile array
+        for (int x = 0; x< BOARD_SIZE; x ++){
+            for(int y = 0; y<BOARD_SIZE; y ++){
+                Point p = new Point(x, y);
+                boardGrid.set(p, new BoardTile(p));
+            }
+        }
     }
 
     /**
@@ -63,16 +77,22 @@ public class Board {
         if(!validator.isValidPlacement(placeEvent)) return -1;
 
 
-        int turnScore = getTurnScore(placeEvent);
-
+        // Place word on board
+        Grid2DArray<BoardTile> savedBoardGrid = boardGrid.copy();
         setWordTiles(placeEvent);
+        List<BoardWord> curWords = getCurrentWords();
+        // If placement results in invalid words, abort placement, reload previous state
+        if(validator.isInvalidWordInBoard(curWords)){
+            boardGrid = savedBoardGrid;
+            return -1;
+        }
 
-        // Add new words to current words
-        currentWords = new ArrayList<>();
-        currentWords.addAll(getNewWords(placeEvent));
+        // Calculate score
+        int score = getTurnScore(getNewWords(curWords));
 
-        // Return score after placing
-        return turnScore;
+        // Store words from this turn (for new word difference)
+        lastPlacedWords = curWords;
+        return score;
     }
 
     /**
@@ -83,11 +103,9 @@ public class Board {
      */
     private void setWordTiles(BoardPlaceEvent placeEvent) throws BoardValidator.InvalidPlacementException {
         // Unpack relevant event info
-        Point wordOrigin = placeEvent.wordOrigin();
-        Direction placementDirection = placeEvent.direction();
-//        System.out.println("Dir in set: "+placementDirection);
-        List<Tile> word = placeEvent.placedTiles();
-//        System.out.println(word);
+        Point wordOrigin = placeEvent.getWordOrigin();
+        Direction placementDirection = placeEvent.getDirection();
+        List<Tile> word = placeEvent.getPlacedTiles();
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
         // Place tiles in the board, skipping tiles that are already placed.
@@ -97,12 +115,10 @@ public class Board {
             if (placementDirection == Board.Direction.RIGHT) {
                 // Increment Col (x), until no overlap
                 while (overlapping) {
-                    //System.out.println("Overladps: "+ overlaps);
                     placementLocation.setLocation((wordOrigin.x + (i + overlaps)), wordOrigin.y);
                     if (isTaken(placementLocation)) overlaps += 1;
                     else overlapping = false;
                 }
-                //System.out.println("Done overlapping");
             } else {
                 // Decrement row (y), until no overlap
                 while (overlapping) {
@@ -111,10 +127,7 @@ public class Board {
                     else overlapping = false;
                 }
             }
-            //System.out.println(word.get(i).letter());
             placeTile(placementLocation, word.get(i).letter());
-            //System.out.println("Placed letter:" + word.get(i).letter());
-            //System.out.println(this);
         }
     }
 
@@ -125,7 +138,7 @@ public class Board {
      * @param letter the letter to place at the board location.
      */
     private void placeTile(Point p, Letter letter) {
-        boardTileTable.setLetter(p, letter);
+        boardGrid.get(p).setLetter(letter);
     }
 
 
@@ -135,7 +148,7 @@ public class Board {
      * @return True if a tile is placed at that location, false otherwise.
      */
     boolean isTaken(Point p) {
-        return boardTileTable.isTaken(p);
+        return boardGrid.get(p).isTaken();
     }
 
     /**
@@ -144,7 +157,7 @@ public class Board {
      */
     // Package private: only accessible by model classes (for the validator)
     boolean isBoardEmpty(){
-        return currentWords.size() == 0;
+        return getCurrentWords().size() == 0;
     }
 
     /**
@@ -154,113 +167,52 @@ public class Board {
      * @return True if the given board tile is the board's start tile, false otherwise.
      */
     boolean isStartTile(Point p) {
-        return boardTileTable.getType(p) == BoardTile.Type.START;
+        return boardGrid.get(p).getType() == BoardTile.Type.START;
     }
 
     /**
-     * Creates a word starting from given coordinates
-     * @author Timothy Kennedy
+     * Finds all words currently in the board
      *
-     * @param aBoard the state of the board to check
-     * @param p the point where the word starts from
-     * @param direction whether the direction of the word is right-to-left
-     * @return the word starting at the given coordinates
+     * @return the list of words in the board
      */
-    // TODO: wouldn't it be easier to just scan each row/column instead? Making sets of 2+ letter words?
-    private PlacedWord getWordStartingFrom(Board aBoard, Point p, Direction direction){
-        //initialize a string with the first character of the word
-        ArrayList<BoardTile> wordTiles = new ArrayList<>();
-        wordTiles.add(aBoard.boardTileTable.getTile(p));
-        int index = 1;
+    // TODO: could use more cohesion probably
+     private List<BoardWord> getCurrentWords(){
+         List<BoardWord> curWords = new ArrayList<>();
 
-        // Going in the direction of the word, add each character to the word
-        if(direction == Direction.RIGHT){
-            while (p.x+index < BOARD_SIZE && aBoard.boardTileTable.isTaken(new Point(p.x + index, p.y))){
-                wordTiles.add(aBoard.boardTileTable.getTile(new Point(p.x + index, p.y)));
-                index+=1;
-            }
-        }else{
-            while (p.y+index < BOARD_SIZE && aBoard.boardTileTable.isTaken(new Point(p.x , p.y + index))){
-                wordTiles.add(aBoard.boardTileTable.getTile(new Point(p.x, p.y + index)));
-                index+=1;
-            }
-        }
+         boolean readingColumns = true; // Choose to read columns first (for condition clarity)
+         List<BoardTile> takenTiles = new ArrayList<>();
 
-        return new PlacedWord(wordTiles);
-    }
+         // Iterate through two ways of reading words in the board
+         for(int readDir = 0; readDir<2; readDir++){
+             // Iterate through entire board
+             for(int i = 0; i < BOARD_SIZE; i++){
+                 // Iterate through entire col/row (depending on direction)
+                 for(int j = 0; j<BOARD_SIZE; j++){
+                     // Check vertical words on first pass, horizontal on second
+                     Point p = readingColumns ? new Point(i,j) : new Point(j, i);
 
-    /**
-     * Finds all words after a word placement
-     * @author Timothy Kennedy
-     *
-     * @param placeEvent The event containing the placement details
-     * @return the list of words originating from the word placement
-     */
-    // FIXME: Is this function placing words down? it shouldn't. it seems to be lacking cohesion
-    private List<PlacedWord> allBoardWords(BoardPlaceEvent placeEvent) throws BoardValidator.InvalidPlacementException{
-        // FIXME: Big function, cohesion could be improved (using helper methods)
+                     if(isTaken(p)) {
+                         takenTiles.add(getBoardTile(p));
+                     } else {
+                         if(takenTiles.size() >= MIN_WORD_SIZE){
+                             // Creates new BoardWord with a copied (important!) list
+                             curWords.add(new BoardWord(new ArrayList<>(takenTiles)));
+                         }
+                         // Clear taken tiles to check for another word in col/row
+                         takenTiles.clear();
+                     }
+                 }
+             }
+             // Second loop, read rows instead
+             readingColumns = false;
+         }
 
-        //make a copy of the board (why?)
-        Board boardCopy = this.copy();
-        Set<BoardTile> newTakenTiles = new HashSet<>();
-
-        // Place word on the copy of the board
-        boardCopy.setWordTiles(placeEvent);
-
-        List<PlacedWord> words = new ArrayList<>();
-        // Iterate through each col, and row to find possible words
-        // TODO: Refactor code duplication here
-        for(int x = 0; x < BOARD_SIZE; x++){
-            List<BoardTile> colWordBuilder = new ArrayList<>();
-            for(int y = 0; y < BOARD_SIZE; y++){
-                Point p = new Point(x,y);
-                if (boardCopy.isTaken(p)){
-                    colWordBuilder.add(boardCopy.getBoardTile(p));
-                } else { // Hit an empty tile, check if builder detected a word
-                    // Only accept words len 2 or more
-                    if (colWordBuilder.size() == 1) colWordBuilder.remove(0);
-                    if (colWordBuilder.size() >= 2){ // Store word in words, and reset builder
-                        words.add(new PlacedWord(colWordBuilder));
-//                        System.out.println("New row word: "+(words.get(words.size()-1)));
-                        colWordBuilder.clear();
-                    }
-                }
-            }
-        }
-        // Same thing but for rows (directions are flipped I think)
-        for(int y = 0; y < BOARD_SIZE; y++){
-            List<BoardTile> rowWordBuilder = new ArrayList<>();
-            for(int x = 0; x < BOARD_SIZE; x++){
-                Point p = new Point(x,y);
-                if (boardCopy.isTaken(p)){
-                    rowWordBuilder.add(boardCopy.getBoardTile(p));
-                } else { // Hit an empty tile, check if builder detected a word
-                    // Only accept words len 2 or more
-                    if (rowWordBuilder.size() == 1) rowWordBuilder.remove(0);
-                    if (rowWordBuilder.size() >= 2){ // Store word in words, and reset builder
-                        words.add(new PlacedWord(rowWordBuilder));
-//                        System.out.println("New col word: "+(words.get(words.size()-1)));
-                        rowWordBuilder.clear();
-                    }
-                }
-            }
-        }
-
-        return words;
-    }
-
-    /**
-     * Returns a copy of the board, copying over an equal (but different) internal boardTileTable.
-     * @return A copy of this board.
-     */
-    private Board copy() {
-        Board copiedBoard = new Board(false);
-        copiedBoard.boardTileTable = this.boardTileTable.copy();
-        return copiedBoard;
+         return curWords;
     }
 
     /**
      * Calculates the score of a given word placement, based off the value of the letters and tile multipliers
+     * Precondition: Word has been placed for this turn
      *
      * @author Vladimir Kovacina
      * @author Timothy Kennedy
@@ -268,15 +220,15 @@ public class Board {
      *
      * @return int The score of the word
      */
-    private int getTurnScore(BoardPlaceEvent placeEvent){
+    private int getTurnScore(List<BoardWord> newWords){
         int turnScore = 0;
 
         // TODO: Parameter should probably be new words, not concise atm
-        for (PlacedWord newWord:getNewWords(placeEvent)) {
+        for (BoardWord newWord:newWords) {
             int wordScore = 0;
             int multiplier = 1;
 
-            for (BoardTile tile:newWord.getTiles()) {
+            for (BoardTile tile:newWord.tiles()) {
 //                System.out.println(tile);
                     switch (tile.getType()){
                         case X2LETTER:
@@ -302,15 +254,11 @@ public class Board {
             turnScore += wordScore*multiplier;
         }
 
-        // Set placed tiles to blank type (to disable bonus types on subsequent turns)
-        Direction dir = placeEvent.direction();
-        int row = placeEvent.wordOrigin().y;
-        int col = placeEvent.wordOrigin().x;
-        for(int index = 0; index < placeEvent.placedTiles().size(); index++){
-            boardTileTable.setType(new Point(
-                    col+(dir == Direction.RIGHT ? index : 0),
-                    row+(dir == Direction.DOWN ? index : 0)),
-                    BoardTile.Type.BLANK);
+        // Set new word tiles to blank type (to disable bonus types on subsequent turns)
+        for(BoardWord newWord: newWords){
+            for (BoardTile tile:newWord.tiles()) {
+                tile.setType(BoardTile.Type.BLANK);
+            }
         }
 
         return turnScore;
@@ -319,22 +267,20 @@ public class Board {
     /**
      * Gets a list of all new words created by a word placement
      *
-     * @param placementEvent Event containing relevant information on placement
      * @return a list of all new words
      */
-    List<PlacedWord> getNewWords(BoardPlaceEvent placementEvent){
+    List<BoardWord> getNewWords(List<BoardWord> currentWords){
         // All words in the board - words that were in the board last turn.
-        List<PlacedWord> newWords = new ArrayList<>(allBoardWords(placementEvent));
-        for (PlacedWord aWord:currentWords) {
-            newWords.remove(aWord);
+        List<BoardWord> newWords = new ArrayList<>(currentWords);
+        for (BoardWord word:lastPlacedWords) {
+            newWords.remove(word);
         }
-//        System.out.println("Final new words "+newWords);
+
         return newWords;
     }
 
-
     public BoardTile getBoardTile(Point p){
-        return boardTileTable.getTile(p);
+        return boardGrid.get(p);
     }
 
     /**
@@ -344,6 +290,6 @@ public class Board {
      */
     @Override
     public String toString() {
-        return boardTileTable.toString();
+        return boardGrid.toString();
     }
 }
