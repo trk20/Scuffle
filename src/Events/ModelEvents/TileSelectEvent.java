@@ -1,5 +1,6 @@
-package Events;
+package Events.ModelEvents;
 
+import Events.ModelEvents.HandChangeEvent;
 import Model.ScrabbleModel;
 import Model.Tile;
 
@@ -10,19 +11,17 @@ import Model.Tile;
  * @version NOV-9
  * @author Alex
  */
-public class TileSelectEvent extends HandChangeEvent{
+public class TileSelectEvent extends HandChangeEvent {
     private final Tile tile;
     private final boolean selected;
 
     /**
      * Constructs a TileSelectEvent object, and initialize its fields.
      *
-     * @param model     the model where the event originated
      * @param t         The tile reference in the model where the event occur
      * @param selected  true if the tile got selected, false if it got unselected.
      */
     public TileSelectEvent(ScrabbleModel model, Tile t, boolean selected) {
-        super(model);
         this.tile = t;
         this.selected = selected;
     }

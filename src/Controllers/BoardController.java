@@ -1,6 +1,6 @@
 package Controllers;
-import Events.BoardClickEvent;
-import Events.ControllerEvent;
+import Events.ControllerEvents.BoardClickEvent;
+import Events.ControllerEvents.ControllerEvent;
 import Events.Listeners.SControllerListener;
 import Model.ScrabbleModel;
 
@@ -21,6 +21,7 @@ public class BoardController implements SController, ActionListener {
         this.origin = origin;
     }
 
+    @Deprecated
     public Point getOrigin(){
         return origin;
     }
@@ -46,6 +47,6 @@ public class BoardController implements SController, ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        notifyControllerListeners(new BoardClickEvent(this));
+        notifyControllerListeners(new BoardClickEvent(origin));
     }
 }

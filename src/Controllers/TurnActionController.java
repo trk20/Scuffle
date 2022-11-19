@@ -1,5 +1,5 @@
 package Controllers;
-import Events.*;
+import Events.ControllerEvents.*;
 import Events.Listeners.BoardClickListener;
 import Events.Listeners.SControllerListener;
 import Model.Board;
@@ -23,7 +23,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     public enum ActionState {
         PLACE (null), // Special case, event made outside
         // FIXME: I'm realising, this might be the odd one out, might not need to make an event field
-        DISCARD (new DiscardClickEvent(new TurnActionController())),
+        DISCARD (new DiscardClickEvent()),
         FLIP_DIR(null),
         SKIP (null); // TODO (discard should work well enough for M2)
 
@@ -98,13 +98,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         int dirInt = dir.ordinal();
         Board.Direction[] allDirections = Board.Direction.values();
         dir = allDirections[(dirInt+1)%(allDirections.length)];
-        notifyControllerListeners(new DirectionChangeEvent(this));
-    }
-
-    /** Get board direction (for direction change events) */
-    public Board.Direction getDir() {
-//        System.out.println(dir.toString());
-        return dir;
+        notifyControllerListeners(new C_DirectionChangeEvent(dir));
     }
 
     /**
@@ -118,7 +112,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     public void handleBoardClickEvent(BoardClickEvent e) {
         if(placing) {
             placing = false; // Disable place mode before next turn
-            notifyControllerListeners(new PlaceClickEvent(this, dir, e.getOrigin()));
+            notifyControllerListeners(new PlaceClickEvent(dir, e.getOrigin()));
         }
     }
         
@@ -130,6 +124,8 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     @Override
     public void addControllerListener(SControllerListener l) {
         listeners.add(l);
+        // Make sure it starts with initial direction value
+        l.handleControllerEvent(new C_DirectionChangeEvent(dir));
     }
 
     /**

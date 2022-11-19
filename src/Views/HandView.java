@@ -1,11 +1,10 @@
 package Views;
 
-import Events.HandChangeEvent;
+import Events.ModelEvents.HandChangeEvent;
 import Events.Listeners.HandChangeListener;
-import Events.NewPlayerHandEvent;
-import Events.TileSelectEvent;
+import Events.ModelEvents.NewPlayerEvent;
+import Events.ModelEvents.TileSelectEvent;
 import Model.Hand;
-import Model.Letter;
 import Model.ScrabbleModel;
 import Model.Tile;
 
@@ -141,6 +140,6 @@ public class HandView extends JPanel implements HandChangeListener {
     public void handleHandChangeEvent(HandChangeEvent e) {
         // Handle based on event type
         if(e instanceof TileSelectEvent sel) updateSelectionRow(sel);
-        if(e instanceof NewPlayerHandEvent newHand) updateNewHand(newHand.getHand());
+        if(e instanceof NewPlayerEvent newPlayer) updateNewHand(newPlayer.getPlayer().getHand());
     }
 }

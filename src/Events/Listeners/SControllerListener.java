@@ -1,6 +1,6 @@
 package Events.Listeners;
 
-import Events.ControllerEvent;
+import Events.ControllerEvents.ControllerEvent;
 
 /**
  * Interface to label Scrabble Controller Listeners (SControllerListener).
