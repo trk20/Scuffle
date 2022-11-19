@@ -1,6 +1,6 @@
 package Tests;
 
-import Events.BoardPlaceEvent;
+import Events.ModelEvents.BoardPlaceEvent;
 import Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,14 +86,14 @@ class BoardValidatorTest {
     void isValidPlacementOutsideBoardTest() {
 
         //Placed outside board vertically
-        BoardPlaceEvent outsideBoardV = new BoardPlaceEvent(model,validWord, outside, Board.Direction.DOWN);
+        BoardPlaceEvent outsideBoardV = new BoardPlaceEvent(validWord, outside, Board.Direction.DOWN);
         assertFalse(validator.isValidPlacement(outsideBoardV));
         //Placed outside board horizontally
-        BoardPlaceEvent outsideBoardH = new BoardPlaceEvent(model,validWord, outside, Board.Direction.RIGHT);
+        BoardPlaceEvent outsideBoardH = new BoardPlaceEvent(validWord, outside, Board.Direction.RIGHT);
         assertFalse(validator.isValidPlacement(outsideBoardH));
 
         //Placed inside board but goes out horizontally
-        BoardPlaceEvent edgeBoardH = new BoardPlaceEvent(model,validWord, onEdge, Board.Direction.RIGHT);
+        BoardPlaceEvent edgeBoardH = new BoardPlaceEvent(validWord, onEdge, Board.Direction.RIGHT);
         assertFalse(validator.isValidPlacement(edgeBoardH));
     }
 
@@ -104,28 +104,28 @@ class BoardValidatorTest {
     @Test
     void isValidPlacementStartTileBoardTest() {
         //Placing invalid word at start
-        BoardPlaceEvent invalidStart = new BoardPlaceEvent(model,invalidWord, start, Board.Direction.RIGHT);
+        BoardPlaceEvent invalidStart = new BoardPlaceEvent(invalidWord, start, Board.Direction.RIGHT);
         assertFalse(validator.isValidPlacement(invalidStart));
 
         //Placing valid word at start tile
-        BoardPlaceEvent validStart1 = new BoardPlaceEvent(model,validWord, start, Board.Direction.RIGHT);
+        BoardPlaceEvent validStart1 = new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT);
         assertTrue(validator.isValidPlacement(validStart1));
 
         //Placing valid word but not at start tile initially (horizontally)
-        BoardPlaceEvent invalidStart2 = new BoardPlaceEvent(model,validWord, otherPoint, Board.Direction.RIGHT);
+        BoardPlaceEvent invalidStart2 = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.RIGHT);
         assertFalse(validator.isValidPlacement(invalidStart2));
 
         //Placing valid word but not at start tile initially (vertically)
-        BoardPlaceEvent invalidStart3 = new BoardPlaceEvent(model,validWord, otherPoint, Board.Direction.DOWN);
+        BoardPlaceEvent invalidStart3 = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
         assertFalse(validator.isValidPlacement(invalidStart3));
 
 
         //Placing valid word across (horizontal) start tile (so that is doesn't start on it but still hits it)
-        BoardPlaceEvent validStart2 = new BoardPlaceEvent(model,validWord, leftStart, Board.Direction.RIGHT);
+        BoardPlaceEvent validStart2 = new BoardPlaceEvent(validWord, leftStart, Board.Direction.RIGHT);
         assertTrue(validator.isValidPlacement(validStart2));
 
         //Placing valid word across (vertical) start tile (so that is doesn't start on it but still hits it)
-        BoardPlaceEvent validStart3 = new BoardPlaceEvent(model,validWord, upStart, Board.Direction.DOWN);
+        BoardPlaceEvent validStart3 = new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN);
         assertTrue(validator.isValidPlacement(validStart3));
     }
 
@@ -137,8 +137,8 @@ class BoardValidatorTest {
     @Test
     void isValidPlacement2WordsHorizThenVertTest() {
         //Place Hello (horizontally) at start and place Hello across it (vertically) to see if adjacent words work
-        board.placeWord(new BoardPlaceEvent(model,validWord, start, Board.Direction.RIGHT));
-        BoardPlaceEvent acrossVert = new BoardPlaceEvent(model,wordToPlace, acrossWord1, Board.Direction.DOWN);
+        board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT));
+        BoardPlaceEvent acrossVert = new BoardPlaceEvent(wordToPlace, acrossWord1, Board.Direction.DOWN);
         assertTrue(validator.isValidPlacement(acrossVert));
 
     }
@@ -150,8 +150,8 @@ class BoardValidatorTest {
     @Test
     void isValidPlacement2WordsVertThenHorizTest() {
         //Place Hello (vertically) at start and place Hello across it (horizontally) to see if adjacent words work
-        board.placeWord(new BoardPlaceEvent(model,validWord, upStart, Board.Direction.DOWN));
-        BoardPlaceEvent acrossHoriz = new BoardPlaceEvent(model,wordToPlace, acrossWord2, Board.Direction.RIGHT);
+        board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN));
+        BoardPlaceEvent acrossHoriz = new BoardPlaceEvent(wordToPlace, acrossWord2, Board.Direction.RIGHT);
         assertTrue(validator.isValidPlacement(acrossHoriz));
     }
 
@@ -164,13 +164,13 @@ class BoardValidatorTest {
     void isValidPlacement2WordsNotAdjacentTest() {
         //Place Hello (horizontally) at start and place Hello again but not adjacent to the first word
 
-        board.placeWord(new BoardPlaceEvent(model,validWord, start, Board.Direction.RIGHT));//place validStart1
-        BoardPlaceEvent invalidPlace = new BoardPlaceEvent(model,validWord, otherPoint, Board.Direction.RIGHT);
+        board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT));//place validStart1
+        BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.RIGHT);
         assertFalse(validator.isValidPlacement(invalidPlace));
 
         //Place Hello (vertically) at start and place Hello again but not adjacent to the first word
-        board.placeWord(new BoardPlaceEvent(model,validWord, upStart, Board.Direction.DOWN)); //place validStart3
-        invalidPlace = new BoardPlaceEvent(model,validWord, otherPoint, Board.Direction.DOWN);
+        board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN)); //place validStart3
+        invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
         assertFalse(validator.isValidPlacement(invalidPlace));
 
     }
@@ -182,8 +182,8 @@ class BoardValidatorTest {
     @Test
     void isValidPlacementOverlapTest() {
         //Place Hello twice in the same place (on top of each other)
-        board.placeWord(new BoardPlaceEvent(model,validWord, upStart, Board.Direction.DOWN));
-        BoardPlaceEvent invalidPlace = new BoardPlaceEvent(model,validWord, upStart, Board.Direction.DOWN);
+        board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN));
+        BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN);
         assertFalse(validator.isValidPlacement(invalidPlace));
     }
 
@@ -196,15 +196,15 @@ class BoardValidatorTest {
         //Place Hello twice (once horizontally and once vertically) then place it
         // across again but create invalid words this time
 
-        board.placeWord(new BoardPlaceEvent(model,validWord, start, Board.Direction.RIGHT)); //place validStart1
-        board.placeWord(new BoardPlaceEvent(model,wordToPlace, acrossWord1, Board.Direction.DOWN)); //place acrossVert
+        board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT)); //place validStart1
+        board.placeWord(new BoardPlaceEvent(wordToPlace, acrossWord1, Board.Direction.DOWN)); //place acrossVert
         List<Tile> wordToPlace2 = new ArrayList<>();
         wordToPlace2.add(new Tile(Letter.H));
         wordToPlace2.add(new Tile(Letter.E));
         wordToPlace2.add(new Tile(Letter.L));
         wordToPlace2.add(new Tile(Letter.O));
         Point newPoint = new Point(6,8);
-        BoardPlaceEvent invalidPlace = new BoardPlaceEvent(model, wordToPlace2, newPoint, Board.Direction.RIGHT);
+        BoardPlaceEvent invalidPlace = new BoardPlaceEvent( wordToPlace2, newPoint, Board.Direction.RIGHT);
         assertFalse(validator.isValidPlacement(invalidPlace));
     }
 
@@ -217,14 +217,14 @@ class BoardValidatorTest {
         //Place Hello twice (once horizontally and once vertically) then place it
         // across again but create valid words this time
 
-        board.placeWord(new BoardPlaceEvent(model,validWord, start, Board.Direction.RIGHT)); //place validStart1 word
+        board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT)); //place validStart1 word
         List<Tile> wordToPlace2 = new ArrayList<>();
         wordToPlace2.add(new Tile(Letter.E));
         wordToPlace2.add(new Tile(Letter.L));
         wordToPlace2.add(new Tile(Letter.L));
         wordToPlace2.add(new Tile(Letter.O));
-        board.placeWord(new BoardPlaceEvent(model,wordToPlace2, start, Board.Direction.DOWN));
-        BoardPlaceEvent validPlace = new BoardPlaceEvent(model,validWord2, newPoint, Board.Direction.DOWN);
+        board.placeWord(new BoardPlaceEvent(wordToPlace2, start, Board.Direction.DOWN));
+        BoardPlaceEvent validPlace = new BoardPlaceEvent(validWord2, newPoint, Board.Direction.DOWN);
         assertTrue(validator.isValidPlacement(validPlace));
 
     }
