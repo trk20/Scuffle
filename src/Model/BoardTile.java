@@ -80,7 +80,6 @@ public class BoardTile {
      */
     public Letter getLetter(){
         return letter;
-        //might need error checking here
     }
 
     /**
@@ -111,6 +110,7 @@ public class BoardTile {
         copy.setLetter(this.letter);
         return copy;
     }
+
     @Override
     public String toString() {
         if(this.isTaken()){

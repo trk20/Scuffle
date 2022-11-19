@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the Board Validator Class, more specifcally the isValidPlacement method
@@ -103,7 +102,9 @@ class BoardValidatorTest {
     void isValidPlacementStartTileBoardTest() {
         //Placing invalid word at start
         BoardPlaceEvent invalidStart = new BoardPlaceEvent(invalidWord, start, Board.Direction.RIGHT);
-        assertFalse(validator.isValidLocation(invalidStart));
+        // Valid location... but invalid words
+        assertTrue(validator.isValidLocation(invalidStart));
+        assertEquals(-1, board.placeWord(invalidStart));
 
         //Placing valid word at start tile
         BoardPlaceEvent validStart1 = new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT);
@@ -182,7 +183,9 @@ class BoardValidatorTest {
         //Place Hello twice in the same place (on top of each other)
         board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN));
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN);
-        assertFalse(validator.isValidLocation(invalidPlace));
+        // Valid location... but invalid words
+        assertTrue(validator.isValidLocation(invalidPlace));
+        assertEquals(-1, board.placeWord(invalidPlace));
     }
 
     /**
@@ -203,7 +206,9 @@ class BoardValidatorTest {
         wordToPlace2.add(new Tile(Letter.O));
         Point newPoint = new Point(6,8);
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent( wordToPlace2, newPoint, Board.Direction.RIGHT);
-        assertFalse(validator.isValidLocation(invalidPlace));
+        // Valid location... but invalid words
+        assertTrue(validator.isValidLocation(invalidPlace));
+        assertEquals(-1, board.placeWord(invalidPlace));
     }
 
     /**

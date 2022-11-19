@@ -2,15 +2,15 @@ package Model;
 
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.List;
 
-import static Model.ScrabbleModel.BOARD_SIZE;
+import static Model.Board.START_TILE_POINT;
 
 /**
  * Handles tile placement validation for Board models,
  * Does not indicate what caused an invalid placement, could be added in future versions.
- * Delegates some tasks to board, could possibly loosen coupling in the future.
+ * Should not be able to modify the board!
  *
  * @author Alex
  * @version NOV-18
@@ -43,8 +43,7 @@ public class BoardValidator {
      * @return True if the word passes all the checks, false otherwise.
      */
     public boolean isValidLocation(BoardPlaceEvent placementEvent) {
-        // Attempt to go from the least intensive checks, to most intensive
-        if(!areNewTilesAreInBoard(placementEvent)) return false;
+        if(!areNewTilesInBoard(placementEvent)) return false;
 
         if(isBoardEmpty()){
             return isPlacedOnStart(placementEvent);
@@ -83,13 +82,22 @@ public class BoardValidator {
      * @param point The point coordinates of a possible new tile in the board.
      * @return True if the point is adjacent to an existing tile
      */
-    private boolean isAdjacentToTile(Point point) {
+    private boolean isAdjacentToTile(Point point){
         if(isTaken(point)) return true;  // If overlapping, then adjacent (transitive relation)
+
         // Translate in the four cardinal directions to check for a tile adjacent to the given point:
-        if(isTaken(new Point(point.x+1, point.y))) return true;
-        if(isTaken(new Point(point.x-1, point.y))) return true;
-        if(isTaken(new Point(point.x, point.y+1))) return true;
-        if(isTaken(new Point(point.x, point.y-1))) return true;
+        // Ignoring exceptions because placements outside the board simply indicate a non-adjacent tile
+        try{ if(isTaken(new Point(point.x+1, point.y))) return true; }
+        catch (IndexOutOfBoundsException ignored) {}
+
+        try{ if(isTaken(new Point(point.x-1, point.y))) return true; }
+        catch (IndexOutOfBoundsException ignored) {}
+
+        try{ if(isTaken(new Point(point.x, point.y+1))) return true; }
+        catch (IndexOutOfBoundsException ignored) {}
+
+        try{ if(isTaken(new Point(point.x, point.y-1))) return true; }
+        catch (IndexOutOfBoundsException ignored) {}
         // No tests passed, must not be adjacent.
         return false;
     }
@@ -100,7 +108,7 @@ public class BoardValidator {
      * @param placementEvent  The event representing a placement attempt
      * @return True if all placed tiles are within the board's limit, false if any are not.
      */
-    private boolean areNewTilesAreInBoard(BoardPlaceEvent placementEvent) {
+    private boolean areNewTilesInBoard(BoardPlaceEvent placementEvent) {
         // Unpack relevant event info
         Point wordOrigin = placementEvent.wordOrigin();
         Board.Direction placementDirection = placementEvent.direction();
@@ -130,7 +138,7 @@ public class BoardValidator {
                 }
             }
         }
-        catch(InvalidPlacementException e){
+        catch(IndexOutOfBoundsException e){
             return false;
         }
         // No tile was outside the board
@@ -152,9 +160,9 @@ public class BoardValidator {
         // Check if any tile is on start tile, using given info
         for(int i = 0; i < numTiles; i++){
             if(placementDirection == Board.Direction.RIGHT){ // Increment Col (Right from origin)
-                if(isStartTile(new Point((int) (wordOrigin.getX()+i), (int) wordOrigin.getY()))) return true;
+                if(START_TILE_POINT.equals(new Point(wordOrigin.x+i, wordOrigin.y))) return true;
             } else { // Decrement row (y)
-                if(isStartTile(new Point((int) wordOrigin.getX(), (int) (wordOrigin.getY()+i)))) return true;
+                if(START_TILE_POINT.equals(new Point(wordOrigin.x, wordOrigin.y+i))) return true;
             }
         }
         // No tile was on the start tile
@@ -162,36 +170,13 @@ public class BoardValidator {
     }
 
     /**
-     * Check if a given point is outside the board.
-     *
-     * @param p The point coordinates of a placement in the board.
-     * @return True if the point is outside the bounds of the board, false otherwise.
-     */
-    private boolean isOutsideBoard(Point p) {
-        return p.getX() >= BOARD_SIZE || p.getY() >= BOARD_SIZE;
-    }
-
-    /**
      * Asks the validator's board if
      * a coordinate in the validator's board is taken (x = col, y = row), starting top left.
      * @param p A point coordinate in the board to check
      * @return True if a tile is placed at that location, false otherwise.
-     * @throws InvalidPlacementException if the checked placement is outside the board.
      */
-    private boolean isTaken(Point p) throws InvalidPlacementException {
-        if (isOutsideBoard(p)) throw new InvalidPlacementException("Placement is outside board");
+    private boolean isTaken(Point p){
         return boardToValidate.isTaken(p);
-    }
-
-    /**
-     * Asks the validator's board if
-     * the given point on the board is a start tile
-     *
-     * @param p the coordinates of the tile to check for the "start" type
-     * @return True if the given board tile is the board's start tile, false otherwise.
-     */
-    private boolean isStartTile(Point p) {
-        return boardToValidate.isStartTile(p);
     }
 
     /**
@@ -209,15 +194,5 @@ public class BoardValidator {
                 return true;
             }
         return false; // No invalid words detected
-    }
-
-    // TODO: Make a hierarchy of these in seperate classes later
-
-    /**
-     * Exception thrown during invalid placements
-     */
-    public static class InvalidPlacementException extends RuntimeException {
-        public InvalidPlacementException(String placement_is_outside_board) {
-        }
     }
 }

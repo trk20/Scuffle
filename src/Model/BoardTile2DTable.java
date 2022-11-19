@@ -28,7 +28,7 @@ public class BoardTile2DTable {
     /**
      * BoardTile2DTable constructor, initializes tile2DArray with default tiles (blank).
      */
-    BoardTile2DTable(){
+    public BoardTile2DTable(){
         tile2DArray = new BoardTile[BOARD_SIZE][BOARD_SIZE];
         // Fill tile array
         for (int col = 0; col< BOARD_SIZE; col ++){

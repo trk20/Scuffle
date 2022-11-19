@@ -31,6 +31,7 @@ public class Board {
 
     }
     public static int MIN_WORD_SIZE = 2;
+    public static final Point START_TILE_POINT = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
     private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
     /** Takes care of validating the board */
@@ -48,8 +49,7 @@ public class Board {
         // Initialize tiles in board.
         initializeBlankGrid();
         if(premiumBoard) setPremiumTiles();
-        Point middleOfBoard = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
-        boardGrid.get(middleOfBoard).setType(BoardTile.Type.START);
+        boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START);
     }
 
     /**
@@ -100,6 +100,23 @@ public class Board {
     @Override
     public String toString() {
         return boardGrid.toString();
+    }
+
+    /**
+     * Checks if a coordinate in the board is taken (x = col, y = row), starting top left.
+     * @param p A point coordinate in the board to check
+     * @return True if a tile is placed at that location, false otherwise.
+     */
+    boolean isTaken(Point p) throws IndexOutOfBoundsException{
+        return boardGrid.get(p).isTaken();
+    }
+
+    /**
+     * Checks if no words have been placed on the board yet.
+     * @return True if the board is empty, false otherwise.
+     */
+    boolean isBoardEmpty(){
+        return ! boardGrid.get(START_TILE_POINT).isTaken();
     }
 
     /**
@@ -163,15 +180,71 @@ public class Board {
     }
 
     /**
-     * Checks if a coordinate in the board is taken (x = col, y = row), starting top left.
-     * @param p A point coordinate in the board to check
-     * @return True if a tile is placed at that location, false otherwise.
+     * Calculates the score of a given word placement, based off the value of the letters and tile multipliers
+     * Precondition: Word has been placed for this turn
+     *
+     * @author Vladimir Kovacina
+     * @author Timothy Kennedy
+     * @author Alex
+     *
+     * @return int The score of the word
      */
-    boolean isTaken(Point p) {
-        return boardGrid.get(p).isTaken();
+    private int getPlacedScore(List<BoardWord> newWords){
+        int turnScore = 0;
+
+        // Sum the scores of each new word
+        for (BoardWord newWord:newWords) {
+            int wordSum = 0;
+            int wordMulti = 1;
+
+            // Check the scoring values of each tile
+            for (BoardTile tile:newWord.tiles()) {
+                wordSum += getTileScore(tile);
+                wordMulti *= getTileMulti(tile);
+            }
+
+            turnScore += wordSum*wordMulti;
+        }
+
+        // Set new word tiles to blank type (to disable bonus types on subsequent turns)
+        for(BoardWord newWord: newWords){
+            for (BoardTile tile:newWord.tiles()) {
+                tile.setType(BoardTile.Type.BLANK);
+            }
+        }
+
+        return turnScore;
     }
 
-    // TODO: Check style past this line
+    /**
+     * Calculates the word multiplier of a given tile placement,
+     * based on premium word multipliers at that location.
+     *
+     * @param tile The board tile to evaluate the score of
+     * @return The score value of that tile
+     */
+    private int getTileMulti(BoardTile tile) {
+        return switch (tile.getType()) {
+            case START, X2WORD -> 2;
+            case X3WORD -> 3;
+            default -> 1;
+        };
+    }
+
+    /**
+     * Calculates the score of a given tile placement, based on
+     * base letter score and premium letter score.
+     *
+     * @param tile The board tile to evaluate the score of
+     * @return The score value of that tile
+     */
+    private int getTileScore(BoardTile tile) {
+        return switch (tile.getType()) {
+            case X2LETTER -> tile.getLetter().getScore() * 2;
+            case X3LETTER -> tile.getLetter().getScore() * 3;
+            default -> tile.getLetter().getScore();
+        };
+    }
 
     /**
      * Places tiles in the board, skipping over tiles that are already placed.
@@ -179,7 +252,8 @@ public class Board {
      *
      * @param placeEvent The event containing the placement details
      */
-    private void setWordTiles(BoardPlaceEvent placeEvent) throws BoardValidator.InvalidPlacementException {
+    // TODO: could use more cohesion probably
+    private void setWordTiles(BoardPlaceEvent placeEvent) {
         // Unpack relevant event info
         Point wordOrigin = placeEvent.wordOrigin();
         Direction placementDirection = placeEvent.direction();
@@ -209,25 +283,6 @@ public class Board {
         }
     }
 
-
-    /**
-     * Checks if no words have been placed on the board yet.
-     * @return True if the board is empty, false otherwise.
-     */
-    // Package private: only accessible by model classes (for the validator)
-    boolean isBoardEmpty(){
-        return getCurrentWords().size() == 0;
-    }
-
-    /**
-     * Checks if the given board tile is the board's start tile
-     *
-     * @param p the coordinates of the tile to check for the "start" type
-     * @return True if the given board tile is the board's start tile, false otherwise.
-     */
-    boolean isStartTile(Point p) {
-        return boardGrid.get(p).getType() == BoardTile.Type.START;
-    }
 
     /**
      * Finds all words currently in the board
@@ -267,57 +322,5 @@ public class Board {
          }
 
          return curWords;
-    }
-
-    /**
-     * Calculates the score of a given word placement, based off the value of the letters and tile multipliers
-     * Precondition: Word has been placed for this turn
-     *
-     * @author Vladimir Kovacina
-     * @author Timothy Kennedy
-     * @author Alex
-     *
-     * @return int The score of the word
-     */
-    private int getPlacedScore(List<BoardWord> newWords){
-        int turnScore = 0;
-
-        for (BoardWord newWord:newWords) {
-            int wordScore = 0;
-            int multiplier = 1;
-
-            for (BoardTile tile:newWord.tiles()) {
-                    switch (tile.getType()){
-                        case X2LETTER:
-                            wordScore+=tile.getLetter().getScore()*2;
-                            break;
-                        case X3LETTER:
-                            wordScore+=tile.getLetter().getScore()*3;
-                            break;
-                        case START: // Start also acts as x2 word
-                        case X2WORD:
-                            wordScore+=tile.getLetter().getScore();
-                            multiplier*=2;
-                            break;
-                        case X3WORD:
-                            wordScore+=tile.getLetter().getScore();
-                            multiplier*=3;
-                            break;
-                        default:
-                            wordScore+=tile.getLetter().getScore();
-                            break;
-                    }
-            }
-            turnScore += wordScore*multiplier;
-        }
-
-        // Set new word tiles to blank type (to disable bonus types on subsequent turns)
-        for(BoardWord newWord: newWords){
-            for (BoardTile tile:newWord.tiles()) {
-                tile.setType(BoardTile.Type.BLANK);
-            }
-        }
-
-        return turnScore;
     }
 }

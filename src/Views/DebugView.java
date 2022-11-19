@@ -18,7 +18,7 @@ import java.util.List;
  * @version NOV-19
  */
 public class DebugView implements ModelListener, SControllerListener {
-    final public static boolean DEBUG_VIEW = true;
+    final public static boolean DEBUG_VIEW = false;
     public DebugView(ScrabbleModel model) {
         model.addModelListener(this);
     }

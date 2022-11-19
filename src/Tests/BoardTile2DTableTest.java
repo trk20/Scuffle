@@ -1,5 +1,8 @@
-package Model;
+package Tests;
 
+import Model.BoardTile;
+import Model.BoardTile2DTable;
+import Model.Letter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
