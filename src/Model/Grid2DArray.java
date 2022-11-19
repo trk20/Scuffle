@@ -33,7 +33,7 @@ public class Grid2DArray<T>{
      *
      * @param size The length of the "grid"
      */
-    Grid2DArray(int size){
+    public Grid2DArray(int size){
         this(size, new ArrayList<ArrayList<T>>(size));
         // Initialize grid array with empty inner lists
         for(int i = 0; i < size; i++)
@@ -42,7 +42,7 @@ public class Grid2DArray<T>{
 
     /**
      * Get a value at point p
-     * @param p
+     * @param p value coordinates in grid
      */
     public T get(Point p){
         if(isInArray(p))
@@ -55,7 +55,7 @@ public class Grid2DArray<T>{
 
     /**
      * Set a value at point p
-     * @param p
+     * @param p value coordinates in grid
      */
     public void set(Point p, T t){
         if(isInArray(p))
