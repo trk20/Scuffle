@@ -1,5 +1,6 @@
 package Views;
 
+import Model.Letter;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
@@ -96,6 +97,16 @@ public class OptionPaneHandler {
             }
         }
         return word;
+    }
+
+    /**
+     * Asks for what letter a blank should be
+     * @return the letter
+     */
+    public Letter askForBlanksLetter(){
+        Letter letter = null;
+        //ask the player what letter the blank tile should be
+        return letter;
     }
 
     /**

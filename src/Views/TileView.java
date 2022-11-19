@@ -65,7 +65,7 @@ public class TileView extends HandTileController {
         letterLabel.setHorizontalAlignment(JLabel.CENTER);
         labelHolder[1][1] = letterLabel; // Add text at grid center.
         // Score label
-        JLabel scoreLabel = new JLabel(getTile().letter().getScore()+"");
+        JLabel scoreLabel = new JLabel(getTile().getScore()+"");
         scoreLabel.setHorizontalAlignment(JLabel.CENTER);
         labelHolder[size-1][size-1] = scoreLabel; // Add score at bottom right corner.
 

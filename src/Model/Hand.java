@@ -128,7 +128,7 @@ public class Hand {
         for (Tile t: tiles) {
             Letter l = t.letter();
             // Format: "(A, 1) "
-            sb.append("(").append(l).append(", ").append(l.getScore()).append(") ");
+            sb.append("(").append(l).append(") ");
         }
         // Trim last trailing space (and return string)
         return sb.toString().trim();

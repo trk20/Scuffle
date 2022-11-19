@@ -30,6 +30,19 @@ class DrawPileTest {
     }
 
     /**
+     * Tests that the DrawPile contains all letters (including blanks)
+     *
+     * @author Timothy Kennedy
+     */
+    @Test
+    void containsAllLetters(){
+        DrawPile dp = model.getDrawPile();
+        for(Letter letter: Letter.values()) { //check if the DrawPile has an instance of each type of letter (INCL blank)
+            assertTrue(dp.getLetterPile().stream().anyMatch(tile -> letter.equals(tile.letter())));
+        }
+    }
+
+    /**
      * Tests the initial drawPile to make sure it is the correct size, takes into account the number of players
      * and their hand size, also checks that each tile is the correct type
      *
@@ -64,12 +77,11 @@ class DrawPileTest {
             newTiles.add(new Tile(Letter.A));
         }
         dp.addToPile(newTiles);
-        assertEquals(98-7+5, dp.getLetterPile().size());
+        assertEquals(100-7+5, dp.getLetterPile().size());
         //Try adding no tiles (empty list)
         newTiles = new ArrayList<>();
         dp.addToPile(newTiles);
-        assertEquals(96, dp.getLetterPile().size());
-
+        assertEquals(98, dp.getLetterPile().size());
     }
 
     /**
@@ -85,13 +97,12 @@ class DrawPileTest {
         DrawPile dp = model.getDrawPile();
         Tile drawn = dp.draw();
         assertTrue(drawn instanceof Tile);
-        assertEquals(98-7-1, dp.getLetterPile().size());
+        assertEquals(100-7-1, dp.getLetterPile().size());
 
         //Test Case where draw is drawing from empty pile
         List<Tile> empty = new ArrayList<>();
         dp.setLetterPile(empty);
         Tile drawn2 = dp.draw();
         assertEquals(drawn2, null);
-
     }
 }

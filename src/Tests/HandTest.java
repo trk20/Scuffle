@@ -50,35 +50,13 @@ class HandTest {
      * Tests the use of tiles to ensure the tiles are no longer present after being used
      */
     @Test
-    void useTiles() {
-        // FIXME: use tile does not return boolean anymore
-//        assertTrue(hand.useTiles(tiles));
-//        hand.setTiles(new ArrayList<>());
-//        assertFalse(hand.useTiles(tiles));
-    }
-
-    /**
-     * Tests the toString method
-     */
-    @Test
-    void testToString() {
-        assertEquals("Model.Hand: (A, 1) (B, 3) (C, 3) (D, 2) (E, 1) (F, 4) (G, 2) (H, 4) (I, 1) (J, 8)",hand.toString());
-        hand.setTiles(tiles.subList(1,2));
-
-        // Not sure what the issue is but we don't use toString except for debug...
-        assertEquals("Model.Hand: (B, 3) (C, 3)",hand.toString());
-    }
-
-    /**
-     * Tests that discarding tiles discards tiles
-     */
-    @Test
-    void discardSelected() {
-        hand.useTiles(tiles);
-        for(Tile tile:tiles){
-            // FIXME: this is not guaranteed to work,
-            //  its possible to draw your own tile back
-//            assertFalse(hand.getHeldTiles().contains(tile));
-        }
+    void useSelected() {
+        ArrayList<Tile> moreTiles = new ArrayList<>();
+        moreTiles.addAll(tiles);
+        moreTiles.add(new Tile(Letter.X));
+        moreTiles.add(new Tile(Letter.Z));
+        hand.setTiles(moreTiles); // set hand's tiles to have a known set of tiles plus X and Z
+        hand.useTiles(tiles); // use the known set of tiles, leaving X and Z as the first tiles in the hand
+        assertSame(hand.getHeldTiles().get(0).letter(), Letter.X);
     }
 }
