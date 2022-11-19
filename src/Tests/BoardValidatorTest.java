@@ -1,17 +1,17 @@
 package Tests;
 
-import Events.ModelEvents.BoardPlaceEvent;
 import Model.*;
+import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.*;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the Board Validator Class, more specifcally the isValidPlacement method

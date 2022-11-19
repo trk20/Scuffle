@@ -1,5 +1,6 @@
 package Model;
 
+import Controllers.SController;
 import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
@@ -7,8 +8,10 @@ import ScrabbleEvents.ModelEvents.*;
 import Views.ScrabbleFrame;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static Views.DebugView.DEBUG_VIEW;
 
 /**
  * Class that controls/models the overall scrabble game.
@@ -44,6 +47,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 
 
     private ScrabbleFrame mainFrame;
+    private List<SController> debugControllers;
 
     public ScrabbleModel(List<String> playerNames) {
         this.board = new Board(false);
@@ -52,6 +56,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
         this.players = new ArrayList<>();
+        this.debugControllers = new ArrayList<>();
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
         // Guard against null human players
@@ -287,5 +292,25 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     @Override
     public void handleModelEvent(ModelEvent e) {
 
+    }
+
+    /**
+     * If debug view is activated, will keep track of controllers in the program
+     * @param c new controller talking to the model
+     */
+    public void addDebugController(SController c) {
+        if(DEBUG_VIEW)
+            this.debugControllers.add(c);
+    }
+
+    /**
+     * If debug view is activated, will return the controllers in the program
+     * @return The list of controllers talking to the model
+     */
+    public List<SController> getDebugControllers() {
+        if(DEBUG_VIEW)
+            return this.debugControllers;
+        else
+            return null;
     }
 }

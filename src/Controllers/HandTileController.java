@@ -5,7 +5,7 @@ import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ControllerEvents.TileClickEvent;
 import Model.Tile;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;

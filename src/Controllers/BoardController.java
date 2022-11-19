@@ -1,8 +1,8 @@
 package Controllers;
+
 import ScrabbleEvents.ControllerEvents.C_BoardClickEvent;
 import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.Listeners.SControllerListener;
-import Model.ScrabbleModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,13 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardController implements SController, ActionListener {
-    private List<SControllerListener> listeners;
-    private Point origin;
-    private ScrabbleModel model;
+    private final List<SControllerListener> listeners;
+    private final Point origin;
 
-    public BoardController(ScrabbleModel model, Point origin) {
+    public BoardController(Point origin) {
         this.listeners = new ArrayList<>();
-        this.model = model;
         this.origin = origin;
     }
 

@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Views.DebugView.DEBUG_VIEW;
+
 /**
  * TurnActionController handles sending events resulting from clicking
  * buttons in the TurnActionView.
@@ -61,6 +63,8 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         for(BoardController c: board){
             c.addControllerListener(this);
         }
+        if(DEBUG_VIEW)
+            model.addDebugController(this);
     }
     
     /**
@@ -80,7 +84,8 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     @Override
     public void actionPerformed(ActionEvent e) {
         // Only enter placing mode if placed was clicked, otherwise exit it
-        placing = action == ActionState.PLACE;
+        if(!placing && action == ActionState.PLACE)
+            placing = true;
         if(action == ActionState.FLIP_DIR) flipDir();
         // Notify controller listeners (if action has an event)
         if(action.event != null) notifyControllerListeners(action.event);
@@ -107,6 +112,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     @Override
     public void handleBoardClickEvent(C_BoardClickEvent e) {
         if(placing) {
+            System.out.println("Handle Board Click");
             placing = false; // Disable place mode before next turn
             notifyControllerListeners(new PlaceClickEvent(dir, e.origin()));
         }

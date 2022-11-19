@@ -1,6 +1,6 @@
 package Model;
 
-import Events.ModelEvents.BoardPlaceEvent;
+import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -76,7 +76,6 @@ public class Board {
         // Ensure valid placement
         if(!validator.isValidPlacement(placeEvent)) return -1;
 
-
         // Place word on board
         Grid2DArray<BoardTile> savedBoardGrid = boardGrid.copy();
         setWordTiles(placeEvent);
@@ -103,9 +102,9 @@ public class Board {
      */
     private void setWordTiles(BoardPlaceEvent placeEvent) throws BoardValidator.InvalidPlacementException {
         // Unpack relevant event info
-        Point wordOrigin = placeEvent.getWordOrigin();
-        Direction placementDirection = placeEvent.getDirection();
-        List<Tile> word = placeEvent.getPlacedTiles();
+        Point wordOrigin = placeEvent.wordOrigin();
+        Direction placementDirection = placeEvent.direction();
+        List<Tile> word = placeEvent.placedTiles();
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
         // Place tiles in the board, skipping tiles that are already placed.

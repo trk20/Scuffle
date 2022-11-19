@@ -1,18 +1,18 @@
 package Tests;
 
 import Controllers.BoardController;
+import Model.*;
 import ScrabbleEvents.ControllerEvents.DiscardClickEvent;
 import ScrabbleEvents.ControllerEvents.PlaceClickEvent;
 import ScrabbleEvents.ControllerEvents.TileClickEvent;
-import Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class ScrabbleModelTest {
@@ -65,7 +65,7 @@ class ScrabbleModelTest {
      */
     @Test
     void handleEvents(){
-        BoardController boardController = new BoardController(model,new Point(7,7));
+        BoardController boardController = new BoardController(new Point(7,7));
         Player player = model.getCurPlayer();
         model.getCurHand().getHeldTiles().add(0,new Tile(Letter.A));
         model.getCurHand().getHeldTiles().add(1,new Tile(Letter.Y));

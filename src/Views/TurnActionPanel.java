@@ -13,6 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static Views.DebugView.DEBUG_VIEW;
+
 public class TurnActionPanel extends JPanel implements ModelListener {
 
     private JPanel turnPanel;
@@ -107,6 +109,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         TurnActionController directionControl = new TurnActionController(model, TurnActionController.ActionState.FLIP_DIR);
         directionButton.addActionListener(directionControl);
         directionControl.addControllerListener(e -> setDirectionViewText(e, directionButton));
+        if(DEBUG_VIEW) model.addDebugController(directionControl);
 
         directionPanel.setLayout(new GridBagLayout());
 

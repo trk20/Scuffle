@@ -1,16 +1,18 @@
 package Views;
 
-import ScrabbleEvents.ModelEvents.HandChangeEvent;
-import ScrabbleEvents.Listeners.HandChangeListener;
-import ScrabbleEvents.ModelEvents.NewPlayerEvent;
-import ScrabbleEvents.ModelEvents.TileSelectEvent;
 import Model.Hand;
 import Model.ScrabbleModel;
 import Model.Tile;
+import ScrabbleEvents.Listeners.HandChangeListener;
+import ScrabbleEvents.ModelEvents.HandChangeEvent;
+import ScrabbleEvents.ModelEvents.NewPlayerEvent;
+import ScrabbleEvents.ModelEvents.TileSelectEvent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+
+import static Views.DebugView.DEBUG_VIEW;
 
 /**
  * HandView is responsible for displaying information about modeled Hand objects.
@@ -44,20 +46,6 @@ public class HandView extends JPanel implements HandChangeListener {
         add(unselected_row);
 
         model.addModelListener(this);
-
-//        // FIXME: remove after testing
-////        selected_row.add(new TileView(new Tile(Letter.S)));
-//        unselected_row.add(new TileView(new Tile(Letter.N)));
-//        unselected_row.add(new TileView(new Tile(Letter.U)));
-//        unselected_row.add(new TileView(new Tile(Letter.L)));
-//        unselected_row.add(new TileView(new Tile(Letter.L)));
-//
-//        // Selection test
-//        Tile st = new Tile(Letter.S);
-//        TileView sv = new TileView(st);
-//        handTileMap.put(st, sv);
-//        unselected_row.add(sv);
-//        updateSelectionRow(new TileSelectEvent(new ScrabbleModel(), st, true));
     }
 
     /**
@@ -127,6 +115,7 @@ public class HandView extends JPanel implements HandChangeListener {
         unselected_row.add(view);
         // Add model listener to tile
         view.addControllerListener(model);
+        if(DEBUG_VIEW) model.addDebugController(view);
         // Update map for the new hand, for each tile
         handTileMap.put(tile, view);
     }
