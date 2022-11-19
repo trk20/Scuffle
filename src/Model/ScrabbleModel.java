@@ -136,8 +136,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             getCurPlayer().addPoints(placementScore);
 
             // Notify listeners about new board state
-            notifyModelListeners(new BoardChangeEvent(this));
-            notifyModelListeners(new PlayerChangeEvent(this));
+            notifyModelListeners(new BoardChangeEvent(board));
+            notifyModelListeners(new PlayerChangeEvent(players));
             nextTurn();
         }
     }
@@ -168,8 +168,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 
         //Need to notify Score View here
 
-        notifyModelListeners(new PlayerChangeEvent(this));
-        notifyModelListeners(new NewPlayerHandEvent(this));
+        notifyModelListeners(new PlayerChangeEvent(players));
+        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         //nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
@@ -183,8 +183,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         // Update views to show current player
 
         incrementTurn();
-        notifyModelListeners(new NewPlayerHandEvent(this));
-        notifyModelListeners(new PlayerChangeEvent(this));
+        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        notifyModelListeners(new PlayerChangeEvent(players));
     }
 
     /**
