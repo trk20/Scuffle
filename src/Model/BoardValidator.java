@@ -26,7 +26,7 @@ public class BoardValidator {
      *
      * @param board reference to the board to validate.
      */
-    BoardValidator(Board board){
+    public BoardValidator(Board board){
         this.boardToValidate = board;
         this.dictionary = new DictionaryHandler();
     }

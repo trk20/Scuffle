@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests the Board Validator Class, more specifcally the isValidPlacement method
  *
  * @author Vladimir Kovacina
+ * @version NOV-19 2022
  */
 
 class BoardValidatorTest {
@@ -73,8 +74,8 @@ class BoardValidatorTest {
         otherPoint = new Point(5,5);
         newPoint = new Point(6,8);
 
-        validator = board.getValidator();
-
+        //validator = board.getValidator();
+        validator = new BoardValidator(board);
     }
 
     /**
@@ -149,9 +150,6 @@ class BoardValidatorTest {
     @Test
     void isValidPlacement2WordsVertThenHorizTest() {
         //Place Hello (vertically) at start and place Hello across it (horizontally) to see if adjacent words work
-        board = new Board(false);
-        model = new ScrabbleModel(playerNames);
-        validator = board.getValidator();
         board.placeWord(new BoardPlaceEvent(model,validWord, upStart, Board.Direction.DOWN));
         BoardPlaceEvent acrossHoriz = new BoardPlaceEvent(model,wordToPlace, acrossWord2, Board.Direction.RIGHT);
         assertTrue(validator.isValidPlacement(acrossHoriz));
@@ -218,9 +216,7 @@ class BoardValidatorTest {
     void isValidPlacement3WordsValidComboTest() {
         //Place Hello twice (once horizontally and once vertically) then place it
         // across again but create valid words this time
-        board = new Board(false);
-        model = new ScrabbleModel(playerNames);
-        validator = board.getValidator();
+
         board.placeWord(new BoardPlaceEvent(model,validWord, start, Board.Direction.RIGHT)); //place validStart1 word
         List<Tile> wordToPlace2 = new ArrayList<>();
         wordToPlace2.add(new Tile(Letter.E));
