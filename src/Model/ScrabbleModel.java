@@ -134,6 +134,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             // Letters have been placed, get rid of them and bank the score.
             getCurPlayer().placeTiles(selectedTiles);
             getCurPlayer().addPoints(placementScore);
+
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(this));
             notifyModelListeners(new PlayerChangeEvent(this));
