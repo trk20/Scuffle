@@ -53,6 +53,15 @@ public class Board {
     }
 
     /**
+     * Get a board tile at the given coordinates
+     * @param p The point coordinates of the tile in the board grid
+     * @return The tile at coordinate p
+     */
+    public BoardTile getBoardTile(Point p){
+        return boardGrid.get(p);
+    }
+
+    /**
      * Returns the string representation of the board's internal grid
      *
      * @return a string representation of the board
@@ -60,6 +69,21 @@ public class Board {
     @Override
     public String toString() {
         return boardGrid.toString();
+    }
+
+    /**
+     * Gets a list of all new words created by a word placement
+     *
+     * @return a list of all new words
+     */
+    List<BoardWord> getNewWords(List<BoardWord> currentWords){
+        // All words in the board - words that were in the board last turn.
+        List<BoardWord> newWords = new ArrayList<>(currentWords);
+        for (BoardWord word:lastPlacedWords) {
+            newWords.remove(word);
+        }
+
+        return newWords;
     }
 
     /**
@@ -290,24 +314,5 @@ public class Board {
         }
 
         return turnScore;
-    }
-
-    /**
-     * Gets a list of all new words created by a word placement
-     *
-     * @return a list of all new words
-     */
-    List<BoardWord> getNewWords(List<BoardWord> currentWords){
-        // All words in the board - words that were in the board last turn.
-        List<BoardWord> newWords = new ArrayList<>(currentWords);
-        for (BoardWord word:lastPlacedWords) {
-            newWords.remove(word);
-        }
-
-        return newWords;
-    }
-
-    public BoardTile getBoardTile(Point p){
-        return boardGrid.get(p);
     }
 }

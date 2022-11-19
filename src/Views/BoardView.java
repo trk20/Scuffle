@@ -61,8 +61,6 @@ public class BoardView extends JPanel implements ModelListener, BoardChangeListe
         // Initialize button
         JButton button = new JButton();
         button.addActionListener(controllers.get(controllers.size()-1));
-//        button.addActionListener(e -> System.out.println("Pressed"));
-        button.setText(model.getBoardTileText(p)); // Might be able to do// this through an update instead
         button.setMaximumSize(new Dimension(30,30));
         return button;
     }

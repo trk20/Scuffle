@@ -7,7 +7,6 @@ import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
 import Views.ScrabbleFrame;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,12 +102,6 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         }
     }
 
-
-    public String getBoardTileText(Point p){
-        return board.getBoardTile(p).toString();
-    }
-
-
     /**
      * Gets the user action either place or discard
      * @return boolean mapped to the action
@@ -160,19 +153,11 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * Handles starting the game
      */
     // Creating a model should be synonymous to creating a game, we should move towards removing this.
-    @Deprecated
+    // I'm not convinced "synonymous to creating a game" is a good idea anymore (M3)
     public void startGame(){
-        // Do not touch the views in the model!
-        // The main decides when to create views, or models. Possibly through controllers.
-//        mainFrame = new ScrabbleFrame(this);
-
-
-//        while(!gameFinished){
-//            nextTurn();
-//        }
 
         //Need to notify Score View here
-
+        notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         //nextTurn();
