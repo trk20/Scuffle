@@ -134,8 +134,10 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             // Letters have been placed, get rid of them and bank the score.
             getCurPlayer().placeTiles(selectedTiles);
             getCurPlayer().addPoints(placementScore);
+
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));
+            notifyModelListeners(new PlayerChangeEvent(players));
             nextTurn();
         }
     }
@@ -167,8 +169,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         //Need to notify Score View here
 
         notifyModelListeners(new PlayerChangeEvent(players));
-
-        nextTurn();
+        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        //nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
@@ -179,8 +181,9 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 //        Player currentPlayer = players.get(turn);
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
-        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         incrementTurn();
+        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        notifyModelListeners(new PlayerChangeEvent(players));
     }
 
     /**

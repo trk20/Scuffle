@@ -86,6 +86,7 @@ public class BoardTile2DTable {
      * @return True if a tile is placed at that location, false otherwise.
      */
     public boolean isTaken(Point p) {
+
         return tile2DArray[p.x][p.y].isTaken();
     }
 
