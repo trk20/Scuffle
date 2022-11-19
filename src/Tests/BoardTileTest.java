@@ -29,8 +29,8 @@ class BoardTileTest {
         assertEquals(0, boardTile.getX());
         assertEquals(0, boardTile.getY());
         assertEquals(BoardTile.Type.BLANK, boardTile.getType());
-        assertEquals(null, boardTile.getLetter());
-        assertEquals(false, boardTile.isTaken());
+        assertNull(boardTile.getLetter());
+        assertFalse(boardTile.isTaken());
 
         assertEquals(boardTile, boardTile2);
     }
@@ -68,12 +68,12 @@ class BoardTileTest {
     void testLetterSet() {
         // Try to set a letter, make tile taken
         boardTile.setLetter(Letter.A);
-        assertEquals(true, boardTile.isTaken());
+        assertTrue(boardTile.isTaken());
         assertEquals(Letter.A, boardTile.getLetter());
 
         // Try to set different letter, should not override!
         boardTile.setLetter(Letter.B);
-        assertEquals(true, boardTile.isTaken());
+        assertTrue(boardTile.isTaken());
         assertEquals(Letter.A, boardTile.getLetter());
     }
 
