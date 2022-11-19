@@ -51,11 +51,10 @@ class HandTest {
      */
     @Test
     void useSelected() {
-        ArrayList<Tile> moreTiles = new ArrayList<>(tiles);
-        moreTiles.add(new Tile(Letter.X));
-        moreTiles.add(new Tile(Letter.Z));
-        hand.setTiles(moreTiles); // set hand's tiles to have a known set of tiles plus X and Z
-        hand.useTiles(tiles); // use the known set of tiles, leaving X and Z as the first tiles in the hand
-        assertSame(hand.getHeldTiles().get(0).letter(), Letter.X);
+        //make a copy of the first 7 tiles (the ones that will be in the hand)
+        ArrayList tileCopy = new ArrayList(tiles.subList(0,7));
+        hand.useTiles(tiles); // use a known set of tiles
+        //the hand should not contain those exact tiles
+        assertFalse(tileCopy.stream().anyMatch(tile-> hand.getHeldTiles().contains(tile)));
     }
 }
