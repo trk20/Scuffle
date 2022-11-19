@@ -1,7 +1,7 @@
 package Controllers;
 
-import Events.ControllerEvents.ControllerEvent;
-import Events.Listeners.SControllerListener;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.Listeners.SControllerListener;
 
 /**
  * Interface for Scrabble Controllers (SController).

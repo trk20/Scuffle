@@ -1,6 +1,6 @@
-package Events.Listeners;
+package ScrabbleEvents.Listeners;
 
-import Events.ModelEvents.ModelEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
 /**
  * ModelListener interface, handles ModelEvent.

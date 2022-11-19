@@ -1,6 +1,6 @@
 package Model;
 
-import Events.ModelEvents.BoardPlaceEvent;
+import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -83,11 +83,11 @@ public class Board {
      */
     private void setWordTiles(BoardPlaceEvent placeEvent) throws BoardValidator.InvalidPlacementException {
         // Unpack relevant event info
-        Point wordOrigin = placeEvent.getWordOrigin();
-        Direction placementDirection = placeEvent.getDirection();
+        Point wordOrigin = placeEvent.wordOrigin();
+        Direction placementDirection = placeEvent.direction();
 //        System.out.println("Dir in set: "+placementDirection);
-        List<Tile> word = placeEvent.getPlacedTiles();
-        //System.out.println(word);
+        List<Tile> word = placeEvent.placedTiles();
+//        System.out.println(word);
         int overlaps = 0; // Place tile one further if a tile already occupies its spot
 
         // Place tiles in the board, skipping tiles that are already placed.
@@ -303,10 +303,10 @@ public class Board {
         }
 
         // Set placed tiles to blank type (to disable bonus types on subsequent turns)
-        Direction dir = placeEvent.getDirection();
-        int row = placeEvent.getWordOrigin().y;
-        int col = placeEvent.getWordOrigin().x;
-        for(int index = 0; index < placeEvent.getPlacedTiles().size(); index++){
+        Direction dir = placeEvent.direction();
+        int row = placeEvent.wordOrigin().y;
+        int col = placeEvent.wordOrigin().x;
+        for(int index = 0; index < placeEvent.placedTiles().size(); index++){
             boardTileTable.setType(new Point(
                     col+(dir == Direction.RIGHT ? index : 0),
                     row+(dir == Direction.DOWN ? index : 0)),

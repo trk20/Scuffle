@@ -1,8 +1,8 @@
 package Controllers;
 
-import Events.ControllerEvents.ControllerEvent;
-import Events.Listeners.SControllerListener;
-import Events.ControllerEvents.TileClickEvent;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.Listeners.SControllerListener;
+import ScrabbleEvents.ControllerEvents.TileClickEvent;
 import Model.Tile;
 
 import javax.swing.JPanel;

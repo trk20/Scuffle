@@ -1,7 +1,7 @@
-package Events.Listeners;
+package ScrabbleEvents.Listeners;
 
-import Events.ControllerEvents.ControllerEvent;
-import Events.ControllerEvents.C_DirectionChangeEvent;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.ControllerEvents.C_DirectionChangeEvent;
 
 /**
  * Interface to label placement direction change listeners(SControllerListener).

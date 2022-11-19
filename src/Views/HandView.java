@@ -1,9 +1,9 @@
 package Views;
 
-import Events.ModelEvents.HandChangeEvent;
-import Events.Listeners.HandChangeListener;
-import Events.ModelEvents.NewPlayerEvent;
-import Events.ModelEvents.TileSelectEvent;
+import ScrabbleEvents.ModelEvents.HandChangeEvent;
+import ScrabbleEvents.Listeners.HandChangeListener;
+import ScrabbleEvents.ModelEvents.NewPlayerEvent;
+import ScrabbleEvents.ModelEvents.TileSelectEvent;
 import Model.Hand;
 import Model.ScrabbleModel;
 import Model.Tile;
@@ -78,13 +78,13 @@ public class HandView extends JPanel implements HandChangeListener {
      */
     private void updateSelectionRow(TileSelectEvent e) throws NullPointerException{
         // Get view from model reference of tile
-        TileView view = handTileMap.get(e.getTile());
+        TileView view = handTileMap.get(e.tile());
         if(view == null){
             throw new NullPointerException("Hand tile map not properly set");
         }
 
         // Add in desired row, remove in other (since it should always be in a row, but not both)
-        if(e.getSelection()){ // Select tile
+        if(e.selected()){ // Select tile
             selected_row.add(view);
             unselected_row.remove(view);
         } else{ // Un-select tile
@@ -140,6 +140,6 @@ public class HandView extends JPanel implements HandChangeListener {
     public void handleHandChangeEvent(HandChangeEvent e) {
         // Handle based on event type
         if(e instanceof TileSelectEvent sel) updateSelectionRow(sel);
-        if(e instanceof NewPlayerEvent newPlayer) updateNewHand(newPlayer.getPlayer().getHand());
+        if(e instanceof NewPlayerEvent newPlayer) updateNewHand(newPlayer.player().getHand());
     }
 }

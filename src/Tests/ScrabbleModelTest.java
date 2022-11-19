@@ -1,9 +1,9 @@
 package Tests;
 
 import Controllers.BoardController;
-import Events.ControllerEvents.DiscardClickEvent;
-import Events.ControllerEvents.PlaceClickEvent;
-import Events.ControllerEvents.TileClickEvent;
+import ScrabbleEvents.ControllerEvents.DiscardClickEvent;
+import ScrabbleEvents.ControllerEvents.PlaceClickEvent;
+import ScrabbleEvents.ControllerEvents.TileClickEvent;
 import Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

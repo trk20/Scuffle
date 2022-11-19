@@ -1,7 +1,7 @@
 package Controllers;
-import Events.ControllerEvents.BoardClickEvent;
-import Events.ControllerEvents.ControllerEvent;
-import Events.Listeners.SControllerListener;
+import ScrabbleEvents.ControllerEvents.C_BoardClickEvent;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.Listeners.SControllerListener;
 import Model.ScrabbleModel;
 
 import java.awt.*;
@@ -47,6 +47,6 @@ public class BoardController implements SController, ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        notifyControllerListeners(new BoardClickEvent(origin));
+        notifyControllerListeners(new C_BoardClickEvent(origin));
     }
 }

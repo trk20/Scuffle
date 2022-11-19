@@ -1,9 +1,9 @@
 package Model;
 
-import Events.ControllerEvents.*;
-import Events.Listeners.ModelListener;
-import Events.Listeners.SControllerListener;
-import Events.ModelEvents.*;
+import ScrabbleEvents.ControllerEvents.*;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.Listeners.SControllerListener;
+import ScrabbleEvents.ModelEvents.*;
 import Views.ScrabbleFrame;
 
 import java.awt.*;
@@ -125,7 +125,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * Handles the user wanting to place letters
      */
     private void handlePlace(PlaceClickEvent pce){
-        BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.getOrigin(), pce.getDir());
+        BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
         int placementScore = board.placeWord(placeEvent);
 
         if(placementScore<0){
@@ -216,7 +216,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * @param tc Tile selection event
      */
     private void flipTileSelect(TileClickEvent tc) {
-        Tile t = tc.getTile();
+        Tile t = tc.tile();
         // If tile is not in selection list yet, it becomes selected
         final boolean selectedAfterClick = !(selectedTiles.contains(t));
         // Add or remove from selection list depending on new desired state
@@ -226,7 +226,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             selectedTiles.remove(t); // This uses equals!!
         }
         // Model changed, notify listeners of new state:
-        notifyModelListeners(new TileSelectEvent(this, t, selectedAfterClick));
+        notifyModelListeners(new TileSelectEvent(t, selectedAfterClick));
     }
 
     /**

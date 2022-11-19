@@ -1,6 +1,6 @@
 package Tests;
 
-import Events.ModelEvents.BoardPlaceEvent;
+import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 import Model.Board;
 import Model.Letter;
 import Model.ScrabbleModel;

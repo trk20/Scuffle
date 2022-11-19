@@ -2,11 +2,11 @@ package Views;
 
 import Controllers.BoardController;
 import Controllers.TurnActionController;
-import Events.ControllerEvents.ControllerEvent;
-import Events.ControllerEvents.C_DirectionChangeEvent;
-import Events.Listeners.ModelListener;
-import Events.ModelEvents.ModelEvent;
-import Events.ModelEvents.NewPlayerEvent;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.ControllerEvents.C_DirectionChangeEvent;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.ModelEvent;
+import ScrabbleEvents.ModelEvents.NewPlayerEvent;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
@@ -127,7 +127,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
      * @param button The button to modify if applicable
      */
     private void setDirectionViewText(ControllerEvent e, JButton button) {
-        if(e instanceof C_DirectionChangeEvent de) button.setText(de.getDir().toString());
+        if(e instanceof C_DirectionChangeEvent de) button.setText(de.dir().toString());
     }
 
     private void setUpSkipButton(ScrabbleModel model){
@@ -142,8 +142,8 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     @Override
     public void handleModelEvent(ModelEvent e) {
         if(e instanceof NewPlayerEvent newPlayer){
-            if(!newPlayer.getPlayer().getName().equals(currentPlayerName)){
-                currentPlayerName = newPlayer.getPlayer().getName(); // FIXME: redundant?
+            if(!newPlayer.player().getName().equals(currentPlayerName)){
+                currentPlayerName = newPlayer.player().getName(); // FIXME: redundant?
                 turnLabel.setText("Turn: "+currentPlayerName);
 
             }
