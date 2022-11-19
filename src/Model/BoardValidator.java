@@ -2,7 +2,8 @@ package Model;
 
 import Events.ModelEvents.BoardPlaceEvent;
 
-import java.awt.*;
+import java.awt.Point;
+import java.util.List;
 
 import static Model.ScrabbleModel.BOARD_SIZE;
 
@@ -12,7 +13,7 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * Delegates some tasks to board, could possibly loosen coupling in the future.
  *
  * @author Alex
- * @version NOV-12
+ * @version NOV-18
  */
 // TODO: (M3) Valid placement may throw exceptions to indicate failure type
 //  (subclasses of InvalidPlacementException?),
@@ -34,31 +35,20 @@ public class BoardValidator {
     /**
      * Checks if a word can be placed with the desired placement.
      * Checks include: Are any tiles placed outside the board?
+     *                 Then,
      *                 For the first word, is it on the start tile?
-     *                 For subsequent words, are they connected to other tiles?
-     *                 Are any new words created invalid?
+     *                 For any subsequent word, is it connected to other tiles?
      *
      * @param placementEvent The event representing a placement attempt
      * @return True if the word passes all the checks, false otherwise.
      */
     public boolean isValidPlacement(BoardPlaceEvent placementEvent) {
-//        System.out.println("Checking validatity");
-
         // Attempt to go from the least intensive checks, to most intensive
-        if(!newTilesAreInBoard(placementEvent)) return false;
-//        System.out.println("In board");
+        if(!areNewTilesAreInBoard(placementEvent)) return false;
 
         if(isBoardEmpty()){
-            if(!isPlacedOnStart(placementEvent)) return false;
-        } else if (!isPlacedNextToWord(placementEvent)) return false;
-
-//        System.out.println("Passed adjacency test");
-
-        if(!newWordsAreValid(placementEvent)) return false;
-
-//        System.out.println("All valid words");
-
-        return true; // All tests passed
+            return isPlacedOnStart(placementEvent);
+        } else return isPlacedNextToWord(placementEvent);
     }
 
     /**
@@ -110,7 +100,7 @@ public class BoardValidator {
      * @param placementEvent  The event representing a placement attempt
      * @return True if all placed tiles are within the board's limit, false if any are not.
      */
-    private boolean newTilesAreInBoard(BoardPlaceEvent placementEvent) {
+    private boolean areNewTilesAreInBoard(BoardPlaceEvent placementEvent) {
         // Unpack relevant event info
         Point wordOrigin = placementEvent.getWordOrigin();
         Board.Direction placementDirection = placementEvent.getDirection();
@@ -187,8 +177,9 @@ public class BoardValidator {
      * @return True if each new word is valid.
      */
     private boolean newWordsAreValid(BoardPlaceEvent placementEvent) {
-        for (PlacedWord newWord: boardToValidate.getNewWords(placementEvent))
-            if (!dictionary.isValidWord(newWord.toString())) return false; // invalid word
+        // FIXME: this isn't doing anything really
+//        for (BoardWord newWord: boardToValidate.getNewWords())
+//            if (!dictionary.isValidWord(newWord.toString())) return false; // invalid word
         return true; // All words valid
     }
 
@@ -224,12 +215,20 @@ public class BoardValidator {
         return boardToValidate.isBoardEmpty();
     }
 
+    public boolean isInvalidWordInBoard(List<BoardWord> currentWords) {
+        for (BoardWord curWord: currentWords)
+            if (!dictionary.isValidWord(curWord.toString())){
+                return true;
+            }
+        return false; // No invalid words detected
+    }
+
     // TODO: Make a hierarchy of these in seperate classes later
 
     /**
      * Exception thrown during invalid placements
      */
-    public class InvalidPlacementException extends RuntimeException {
+    public static class InvalidPlacementException extends RuntimeException {
         public InvalidPlacementException(String placement_is_outside_board) {
         }
     }
