@@ -21,13 +21,4 @@ public record Tile(Letter letter){
         // If the object is compared with itself then return true otherwise return false
         return this == obj;
     }
-
-    /**
-     * Gets a tile's score
-     *
-     * @return the tile's score
-     */
-    public int getScore() {
-        return 0;
-    }
 }

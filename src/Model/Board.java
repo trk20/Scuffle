@@ -275,21 +275,21 @@ public class Board {
 //                System.out.println(tile);
                     switch (tile.getType()){
                         case X2LETTER:
-                            wordScore+=tile.getScore()*2;
+                            wordScore+=tile.getLetter().getScore()*2;
                             break;
                         case X3LETTER:
-                            wordScore+=tile.getScore()*3;
+                            wordScore+=tile.getLetter().getScore()*3;
                             break;
                         case X2WORD: case START:
-                            wordScore+=tile.getScore();
+                            wordScore+=tile.getLetter().getScore();
                             multiplier*=2;
                             break;
                         case X3WORD:
-                            wordScore+=tile.getScore();
+                            wordScore+=tile.getLetter().getScore();
                             multiplier*=3;
                             break;
                         default:
-                            wordScore+=tile.getScore();
+                            wordScore+=tile.getLetter().getScore();
                             break;
                     }
             }

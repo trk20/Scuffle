@@ -36,9 +36,9 @@ class DrawPileTest {
      */
     @Test
     void containsAllLetters(){
-        DrawPile dp = model.getDrawPile();
-        for(Letter letter: Letter.values()) { //check if the DrawPile has an instance of each type of letter (INCL blank)
-            assertTrue(dp.getLetterPile().stream().anyMatch(tile -> letter.equals(tile.letter())));
+        DrawPile dp = new DrawPile();
+        for(Letter letter: Letter.values()) { //check if the DrawPile has the correct number of each type of letter (INCL blank)
+            assertEquals(dp.getLetterPile().stream().filter(tile -> tile.letter().equals(letter)).count(), letter.getFrequency());
         }
     }
 

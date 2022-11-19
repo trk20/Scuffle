@@ -7,8 +7,6 @@ import java.awt.*;
  * Stores information on the board tile's type (score multiplier, score, neither),
  * location, and letter (if it is taken).
  *
- * TODO: change to use Tile instead of Letter to separate score from Letter
- *
  * @author Vladimir Kovacina
  * @author Timothy Kennedy
  * @author Alex

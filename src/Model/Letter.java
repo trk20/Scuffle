@@ -12,35 +12,37 @@ import java.util.List;
  */
 public enum Letter {
     // Model.Letter enums, sorted by order of frequency, in tiles/game
-    E('E',12),
-    A('A',9),
-    I('I',9),
-    O('O',8),
-    N('N',6),
-    R('R',6),
-    T('T',6),
-    L('L',4),
-    S('S',4),
-    U('U',4),
-    D('D',4),
-    G('G',3),
-    B('B',2),
-    C('C',2),
-    M('M',2),
-    P('P',2),
-    F('F',2),
-    H('H',2),
-    W('W',2),
-    Y('Y',2),
-    V('V',2),
-    K('K',1),
-    J('J',1),
-    X('X',1),
-    Q('Q', 1),
-    Z('Z', 1),
-    BLANK(' ',2);
+    E('E', 1, 12),
+    A('A', 1, 9),
+    I('I', 1, 9),
+    O('O', 1, 8),
+    N('N', 1, 6),
+    R('R', 1, 6),
+    T('T', 1, 6),
+    L('L', 1, 4),
+    S('S', 1, 4),
+    U('U', 1, 4),
+    D('D', 2, 4),
+    G('G', 2, 3),
+    B('B', 3, 2),
+    C('C', 3, 2),
+    M('M', 3, 2),
+    P('P', 3, 2),
+    F('F', 4, 2),
+    H('H', 4, 2),
+    W('W', 4, 2),
+    Y('Y', 4, 2),
+    V('V', 4, 2),
+    K('K', 5, 1),
+    J('J', 8, 1),
+    X('X', 8, 1),
+    Q('Q', 10, 1),
+    Z('Z', 10, 1);
+    // TODO: Blank(' ', 0, 2);
 
     // Fields
+    /** Score associated with letter (defined by Scrabble rules) */
+    private final int score;
 
     /** Character associated with letter (used for printing) */
     private final char character; // char to enforce only one character
@@ -51,12 +53,24 @@ public enum Letter {
      * Model.Letter Constructor, initializes fields with given parameters.
      *
      * @param character Character to associate with letter
+     * @param score     Score to associate with letter
      * @param freq      Frequency to associate with letter
      * @author Alexandre Marques - 101189743
      */
-    Letter (char character, int freq){
+    Letter (char character, int score, int freq){
+        this.score = score;
         this.character = character;
         this.frequency = freq;
+    }
+
+    /**
+     * Returns the score associated to this Model.Letter.
+     *
+     * @author Alexandre Marques - 101189743
+     * @return Model.Letter's Scrabble score.
+     */
+    public int getScore() {
+        return score;
     }
 
     /**
@@ -121,5 +135,6 @@ public enum Letter {
     @Override
     public String toString() {
         return ""+character; // Concatenate char to convert to String
+
     }
 }

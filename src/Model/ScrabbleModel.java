@@ -128,7 +128,6 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.getOrigin(), pce.getDir());
         int placementScore = board.placeWord(placeEvent);
 
-        //TODO: blank tiles should ask for what letter they're supposed to be on placement
         if(placementScore<0){
             // Display error, do nothing.
         } else {
@@ -277,7 +276,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * @return Model's board
      */
     // FIXME: in the future, should inherit SModel in ModelEvents
-    //  and then pass only the the relevant parts in model events
+    //  and then pass only the relevant parts in model events
     public Board getBoard() {
         return board;
     }

@@ -51,8 +51,7 @@ class HandTest {
      */
     @Test
     void useSelected() {
-        ArrayList<Tile> moreTiles = new ArrayList<>();
-        moreTiles.addAll(tiles);
+        ArrayList<Tile> moreTiles = new ArrayList<>(tiles);
         moreTiles.add(new Tile(Letter.X));
         moreTiles.add(new Tile(Letter.Z));
         hand.setTiles(moreTiles); // set hand's tiles to have a known set of tiles plus X and Z
