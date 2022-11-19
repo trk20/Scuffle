@@ -97,10 +97,12 @@ public class Board {
             if (placementDirection == Board.Direction.RIGHT) {
                 // Increment Col (x), until no overlap
                 while (overlapping) {
+                    //System.out.println("Overladps: "+ overlaps);
                     placementLocation.setLocation((wordOrigin.x + (i + overlaps)), wordOrigin.y);
                     if (isTaken(placementLocation)) overlaps += 1;
                     else overlapping = false;
                 }
+                //System.out.println("Done overlapping");
             } else {
                 // Decrement row (y), until no overlap
                 while (overlapping) {
@@ -109,7 +111,10 @@ public class Board {
                     else overlapping = false;
                 }
             }
+            //System.out.println(word.get(i).letter());
             placeTile(placementLocation, word.get(i).letter());
+            //System.out.println("Placed letter:" + word.get(i).letter());
+            //System.out.println(this);
         }
     }
 
@@ -326,6 +331,7 @@ public class Board {
 //        System.out.println("Final new words "+newWords);
         return newWords;
     }
+
 
     public BoardTile getBoardTile(Point p){
         return boardTileTable.getTile(p);

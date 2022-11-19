@@ -14,9 +14,7 @@ public class Main {
         OptionPaneHandler input = new OptionPaneHandler();
         // TODO: may change model placement, here for testing atm
         ScrabbleModel model = new ScrabbleModel(input.getNewPlayerNames());
-
         ScrabbleFrame frame = new ScrabbleFrame(model);
-
         model.startGame();
     }
 }
