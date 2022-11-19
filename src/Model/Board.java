@@ -5,6 +5,7 @@ import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static Model.ScrabbleModel.BOARD_SIZE;
 
@@ -17,35 +18,36 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @version NOV-18
  */
 public class Board {
+    /** Enum for board placement possibilities */
     public enum Direction{
         DOWN("↓"), RIGHT("→");
+
         private final String dirStr;
+
         Direction(String s){this.dirStr = s;}
 
         @Override
-        public String toString() {
-            return dirStr;
-        }
+        public String toString() {return dirStr;}
     }
 
     public static int MIN_WORD_SIZE = 2;
-    private Grid2DArray<BoardTile> boardGrid; // COLUMN (x), ROW (y)
+    private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
     /** Takes care of validating the board */
     private final BoardValidator validator;
 
     /**
-     * Constructor for a Model.Board object
+     * Constructor for a Board object
+     *
+     * @param premiumBoard If true, will add premium tiles to the board (point multipliers)
      */
-    public Board(boolean randomBoard){
+    public Board(boolean premiumBoard){
         validator = new BoardValidator(this);
         lastPlacedWords = new ArrayList<>();
 
-        // TODO: add randomisation back in
-//        if(randomBoard) boardTileTable.randomiseTable();
-
-        // Initialize the start tile in the middle of the board
-        initializeGrid();
+        // Initialize tiles in board.
+        initializeBlankGrid();
+        if(premiumBoard) setPremiumTiles();
         Point middleOfBoard = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
         boardGrid.get(middleOfBoard).setType(BoardTile.Type.START);
     }
@@ -53,13 +55,32 @@ public class Board {
     /**
      * Initialize the board grid with blank board tiles.
      */
-    private void initializeGrid(){
+    private void initializeBlankGrid(){
         boardGrid = new Grid2DArray<>(BOARD_SIZE);
         // Fill tile array
         for (int x = 0; x< BOARD_SIZE; x ++){
             for(int y = 0; y<BOARD_SIZE; y ++){
                 Point p = new Point(x, y);
                 boardGrid.set(p, new BoardTile(p));
+            }
+        }
+    }
+
+    /**
+     * Set premium score tiles in the board.
+     * Currently, randomly places them on the board.
+     */
+    private void setPremiumTiles() {
+        Random r = new Random();
+        for (int x = 0; x< BOARD_SIZE; x ++){
+            for(int y = 0; y<BOARD_SIZE; y ++){
+                Point p = new Point(x, y);
+                // 1/14 chance to set a premium tile
+                int randomInt = r.nextInt(14);
+                if(randomInt == 1){
+                    //Set multiplier tiles at random
+                    boardGrid.get(p).setType(BoardTile.Type.values()[2+r.nextInt(4)]);
+                }
             }
         }
     }
@@ -222,13 +243,11 @@ public class Board {
     private int getTurnScore(List<BoardWord> newWords){
         int turnScore = 0;
 
-        // TODO: Parameter should probably be new words, not concise atm
         for (BoardWord newWord:newWords) {
             int wordScore = 0;
             int multiplier = 1;
 
             for (BoardTile tile:newWord.tiles()) {
-//                System.out.println(tile);
                     switch (tile.getType()){
                         case X2LETTER:
                             wordScore+=tile.getLetter().getScore()*2;
@@ -236,7 +255,8 @@ public class Board {
                         case X3LETTER:
                             wordScore+=tile.getLetter().getScore()*3;
                             break;
-                        case X2WORD: case START:
+                        case START: // Start also acts as x2 word
+                        case X2WORD:
                             wordScore+=tile.getLetter().getScore();
                             multiplier*=2;
                             break;
@@ -249,7 +269,6 @@ public class Board {
                             break;
                     }
             }
-//            System.out.println("wordScore: "+wordScore+", multi: "+multiplier);
             turnScore += wordScore*multiplier;
         }
 
