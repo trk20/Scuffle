@@ -37,8 +37,13 @@ class DrawPileTest {
     @Test
     void containsAllLetters(){
         DrawPile dp = new DrawPile();
-        for(Letter letter: Letter.values()) { //check if the DrawPile has the correct number of each type of letter (INCL blank)
-            assertEquals(dp.getLetterPile().stream().filter(tile -> tile.letter().equals(letter)).count(), letter.getFrequency());
+        for(Letter expectedLetter: Letter.values()) { //check if the DrawPile has the correct number of each type of letter (INCL blank)
+
+            assertEquals(dp.getLetterPile().stream().filter(
+                    tile -> tile.letter().equals(expectedLetter)).count(),
+                    expectedLetter.getFrequency()
+            );
+
         }
     }
 
