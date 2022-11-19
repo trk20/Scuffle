@@ -100,16 +100,6 @@ public class OptionPaneHandler {
     }
 
     /**
-     * Asks for what letter a blank should be
-     * @return the letter
-     */
-    public Letter askForBlanksLetter(){
-        Letter letter = null;
-        //ask the player what letter the blank tile should be
-        return letter;
-    }
-
-    /**
      * Asks for a name for each player that would like to play in a new game.
      * Amount is limited by the model's player limits.
      *
