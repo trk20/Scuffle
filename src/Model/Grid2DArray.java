@@ -14,19 +14,19 @@ import java.util.ArrayList;
  */
 public class Grid2DArray<T>{
     // "T" is the generic type
-    protected ArrayList<ArrayList<T>> array2D;
-    protected int size;
+    private final ArrayList<ArrayList<T>> array2D;
+    private final int size;
 
-    /**
-     * General Constructor, used to copy Grid2DArray
-     *
-     * @param size The length of the "grid"
-     * @param copiedArray The grid to copy into the internal array2D
-     */
-    private Grid2DArray(int size, ArrayList<ArrayList<T>> copiedArray){
-        this.size = size;
-        array2D = new ArrayList<>(copiedArray);
-    }
+//    /**
+//     * General Constructor, used to copy Grid2DArray
+//     *
+//     * @param size The length of the "grid"
+//     * @param copiedArray The grid to copy into the internal array2D
+//     */
+//    private Grid2DArray(int size, ArrayList<ArrayList<T>> copiedArray){
+//        this.size = size;
+//
+//    }
 
     /**
      * Constructor for Grid2DArray
@@ -35,7 +35,8 @@ public class Grid2DArray<T>{
      */
     @SuppressWarnings("Convert2Diamond")
     public Grid2DArray(int size){
-        this(size, new ArrayList<ArrayList<T>>(size));
+        this.size = size;
+        array2D = new ArrayList<ArrayList<T>>();
         // Initialize grid array with empty inner lists
         for(int i = 0; i < size; i++)
             array2D.add(new ArrayList<T>());
@@ -67,13 +68,17 @@ public class Grid2DArray<T>{
                             size, p.x,p.y));
     }
 
-    /**
-     * Returns a deep copy of this Grid2DArray
-     * @return a deep copy of this objet
-     */
-    public Grid2DArray<T> copy(){
-        return new Grid2DArray<>(size, array2D);
+    public int getSize(){
+        return this.size;
     }
+
+//    /**
+//     * Returns a deep copy of this Grid2DArray
+//     * @return a deep copy of this objet
+//     */
+//    public Grid2DArray<T> copy(){
+//        return new Grid2DArray<>(size, array2D);
+//    }
 
     /**
      * Checks if a point coordinate is in the Array2D.

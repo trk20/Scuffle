@@ -13,29 +13,27 @@ import java.awt.*;
  * @version NOV-19
  */
 public class BoardTile {
-
-    private Letter letter;
-
     public enum Type {
-            START(new Color(233, 187, 171), "★"),
-            BLANK(new Color(207, 197, 161), ""),
-            X2WORD(new Color(232, 177, 156), "2W"),
-            X3WORD(new Color(232, 113, 115), "3W"),
-            X2LETTER(new Color(171, 207, 205), "2L"),
-            X3LETTER(new Color(76, 169, 191), "3L");
-            final private Color c;
-            final private String s;
-            Type(Color c, String s){
-                this.c = c;
-                this.s = s;
-            }
-            public Color getColor(){return c;};
+        START(new Color(233, 187, 171), "★"),
+        BLANK(new Color(207, 197, 161), ""),
+        X2WORD(new Color(232, 177, 156), "2W"),
+        X3WORD(new Color(232, 113, 115), "3W"),
+        X2LETTER(new Color(171, 207, 205), "2L"),
+        X3LETTER(new Color(76, 169, 191), "3L");
+        final private Color c;
+        final private String s;
+        Type(Color c, String s){
+            this.c = c;
+            this.s = s;
+        }
+        public Color getColor(){return c;}
 
         @Override
         public String toString() {
             return s;
         }
     }
+    private Letter letter;
 
     private Type tileType;
     private final int x;
@@ -69,6 +67,15 @@ public class BoardTile {
      */
     public BoardTile(Point p) {
         this(p.x, p.y);
+    }
+
+    /**
+     * Constructor creating a deep copy of the passed BoardTile
+     * @param boardTile the BoardTile to copy
+     */
+    public BoardTile(BoardTile boardTile) {
+        this(boardTile.tileType, boardTile.x, boardTile.y);
+        this.letter = boardTile.letter;
     }
 
 

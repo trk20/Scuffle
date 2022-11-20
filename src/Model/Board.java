@@ -86,7 +86,7 @@ public class Board {
             return -1;
         }
         // Save board state
-        Grid2DArray<BoardTile> savedBoardGrid = boardGrid.copy();
+        Grid2DArray<BoardTile> savedBoardGrid = this.copyGrid(boardGrid);
 
         // Place word on board, abort placement if it results in invalid words
         setWordTiles(placeEvent);
@@ -106,6 +106,23 @@ public class Board {
         // Store words from this turn (for next placement)
         lastPlacedWords = curWords;
         return score;
+    }
+
+    private Grid2DArray<BoardTile> copyGrid(Grid2DArray<BoardTile> boardGrid) {
+        int boardSize = boardGrid.getSize();
+        Grid2DArray<BoardTile> gridCopy = new Grid2DArray<>(boardSize);
+
+        for (int x =0; x<boardSize; x++) {
+            for(int y =0; y<boardSize; y++){
+                Point p = new Point(x,y);
+                // Deep copy constructor for board tile
+                BoardTile tileCopy = new BoardTile(boardGrid.get(p));
+                // Set copied tile in new grid
+                gridCopy.set(p, tileCopy);
+            }
+        }
+
+        return gridCopy;
     }
 
     /**
