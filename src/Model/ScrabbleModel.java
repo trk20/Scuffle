@@ -124,28 +124,24 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     private void handlePlace(PlaceClickEvent pce){
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
         int placementScore = board.placeWord(placeEvent);
-        System.out.println("SCORE" + placementScore);
 
         if(placementScore<0){
             // Display error, do nothing.
         } else {
+            // Notify listeners about new board state
+            notifyModelListeners(new BoardChangeEvent(board));
+            notifyModelListeners(new PlayerChangeEvent(players));
+
             // Letters have been placed, get rid of them and bank the score.
+            getCurPlayer().addPoints(placementScore);
             try{
-                notifyModelListeners(new BoardChangeEvent(board));
-                notifyModelListeners(new PlayerChangeEvent(players));
-                getCurPlayer().addPoints(placementScore);
                 getCurPlayer().placeTiles(selectedTiles);
 
             } catch (NullPointerException e){
                 endGame();
             }
 
-            // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));
-            notifyModelListeners(new PlayerChangeEvent(players));
-            nextTurn();
-
-
         }
     }
 
@@ -178,7 +174,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         Player winner = getTopPlayer();
         OptionPaneHandler popUpHandler = new OptionPaneHandler();
 
-        gameFinished = false;
+        gameFinished = true;
         popUpHandler.displayMessage("Draw Pile is Empty Game is Over!\nThe winner is "+winner.getName()+"! Congrats!!!");
     }
 
