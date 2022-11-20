@@ -104,11 +104,6 @@ class BoardValidatorTest {
         BoardPlaceEvent invalidStart = new BoardPlaceEvent(invalidWord, start, Board.Direction.RIGHT);
         // Valid location... but invalid words
         assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(invalidStart));
-        assertEquals(-1, board.placeWord(invalidStart));
-
-        //Placing valid word at start tile
-        BoardPlaceEvent validStart1 = new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT);
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(validStart1));
 
         //Placing valid word but not at start tile initially (horizontally)
         BoardPlaceEvent invalidStart2 = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.RIGHT);
@@ -118,6 +113,9 @@ class BoardValidatorTest {
         BoardPlaceEvent invalidStart3 = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
         assertEquals(BoardValidator.Status.NOT_ON_START, validator.isValidLocation(invalidStart3));
 
+        //Placing valid word at start tile
+        BoardPlaceEvent validStart1 = new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT);
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(validStart1));
 
         //Placing valid word across (horizontal) start tile (so that is doesn't start on it but still hits it)
         BoardPlaceEvent validStart2 = new BoardPlaceEvent(validWord, leftStart, Board.Direction.RIGHT);

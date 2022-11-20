@@ -23,7 +23,7 @@ public class BoardValidator {
         NOT_NEXT_TO_WORD("Error: PLACEMENT WAS NOT NEXT TO ANOTHER WORD"),
         INVALID_WORD("Error: PLACEMENT DID NOT FORM VALID WORDS");
 
-        private String errorMessage;
+        private final String errorMessage;
         Status(String errorMessage){
             this.errorMessage = errorMessage;
         }
@@ -133,6 +133,7 @@ public class BoardValidator {
             for (int i = 0; i < word.size(); i++) {
                 // Place tile at first available location
                 Point firstFree = boardToValidate.getFirstNonTakenPoint(placementDirection, new Point(nextPoint));
+                isTaken(firstFree); // Will check to see if it causes an out-of-bounds exception
 
                 // nextPoint is checked one after last place
                 if (placementDirection == Board.Direction.RIGHT) firstFree.translate(1, 0);
