@@ -37,27 +37,13 @@ public class BoardView extends JPanel implements BoardChangeListener {
     }
 
     /**
-     * Update the board view to represent the given board
-     */
-    public void update(BoardChangeEvent e){
-//        for (int x = 0; x < BOARD_SIZE; x++) {
-//            for (int y = 0; y < BOARD_SIZE; y++) {
-//                Point p = new Point(x,y);
-//
-//                boardTileViewGrid.get(p).handleBoardChangeEvent(e);
-//            }
-//        }
-        validate();
-        repaint();
-    }
-
-    /**
      * Handles board change events, updates view to show new board state
      * @param e The event indicating a board change
      */
     @Override
     public void handleBoardChangeEvent(BoardChangeEvent e) {
-        update(e);
+        validate();
+        repaint();
     }
 
     /**
