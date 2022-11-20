@@ -1,6 +1,7 @@
 package Model;
 
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
+import Views.OptionPaneHandler;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -62,6 +63,12 @@ public class Board {
         return boardGrid.get(p);
     }
 
+
+    private void handleInvalidPlacement(BoardValidator.Status status){
+        OptionPaneHandler errorDisplayer = new OptionPaneHandler();
+        errorDisplayer.displayError(status.getErrorMessage());
+    }
+
     /**
      * Places a word on the board, and calculates the resulting score from the placement.
      * For invalid placements, will cancel the operation and indicate an exception.
@@ -70,17 +77,26 @@ public class Board {
      * @return -1 if it is an invalid placement, otherwise, the score resulting from the placement.
      */
     public int placeWord(BoardPlaceEvent placeEvent){
+        BoardValidator.Status currentStatus;
+
+        currentStatus = validator.isValidLocation(placeEvent);
         // Ensure valid placement
-        if(!validator.isValidLocation(placeEvent)) return -1;
+        if(currentStatus != BoardValidator.Status.SUCCESS){
+            handleInvalidPlacement(currentStatus);
+            return -1;
+        }
         // Save board state
         Grid2DArray<BoardTile> savedBoardGrid = boardGrid.copy();
 
         // Place word on board, abort placement if it results in invalid words
         setWordTiles(placeEvent);
         List<BoardWord> curWords = getCurrentWords();
-        if(validator.isInvalidWordInBoard(curWords)){
+
+        currentStatus = validator.isInvalidWordInBoard(curWords);
+        if(currentStatus != BoardValidator.Status.SUCCESS){
             // Load board state
             boardGrid = savedBoardGrid;
+            handleInvalidPlacement(currentStatus);
             return -1;
         }
 

@@ -1,5 +1,6 @@
 package Views;
 
+import Model.BoardValidator;
 import Model.Letter;
 import Model.ScrabbleModel;
 
@@ -64,14 +65,13 @@ public class OptionPaneHandler {
             validNum = isValidNum(numPlayers);
 
             if (!validNum){
-                JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a valid number",
-                        "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                displayError("Invalid Input! Please enter a valid number");
             }else{
                 if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) > ScrabbleModel.MAX_PLAYERS){
-                    JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a number below "+ScrabbleModel.MAX_PLAYERS, "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    displayError("Invalid Input! Please enter a number below "+ScrabbleModel.MAX_PLAYERS);
                     validNum = false;
                 }else if (Integer.parseInt(String.valueOf(numPlayers.charAt(0))) == 0){
-                    JOptionPane.showMessageDialog(null, "Invalid Input! Please enter a number above 0", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    displayError("Invalid Input! Please enter a number above 0");
                     validNum = false;
                 }
             }
@@ -92,8 +92,7 @@ public class OptionPaneHandler {
             word = JOptionPane.showInputDialog("What is Player "+ (index+1) + "'s name");
             validWord = isValidWord(word);
             if(!validWord){
-                JOptionPane.showMessageDialog(null, "Invalid Input! Please enter only valid characters",
-                        "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                displayError("Invalid Input! Please enter only valid characters");
             }
         }
         return word;
@@ -116,5 +115,9 @@ public class OptionPaneHandler {
             names.add(name);
         }
         return names;
+    }
+
+    public void displayError(String message){
+        JOptionPane.showMessageDialog(null, message, "Invalid Input", JOptionPane.ERROR_MESSAGE);
     }
 }
