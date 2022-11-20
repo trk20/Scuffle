@@ -151,14 +151,10 @@ When sending actions to the model
 - Determine player order by drawing from the letter bag
 - Special scoring -> BINGO
 ### Milestone 2
-- Some of the scoring is not quite right when placing 
-  - (Some words get counted when they should not, causig some score inflation)
 - GUI user feedback: indicate why the user cannot place, a tile.
   - Have instructions / a tutorial on how to use the GUI
-- Some GUI features not implemented, Skip button not working, menu save/loard not working (M3 feature)
+- Some GUI features not implemented, Skip button not working, menu save/loard not working (M4 feature)
   - (low priority because discarding 0 tiles can be used to skip your turn already)
-- Direction arrow is inversed at the moment
-- Model needs a lot of refactoring. A lot of outdated code is causing issues.
 - Class diagrams, sequence diagrams not fully up to date
 - Some model tests missing for the newer classes
   - Some existing tests are outdated due to evolving class interfaces
