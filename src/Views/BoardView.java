@@ -1,67 +1,52 @@
 package Views;
 
-import Controllers.BoardController;
-import ScrabbleEvents.ModelEvents.BoardChangeEvent;
-import ScrabbleEvents.Listeners.BoardChangeListener;
-import ScrabbleEvents.Listeners.ModelListener;
-import Model.Board;
+import Controllers.BoardTileController;
+import Model.Grid2DArray;
 import Model.ScrabbleModel;
+import ScrabbleEvents.Listeners.BoardChangeListener;
+import ScrabbleEvents.ModelEvents.BoardChangeEvent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardView extends JPanel implements ModelListener, BoardChangeListener {
+import static Model.ScrabbleModel.BOARD_SIZE;
 
-    private JPanel boardPanel;
-    private JButton[][] gridButtons;
-    private int boardSize;
-    private List<BoardController> controllers;
+public class BoardView extends JPanel implements BoardChangeListener {
+    private final Grid2DArray<BoardTileView> boardTileViewGrid;
 
     public BoardView(ScrabbleModel model) {
-        boardSize = 15;
+        boardTileViewGrid = new Grid2DArray<>(BOARD_SIZE);
         model.addModelListener(this);
-        setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
-        add(Box.createHorizontalGlue());
+
+        setLayout(new GridLayout(BOARD_SIZE,BOARD_SIZE));
         setSize(800,500);
-        setAlignmentX(RIGHT_ALIGNMENT);
-        boardPanel = new JPanel();
-        Font buttonFont = new Font("Consolas",Font.PLAIN,10);
-        add(boardPanel);
-        add(Box.createHorizontalGlue());
-        boardPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        boardPanel.setLayout(new GridLayout(boardSize,boardSize));
-        boardPanel.setMaximumSize(new Dimension(boardSize*30,boardSize*30));
 
-        controllers = new ArrayList<>();
+        // Build row by row, because that's how grid layout adds
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
+                Point p = new Point(x, y);
 
-        gridButtons = new JButton[boardSize][boardSize];
-        for (int col = 0; col < boardSize; col++) {
-            for (int row = 0; row < boardSize; row++) {
-                controllers.add(new BoardController(model,new Point(col, row)));
-                gridButtons[col][row] = new JButton();
-                gridButtons[col][row].addActionListener(controllers.get(controllers.size()-1));
-                gridButtons[col][row].setText(model.getBoardTileText(new Point(col, row)));
-                gridButtons[col][row].setMaximumSize(new Dimension(30,30));
-                boardPanel.add(gridButtons[col][row]);
+                boardTileViewGrid.set(p, new BoardTileView(model, p));
+                this.add(boardTileViewGrid.get(p));
             }
         }
+
         setVisible(true);
     }
 
     /**
      * Update the board view to represent the given board
-     * @param board A modeled board
      */
-    public void update(Board board){
-//        System.out.println("Updating");
-        for (int col = 0; col < boardSize; col++) {
-            for (int row = 0; row < boardSize; row++) {
-                gridButtons[col][row].setText(board.getBoardTile(new Point(col, row))
-                        .toString());
-            }
-        }
+    public void update(BoardChangeEvent e){
+//        for (int x = 0; x < BOARD_SIZE; x++) {
+//            for (int y = 0; y < BOARD_SIZE; y++) {
+//                Point p = new Point(x,y);
+//
+//                boardTileViewGrid.get(p).handleBoardChangeEvent(e);
+//            }
+//        }
         validate();
         repaint();
     }
@@ -72,14 +57,23 @@ public class BoardView extends JPanel implements ModelListener, BoardChangeListe
      */
     @Override
     public void handleBoardChangeEvent(BoardChangeEvent e) {
-        update(e.board());
+        update(e);
     }
 
     /**
      * Return all the board controllers (1/tile in the board)
      * @return all the board controllers in the board view.
      */
-    public List<BoardController> getControllers() {
-        return this.controllers;
+    public List<BoardTileController> getControllers() {
+        List<BoardTileController> controllers = new ArrayList<>();
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                Point p = new Point(x,y);
+
+                controllers.add(boardTileViewGrid.get(p).getController());
+            }
+        }
+
+        return controllers;
     }
 }

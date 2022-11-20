@@ -1,14 +1,15 @@
 package Model;
 
+import Controllers.SController;
 import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
-import Views.ScrabbleFrame;
 
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static Views.DebugView.DEBUG_VIEW;
 
 /**
  * Class that controls/models the overall scrabble game.
@@ -43,15 +44,16 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     List<Tile> selectedTiles;
 
 
-    private ScrabbleFrame mainFrame;
+    private List<SController> debugControllers;
 
     public ScrabbleModel(List<String> playerNames) {
-        this.board = new Board(false);
+        this.board = new Board(true);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
         this.players = new ArrayList<>();
+        this.debugControllers = new ArrayList<>();
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
         // Guard against null human players
@@ -97,12 +99,6 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             players.add(new Player(name, this));
         }
     }
-
-
-    public String getBoardTileText(Point p){
-        return board.getBoardTile(p).toString();
-    }
-
 
     /**
      * Gets the user action either place or discard
@@ -155,19 +151,11 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * Handles starting the game
      */
     // Creating a model should be synonymous to creating a game, we should move towards removing this.
-    @Deprecated
+    // I'm not convinced "synonymous to creating a game" is a good idea anymore (M3)
     public void startGame(){
-        // Do not touch the views in the model!
-        // The main decides when to create views, or models. Possibly through controllers.
-//        mainFrame = new ScrabbleFrame(this);
-
-
-//        while(!gameFinished){
-//            nextTurn();
-//        }
 
         //Need to notify Score View here
-
+        notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         //nextTurn();
@@ -287,5 +275,25 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     @Override
     public void handleModelEvent(ModelEvent e) {
 
+    }
+
+    /**
+     * If debug view is activated, will keep track of controllers in the program
+     * @param c new controller talking to the model
+     */
+    public void addDebugController(SController c) {
+        if(DEBUG_VIEW)
+            this.debugControllers.add(c);
+    }
+
+    /**
+     * If debug view is activated, will return the controllers in the program
+     * @return The list of controllers talking to the model
+     */
+    public List<SController> getDebugControllers() {
+        if(DEBUG_VIEW)
+            return this.debugControllers;
+        else
+            return null;
     }
 }

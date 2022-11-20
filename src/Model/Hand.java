@@ -1,7 +1,6 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -101,10 +100,7 @@ public class Hand {
 //        }
 
         // For each used letter, remove it from the hand
-        Iterator tileIterator = tiles.listIterator();
-        while(tileIterator.hasNext()){
-            if(used.contains(tileIterator.next())) tileIterator.remove();
-        }
+        tiles.removeIf(used::contains);
 
         /* Letters were used, so Model.Hand needs to be filled.
          * Note: Throws exception for empty draw pile!

@@ -1,17 +1,19 @@
 package Views;
 
-import Controllers.BoardController;
+import Controllers.BoardTileController;
 import Controllers.TurnActionController;
-import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import Model.ScrabbleModel;
 import ScrabbleEvents.ControllerEvents.C_DirectionChangeEvent;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.ModelEvents.ModelEvent;
 import ScrabbleEvents.ModelEvents.NewPlayerEvent;
-import Model.ScrabbleModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+
+import static Views.DebugView.DEBUG_VIEW;
 
 public class TurnActionPanel extends JPanel implements ModelListener {
 
@@ -34,7 +36,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     private String currentPlayerName;
 
     // FIXME: coupling with board controller, look for ways to decouple
-    public TurnActionPanel(ScrabbleModel model, List<BoardController> board) {
+    public TurnActionPanel(ScrabbleModel model, List<BoardTileController> board) {
         turnPanel = new JPanel();
         actionPanel = new JPanel();
         skipPanel = new JPanel();
@@ -82,7 +84,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         turnPanel.add(turnLabel);
     }
 
-    private void setUpActionButtons(ScrabbleModel model, List<BoardController> board){
+    private void setUpActionButtons(ScrabbleModel model, List<BoardTileController> board){
         placeButton = new JButton("Place");
         discardButton = new JButton("Discard");
 
@@ -107,6 +109,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         TurnActionController directionControl = new TurnActionController(model, TurnActionController.ActionState.FLIP_DIR);
         directionButton.addActionListener(directionControl);
         directionControl.addControllerListener(e -> setDirectionViewText(e, directionButton));
+        if(DEBUG_VIEW) model.addDebugController(directionControl);
 
         directionPanel.setLayout(new GridBagLayout());
 

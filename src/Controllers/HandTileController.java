@@ -1,11 +1,10 @@
 package Controllers;
 
-import ScrabbleEvents.ControllerEvents.ControllerEvent;
-import ScrabbleEvents.Listeners.SControllerListener;
-import ScrabbleEvents.ControllerEvents.TileClickEvent;
 import Model.Tile;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.ControllerEvents.TileClickEvent;
+import ScrabbleEvents.Listeners.SControllerListener;
 
-import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -16,18 +15,16 @@ import java.util.List;
  * Enables clicking on tiles, and hovering over them.
  * A view class has to extend this class, this allows for separation of the controller and view code.
  */
-public abstract class HandTileController extends JPanel implements SController {
+public class HandTileController extends MouseAdapter implements SController {
     private List<SControllerListener> listeners;
     private final Tile tile;
 
     /**
      * HandTileController constructor. Initiates fields.
      */
-    protected HandTileController(Tile tile){
+    public HandTileController(Tile tile){
         this.listeners = new ArrayList<>();
         this.tile = tile;
-        // See inner class to see how mouse handler works
-        this.addMouseListener(new MouseHandler());
     }
 
     /**
@@ -51,61 +48,11 @@ public abstract class HandTileController extends JPanel implements SController {
     }
 
     /**
-     * Getter for tile
-     * @return tile for this controller.
+     * Send a tile click event to any listeners
+     * @param e the event to be processed
      */
-    public Tile getTile() {
-        return tile;
-    }
-
-
-    /**
-     * Flips the selection of the tile in the model.
-     */
-    protected void flipSelection(){
+    @Override
+    public void mousePressed(MouseEvent e) {
         notifyControllerListeners(new TileClickEvent(tile));
-    }
-
-    /**
-     * Highlights the tile in the view (lower prio)
-     */
-    abstract protected void highlight();
-
-    /**
-     * Undo highlighting for the tile in the view (lower prio)
-     */
-    abstract protected void undoHighlight();
-
-    /**
-     * Inner class do handle mouse events on this JPanel.
-     * Handles highlighting on hover, and tile selections on click.
-     */
-    private class MouseHandler extends MouseAdapter {
-        /**
-         * Flip tile selection on click
-         * @param e the event to be processed
-         */
-        @Override
-        public void mousePressed(MouseEvent e) {
-            flipSelection();
-        }
-
-        /**
-         * Highlight tile when mouse enters it
-         * @param e the event to be processed
-         */
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            highlight();
-        }
-
-        /**
-         * Remove highlighting when mouse exits tile.
-         * @param e the event to be processed
-         */
-        @Override
-        public void mouseExited(MouseEvent e) {
-            undoHighlight();
-        }
     }
 }

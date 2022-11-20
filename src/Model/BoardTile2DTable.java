@@ -13,15 +13,22 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @author Alex
  * @version NOV-12
  */
+
+/**
+ * Use Grid2DArray instead, more generalized.
+ * Some of this code should be merged back into the board class now, or board views
+ */
+@Deprecated
 public class BoardTile2DTable {
     // Indexing convention: X, Y
     BoardTile[][] tile2DArray;
+    /** Board view responsibility */
     private final String[] columnLabels = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"};
 
     /**
      * BoardTile2DTable constructor, initializes tile2DArray with default tiles (blank).
      */
-    BoardTile2DTable(){
+    public BoardTile2DTable(){
         tile2DArray = new BoardTile[BOARD_SIZE][BOARD_SIZE];
         // Fill tile array
         for (int col = 0; col< BOARD_SIZE; col ++){

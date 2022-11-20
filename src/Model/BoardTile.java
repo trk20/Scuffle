@@ -10,17 +10,36 @@ import java.awt.*;
  * @author Vladimir Kovacina
  * @author Timothy Kennedy
  * @author Alex
- * @version NOV-12
+ * @version NOV-19
  */
 public class BoardTile {
 
     private Letter letter;
 
-    public enum Type {START, BLANK, X2WORD, X3WORD, X2LETTER, X3LETTER}
+    public enum Type {
+            START(new Color(233, 187, 171), "★"),
+            BLANK(new Color(207, 197, 161), ""),
+            X2WORD(new Color(232, 177, 156), "2W"),
+            X3WORD(new Color(232, 113, 115), "3W"),
+            X2LETTER(new Color(171, 207, 205), "2L"),
+            X3LETTER(new Color(76, 169, 191), "3L");
+            final private Color c;
+            final private String s;
+            Type(Color c, String s){
+                this.c = c;
+                this.s = s;
+            }
+            public Color getColor(){return c;};
+
+        @Override
+        public String toString() {
+            return s;
+        }
+    }
 
     private Type tileType;
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     /**
      * Constructor for creating a new Model.BoardTile object
@@ -52,43 +71,6 @@ public class BoardTile {
         this(p.x, p.y);
     }
 
-    /**
-     * Method used for setting the X position of the board Tile
-     *
-     * @param x, the new x position of the tile
-     */
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    /**
-     * Method used for getting the X position of the board tile
-     *
-     * @return x, returns the x position of the tile
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * Method used for setting the Y position of the board tile
-     *
-     * @param y, the y position of the tile
-     */
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    /**
-     * Method used for getting to Y position of the board tile
-     *
-     * @return y, returns the y position of the tile
-     */
-    public int getY() {
-        return y;
-    }
-
 
     /**
      * Method used for checking is a board tile is taken
@@ -117,7 +99,6 @@ public class BoardTile {
      */
     public Letter getLetter(){
         return letter;
-        //might need error checking here
     }
 
     /**
@@ -148,25 +129,24 @@ public class BoardTile {
         copy.setLetter(this.letter);
         return copy;
     }
+
     @Override
     public String toString() {
         if(this.isTaken()){
             return String.valueOf(letter);
         }
-        return tileType.toString().replaceAll("BLANK"," -- ")
-                .replace("START", "ST")
-                .replace("X2WORD", "2W")
-                .replace("X3WORD", "3W")
-                .replace("X2LETTER", "2L")
-                .replace("X3LETTER", "3L");
+        return tileType.toString();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BoardTile boardTile = (BoardTile) o;
-        return letter == boardTile.letter && tileType == boardTile.tileType;
+        if (!(o instanceof BoardTile boardTile)) return false;
+
+        return letter == boardTile.letter &&
+                tileType == boardTile.tileType &&
+                x == boardTile.x &&
+                y == boardTile.y;
     }
 
 }
