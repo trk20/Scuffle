@@ -15,10 +15,23 @@ import static Model.Board.START_TILE_POINT;
  * @author Alex
  * @version NOV-18
  */
-// TODO: (M3) Valid placement may throw exceptions to indicate failure type
-//  (subclasses of InvalidPlacementException?),
-//  alternatively could set flags in the validator to get later?
 public class BoardValidator {
+    public enum Status{
+        SUCCESS (null),
+        OUT_OF_BOUNDS("Error: PLACEMENT WAS OUT OF BOUNDS"),
+        NOT_ON_START("Error: PLACEMENT DOES NOT INCLUDE START TILE"),
+        NOT_NEXT_TO_WORD("Error: PLACEMENT WAS NOT NEXT TO ANOTHER WORD"),
+        INVALID_WORD("Error: PLACEMENT DID NOT FORM VALID WORDS");
+
+        private String errorMessage;
+        Status(String errorMessage){
+            this.errorMessage = errorMessage;
+        }
+
+        public String getErrorMessage(){
+            return errorMessage;
+        }
+    }
     private final Board boardToValidate;
     private final DictionaryHandler dictionary;
 
@@ -42,12 +55,12 @@ public class BoardValidator {
      * @param placementEvent The event representing a placement attempt
      * @return True if the word passes all the checks, false otherwise.
      */
-    public boolean isValidLocation(BoardPlaceEvent placementEvent) {
-        if(!areNewTilesInBoard(placementEvent)) return false;
+    public Status isValidLocation(BoardPlaceEvent placementEvent) {
+        if(!areNewTilesInBoard(placementEvent)) return Status.OUT_OF_BOUNDS;
 
         if(isBoardEmpty()){
-            return isPlacedOnStart(placementEvent);
-        } else return isPlacedNextToWord(placementEvent);
+            return isPlacedOnStart(placementEvent) ? Status.SUCCESS : Status.NOT_ON_START;
+        } else return isPlacedNextToWord(placementEvent) ? Status.SUCCESS : Status.NOT_NEXT_TO_WORD;
     }
 
     /**
@@ -175,11 +188,11 @@ public class BoardValidator {
         return boardToValidate.isBoardEmpty();
     }
 
-    public boolean isInvalidWordInBoard(List<BoardWord> currentWords) {
+    public Status isInvalidWordInBoard(List<BoardWord> currentWords) {
         for (BoardWord curWord: currentWords)
             if (!dictionary.isValidWord(curWord.toString())){
-                return true;
+                return Status.INVALID_WORD;
             }
-        return false; // No invalid words detected
+        return Status.SUCCESS; // No invalid words detected
     }
 }
