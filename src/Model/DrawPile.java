@@ -21,7 +21,7 @@ public class DrawPile {
      * @see #resetPile()
      * @author Alexandre Marques - 101189743
      */
-    DrawPile(){
+    public DrawPile(){
         resetPile();
     }
 

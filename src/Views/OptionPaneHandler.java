@@ -1,5 +1,6 @@
 package Views;
 
+import Model.Letter;
 import Model.ScrabbleModel;
 
 import javax.swing.*;

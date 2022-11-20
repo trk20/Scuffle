@@ -61,7 +61,8 @@ class ScrabbleModelTest {
 
 
     /**
-     * Tests Event handling of ScrabbleModel
+     * Tests Event handling of ScrabbleModel: TileClick, DiscardClick, and PlaceClick events
+     * TODO: separate into multiple tests
      */
     @Test
     void handleEvents(){

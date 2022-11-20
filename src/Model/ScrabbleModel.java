@@ -279,7 +279,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * @return Model's board
      */
     // FIXME: in the future, should inherit SModel in ModelEvents
-    //  and then pass only the the relevant parts in model events
+    //  and then pass only the relevant parts in model events
     public Board getBoard() {
         return board;
     }
