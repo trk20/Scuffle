@@ -158,15 +158,12 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
-        //nextTurn();
-//        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
     /**
      * Handles running a turn, will be called in a loop until the game is over
      */
     private void nextTurn(){
-//        Player currentPlayer = players.get(turn);
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
         incrementTurn();

@@ -27,7 +27,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         // FIXME: I'm realising, this might be the odd one out, might not need to make an event field
         DISCARD (new DiscardClickEvent()),
         FLIP_DIR(null),
-        SKIP (null); // TODO (discard should work well enough for M2)
+        SKIP (new C_SkipEvent());
 
         private final TurnActionEvent event;
 
