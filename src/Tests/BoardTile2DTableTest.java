@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+// This should translate somewhat well to Grid2DArray tests, keeping it until those exist
+@Deprecated
 class BoardTile2DTableTest {
     BoardTile2DTable board;
 
@@ -21,7 +22,7 @@ class BoardTile2DTableTest {
 
     @Test
     void randomiseTable() {
-        ;//Not sure how to test this
+        //Not sure how to test this
     }
 
     @Test
@@ -48,14 +49,14 @@ class BoardTile2DTableTest {
         Point point = new Point(0, 0);
 
         board.setLetter( point, Letter.A);
-        assertEquals(board.isTaken(point), true);
+        assertTrue(board.isTaken(point));
     }
 
     @Test
     void isNotTaken() {
         Point point = new Point(0, 0);
 
-        assertEquals(board.isTaken(point), false);
+        assertFalse(board.isTaken(point));
     }
 
     @Test
