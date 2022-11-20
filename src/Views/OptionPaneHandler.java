@@ -122,6 +122,7 @@ public class OptionPaneHandler {
     /**
      * Asks user for a character when the user wants to place a blank tile.
      * The blank tile will then contain that character
+     * @author Vladimir Kovacina
      * @return Letter chosen by the user
      */
     public Letter getChosenLetter(){

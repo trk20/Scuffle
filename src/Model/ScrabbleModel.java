@@ -15,8 +15,8 @@ import java.util.List;
  * Class that controls/models the overall scrabble game.
  * For Milestone 1, also acts as a text "view".
  *
- * @author Kieran Rourke, Alex
- * @version NOV-12
+ * @author Kieran Rourke, Alex, Vladimir Kovacina
+ * @version NOV-20
  */
 public class ScrabbleModel implements SControllerListener, SModel, ModelListener{
     /** Max players limited by the four racks (see README setup rules) */

@@ -38,7 +38,7 @@ public enum Letter {
     X('X', 8, 1),
     Q('Q', 10, 1),
     Z('Z', 10, 1),
-    BLANK(' ', 0, 20);
+    BLANK(' ', 0, 2);
 
     // Fields
     /** Score associated with letter (defined by Scrabble rules) */
