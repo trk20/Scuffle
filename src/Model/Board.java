@@ -143,20 +143,17 @@ public class Board {
      */
     Point getFirstNonTakenPoint(Direction placementDirection, Point placeAttempt) {
         Point placementLocation = new Point(placeAttempt);
-        System.out.println("Initial place: "+placementLocation);
 
         try {
             if (placementDirection == Direction.RIGHT) {
                 // Increment Col (x), until no overlap
                 while (isTaken(placementLocation)) {
                     placementLocation.translate(1, 0);
-                    System.out.println("Right translation: " + placementLocation);
                 }
             } else {
                 // Increment row (y), until no overlap
                 while (isTaken(placementLocation)) {
                     placementLocation.translate(0, 1);
-                    System.out.println("Down translation: " + placementLocation);
                 }
             }
         } catch (IndexOutOfBoundsException e){

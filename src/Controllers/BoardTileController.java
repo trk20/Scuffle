@@ -5,23 +5,18 @@ import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.Listeners.SControllerListener;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardController implements SController, ActionListener {
+public class BoardTileController extends MouseAdapter implements SController {
     private final List<SControllerListener> listeners;
     private final Point origin;
 
-    public BoardController(Point origin) {
+    public BoardTileController(Point origin) {
         this.listeners = new ArrayList<>();
         this.origin = origin;
-    }
-
-    @Deprecated
-    public Point getOrigin(){
-        return origin;
     }
     @Override
     public void addControllerListener(SControllerListener l) {listeners.add(l);}
@@ -44,7 +39,7 @@ public class BoardController implements SController, ActionListener {
      * @param e the event to be processed
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void mousePressed(MouseEvent e) {
         notifyControllerListeners(new C_BoardClickEvent(origin));
     }
 }

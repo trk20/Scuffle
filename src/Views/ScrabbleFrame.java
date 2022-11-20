@@ -14,7 +14,7 @@ public class ScrabbleFrame extends JFrame{
     private JPanel southContent;
 
     private final int WIDTH = 1280;
-    private final int HEIGHT = 720;
+    private final int HEIGHT = 900;
 
     private final ScrabbleModel model;
 
@@ -93,13 +93,10 @@ public class ScrabbleFrame extends JFrame{
     }
 
     public void setSouthContent(JPanel southContent) {
-        southContent.setPreferredSize(new Dimension(WIDTH, HEIGHT/4));
+        southContent.setPreferredSize(new Dimension(WIDTH, 180));
         this.southContent = southContent;
 
         repaint();
         revalidate();
     }
-
-
-
 }

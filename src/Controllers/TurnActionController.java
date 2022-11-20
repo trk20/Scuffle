@@ -58,22 +58,13 @@ public class TurnActionController implements SController, BoardClickListener, Ac
      * Constructor for a TurnActionController (for the place action)
      * @param board The board controllers to listen to for click events
      */
-    public TurnActionController(ScrabbleModel model, List<BoardController> board) {
+    public TurnActionController(ScrabbleModel model, List<BoardTileController> board) {
         this(model, ActionState.PLACE);
-        for(BoardController c: board){
+        for(BoardTileController c: board){
             c.addControllerListener(this);
         }
         if(DEBUG_VIEW)
             model.addDebugController(this);
-    }
-    
-    /**
-     * Null constructor for TurnActionController, temporary fix to create events in enum!
-     */
-    @Deprecated
-    private TurnActionController() {
-        action = null;
-        listeners = null;
     }
 
     /**
@@ -112,7 +103,6 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     @Override
     public void handleBoardClickEvent(C_BoardClickEvent e) {
         if(placing) {
-            System.out.println("Handle Board Click");
             placing = false; // Disable place mode before next turn
             notifyControllerListeners(new PlaceClickEvent(dir, e.origin()));
         }

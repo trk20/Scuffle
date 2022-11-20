@@ -5,7 +5,6 @@ import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
-import Views.ScrabbleFrame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +44,10 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     List<Tile> selectedTiles;
 
 
-    private ScrabbleFrame mainFrame;
     private List<SController> debugControllers;
 
     public ScrabbleModel(List<String> playerNames) {
-        this.board = new Board(false);
+        this.board = new Board(true);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();

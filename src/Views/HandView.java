@@ -1,5 +1,6 @@
 package Views;
 
+import Controllers.SController;
 import Model.Hand;
 import Model.ScrabbleModel;
 import Model.Tile;
@@ -27,7 +28,7 @@ public class HandView extends JPanel implements HandChangeListener {
     /** Row with the tiles not yet selected*/
     final private JPanel unselected_row;
     /** Maps model tiles to their respective tile view (for selection referencing)*/
-    final private HashMap<Tile, TileView> handTileMap;
+    final private HashMap<Tile, HandTileView> handTileMap;
     /** Model reference, needed to pass it to new controllers as a listener*/
     final private ScrabbleModel model;
 
@@ -66,7 +67,7 @@ public class HandView extends JPanel implements HandChangeListener {
      */
     private void updateSelectionRow(TileSelectEvent e) throws NullPointerException{
         // Get view from model reference of tile
-        TileView view = handTileMap.get(e.tile());
+        HandTileView view = handTileMap.get(e.tile());
         if(view == null){
             throw new NullPointerException("Hand tile map not properly set");
         }
@@ -111,11 +112,12 @@ public class HandView extends JPanel implements HandChangeListener {
      */
     private void addNewTileView(Tile tile){
 
-        TileView view = new TileView(tile);
+        HandTileView view = new HandTileView(tile);
         unselected_row.add(view);
         // Add model listener to tile
-        view.addControllerListener(model);
-        if(DEBUG_VIEW) model.addDebugController(view);
+        SController viewController = view.getController();
+        viewController.addControllerListener(model);
+        if(DEBUG_VIEW) model.addDebugController(viewController);
         // Update map for the new hand, for each tile
         handTileMap.put(tile, view);
     }

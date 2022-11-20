@@ -1,6 +1,6 @@
 package Tests;
 
-import Controllers.BoardController;
+import Controllers.BoardTileController;
 import Model.*;
 import ScrabbleEvents.ControllerEvents.DiscardClickEvent;
 import ScrabbleEvents.ControllerEvents.PlaceClickEvent;
@@ -65,13 +65,13 @@ class ScrabbleModelTest {
      */
     @Test
     void handleEvents(){
-        BoardController boardController = new BoardController(new Point(7,7));
+        BoardTileController boardController = new BoardTileController(new Point(7,7));
         Player player = model.getCurPlayer();
         model.getCurHand().getHeldTiles().add(0,new Tile(Letter.A));
         model.getCurHand().getHeldTiles().add(1,new Tile(Letter.Y));
         // send a TileClickEvent to select the first tile, then place it with a PlaceClickEvent
         model.handleControllerEvent(new TileClickEvent(model.getCurHand().getHeldTiles().get(0)));
-        model.handleControllerEvent(new PlaceClickEvent(Board.Direction.RIGHT, boardController.getOrigin()));
+        model.handleControllerEvent(new PlaceClickEvent(Board.Direction.RIGHT, new Point(7,7)));
         // Active player should be changed
         assertNotEquals(player,model.getCurPlayer());
         // Tile should have been played

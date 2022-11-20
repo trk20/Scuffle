@@ -10,13 +10,32 @@ import java.awt.*;
  * @author Vladimir Kovacina
  * @author Timothy Kennedy
  * @author Alex
- * @version NOV-12
+ * @version NOV-19
  */
 public class BoardTile {
 
     private Letter letter;
 
-    public enum Type {START, BLANK, X2WORD, X3WORD, X2LETTER, X3LETTER}
+    public enum Type {
+            START(new Color(233, 187, 171), "★"),
+            BLANK(new Color(207, 197, 161), ""),
+            X2WORD(new Color(232, 177, 156), "2W"),
+            X3WORD(new Color(232, 113, 115), "3W"),
+            X2LETTER(new Color(171, 207, 205), "2L"),
+            X3LETTER(new Color(76, 169, 191), "3L");
+            final private Color c;
+            final private String s;
+            Type(Color c, String s){
+                this.c = c;
+                this.s = s;
+            }
+            public Color getColor(){return c;};
+
+        @Override
+        public String toString() {
+            return s;
+        }
+    }
 
     private Type tileType;
     private final int x;
@@ -116,12 +135,7 @@ public class BoardTile {
         if(this.isTaken()){
             return String.valueOf(letter);
         }
-        return tileType.toString().replaceAll("BLANK"," -- ")
-                .replace("START", "ST")
-                .replace("X2WORD", "2W")
-                .replace("X3WORD", "3W")
-                .replace("X2LETTER", "2L")
-                .replace("X3LETTER", "3L");
+        return tileType.toString();
     }
 
     @Override
