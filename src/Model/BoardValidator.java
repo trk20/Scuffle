@@ -102,40 +102,29 @@ public class BoardValidator {
         return false;
     }
 
-
     /**
      * Checks if all placed tiles are within the board's limits.
-     * @param placementEvent  The event representing a placement attempt
+     * @param placeEvent  The event representing a placement attempt
      * @return True if all placed tiles are within the board's limit, false if any are not.
      */
-    private boolean areNewTilesInBoard(BoardPlaceEvent placementEvent) {
-        // Unpack relevant event info
-        Point wordOrigin = placementEvent.wordOrigin();
-        Board.Direction placementDirection = placementEvent.direction();
-        int numTiles = placementEvent.placedTiles().size();
+    private boolean areNewTilesInBoard(BoardPlaceEvent placeEvent) {
+        // Unpack event info
+        List<Tile> word = placeEvent.placedTiles();
+        Board.Direction placementDirection = placeEvent.direction();
 
-        int overlaps = 0; // Place tile one further if a tile already occupies its spot
+        // First tile, no translation
+        Point nextPoint = placeEvent.wordOrigin();
 
         // Check if any tile is outside the board, using given info
         try {
-            for (int i = 0; i < numTiles; i++) {
-                boolean overlapping = true; // (until proven otherwise)
-                Point placementLocation = new Point();
-                if (placementDirection == Board.Direction.RIGHT) {
-                    // Increment Col (x), until no overlap
-                    while (overlapping) {
-                        placementLocation.setLocation((wordOrigin.x + (i + overlaps)), wordOrigin.y);
-                        if (isTaken(placementLocation)) overlaps += 1;
-                        else overlapping = false;
-                    }
-                } else {
-                    // Decrement row (y), until no overlap
-                    while (overlapping) {
-                        placementLocation.setLocation(wordOrigin.x, wordOrigin.y + (i + overlaps));
-                        if (isTaken(placementLocation)) overlaps += 1;
-                        else overlapping = false;
-                    }
-                }
+            for (int i = 0; i < word.size(); i++) {
+                // Place tile at first available location
+                Point firstFree = boardToValidate.getFirstNonTakenPoint(placementDirection, new Point(nextPoint));
+
+                // nextPoint is checked one after last place
+                if (placementDirection == Board.Direction.RIGHT) firstFree.translate(1, 0);
+                else firstFree.translate(0, 1);
+                nextPoint = new Point(firstFree);
             }
         }
         catch(IndexOutOfBoundsException e){
@@ -150,8 +139,6 @@ public class BoardValidator {
      * @return True if one of the tiles is placed on the start tile, false otherwise.
      */
     private boolean isPlacedOnStart(BoardPlaceEvent placementEvent) {
-        // TODO: this unpack/check loop (mostly) repeats itself across checks. Might be refactorable... lambdas maybe?
-
         // Unpack relevant event info
         Point wordOrigin = placementEvent.wordOrigin();
         Board.Direction placementDirection = placementEvent.direction();

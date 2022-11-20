@@ -205,7 +205,7 @@ class BoardValidatorTest {
         wordToPlace2.add(new Tile(Letter.L));
         wordToPlace2.add(new Tile(Letter.O));
         Point newPoint = new Point(6,8);
-        BoardPlaceEvent invalidPlace = new BoardPlaceEvent( wordToPlace2, newPoint, Board.Direction.RIGHT);
+        BoardPlaceEvent invalidPlace = new BoardPlaceEvent(wordToPlace2, newPoint, Board.Direction.RIGHT);
         // Valid location... but invalid words
         assertTrue(validator.isValidLocation(invalidPlace));
         assertEquals(-1, board.placeWord(invalidPlace));

@@ -107,7 +107,7 @@ public class Board {
      * @param p A point coordinate in the board to check
      * @return True if a tile is placed at that location, false otherwise.
      */
-    boolean isTaken(Point p) throws IndexOutOfBoundsException{
+    boolean isTaken(Point p){
         return boardGrid.get(p).isTaken();
     }
 
@@ -132,6 +132,60 @@ public class Board {
         }
 
         return newWords;
+    }
+
+    /**
+     * Keeps translating point in the placement direction until it is not overlapping with a tile in the board.
+     *
+     * @param placementDirection The direction in which the point's word is placed
+     * @param placeAttempt The initial point where the placement is attempted
+     * @return The first point with no overlap
+     */
+    Point getFirstNonTakenPoint(Direction placementDirection, Point placeAttempt) {
+        Point placementLocation = new Point(placeAttempt);
+        System.out.println("Initial place: "+placementLocation);
+
+        try {
+            if (placementDirection == Direction.RIGHT) {
+                // Increment Col (x), until no overlap
+                while (isTaken(placementLocation)) {
+                    placementLocation.translate(1, 0);
+                    System.out.println("Right translation: " + placementLocation);
+                }
+            } else {
+                // Increment row (y), until no overlap
+                while (isTaken(placementLocation)) {
+                    placementLocation.translate(0, 1);
+                    System.out.println("Down translation: " + placementLocation);
+                }
+            }
+        } catch (IndexOutOfBoundsException e){
+            return new Point(-1, -1); // Out of bounds point
+        }
+
+        return placementLocation;
+    }
+
+    /**
+     * Places tiles in the board, skipping over tiles that are already placed.
+     * Precondition: assumes valid placement.
+     *
+     * @param placeEvent The event containing the placement details
+     */
+    private void setWordTiles(BoardPlaceEvent placeEvent) {
+        // Unpack event info
+        List<Tile> word = placeEvent.placedTiles();
+        Direction placementDirection = placeEvent.direction();
+
+        // First tile, attempt to place at origin
+        Point placeLocation = placeEvent.wordOrigin();
+
+        // Place tiles in the board, skipping tiles that are already placed.
+        for (Tile tile : word) {
+            // Place tile at first available location
+            placeLocation = getFirstNonTakenPoint(placementDirection, placeLocation);
+            placeTile(placeLocation, tile.letter());
+        }
     }
 
     /**
@@ -247,80 +301,44 @@ public class Board {
     }
 
     /**
-     * Places tiles in the board, skipping over tiles that are already placed.
-     * Precondition: assumes valid placement.
-     *
-     * @param placeEvent The event containing the placement details
-     */
-    // TODO: could use more cohesion probably
-    private void setWordTiles(BoardPlaceEvent placeEvent) {
-        // Unpack relevant event info
-        Point wordOrigin = placeEvent.wordOrigin();
-        Direction placementDirection = placeEvent.direction();
-        List<Tile> word = placeEvent.placedTiles();
-        int overlaps = 0; // Place tile one further if a tile already occupies its spot
-
-        // Place tiles in the board, skipping tiles that are already placed.
-        for(int i = 0; i < word.size(); i++) {
-            boolean overlapping = true; // (until proven otherwise)
-            Point placementLocation = new Point();
-            if (placementDirection == Board.Direction.RIGHT) {
-                // Increment Col (x), until no overlap
-                while (overlapping) {
-                    placementLocation.setLocation((wordOrigin.x + (i + overlaps)), wordOrigin.y);
-                    if (isTaken(placementLocation)) overlaps += 1;
-                    else overlapping = false;
-                }
-            } else {
-                // Decrement row (y), until no overlap
-                while (overlapping) {
-                    placementLocation.setLocation(wordOrigin.x, wordOrigin.y + (i + overlaps));
-                    if (isTaken(placementLocation)) overlaps += 1;
-                    else overlapping = false;
-                }
-            }
-            placeTile(placementLocation, word.get(i).letter());
-        }
-    }
-
-
-    /**
      * Finds all words currently in the board
      *
      * @return the list of words in the board
      */
-    // TODO: could use more cohesion probably
-     private List<BoardWord> getCurrentWords(){
-         List<BoardWord> curWords = new ArrayList<>();
+    private List<BoardWord> getCurrentWords(){
+        List<BoardWord> curWords = new ArrayList<>();
 
-         boolean readingColumns = true; // Choose to read columns first (for condition clarity)
-         List<BoardTile> takenTiles = new ArrayList<>();
+        boolean readingColumns = true; // Choose to read columns first (arbitrary)
+        List<BoardTile> sequentialTakenTiles = new ArrayList<>();
 
-         // Iterate through two ways of reading words in the board
-         for(int readDir = 0; readDir<2; readDir++){
-             // Iterate through entire board
-             for(int i = 0; i < BOARD_SIZE; i++){
-                 // Iterate through entire col/row (depending on direction)
-                 for(int j = 0; j<BOARD_SIZE; j++){
-                     // Check vertical words on first pass, horizontal on second
-                     Point p = readingColumns ? new Point(i,j) : new Point(j, i);
+        /* Loop levels:
+         * Iterate through two ways of reading words in the board;
+         *  Iterate through entire board
+         *   Iterate through entire col/row (cols first past)
+         */
+        for(int readDir = 0; readDir<2; readDir++){
+            for(int i = 0; i < BOARD_SIZE; i++){
+                for(int j = 0; j<BOARD_SIZE; j++){
+                    // Increment coords based on reading strategy
+                    Point p = readingColumns ? new Point(i,j) : new Point(j, i);
 
-                     if(isTaken(p)) {
-                         takenTiles.add(getBoardTile(p));
-                     } else {
-                         if(takenTiles.size() >= MIN_WORD_SIZE){
-                             // Creates new BoardWord with a copied (important!) list
-                             curWords.add(new BoardWord(new ArrayList<>(takenTiles)));
-                         }
-                         // Clear taken tiles to check for another word in col/row
-                         takenTiles.clear();
-                     }
-                 }
-             }
-             // Second loop, read rows instead
-             readingColumns = false;
-         }
+                    if(isTaken(p)) {
+                        sequentialTakenTiles.add(getBoardTile(p));
+                    } else {
+                        // Sequence > min word size, then it represents a word in the board (possibly invalid)
+                        if(sequentialTakenTiles.size() >= MIN_WORD_SIZE){
+                            // Creates new BoardWord with a copied (important!) list
+                            curWords.add(new BoardWord(new ArrayList<>(sequentialTakenTiles)));
+                        }
+                        // Sequence broken, clear list
+                        sequentialTakenTiles.clear();
+                    }
+                }
+            }
+            // Second loop, read rows instead
+            readingColumns = false;
+        }
 
-         return curWords;
+        return curWords;
     }
 }
