@@ -108,6 +108,38 @@ public class Board {
         return score;
     }
 
+    /**
+     * AI utility function, checks if a placement is valid
+     * FOR AI USE ONLY
+     *
+     * @param placeEvent the placement event to evaluate
+     *
+     * @author Timothy Kennedy
+     */
+    public boolean isValidPlacement(BoardPlaceEvent placeEvent){
+        BoardValidator.Status currentStatus;
+        currentStatus = validator.isValidLocation(placeEvent);
+        // Ensure valid placement
+        if(currentStatus != BoardValidator.Status.SUCCESS){
+            return false;
+        }
+
+        // Save board state
+        Grid2DArray<BoardTile> savedBoardGrid = this.copyGrid(boardGrid);
+        // Place word on board, abort placement if it results in invalid words
+        setWordTiles(placeEvent);
+        List<BoardWord> curWords = getCurrentWords();
+
+        currentStatus = validator.isInvalidWordInBoard(curWords);
+        if(currentStatus != BoardValidator.Status.SUCCESS){
+            // Load board state
+            boardGrid = savedBoardGrid;
+            return false;
+        }
+        boardGrid = savedBoardGrid;
+        return true;
+    }
+
     private Grid2DArray<BoardTile> copyGrid(Grid2DArray<BoardTile> boardGrid) {
         int boardSize = boardGrid.getSize();
         Grid2DArray<BoardTile> gridCopy = new Grid2DArray<>(boardSize);
@@ -328,6 +360,16 @@ public class Board {
             case X3LETTER -> tile.getLetter().getScore() * 3;
             default -> tile.getLetter().getScore();
         };
+    }
+
+    public ArrayList<BoardTile> getBoardTiles(){
+        ArrayList<BoardTile> tiles = new ArrayList<>();
+        for (int x = 0; x < 15; x++){
+            for (int y = 0; y < 15; y++) {
+                tiles.add(boardGrid.get(new Point(x, y)));
+            }
+        }
+        return tiles;
     }
 
     /**

@@ -20,7 +20,7 @@ import static Views.DebugView.DEBUG_VIEW;
  * @author Kieran Rourke, Alex
  * @version NOV-12
  */
-public class ScrabbleModel implements SControllerListener, SModel, ModelListener{
+public class ScrabbleModel implements SControllerListener, SModel{
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
@@ -50,8 +50,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 
     public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
 
-    public ScrabbleModel(List<String> playerNames) {
-        this.board = new Board(true);
+    public ScrabbleModel(List playerInfo) {
+        this.board = new Board(false);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
@@ -60,10 +60,11 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         this.debugControllers = new ArrayList<>();
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
+
         // Guard against null human players
-        if(playerNames != null){
-            this.numPlayers = playerNames.size();
-            initializePlayers(playerNames);
+        if(playerInfo != null){
+            this.numPlayers = playerInfo.size();
+            initializePlayers(playerInfo, drawPile);
         }
     }
 
@@ -95,12 +96,17 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     /**
      * Creates Player models from a list of player names.
      *
-     * @param names The list of names for each player in the model
+     * @param playerInfos The list of playerInfo for each player in the model
+     * @param drawPile
      */
-    private void initializePlayers(List<String> names){
+    private void initializePlayers(List<?> playerInfos, DrawPile drawPile){
         players = new ArrayList<>();
-        for (String name: names) {
-            players.add(new Player(name, this));
+        for (Object playerInfo: playerInfos) {
+            if(!(boolean)((List<?>)playerInfo).get(1)) {
+                players.add(new Player((String)((List<?>)playerInfo).get(0), drawPile));
+            }else{
+                players.add(new AIPlayer((String)((List<?>)playerInfo).get(0), this));
+            }
         }
     }
 
@@ -145,6 +151,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             }
 
             notifyModelListeners(new BoardChangeEvent(board));
+            nextTurn();
         }
     }
 
@@ -192,6 +199,11 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        if(getCurPlayer() instanceof AIPlayer){
+            ((AIPlayer) getCurPlayer()).play();
+        }
+        //nextTurn();
+//        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
     /**
@@ -203,8 +215,12 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
         incrementTurn();
-        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+
         notifyModelListeners(new PlayerChangeEvent(players));
+        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        if(getCurPlayer() instanceof AIPlayer){
+            ((AIPlayer) getCurPlayer()).play();
+        }
     }
 
     /**
@@ -304,11 +320,6 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     //  and then pass only the relevant parts in model events
     public Board getBoard() {
         return board;
-    }
-
-    @Override
-    public void handleModelEvent(ModelEvent e) {
-
     }
 
     /**

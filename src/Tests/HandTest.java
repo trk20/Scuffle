@@ -57,4 +57,5 @@ class HandTest {
         //the hand should not contain those exact tiles
         assertFalse(tileCopy.stream().anyMatch(tile-> hand.getHeldTiles().contains(tile)));
     }
+
 }
