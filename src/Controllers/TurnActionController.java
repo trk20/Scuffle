@@ -108,6 +108,7 @@ public class TurnActionController extends TurnController implements SController,
         if(placing && !disableControl) {
             placing = false; // Disable place mode before next turn
             notifyControllerListeners(new PlaceClickEvent(dir, e.origin()));
+
         }
     }
         

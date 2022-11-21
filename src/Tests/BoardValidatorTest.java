@@ -1,5 +1,6 @@
 package Tests;
 
+import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 import Model.*;
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 import org.junit.jupiter.api.BeforeEach;
