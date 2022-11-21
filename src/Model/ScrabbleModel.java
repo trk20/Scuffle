@@ -150,6 +150,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
             }
 
             notifyModelListeners(new BoardChangeEvent(board));
+            nextTurn();
         }
     }
 
