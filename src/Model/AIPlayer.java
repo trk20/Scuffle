@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.*;
 
 public class AIPlayer extends Player {
+    private static final int MAX_ATTEMPTS = 500;
     private final List<ModelListener> modelListeners;
     private final DictionaryHandler dict;
     private final ScrabbleModel model;
@@ -97,7 +98,6 @@ public class AIPlayer extends Player {
     /**
      * Gets a placement event including a boardTile if applicable, and returns a valid placement if found.
      * If it finds no placements, it returns null.
-     *
      * TODO: optimize/rework/change word-finding algorithm (currently random guessing, inefficient)
      *
      * @param boardTileUsed the boardTile to include in the placement (if applicable)
@@ -112,7 +112,7 @@ public class AIPlayer extends Player {
         Board board = model.getBoard();
         Hand hand = super.getHand();
 
-        ArrayList<Tile> tilesToPlace = new ArrayList<>(); //Tiles with which to attempt a placement
+        ArrayList<Tile> tilesToPlace; //Tiles with which to attempt a placement
 
         for(ArrayList<String> word: (startOfGame) ? getValidWords(hand) : getValidWords(boardTileUsed,hand)){
             tilesToPlace = new ArrayList<>(); //clear list each attempt (otherwise will grow)
@@ -142,7 +142,8 @@ public class AIPlayer extends Player {
                 if(board.isValidPlacement(
                         new BoardPlaceEvent(
                                 tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()-boardTileIndex), Board.Direction.DOWN
-                        )))
+                        )) ==
+                        BoardValidator.Status.SUCCESS)
                 {
                     //return corresponding placement event
                     return new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()-boardTileIndex), Board.Direction.DOWN);
@@ -152,7 +153,8 @@ public class AIPlayer extends Player {
                 else if (board.isValidPlacement(
                         new BoardPlaceEvent(
                                 tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT
-                        )))
+                        )) ==
+                        BoardValidator.Status.SUCCESS)
                 {
                     //return corresponding placement event
                     return new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT);
@@ -205,7 +207,7 @@ public class AIPlayer extends Player {
         }
 
         //Find valid words in a large amount of random strings that contain the right letters
-        for(ArrayList<String> wordCandidate:getNRandomPermutations(letters.toString(), 500)){
+        for(ArrayList<String> wordCandidate:getNRandomPermutations(letters.toString())){
             if(dict.isValidWord(String.join("",wordCandidate))){
                 placementCandidates.add(wordCandidate);
             }
@@ -230,7 +232,7 @@ public class AIPlayer extends Player {
             letters.append(heldTile.letter().name());
         }
         //Find valid words in a large amount of random strings that contain the right letters (including that of the BoardTile
-        for(ArrayList<String> wordCandidate:getNRandomPermutations(letters.toString(), 500)){
+        for(ArrayList<String> wordCandidate:getNRandomPermutations(letters.toString())){
             if(wordCandidate.contains(tile.getLetter().name()) && dict.isValidWord(String.join("",wordCandidate))){
                 placementCandidates.add(wordCandidate);
             }
@@ -241,20 +243,19 @@ public class AIPlayer extends Player {
 
     /**
      * Utility function to get n random permutations of a string
-     * @param letters the string to get the permutations of
-     * @param n the number of random permutations to generate
-     * @return a hashset of n random permutations of the string
      *
+     * @param letters the string to get the permutations of
+     * @return a hashset of n random permutations of the string
      * @author Timothy Kennedy
      */
-    private HashSet<ArrayList<String>> getNRandomPermutations(String letters,int n) {
+    private HashSet<ArrayList<String>> getNRandomPermutations(String letters) {
         Random r = new Random();
         HashSet<ArrayList<String>> perms = new HashSet<>(); // Set of permutations generated-don't want to have duplicates
 
         //list of letters to shuffle to get a random permutation
-        ArrayList<String> shuffle = new ArrayList<String>(Arrays.asList(letters.split("")));
+        ArrayList<String> shuffle = new ArrayList<>(Arrays.asList(letters.split("")));
 
-        while(perms.size() < n) {
+        while(perms.size() < MAX_ATTEMPTS) {
             Collections.shuffle(shuffle, r);
 
             // add a permutation of variable length

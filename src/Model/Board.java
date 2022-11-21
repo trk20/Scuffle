@@ -46,11 +46,10 @@ public class Board {
     public Board(boolean premiumBoard){
         validator = new BoardValidator(this);
         lastPlacedWords = new ArrayList<>();
+        initializeBlankGrid();  // Initialize tiles in boardGrid
 
-        // Initialize tiles in board.
-        initializeBlankGrid();
         if(premiumBoard) setPremiumTiles();
-        boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START);
+        boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START); // Set start tile
     }
 
     /**
@@ -63,7 +62,7 @@ public class Board {
         return boardGrid.get(p);
     }
 
-
+    @Deprecated // TODO: should be sending a message to a view through validation
     private void handleInvalidPlacement(BoardValidator.Status status){
         OptionPaneHandler errorDisplayer = new OptionPaneHandler();
         errorDisplayer.displayError(status.getErrorMessage());
@@ -74,70 +73,48 @@ public class Board {
      * For invalid placements, will cancel the operation and indicate an exception.
      *
      * @param placeEvent The event containing the placement details
-     * @return -1 if it is an invalid placement, otherwise, the score resulting from the placement.
+     * @return The score resulting from the placement (Post-Condition: score >= 0).
      */
     public int placeWord(BoardPlaceEvent placeEvent){
-        BoardValidator.Status currentStatus;
-
-        currentStatus = validator.isValidLocation(placeEvent);
-        // Ensure valid placement
-        if(currentStatus != BoardValidator.Status.SUCCESS){
-            handleInvalidPlacement(currentStatus);
-            return -1;
-        }
-        // Save board state
-        Grid2DArray<BoardTile> savedBoardGrid = this.copyGrid(boardGrid);
-
-        // Place word on board, abort placement if it results in invalid words
+        // Pre-condition: placeEvent is a valid placement
+        //noinspection AssertWithSideEffects
+        assert(isValidPlacement(placeEvent) == BoardValidator.Status.SUCCESS);
+        // Place word on board, save resulting state
         setWordTiles(placeEvent);
         List<BoardWord> curWords = getCurrentWords();
+        List<BoardWord> turnWords = getPlacedWords(getCurrentWords());
+        lastPlacedWords = curWords; // Store words from this turn (for next placement)
 
-        currentStatus = validator.isInvalidWordInBoard(curWords);
-        if(currentStatus != BoardValidator.Status.SUCCESS){
-            // Load board state
-            boardGrid = savedBoardGrid;
-            handleInvalidPlacement(currentStatus);
-            return -1;
-        }
-
-        // Calculate score of the words formed this placement
-        int score = getPlacedScore(getPlacedWords(curWords));
-
-        // Store words from this turn (for next placement)
-        lastPlacedWords = curWords;
-        return score;
+        return getPlacedScore(turnWords);
     }
 
     /**
-     * AI utility function, checks if a placement is valid
-     * FOR AI USE ONLY
+     * Checks if a placement is valid, then indicates the result of the validation.
+     * Board state before and after this method should be identical!
      *
      * @param placeEvent the placement event to evaluate
+     * @return The status of the validation: Success if it passed, otherwise the cause of failure.
      *
      * @author Timothy Kennedy
+     * @author Alex
      */
-    public boolean isValidPlacement(BoardPlaceEvent placeEvent){
+    public BoardValidator.Status isValidPlacement(BoardPlaceEvent placeEvent){
         BoardValidator.Status currentStatus;
         currentStatus = validator.isValidLocation(placeEvent);
-        // Ensure valid placement
-        if(currentStatus != BoardValidator.Status.SUCCESS){
-            return false;
-        }
 
-        // Save board state
-        Grid2DArray<BoardTile> savedBoardGrid = this.copyGrid(boardGrid);
-        // Place word on board, abort placement if it results in invalid words
-        setWordTiles(placeEvent);
-        List<BoardWord> curWords = getCurrentWords();
-
-        currentStatus = validator.isInvalidWordInBoard(curWords);
-        if(currentStatus != BoardValidator.Status.SUCCESS){
-            // Load board state
+        // Location is valid, check if words are valid
+        if(currentStatus == BoardValidator.Status.SUCCESS){
+            // Save board state
+            Grid2DArray<BoardTile> savedBoardGrid = this.copyGrid(boardGrid);
+            // Place word on board, check if it creates invalid words
+            setWordTiles(placeEvent);
+            List<BoardWord> curWords = getCurrentWords();
+            currentStatus = validator.isInvalidWordInBoard(curWords);
+            // Load board state (Prevent mutation due to validation!)
             boardGrid = savedBoardGrid;
-            return false;
         }
-        boardGrid = savedBoardGrid;
-        return true;
+
+        return currentStatus;
     }
 
     private Grid2DArray<BoardTile> copyGrid(Grid2DArray<BoardTile> boardGrid) {
