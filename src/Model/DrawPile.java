@@ -1,5 +1,9 @@
 package Model;
 
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.DiscardEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +15,7 @@ import java.util.List;
  * @author Alexandre Marques - 101189743
  * @version 2022-10-22
  */
-public class DrawPile {
+public class DrawPile implements ModelListener {
     /** Contains all letter tiles not drawn in the game yet*/
     private List<Tile> letterPile;
 
@@ -92,5 +96,10 @@ public class DrawPile {
      */
     public void setLetterPile(List<Tile> letterPile) {
         this.letterPile = letterPile;
+    }
+
+    @Override
+    public void handleModelEvent(ModelEvent e) {
+        if(e instanceof DiscardEvent ev) addToPile(ev.used());
     }
 }
