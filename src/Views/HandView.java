@@ -24,6 +24,7 @@ import static Views.DebugView.DEBUG_VIEW;
  */
 public class HandView extends JPanel implements HandChangeListener {
     /** Row with the selected tiles*/
+    private static final Color BACKGROUND_COLOR = new Color(187, 129, 65);
     final private JPanel selected_row;
     /** Row with the tiles not yet selected*/
     final private JPanel unselected_row;
@@ -37,12 +38,16 @@ public class HandView extends JPanel implements HandChangeListener {
      */
     HandView(ScrabbleModel model){
         unselected_row = new JPanel();
+        unselected_row.setBackground(BACKGROUND_COLOR);
         selected_row = new JPanel();
+        selected_row.setBackground(BACKGROUND_COLOR);
+
         handTileMap = new HashMap<>();
         this.model = model;
 
         // Composed of two sections, selected tiles on top, unselected on the bottom.
         setLayout(new GridLayout(2, 1));
+        setBackground(BACKGROUND_COLOR);
         add(selected_row);
         add(unselected_row);
 
