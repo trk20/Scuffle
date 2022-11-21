@@ -61,9 +61,9 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
         // Guard against null human players
-        if(playerNames != null){
-            this.numPlayers = playerNames.size();
-            initializePlayers(playerNames);
+        if(playerInfo != null){
+            this.numPlayers = playerInfo.size();
+            initializePlayers(playerInfo);
         }
     }
 
@@ -95,12 +95,17 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     /**
      * Creates Player models from a list of player names.
      *
-     * @param names The list of names for each player in the model
+     *
+     * @param playerInfos The list of playerInfo for each player in the model
      */
-    private void initializePlayers(List<String> names){
+    private void initializePlayers(List<?> playerInfos){
         players = new ArrayList<>();
-        for (String name: names) {
-            players.add(new Player(name, this));
+        for (Object playerInfo: playerInfos) {
+            if(!(boolean)((List<?>)playerInfo).get(1)) {
+                players.add(new Player((String)((List<?>)playerInfo).get(0), this));
+            }else{
+                players.add(new AIPlayer((String)((List<?>)playerInfo).get(0), this));
+            }
         }
     }
 
@@ -126,31 +131,27 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      */
     private void handlePlace(PlaceClickEvent pce){
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
-        int placementScore = board.placeWord(placeEvent);
+        BoardValidator.Status validStatus = board.isValidPlacement(placeEvent);
 
-        if(placementScore<0){
-            // Display error, do nothing.
-        } else {
+        if (validStatus == BoardValidator.Status.SUCCESS){
+            // Place on board, save points in player
+            getCurPlayer().addPoints(board.placeWord(placeEvent));
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));
             notifyModelListeners(new PlayerChangeEvent(players));
-
-            // Letters have been placed, get rid of them and bank the score.
-            getCurPlayer().addPoints(placementScore);
             try{
-                getCurPlayer().placeTiles(selectedTiles);
-
+                getCurPlayer().placeTiles(selectedTiles); // Get rid of tiles used
             } catch (NullPointerException e){
                 endGame();
             }
-
-            notifyModelListeners(new BoardChangeEvent(board));
         }
+        notifyModelListeners(new BoardChangeEvent(board));
+        nextTurn();
     }
 
 
     /**
-     * Used to end the game
+     * Used to restart the game
      */
     public void newGame() {
         // TODO
@@ -192,6 +193,9 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        if(getCurPlayer() instanceof AIPlayer){
+            ((AIPlayer) getCurPlayer()).play();
+        }
     }
 
     /**
@@ -203,8 +207,12 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
         incrementTurn();
-        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+
         notifyModelListeners(new PlayerChangeEvent(players));
+        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        if(getCurPlayer() instanceof AIPlayer){
+            ((AIPlayer) getCurPlayer()).play();
+        }
     }
 
     /**

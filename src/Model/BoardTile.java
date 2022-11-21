@@ -13,6 +13,7 @@ import java.awt.*;
  * @version NOV-19
  */
 public class BoardTile {
+
     public enum Type {
         START(new Color(233, 187, 171), "★"),
         BLANK(new Color(207, 197, 161), ""),
@@ -124,6 +125,24 @@ public class BoardTile {
      */
     public void setType(Type type) {
         this.tileType = type;
+    }
+
+    /**
+     * Gets the tile's x location (AI ONLY)
+     *
+     * @return tile's x location
+     */
+    public int getX() {
+        return x;
+    }
+
+    /**
+     * Gets the tile's y location (AI ONLY)
+     *
+     * @return tile's y location
+     */
+    public int getY() {
+        return y;
     }
 
     /**
