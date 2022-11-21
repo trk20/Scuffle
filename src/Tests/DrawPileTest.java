@@ -40,7 +40,7 @@ class DrawPileTest {
         for(Letter expectedLetter: Letter.values()) { //check if the DrawPile has the correct number of each type of letter (INCL blank)
 
             assertEquals(dp.getLetterPile().stream().filter(
-                    tile -> tile.letter().equals(expectedLetter)).count(),
+                    tile -> tile.getLetter().equals(expectedLetter)).count(),
                     expectedLetter.getFrequency()
             );
 

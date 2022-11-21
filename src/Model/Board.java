@@ -223,7 +223,7 @@ public class Board {
         for (Tile tile : word) {
             // Place tile at first available location
             placeLocation = getFirstNonTakenPoint(placementDirection, placeLocation);
-            placeTile(placeLocation, tile.letter());
+            placeTile(placeLocation, tile.getLetter());
         }
     }
 

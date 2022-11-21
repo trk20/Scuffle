@@ -32,11 +32,11 @@ public abstract class TileView extends JPanel {
         JLabel[][] labelHolder = new JLabel[size][size];
 
         // Letter label
-        JLabel letterLabel = new JLabel(getTile().getLetter().toString());
+        JLabel letterLabel = new JLabel(letter.toString());
         letterLabel.setHorizontalAlignment(JLabel.CENTER);
         labelHolder[1][1] = letterLabel; // Add text at grid center.
         // Score label
-        JLabel scoreLabel = new JLabel(getTile().getScore()+"");
+        JLabel scoreLabel = new JLabel(letter.getScore()+"");
         scoreLabel.setHorizontalAlignment(JLabel.CENTER);
         labelHolder[size-1][size-1] = scoreLabel; // Add score at bottom right corner.
 

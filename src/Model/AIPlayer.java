@@ -129,7 +129,7 @@ public class AIPlayer extends Player {
                 int boardTileIndex =
                         tilesToPlace.indexOf(
                                 tilesToPlace.stream()
-                                                .filter(currentTile->currentTile.letter().name().equals(boardTileUsed.getLetter().name()))
+                                                .filter(currentTile->currentTile.getLetter().name().equals(boardTileUsed.getLetter().name()))
                                         .findFirst().get());
 
                 //debug
@@ -179,7 +179,7 @@ public class AIPlayer extends Player {
         for(String letter:word) {
             for(int i = 0; i < removeFrom.size(); i ++) {
                 Tile current = removeFrom.get(i);
-                if(current.letter().name().equals(letter)) {
+                if(current.getLetter().name().equals(letter)) {
                     insertInto.add(removeFrom.remove(i));
                     break;
                 }
@@ -203,7 +203,7 @@ public class AIPlayer extends Player {
         ArrayList<ArrayList<String>> placementCandidates = new ArrayList<>();
 
         for(Tile heldTile:hand.getHeldTiles()){
-            letters.append(heldTile.letter().name());
+            letters.append(heldTile.getLetter().name());
         }
 
         //Find valid words in a large amount of random strings that contain the right letters
@@ -229,7 +229,7 @@ public class AIPlayer extends Player {
 
         ArrayList<ArrayList<String>> placementCandidates = new ArrayList<>();
         for(Tile heldTile:hand.getHeldTiles()){
-            letters.append(heldTile.letter().name());
+            letters.append(heldTile.getLetter().name());
         }
         //Find valid words in a large amount of random strings that contain the right letters (including that of the BoardTile
         for(ArrayList<String> wordCandidate:getNRandomPermutations(letters.toString())){
