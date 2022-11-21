@@ -34,6 +34,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     private JButton directionButton;
     private final int width = 300;
     private final int height = 300;
+    private JLabel playerLabel;
 
     TurnActionController controller;
 
@@ -89,7 +90,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         turnLabel.setFont(new Font("Serif", Font.BOLD, 15));
         turnLabel.setForeground(Color.WHITE);
 
-        JLabel playerLabel = new JLabel(currentPlayerName);
+        playerLabel = new JLabel(currentPlayerName);
         playerLabel.setFont(new Font("Serif", Font.BOLD, 15));
         playerLabel.setForeground(Color.WHITE);
 
@@ -163,7 +164,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         if(e instanceof NewPlayerEvent newPlayer){
             if(!newPlayer.player().getName().equals(currentPlayerName)){
                 currentPlayerName = newPlayer.player().getName(); // FIXME: redundant?
-                turnLabel.setText("Turn: "+currentPlayerName);
+                playerLabel.setText(currentPlayerName);
 
             }
         }
