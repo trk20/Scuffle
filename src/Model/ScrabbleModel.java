@@ -5,6 +5,7 @@ import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
+import Views.OptionPaneHandler;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -130,14 +131,20 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         if(placementScore<0){
             // Display error, do nothing.
         } else {
-            // Letters have been placed, get rid of them and bank the score.
-            getCurPlayer().placeTiles(selectedTiles);
-            getCurPlayer().addPoints(placementScore);
-
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));
             notifyModelListeners(new PlayerChangeEvent(players));
-            nextTurn();
+
+            // Letters have been placed, get rid of them and bank the score.
+            getCurPlayer().addPoints(placementScore);
+            try{
+                getCurPlayer().placeTiles(selectedTiles);
+
+            } catch (NullPointerException e){
+                endGame();
+            }
+
+            notifyModelListeners(new BoardChangeEvent(board));
         }
     }
 
@@ -145,10 +152,34 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     /**
      * Used to end the game
      */
-    public void setGameFinished() {
-        this.gameFinished = true;
+    public void newGame() {
+        // TODO
     }
 
+    /**
+     * Gets player with highest score
+     * @return Player with highest score
+     */
+    private Player getTopPlayer(){
+        Player topPlayer = players.get(0);
+        for (Player player : players){
+            if (player.getScore() > topPlayer.getScore()){
+                topPlayer = player;
+            }
+        }
+        return topPlayer;
+    }
+
+    /**
+     * Handles ending the game
+     */
+    private void endGame(){
+        Player winner = getTopPlayer();
+        OptionPaneHandler popUpHandler = new OptionPaneHandler();
+
+        gameFinished = true;
+        popUpHandler.displayMessage("Draw Pile is Empty Game is Over!\nThe winner is "+winner.getName()+"! Congrats!!!");
+    }
 
     /**
      * Handles starting the game
@@ -167,6 +198,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * Handles running a turn, will be called in a loop until the game is over
      */
     private void nextTurn(){
+        if(gameFinished) return;
+
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
         incrementTurn();
@@ -232,6 +265,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
+        if (gameFinished) return;
         // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
