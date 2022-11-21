@@ -125,7 +125,7 @@ class AIPlayerTest {
         ArrayList<Tile> tiles2 = new ArrayList<>();
         ArrayList<String> word = new ArrayList<String>();
         for(Tile tile:tiles1){
-            word.add(tile.letter().name());
+            word.add(tile.getLetter().name());
         }
         System.out.println(tiles1 + " -> " + word + " -> "  + tiles2);
         player.transferTilesMatchingWord(tiles1,tiles2,word);

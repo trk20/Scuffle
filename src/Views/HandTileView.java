@@ -24,7 +24,7 @@ public class HandTileView extends TileView{
      */
     public HandTileView(Tile tile){
         super();
-        styleHandTile(tile.letter());
+        styleHandTile(tile.getLetter());
         controller = new HandTileController(tile);
         this.addMouseListener(controller);
     }
