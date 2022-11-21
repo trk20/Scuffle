@@ -50,7 +50,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
 
     public ScrabbleModel(List<?> playerInfo) {
-        this.board = new Board(false);
+        this.board = new Board(true);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
@@ -189,6 +189,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        // Otherwise, wait for GUI controllers to handle turn
         if(getCurPlayer() instanceof AIPlayer){
             notifyModelListeners(new AIPlayingEvent(true));
             ((AIPlayer) getCurPlayer()).play();
