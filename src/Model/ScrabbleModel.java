@@ -6,6 +6,7 @@ import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 
 
     private List<SController> debugControllers;
+
+    public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
 
     public ScrabbleModel(List<String> playerNames) {
         this.board = new Board(true);
