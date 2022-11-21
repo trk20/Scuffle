@@ -1,5 +1,9 @@
 package Model;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.DiscardEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +13,7 @@ import java.util.List;
  * @author Alexandre Marques - 101189743
  * @version 2022-10-23
  */
-public class Player {
+public class Player implements SModel {
     /** Model.Player's display name */
     final private String name;
     /** Model.Player's Model.Hand (holds their letters) */
@@ -17,19 +21,22 @@ public class Player {
     /** Model.Player's cumulative score for the game */
     private int score;
     /** Game model, has a shared Model.DrawPile, and a Model.Board */
-    final ScrabbleModel model;
+
+    private List<ModelListener> modelListeners;
 
     /**
      * Model.Player constructor, sets a name from the name parameter,
      * initializes an empty hand, and sets score to 0 initially.
      *
      * @param name the Model.Player's display name
-     * @param model the Scrabble game's model
+     * @param model the model to notify on discard
      */
     public Player(String name, ScrabbleModel model) {
+        //needs model to add it as a listener
         this.name = name;
-        this.model = model;
+        this.modelListeners = new ArrayList<>();
         this.hand = new Hand(model.getDrawPile());
+        this.addModelListener(model);
         this.score = 0;
     }
 
@@ -58,8 +65,8 @@ public class Player {
     @Deprecated
     public void discardTiles(List<Tile> used){
         // Add the letters to be removed to the model's Model.DrawPile
-        model.getDrawPile().addToPile(used);
-        // Remove the letters from the hand (return true if hand contains used letters)
+        this.notifyModelListeners(new DiscardEvent(this, used));
+        // Remove the letters from the hand
         hand.useTiles(used);
 
         /* Note: Will always be able to draw enough letters. -> no empty pile exception
@@ -67,6 +74,8 @@ public class Player {
          * This works only because "useLetters" is called after "addToPile" -> order is important!
          */
     }
+
+
 
     /**
      * Add points from a placement to this Model.Player's score.
@@ -139,5 +148,18 @@ public class Player {
     @Deprecated
     public void setHand(Hand hand) {
         this.hand = hand;
+    }
+
+
+    @Override
+    public void addModelListener(ModelListener l) {
+        modelListeners.add(l);
+    }
+
+    @Override
+    public void notifyModelListeners(ModelEvent e) {
+        for(ModelListener listener:modelListeners){
+            listener.notify();
+        }
     }
 }
