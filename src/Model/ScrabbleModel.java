@@ -104,32 +104,31 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles the user wanting to place letters
      */
     private void handlePlace(PlaceClickEvent pce){
+        // Check if the placement event is valid
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
-        int placementScore = board.placeWord(placeEvent);
+        BoardValidator.Status validStatus = board.isValidPlacement(placeEvent);
 
-        // Otherwise, not a valid placement (ignore placement)
-        if (placementScore >= 0) {
+        if (validStatus == BoardValidator.Status.SUCCESS){
+            // Place on board, save points in player
+            getCurPlayer().addPoints(board.placeWord(placeEvent));
+
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));
             notifyModelListeners(new PlayerChangeEvent(players));
-
-            // Letters have been placed, get rid of them and bank the score.
-            getCurPlayer().addPoints(placementScore);
             try{
-                getCurPlayer().placeTiles(selectedTiles);
-
+                getCurPlayer().placeTiles(selectedTiles); // Get rid of tiles used
             } catch (NullPointerException e){
                 endGame();
             }
-
-            notifyModelListeners(new BoardChangeEvent(board));
-            nextTurn();
         }
+        // Update turn state
+        notifyModelListeners(new BoardChangeEvent(board));
+        nextTurn();
     }
 
 
     /**
-     * Used to end the game
+     * Used to start a new game
      */
     public void newGame() {
         // TODO
