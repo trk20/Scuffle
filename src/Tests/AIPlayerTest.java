@@ -59,19 +59,19 @@ class AIPlayerTest {
         /*
          * If the AI decides to discard, the score should not change at the end of the turn
          */
-        ai1.addControllerListener(new SControllerListener() {
-            private static int oldScore = 0;
-
-            @Override
-            public void handleControllerEvent(ControllerEvent e) {
-                // Check discard test assumption
-                if (e instanceof DiscardClickEvent){
-                    assertEquals(oldScore, ai1.getScore());
-                }
-                // Update score each turn taken
-                oldScore = ai1.getScore();
-            }
-        });
+//        ai.addControllerListener(new SControllerListener() {
+//            private static int oldScore = 0;
+//
+//            @Override
+//            public void handleControllerEvent(ControllerEvent e) {
+//                // Check discard test assumption
+//                if (e instanceof DiscardClickEvent){
+//                    assertEquals(oldScore, ai1.getScore());
+//                }
+//                // Update score each turn taken
+//                oldScore = ai1.getScore();
+//            }
+//        });
 
         // I think model should auto-play when it only has AI players
         model.startGame();
@@ -88,19 +88,19 @@ class AIPlayerTest {
         /*
          * If the AI decides to place, the score should increase after the end of the turn
          */
-        ai1.addControllerListener(new SControllerListener() {
-            private static int oldScore = 0;
-
-            @Override
-            public void handleControllerEvent(ControllerEvent e) {
-                // Check place test assumption
-                if (e instanceof PlaceClickEvent) {
-                    assertTrue(oldScore > ai1.getScore());
-                }
-                // Update score each turn taken
-                oldScore = ai1.getScore();
-            }
-        });
+//        ai1.addControllerListener(new SControllerListener() {
+//            private static int oldScore = 0;
+//
+//            @Override
+//            public void handleControllerEvent(ControllerEvent e) {
+//                // Check place test assumption
+//                if (e instanceof PlaceClickEvent) {
+//                    assertTrue(oldScore > ai1.getScore());
+//                }
+//                // Update score each turn taken
+//                oldScore = ai1.getScore();
+//            }
+//        });
 
         // I think model should auto-play when it only has AI players
         model.startGame();
