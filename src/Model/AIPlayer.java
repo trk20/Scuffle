@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.*;
 
 public class AIPlayer extends Player {
-    private static final int MAX_ATTEMPTS = 500;
+    private static final int MAX_ATTEMPTS = 100;
     private final List<ModelListener> modelListeners;
     private final DictionaryHandler dict;
     private final ScrabbleModel model;
