@@ -6,6 +6,7 @@ import Model.ScrabbleModel;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -85,17 +86,24 @@ public class OptionPaneHandler {
      * @param index: the index of the player list
      * @return: the name
      */
-    public String askForPlayerName(int index){
+    public List askForPlayerInfo(int index){
         String word = "";
         boolean validWord = false;
+        boolean isAi = false;
         while (!validWord){
-            word = JOptionPane.showInputDialog("What is Player "+ (index+1) + "'s name");
+            JCheckBox aiCheckbox = new JCheckBox("AI player?");
+            String message = "What is Player "+ (index+1) + "'s name";
+            Object[] params = {message,aiCheckbox};
+            word = JOptionPane.showInputDialog(params);
             validWord = isValidWord(word);
+            isAi = aiCheckbox.isSelected();
             if(!validWord){
                 displayError("Invalid Input! Please enter only valid characters");
             }
+            if(isAi)
+                word += " - (AI)";
         }
-        return word;
+        return Arrays.asList(word,isAi);
     }
 
     /**
@@ -103,18 +111,20 @@ public class OptionPaneHandler {
      * Amount is limited by the model's player limits.
      *
      * @return List of player names for a new game.
+     *
+     * TODO: make player info HashMap or similar
      */
-    public List<String> getNewPlayerNames() {
-        String name = "";
+    public List getNewPlayers() {
+        List playerInfo;
 
         int numPlayers = this.askForNumPlayers();
-        ArrayList<String> names = new ArrayList<>(numPlayers);
+        ArrayList<List> players = new ArrayList<>(numPlayers);
 
         for (int i = 0; i < numPlayers; i++){
-            name = this.askForPlayerName(i);
-            names.add(name);
+            playerInfo = this.askForPlayerInfo(i);
+            players.add(playerInfo);
         }
-        return names;
+        return players;
     }
 
     public void displayError(String message){

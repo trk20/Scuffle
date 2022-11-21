@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args){
         OptionPaneHandler input = new OptionPaneHandler();
         // TODO: may change model placement, here for testing atm
-        ScrabbleModel model = new ScrabbleModel(input.getNewPlayerNames());
+        ScrabbleModel model = new ScrabbleModel(input.getNewPlayers());
         ScrabbleFrame frame = new ScrabbleFrame(model);
 
         // Text view for debug outputs

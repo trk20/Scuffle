@@ -17,7 +17,7 @@ public class Player {
     /** Model.Player's cumulative score for the game */
     private int score;
     /** Game model, has a shared Model.DrawPile, and a Model.Board */
-    final private ScrabbleModel model;
+    final ScrabbleModel model;
 
     /**
      * Model.Player constructor, sets a name from the name parameter,

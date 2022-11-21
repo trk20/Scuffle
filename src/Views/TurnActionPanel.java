@@ -148,7 +148,6 @@ public class TurnActionPanel extends JPanel implements ModelListener {
             if(!newPlayer.player().getName().equals(currentPlayerName)){
                 currentPlayerName = newPlayer.player().getName(); // FIXME: redundant?
                 turnLabel.setText("Turn: "+currentPlayerName);
-
             }
         }
 
