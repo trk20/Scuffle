@@ -323,7 +323,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
 
     @Override
     public void handleModelEvent(ModelEvent e) {
-
+        if(e instanceof DiscardEvent dc) drawPile.addToPile(dc.used());
     }
 
     /**

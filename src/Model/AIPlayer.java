@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class AIPlayer extends Player implements SController  {
     private List<ModelListener> modelListeners;
     private DictionaryHandler dict;
+    private ScrabbleModel model;
 
     /**
      * AIPlayer constructor
@@ -28,6 +29,7 @@ public class AIPlayer extends Player implements SController  {
     public AIPlayer(String name, ScrabbleModel model) {
         super(name, model); // TODO: planning to refactor model out (of player, AI needs access to the model)
         this.modelListeners = new ArrayList<>();
+        this.model = model;
         dict = new DictionaryHandler();
     }
 
@@ -39,7 +41,7 @@ public class AIPlayer extends Player implements SController  {
     public void play(){
         BoardPlaceEvent placeEvent = null; //make a new PlaceEvent to store placement information
 
-        if(super.model.getBoard().isBoardEmpty()){ //The board is empty, play the first possible valid word
+        if(model.getBoard().isBoardEmpty()){ //The board is empty, play the first possible valid word
 
             System.out.println("Board is empty, playing word");
             try {
@@ -53,7 +55,7 @@ public class AIPlayer extends Player implements SController  {
                 return;
             }
         }else {
-            ArrayList<BoardTile> boardTiles = new ArrayList<BoardTile>(super.model.getBoard().getBoardTiles().stream().filter(BoardTile::isTaken).toList());
+            ArrayList<BoardTile> boardTiles = new ArrayList<BoardTile>(model.getBoard().getBoardTiles().stream().filter(BoardTile::isTaken).toList());
             Collections.shuffle(boardTiles);
             for (BoardTile tile : boardTiles) {
                 try {
@@ -112,7 +114,7 @@ public class AIPlayer extends Player implements SController  {
         if(!startOfGame && boardTileUsed == null){
             throw new Exception("boardTileUsed is null but tiles have already been played");
         }
-        Board board = super.model.getBoard();
+        Board board = model.getBoard();
         Hand hand = super.getHand();
 
         ArrayList<Tile> tilesToPlace = new ArrayList<>(); //Tiles with which to attempt a placement
