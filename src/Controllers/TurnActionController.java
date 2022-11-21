@@ -18,9 +18,9 @@ import static Views.DebugView.DEBUG_VIEW;
  *
  * @author Kieran
  * @author Alex
- * @version NOV-13
+ * @version NOV-21
  */
-public class TurnActionController implements SController, BoardClickListener, ActionListener {
+public class TurnActionController extends TurnController implements SController, BoardClickListener, ActionListener {
     /** Depending on the action, will send different action events to listeners*/
     public enum ActionState {
         PLACE (null), // Special case, event made outside
@@ -48,6 +48,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
      * @param action Discard, Skip, Flip tile
      */
     public TurnActionController(ScrabbleModel model, ActionState action) {
+        super(model);
         // TODO: should probably separate PLACE into its own class for safety (M3)
         this.action = action;
         listeners = new ArrayList<>();
@@ -74,12 +75,14 @@ public class TurnActionController implements SController, BoardClickListener, Ac
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Only enter placing mode if placed was clicked, otherwise exit it
-        if(!placing && action == ActionState.PLACE)
-            placing = true;
-        if(action == ActionState.FLIP_DIR) flipDir();
-        // Notify controller listeners (if action has an event)
-        if(action.event != null) notifyControllerListeners(action.event);
+        if(!disableControl){
+            // Only enter placing mode if placed was clicked, otherwise exit it
+            if(!placing && action == ActionState.PLACE)
+                placing = true;
+            if(action == ActionState.FLIP_DIR) flipDir();
+            // Notify controller listeners (if action has an event)
+            if(action.event != null) notifyControllerListeners(action.event);
+        }
     }
 
     /**
@@ -102,7 +105,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
      */
     @Override
     public void handleBoardClickEvent(C_BoardClickEvent e) {
-        if(placing) {
+        if(placing && !disableControl) {
             placing = false; // Disable place mode before next turn
             notifyControllerListeners(new PlaceClickEvent(dir, e.origin()));
         }

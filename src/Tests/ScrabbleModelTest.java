@@ -1,6 +1,5 @@
 package Tests;
 
-import Controllers.BoardTileController;
 import Model.*;
 import ScrabbleEvents.ControllerEvents.DiscardClickEvent;
 import ScrabbleEvents.ControllerEvents.PlaceClickEvent;
@@ -66,7 +65,7 @@ class ScrabbleModelTest {
      */
     @Test
     void handleEvents(){
-        BoardTileController boardController = new BoardTileController(new Point(7,7));
+//        BoardTileController boardController = new BoardTileController(new Point(7,7), model);
         Player player = model.getCurPlayer();
         model.getCurHand().getHeldTiles().add(0,new Tile(Letter.A));
         model.getCurHand().getHeldTiles().add(1,new Tile(Letter.Y));

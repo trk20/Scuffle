@@ -51,21 +51,14 @@ public class Player {
      * Called to discard letters (and draw the same amount)
      *
      * @param used List of letters to discard
-     * @return True if hand contains used letters, false otherwise.
      *
      * @author Alexandre Marques - 101189743
      */
-    @Deprecated
     public void discardTiles(List<Tile> used){
         // Add the letters to be removed to the model's Model.DrawPile
         model.getDrawPile().addToPile(used);
         // Remove the letters from the hand (return true if hand contains used letters)
         hand.useTiles(used);
-
-        /* Note: Will always be able to draw enough letters. -> no empty pile exception
-         * Worst case scenario: Model.DrawPile is empty, discard hand, Model.Player draws their own hand back.
-         * This works only because "useLetters" is called after "addToPile" -> order is important!
-         */
     }
 
     /**
@@ -89,14 +82,12 @@ public class Player {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
         // ========{name}========:\n
-        sb.append("=".repeat(8)).append(name).append("=".repeat(8)).append("\n");
-        // Score: {score}\n
-        sb.append("Score: ").append(score).append("\n");
-        // {hand}
-        sb.append(hand);
-        return sb.toString();
+        return "=".repeat(8) + name + "=".repeat(8) + "\n" +
+                // Score: {score}\n
+                "Score: " + score + "\n" +
+                // {hand}
+                hand;
     }
 
     /**
