@@ -9,6 +9,10 @@ import ScrabbleEvents.ModelEvents.BoardChangeEvent;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Alex
+ * @version NOV-21
+ */
 public class BoardTileView extends TileView implements BoardChangeListener {
     private final Point boardPoint;
     private final BoardTileController controller;
@@ -16,7 +20,7 @@ public class BoardTileView extends TileView implements BoardChangeListener {
     BoardTileView(ScrabbleModel model, Point p){
         boardPoint = p;
         model.addModelListener(this);
-        controller = new BoardTileController(p);
+        controller = new BoardTileController(p, model);
         this.addMouseListener(controller);
         // Empirically found a size to stick with
         setPreferredSize(new Dimension(30,30));
@@ -59,7 +63,7 @@ public class BoardTileView extends TileView implements BoardChangeListener {
             styleLetterTile(updatedTile.getLetter());
             // Disable placement on placed tiles
             removeMouseListener(controller);
-            return; // Style State 2
+            // Style State 2
         }
 
     }

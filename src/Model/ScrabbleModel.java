@@ -18,15 +18,14 @@ import static Views.DebugView.DEBUG_VIEW;
  * For Milestone 1, also acts as a text "view".
  *
  * @author Kieran Rourke, Alex
- * @version NOV-12
+ * @version NOV-21
  */
 public class ScrabbleModel implements SControllerListener, SModel{
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
-    public static final int MIN_PLAYERS = 1;
-    //    public static final Boolean DISCARD = false; FIXME: outdated, should not be using bool to indicate function.
-//    public static final Boolean PLACE = true;
+    @SuppressWarnings("unused")
+    public static final int MIN_PLAYERS = 2; // Note: unused atm but probably should be
     public static final int BOARD_SIZE = 15;
 
     // Model components
@@ -37,7 +36,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     /** Player whose turn it is to play */
     private int numPlayers;
-    private int turn = 0;
+    private int turn;
     /** False until something triggers a game to end (Model.Player out of Letters, or no more possible moves)*/
     boolean gameFinished; // FIXME: may become a controller signal in the future, with no need for a field
     /** Model listeners to notify on model change */
@@ -46,12 +45,12 @@ public class ScrabbleModel implements SControllerListener, SModel{
     List<Tile> selectedTiles;
 
 
-    private List<SController> debugControllers;
+    private final List<SController> debugControllers;
 
     public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
 
-    public ScrabbleModel(List<String> playerNames) {
-        this.board = new Board(true);
+    public ScrabbleModel(List<?> playerInfo) {
+        this.board = new Board(false);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
@@ -68,29 +67,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
         }
     }
 
-    public ScrabbleModel(List<String> playerNames, int numAI){
-        this(playerNames);
-        initializeAI(numAI);
-    }
-
-    private void initializeAI(int numAI) {
-        // TODO: implement
-        return;
-    }
-
     /**
      * Increments turn, rolling back to the first turn after passing the last player.
      */
     private void incrementTurn(){
         turn = turn == numPlayers -1 ? 0 : turn+1;
-    }
-
-    /**
-     * Prints Model.Board
-     */
-    @Deprecated // View duty
-    private void printBoard(){
-        System.out.println(board);
     }
 
     /**
@@ -108,14 +89,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
                 players.add(new AIPlayer((String)((List<?>)playerInfo).get(0), this));
             }
         }
-    }
-
-    /**
-     * Gets the user action either place or discard
-     * @return boolean mapped to the action
-     */
-    private boolean getAction(){
-        return true;
     }
 
     /**
@@ -189,13 +162,14 @@ public class ScrabbleModel implements SControllerListener, SModel{
     // Creating a model should be synonymous to creating a game, we should move towards removing this.
     // I'm not convinced "synonymous to creating a game" is a good idea anymore (M3)
     public void startGame(){
-
         //Need to notify Score View here
         notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         if(getCurPlayer() instanceof AIPlayer){
+            notifyModelListeners(new AIPlayingEvent(true));
             ((AIPlayer) getCurPlayer()).play();
+            notifyModelListeners(new AIPlayingEvent(false));
         }
     }
 
@@ -212,7 +186,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         if(getCurPlayer() instanceof AIPlayer){
+            notifyModelListeners(new AIPlayingEvent(true));
             ((AIPlayer) getCurPlayer()).play();
+            notifyModelListeners(new AIPlayingEvent(false));
         }
     }
 
@@ -278,7 +254,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
-        if(e instanceof C_SkipEvent skip) nextTurn();
+        if(e instanceof C_SkipEvent) nextTurn();
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
     }
 
@@ -300,8 +276,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     @Override
     public void notifyModelListeners(ModelEvent e) {
-        for (ModelListener l: modelListeners) {
-            l.handleModelEvent(e);
+        // (Concurrent modification exception otherwise)
+        // noinspection ForLoopReplaceableByForEach
+        for (int l = 0; l< modelListeners.size(); l++) {
+            modelListeners.get(l).handleModelEvent(e);
         }
     }
 
