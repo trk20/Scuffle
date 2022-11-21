@@ -6,6 +6,7 @@ import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
 import Views.OptionPaneHandler;
+import Views.ScrabbleFrame;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,9 +16,8 @@ import static Views.DebugView.DEBUG_VIEW;
 
 /**
  * Class that controls/models the overall scrabble game.
- * For Milestone 1, also acts as a text "view".
  *
- * @author Kieran Rourke, Alex
+ * @author Kieran Rourke, Alex, Vladimir Kovacina
  * @version NOV-21
  */
 public class ScrabbleModel implements SControllerListener, SModel{
@@ -44,6 +44,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
     /** list of selected tiles (in order) to pass to the board when placing*/
     List<Tile> selectedTiles;
 
+    private OptionPaneHandler input;
+
 
     private final List<SController> debugControllers;
 
@@ -65,6 +67,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
             this.numPlayers = playerInfo.size();
             initializePlayers(playerInfo, drawPile);
         }
+        input = new OptionPaneHandler();
     }
 
     /**
@@ -104,13 +107,21 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles the user wanting to place letters
      */
     private void handlePlace(PlaceClickEvent pce){
+        //Check for Blank tile in selected tiles:
+        for(int i =0; i< selectedTiles.size(); i++){
+            if(selectedTiles.get(i).getLetter() == Letter.BLANK){
+                selectedTiles.get(i).setLetter(input.getChosenLetter());
+            }
+        }
+    
         // Check if the placement event is valid
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
         BoardValidator.Status validStatus = board.isValidPlacement(placeEvent);
-
-        if (validStatus == BoardValidator.Status.SUCCESS){
+        
+        if (validStatus == BoardValidator.Status.SUCCESS
             // Place on board, save points in player
             getCurPlayer().addPoints(board.placeWord(placeEvent));
+            
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));
             notifyModelListeners(new PlayerChangeEvent(players));
@@ -119,10 +130,16 @@ public class ScrabbleModel implements SControllerListener, SModel{
             } catch (NullPointerException e){
                 endGame();
             }
+            // Update turn state
+            notifyModelListeners(new BoardChangeEvent(board));
+            nextTurn();
+        } else { //Reset Blank tile (could not place)
+            for(int i=0; i< selectedTiles.size(); i++){
+                if(selectedTiles.get(i).getScore() == 0){
+                    selectedTiles.get(i).setLetter(Letter.BLANK);
+                }
+            }
         }
-        // Update turn state
-        notifyModelListeners(new BoardChangeEvent(board));
-        nextTurn();
     }
 
 
