@@ -5,6 +5,7 @@ import Model.Letter;
 import Model.ScrabbleModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -129,5 +130,9 @@ public class OptionPaneHandler {
 
     public void displayError(String message){
         JOptionPane.showMessageDialog(null, message, "Invalid Input", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void displayMessage(String message){
+        JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
     }
 }
