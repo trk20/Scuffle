@@ -1,60 +1,31 @@
 package Views;
 
-import Controllers.HandTileController;
-import Model.Tile;
+import Model.Letter;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 
-/**
- * HandView is responsible for displaying information about individual Tile objects.
- * Displays Tile's letters. Also implements a mouse based controller to allow selecting the tiles.
- *
- * @author Alex
- * @version NOV-9
- */
-public class TileView extends HandTileController {
-    public static final Color TILE_BEIGE = new Color(245, 245, 220);
-//    public static final int TILE_MARGINS = 5;
-    /**
-     * TileView constructor, initializes fields.
-     *
-     * @param tile The tile to view
-     */
-    public TileView(Tile tile){
-        super(tile);
+import static Views.HandTileView.TILE_BEIGE;
 
-        // Set visuals for the tile
-        styleTile();
-    }
-
+public abstract class TileView extends JPanel {
     /**
-     * Set visuals for the tile. This includes a border, and a background color,
+     * Set visuals for a letter tile. This includes a border, and a background color,
      * There is also text indicating the letter it represents.
      */
-    private void styleTile() {
-        // Make a "raised" border, with margins outside (acts as padding instead it looks like?)
-//        Border innerBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
-//        Border outerBorder = BorderFactory.createEmptyBorder(TILE_MARGINS, TILE_MARGINS, TILE_MARGINS,TILE_MARGINS);
-
-        // Empirically found good size.
-        setPreferredSize(new Dimension(80,80));
-
-        // Sets the tile labels
-        labelTile();
-
+    protected void styleLetterTile(Letter letter) {
         // Make a "raised" border
         setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         // Set beige background
         setBackground(TILE_BEIGE);
-
+        // Sets the tile labels
+        labelTile(letter);
     }
 
     /**
      * Set the tile labels, includes the tile's letter, and score.
      */
-    private void labelTile(){
+    protected void labelTile(Letter letter){
         // Make 3x3 layout, add Letter in the center and Score in the bottom right.
         final int size = 3;
         setLayout(new GridLayout(size,size));
@@ -65,7 +36,7 @@ public class TileView extends HandTileController {
         letterLabel.setHorizontalAlignment(JLabel.CENTER);
         labelHolder[1][1] = letterLabel; // Add text at grid center.
         // Score label
-        JLabel scoreLabel = new JLabel(getTile().getLetter().getScore()+"");
+        JLabel scoreLabel = new JLabel(getTile().getScore()+"");
         scoreLabel.setHorizontalAlignment(JLabel.CENTER);
         labelHolder[size-1][size-1] = scoreLabel; // Add score at bottom right corner.
 
@@ -80,30 +51,5 @@ public class TileView extends HandTileController {
                 add(labelHolder[m][n]);
             }
         }
-    }
-
-//    /**
-//     * Flips the selection of the tile in the model.
-//     */
-//    @Override
-//    protected void flipSelection() {
-//        super.flipSelection();
-//        // View changes on flip... for now handled by hand View?
-//    }
-
-    /**
-     * Highlights the tile in the view (lower prio)
-     */
-    @Override
-    protected void highlight() {
-        // TODO (low prio)
-    }
-
-    /**
-     * Undo highlighting for the tile in the view (lower prio)
-     */
-    @Override
-    protected void undoHighlight() {
-        // TODO (low prio)
     }
 }

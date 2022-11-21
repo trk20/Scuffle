@@ -1,6 +1,9 @@
 import Model.ScrabbleModel;
+import Views.DebugView;
 import Views.OptionPaneHandler;
 import Views.ScrabbleFrame;
+
+import static Views.DebugView.DEBUG_VIEW;
 
 /**
  * The main executable for the scrabble project.
@@ -13,8 +16,16 @@ public class Main {
     public static void main(String[] args){
         OptionPaneHandler input = new OptionPaneHandler();
         // TODO: may change model placement, here for testing atm
-        ScrabbleModel model = new ScrabbleModel(input.getNewPlayerNames());
+        ScrabbleModel model = new ScrabbleModel(input.getNewPlayers());
         ScrabbleFrame frame = new ScrabbleFrame(model);
+
+        // Text view for debug outputs
+        DebugView debug;
+        if(DEBUG_VIEW) {
+            debug = new DebugView(model);
+            debug.listenToControllers(model.getDebugControllers());
+        }
+
         model.startGame();
     }
 }

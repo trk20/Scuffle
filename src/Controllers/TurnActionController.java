@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Views.DebugView.DEBUG_VIEW;
+
 /**
  * TurnActionController handles sending events resulting from clicking
  * buttons in the TurnActionView.
@@ -25,7 +27,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         // FIXME: I'm realising, this might be the odd one out, might not need to make an event field
         DISCARD (new DiscardClickEvent()),
         FLIP_DIR(null),
-        SKIP (null); // TODO (discard should work well enough for M2)
+        SKIP (new C_SkipEvent());
 
         private final TurnActionEvent event;
 
@@ -56,20 +58,13 @@ public class TurnActionController implements SController, BoardClickListener, Ac
      * Constructor for a TurnActionController (for the place action)
      * @param board The board controllers to listen to for click events
      */
-    public TurnActionController(ScrabbleModel model, List<BoardController> board) {
+    public TurnActionController(ScrabbleModel model, List<BoardTileController> board) {
         this(model, ActionState.PLACE);
-        for(BoardController c: board){
+        for(BoardTileController c: board){
             c.addControllerListener(this);
         }
-    }
-    
-    /**
-     * Null constructor for TurnActionController, temporary fix to create events in enum!
-     */
-    @Deprecated
-    private TurnActionController() {
-        action = null;
-        listeners = null;
+        if(DEBUG_VIEW)
+            model.addDebugController(this);
     }
 
     /**
@@ -80,10 +75,8 @@ public class TurnActionController implements SController, BoardClickListener, Ac
     @Override
     public void actionPerformed(ActionEvent e) {
         // Only enter placing mode if placed was clicked, otherwise exit it
-        placing = action == ActionState.PLACE;
-        if(!placing && action == ActionState.PLACE){
+        if(!placing && action == ActionState.PLACE)
             placing = true;
-        }
         if(action == ActionState.FLIP_DIR) flipDir();
         // Notify controller listeners (if action has an event)
         if(action.event != null) notifyControllerListeners(action.event);

@@ -1,16 +1,19 @@
 package Views;
 
-import ScrabbleEvents.ModelEvents.HandChangeEvent;
-import ScrabbleEvents.Listeners.HandChangeListener;
-import ScrabbleEvents.ModelEvents.NewPlayerEvent;
-import ScrabbleEvents.ModelEvents.TileSelectEvent;
+import Controllers.SController;
 import Model.Hand;
 import Model.ScrabbleModel;
 import Model.Tile;
+import ScrabbleEvents.Listeners.HandChangeListener;
+import ScrabbleEvents.ModelEvents.HandChangeEvent;
+import ScrabbleEvents.ModelEvents.NewPlayerEvent;
+import ScrabbleEvents.ModelEvents.TileSelectEvent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+
+import static Views.DebugView.DEBUG_VIEW;
 
 /**
  * HandView is responsible for displaying information about modeled Hand objects.
@@ -21,11 +24,12 @@ import java.util.HashMap;
  */
 public class HandView extends JPanel implements HandChangeListener {
     /** Row with the selected tiles*/
+    private static final Color BACKGROUND_COLOR = new Color(187, 129, 65);
     final private JPanel selected_row;
     /** Row with the tiles not yet selected*/
     final private JPanel unselected_row;
     /** Maps model tiles to their respective tile view (for selection referencing)*/
-    final private HashMap<Tile, TileView> handTileMap;
+    final private HashMap<Tile, HandTileView> handTileMap;
     /** Model reference, needed to pass it to new controllers as a listener*/
     final private ScrabbleModel model;
 
@@ -34,30 +38,20 @@ public class HandView extends JPanel implements HandChangeListener {
      */
     HandView(ScrabbleModel model){
         unselected_row = new JPanel();
+        unselected_row.setBackground(BACKGROUND_COLOR);
         selected_row = new JPanel();
+        selected_row.setBackground(BACKGROUND_COLOR);
+
         handTileMap = new HashMap<>();
         this.model = model;
 
         // Composed of two sections, selected tiles on top, unselected on the bottom.
         setLayout(new GridLayout(2, 1));
+        setBackground(BACKGROUND_COLOR);
         add(selected_row);
         add(unselected_row);
 
         model.addModelListener(this);
-
-//        // FIXME: remove after testing
-////        selected_row.add(new TileView(new Tile(Letter.S)));
-//        unselected_row.add(new TileView(new Tile(Letter.N)));
-//        unselected_row.add(new TileView(new Tile(Letter.U)));
-//        unselected_row.add(new TileView(new Tile(Letter.L)));
-//        unselected_row.add(new TileView(new Tile(Letter.L)));
-//
-//        // Selection test
-//        Tile st = new Tile(Letter.S);
-//        TileView sv = new TileView(st);
-//        handTileMap.put(st, sv);
-//        unselected_row.add(sv);
-//        updateSelectionRow(new TileSelectEvent(new ScrabbleModel(), st, true));
     }
 
     /**
@@ -78,7 +72,7 @@ public class HandView extends JPanel implements HandChangeListener {
      */
     private void updateSelectionRow(TileSelectEvent e) throws NullPointerException{
         // Get view from model reference of tile
-        TileView view = handTileMap.get(e.tile());
+        HandTileView view = handTileMap.get(e.tile());
         if(view == null){
             throw new NullPointerException("Hand tile map not properly set");
         }
@@ -123,10 +117,12 @@ public class HandView extends JPanel implements HandChangeListener {
      */
     private void addNewTileView(Tile tile){
 
-        TileView view = new TileView(tile);
+        HandTileView view = new HandTileView(tile);
         unselected_row.add(view);
         // Add model listener to tile
-        view.addControllerListener(model);
+        SController viewController = view.getController();
+        viewController.addControllerListener(model);
+        if(DEBUG_VIEW) model.addDebugController(viewController);
         // Update map for the new hand, for each tile
         handTileMap.put(tile, view);
     }

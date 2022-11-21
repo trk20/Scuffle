@@ -50,35 +50,12 @@ class HandTest {
      * Tests the use of tiles to ensure the tiles are no longer present after being used
      */
     @Test
-    void useTiles() {
-        // FIXME: use tile does not return boolean anymore
-//        assertTrue(hand.useTiles(tiles));
-//        hand.setTiles(new ArrayList<>());
-//        assertFalse(hand.useTiles(tiles));
+    void useSelected() {
+        //make a copy of the first 7 tiles (the ones that will be in the hand)
+        ArrayList tileCopy = new ArrayList(tiles.subList(0,7));
+        hand.useTiles(tiles); // use a known set of tiles
+        //the hand should not contain those exact tiles
+        assertFalse(tileCopy.stream().anyMatch(tile-> hand.getHeldTiles().contains(tile)));
     }
 
-    /**
-     * Tests the toString method
-     */
-    @Test
-    void testToString() {
-        assertEquals("Model.Hand: (A, 1) (B, 3) (C, 3) (D, 2) (E, 1) (F, 4) (G, 2) (H, 4) (I, 1) (J, 8)",hand.toString());
-        hand.setTiles(tiles.subList(1,2));
-
-        // Not sure what the issue is but we don't use toString except for debug...
-        assertEquals("Model.Hand: (B, 3) (C, 3)",hand.toString());
-    }
-
-    /**
-     * Tests that discarding tiles discards tiles
-     */
-    @Test
-    void discardSelected() {
-        hand.useTiles(tiles);
-        for(Tile tile:tiles){
-            // FIXME: this is not guaranteed to work,
-            //  its possible to draw your own tile back
-//            assertFalse(hand.getHeldTiles().contains(tile));
-        }
-    }
 }

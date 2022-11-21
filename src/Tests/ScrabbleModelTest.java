@@ -1,18 +1,18 @@
 package Tests;
 
-import Controllers.BoardController;
+import Controllers.BoardTileController;
+import Model.*;
 import ScrabbleEvents.ControllerEvents.DiscardClickEvent;
 import ScrabbleEvents.ControllerEvents.PlaceClickEvent;
 import ScrabbleEvents.ControllerEvents.TileClickEvent;
-import Model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class ScrabbleModelTest {
@@ -35,8 +35,8 @@ class ScrabbleModelTest {
     @Test
     void initializeAndGetPlayerNames(){
         ArrayList<Player> players= new ArrayList<>();
-        players.add(new Player("Tim",model));
-        players.add(new Player("Not Tim",model));
+//        players.add(new Player("Tim", model));
+//        players.add(new Player("Not Tim",model));
         assertEquals(players.get(0).getName(),model.getPlayers().get(0).getName());
         assertEquals(players.get(1).getName(),model.getPlayers().get(1).getName());
     }
@@ -61,17 +61,18 @@ class ScrabbleModelTest {
 
 
     /**
-     * Tests Event handling of ScrabbleModel
+     * Tests Event handling of ScrabbleModel: TileClick, DiscardClick, and PlaceClick events
+     * TODO: separate into multiple tests
      */
     @Test
     void handleEvents(){
-        BoardController boardController = new BoardController(model,new Point(7,7));
+        BoardTileController boardController = new BoardTileController(new Point(7,7));
         Player player = model.getCurPlayer();
         model.getCurHand().getHeldTiles().add(0,new Tile(Letter.A));
         model.getCurHand().getHeldTiles().add(1,new Tile(Letter.Y));
         // send a TileClickEvent to select the first tile, then place it with a PlaceClickEvent
         model.handleControllerEvent(new TileClickEvent(model.getCurHand().getHeldTiles().get(0)));
-        model.handleControllerEvent(new PlaceClickEvent(Board.Direction.RIGHT, boardController.getOrigin()));
+        model.handleControllerEvent(new PlaceClickEvent(Board.Direction.RIGHT, new Point(7,7)));
         // Active player should be changed
         assertNotEquals(player,model.getCurPlayer());
         // Tile should have been played

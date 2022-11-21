@@ -60,7 +60,7 @@ public class BoardTest {
     @Test
     void checkValidOverlapWordPlacement(){
         int result = board.placeWord(event);
-        assertEquals(5, result);
+        assertEquals(10, result); // 10 because of start tile
         placedTiles.remove(1);
         event = new BoardPlaceEvent(placedTiles, new Point(6, 8), Board.Direction.RIGHT);
         result = board.placeWord(event);
@@ -124,8 +124,9 @@ public class BoardTest {
          *   C
          *   AS
          *   TO
+         *   (AS) + (SO) + (TO) = 2+2+2 = 6
          */
-        assertEquals(4, result);
+        assertEquals(6, result);
     }
 
     @Test

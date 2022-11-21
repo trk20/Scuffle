@@ -1,5 +1,6 @@
 package Model;
 
+import Controllers.SController;
 import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
@@ -8,8 +9,10 @@ import Views.OptionPaneHandler;
 import Views.ScrabbleFrame;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static Views.DebugView.DEBUG_VIEW;
 
 /**
  * Class that controls/models the overall scrabble game.
@@ -18,7 +21,7 @@ import java.util.List;
  * @author Kieran Rourke, Alex, Vladimir Kovacina
  * @version NOV-20
  */
-public class ScrabbleModel implements SControllerListener, SModel, ModelListener{
+public class ScrabbleModel implements SControllerListener, SModel{
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
@@ -46,21 +49,25 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     private OptionPaneHandler input;
 
 
-    private ScrabbleFrame mainFrame;
+    private List<SController> debugControllers;
 
-    public ScrabbleModel(List<String> playerNames) {
+    public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
+
+    public ScrabbleModel(List playerInfo) {
         this.board = new Board(false);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
         this.players = new ArrayList<>();
+        this.debugControllers = new ArrayList<>();
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
+
         // Guard against null human players
-        if(playerNames != null){
-            this.numPlayers = playerNames.size();
-            initializePlayers(playerNames);
+        if(playerInfo != null){
+            this.numPlayers = playerInfo.size();
+            initializePlayers(playerInfo, drawPile);
         }
         input = new OptionPaneHandler();
     }
@@ -93,20 +100,19 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     /**
      * Creates Player models from a list of player names.
      *
-     * @param names The list of names for each player in the model
+     * @param playerInfos The list of playerInfo for each player in the model
+     * @param drawPile
      */
-    private void initializePlayers(List<String> names){
+    private void initializePlayers(List<?> playerInfos, DrawPile drawPile){
         players = new ArrayList<>();
-        for (String name: names) {
-            players.add(new Player(name, this));
+        for (Object playerInfo: playerInfos) {
+            if(!(boolean)((List<?>)playerInfo).get(1)) {
+                players.add(new Player((String)((List<?>)playerInfo).get(0), drawPile));
+            }else{
+                players.add(new AIPlayer((String)((List<?>)playerInfo).get(0), this));
+            }
         }
     }
-
-
-    public String getBoardTileText(Point p){
-        return board.getBoardTile(p).toString();
-    }
-
 
     /**
      * Gets the user action either place or discard
@@ -149,13 +155,20 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
                 }
             }
         } else {
-            // Letters have been placed, get rid of them and bank the score.
-            getCurPlayer().placeTiles(selectedTiles);
-            getCurPlayer().addPoints(placementScore);
-
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));
             notifyModelListeners(new PlayerChangeEvent(players));
+
+            // Letters have been placed, get rid of them and bank the score.
+            getCurPlayer().addPoints(placementScore);
+            try{
+                getCurPlayer().placeTiles(selectedTiles);
+
+            } catch (NullPointerException e){
+                endGame();
+            }
+
+            notifyModelListeners(new BoardChangeEvent(board));
             nextTurn();
         }
     }
@@ -164,30 +177,49 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     /**
      * Used to end the game
      */
-    public void setGameFinished() {
-        this.gameFinished = true;
+    public void newGame() {
+        // TODO
     }
 
+    /**
+     * Gets player with highest score
+     * @return Player with highest score
+     */
+    private Player getTopPlayer(){
+        Player topPlayer = players.get(0);
+        for (Player player : players){
+            if (player.getScore() > topPlayer.getScore()){
+                topPlayer = player;
+            }
+        }
+        return topPlayer;
+    }
+
+    /**
+     * Handles ending the game
+     */
+    private void endGame(){
+        Player winner = getTopPlayer();
+        OptionPaneHandler popUpHandler = new OptionPaneHandler();
+
+        gameFinished = true;
+        popUpHandler.displayMessage("Draw Pile is Empty Game is Over!\nThe winner is "+winner.getName()+"! Congrats!!!");
+    }
 
     /**
      * Handles starting the game
      */
     // Creating a model should be synonymous to creating a game, we should move towards removing this.
-    @Deprecated
+    // I'm not convinced "synonymous to creating a game" is a good idea anymore (M3)
     public void startGame(){
-        // Do not touch the views in the model!
-        // The main decides when to create views, or models. Possibly through controllers.
-//        mainFrame = new ScrabbleFrame(this);
-
-
-//        while(!gameFinished){
-//            nextTurn();
-//        }
 
         //Need to notify Score View here
-
+        notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        if(getCurPlayer() instanceof AIPlayer){
+            ((AIPlayer) getCurPlayer()).play();
+        }
         //nextTurn();
 //        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
@@ -196,12 +228,17 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * Handles running a turn, will be called in a loop until the game is over
      */
     private void nextTurn(){
-//        Player currentPlayer = players.get(turn);
+        if(gameFinished) return;
+
         selectedTiles = new ArrayList<>(); // Clear selection
         // Update views to show current player
         incrementTurn();
-        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+
         notifyModelListeners(new PlayerChangeEvent(players));
+        notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        if(getCurPlayer() instanceof AIPlayer){
+            ((AIPlayer) getCurPlayer()).play();
+        }
     }
 
     /**
@@ -262,6 +299,7 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      */
     @Override
     public void handleControllerEvent(ControllerEvent e) {
+        if (gameFinished) return;
         // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
@@ -297,13 +335,28 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
      * @return Model's board
      */
     // FIXME: in the future, should inherit SModel in ModelEvents
-    //  and then pass only the the relevant parts in model events
+    //  and then pass only the relevant parts in model events
     public Board getBoard() {
         return board;
     }
 
-    @Override
-    public void handleModelEvent(ModelEvent e) {
+    /**
+     * If debug view is activated, will keep track of controllers in the program
+     * @param c new controller talking to the model
+     */
+    public void addDebugController(SController c) {
+        if(DEBUG_VIEW)
+            this.debugControllers.add(c);
+    }
 
+    /**
+     * If debug view is activated, will return the controllers in the program
+     * @return The list of controllers talking to the model
+     */
+    public List<SController> getDebugControllers() {
+        if(DEBUG_VIEW)
+            return this.debugControllers;
+        else
+            return null;
     }
 }

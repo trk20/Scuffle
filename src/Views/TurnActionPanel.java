@@ -1,17 +1,23 @@
 package Views;
 
-import Controllers.BoardController;
+import Controllers.BoardTileController;
 import Controllers.TurnActionController;
-import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import Model.ScrabbleModel;
 import ScrabbleEvents.ControllerEvents.C_DirectionChangeEvent;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.ModelEvents.ModelEvent;
 import ScrabbleEvents.ModelEvents.NewPlayerEvent;
-import Model.ScrabbleModel;
+
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.util.List;
+
+import static Model.ScrabbleModel.SIDE_BACKGROUND_COLOR;
+import static Views.DebugView.DEBUG_VIEW;
 
 public class TurnActionPanel extends JPanel implements ModelListener {
 
@@ -28,29 +34,37 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     private JButton directionButton;
     private final int width = 300;
     private final int height = 300;
+    private JLabel playerLabel;
 
     TurnActionController controller;
 
     private String currentPlayerName;
 
     // FIXME: coupling with board controller, look for ways to decouple
-    public TurnActionPanel(ScrabbleModel model, List<BoardController> board) {
+    public TurnActionPanel(ScrabbleModel model, List<BoardTileController> board) {
         turnPanel = new JPanel();
         actionPanel = new JPanel();
         skipPanel = new JPanel();
         directionPanel = new JPanel();
+        Border blackline = BorderFactory.createMatteBorder(0,0,2,0, Color.BLACK);
+
 
         turnPanel.setPreferredSize(new Dimension(width, height/5));
-        turnPanel.setBackground(Color.BLACK);
+        turnPanel.setBackground(SIDE_BACKGROUND_COLOR);
+        turnPanel.setBorder(blackline);
+
 
         actionPanel.setPreferredSize(new Dimension(width, height/5 ));
-        actionPanel.setBackground(Color.green);
+        actionPanel.setBackground(SIDE_BACKGROUND_COLOR);
+        actionPanel.setBorder(blackline);
 
         directionPanel.setPreferredSize(new Dimension(width, height/5));
-        directionPanel.setBackground(Color.WHITE);
+        directionPanel.setBackground(SIDE_BACKGROUND_COLOR);
+        directionPanel.setBorder(blackline);
 
         skipPanel.setPreferredSize(new Dimension(width, height/5*2));
-        skipPanel.setBackground(Color.blue);
+        skipPanel.setBackground(SIDE_BACKGROUND_COLOR);
+
 
 
         currentPlayerName = model.getCurPlayer().getName();
@@ -72,17 +86,21 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     }
 
     private void setUpTurnPanel(){
-        turnLabel = new JLabel("Turn: " + currentPlayerName);
-
+        turnLabel = new JLabel("Turn: ");
         turnLabel.setFont(new Font("Serif", Font.BOLD, 15));
         turnLabel.setForeground(Color.WHITE);
+
+        playerLabel = new JLabel(currentPlayerName);
+        playerLabel.setFont(new Font("Serif", Font.BOLD, 15));
+        playerLabel.setForeground(Color.WHITE);
 
         turnPanel.setLayout(new GridBagLayout());
 
         turnPanel.add(turnLabel);
+        turnPanel.add(playerLabel);
     }
 
-    private void setUpActionButtons(ScrabbleModel model, List<BoardController> board){
+    private void setUpActionButtons(ScrabbleModel model, List<BoardTileController> board){
         placeButton = new JButton("Place");
         discardButton = new JButton("Discard");
 
@@ -102,11 +120,13 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     private void setUpDirectionPanel(ScrabbleModel model)
     {
         JLabel directionLabel = new JLabel("Direction:");
+        directionLabel.setForeground(Color.WHITE);
         directionButton = new JButton();
         // Set direction controller, and listeners
         TurnActionController directionControl = new TurnActionController(model, TurnActionController.ActionState.FLIP_DIR);
         directionButton.addActionListener(directionControl);
         directionControl.addControllerListener(e -> setDirectionViewText(e, directionButton));
+        if(DEBUG_VIEW) model.addDebugController(directionControl);
 
         directionPanel.setLayout(new GridBagLayout());
 
@@ -144,7 +164,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         if(e instanceof NewPlayerEvent newPlayer){
             if(!newPlayer.player().getName().equals(currentPlayerName)){
                 currentPlayerName = newPlayer.player().getName(); // FIXME: redundant?
-                turnLabel.setText("Turn: "+currentPlayerName);
+                playerLabel.setText(currentPlayerName);
 
             }
         }

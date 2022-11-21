@@ -8,7 +8,12 @@ import Model.ScrabbleModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.TextAttribute;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static Model.ScrabbleModel.SIDE_BACKGROUND_COLOR;
 
 /**
  * Score view is responsible for displaying the Players scores during the game
@@ -38,14 +43,21 @@ public class ScoreView extends JPanel implements ModelListener {
 
         //Initialize how the JPanel will look
         scorePanel.setPreferredSize(new Dimension(width, height));
-        scorePanel.setBackground(Color.blue);
+        scorePanel.setBackground(SIDE_BACKGROUND_COLOR);
         scorePanel.setLayout(new GridLayout(5,1));
 
         //Create the title of the JPanel
         Font font = new Font("Courier", Font.BOLD, 14);
         title = new JLabel("Player Scores:", JLabel.CENTER);
+
+        //Making font underlined
+        Font underLinedFont = title.getFont();
+        Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+
         title.setForeground(Color.white);
-        title.setFont(font);
+        title.setFont(font.deriveFont(attributes));
+
         scorePanel.add(title);
 
         //Initially set the JLabels as empty and white font
