@@ -104,6 +104,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles the user wanting to place letters
      */
     private void handlePlace(PlaceClickEvent pce){
+        // Check if the placement event is valid
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
         BoardValidator.Status validStatus = board.isValidPlacement(placeEvent);
 
@@ -119,13 +120,14 @@ public class ScrabbleModel implements SControllerListener, SModel{
                 endGame();
             }
         }
+        // Update turn state
         notifyModelListeners(new BoardChangeEvent(board));
         nextTurn();
     }
 
 
     /**
-     * Used to restart the game
+     * Used to start a new game
      */
     public void newGame() {
         // TODO
