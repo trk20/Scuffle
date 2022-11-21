@@ -6,6 +6,7 @@ import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
 import Views.OptionPaneHandler;
+import Views.ScrabbleFrame;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ import static Views.DebugView.DEBUG_VIEW;
  * Class that controls/models the overall scrabble game.
  * For Milestone 1, also acts as a text "view".
  *
- * @author Kieran Rourke, Alex
- * @version NOV-12
+ * @author Kieran Rourke, Alex, Vladimir Kovacina
+ * @version NOV-20
  */
 public class ScrabbleModel implements SControllerListener, SModel{
     /** Max players limited by the four racks (see README setup rules) */
@@ -45,6 +46,8 @@ public class ScrabbleModel implements SControllerListener, SModel{
     /** list of selected tiles (in order) to pass to the board when placing*/
     List<Tile> selectedTiles;
 
+    private OptionPaneHandler input;
+
 
     private List<SController> debugControllers;
 
@@ -66,6 +69,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
             this.numPlayers = playerInfo.size();
             initializePlayers(playerInfo, drawPile);
         }
+        input = new OptionPaneHandler();
     }
 
     public ScrabbleModel(List<String> playerNames, int numAI){
@@ -132,10 +136,24 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     private void handlePlace(PlaceClickEvent pce){
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
+
+        //Check for Blank tile in selected tiles:
+        for(int i =0; i< selectedTiles.size(); i++){
+            if(selectedTiles.get(i).getLetter() == Letter.BLANK){
+                selectedTiles.get(i).setLetter(input.getChosenLetter());
+            }
+        }
+
         int placementScore = board.placeWord(placeEvent);
 
         if(placementScore<0){
             // Display error, do nothing.
+            //Reset Blank tile
+            for(int i=0; i< selectedTiles.size(); i++){
+                if(selectedTiles.get(i).getScore() == 0){
+                    selectedTiles.get(i).setLetter(Letter.BLANK);
+                }
+            }
         } else {
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));

@@ -76,7 +76,7 @@ class ScrabbleModelTest {
         // Active player should be changed
         assertNotEquals(player,model.getCurPlayer());
         // Tile should have been played
-        assertEquals(Letter.Y,player.getHand().getHeldTiles().get(0).letter());
+        assertEquals(Letter.Y,player.getHand().getHeldTiles().get(0).getLetter());
         player = model.getCurPlayer();
         model.getCurHand().getHeldTiles().add(0,new Tile(Letter.A));
         model.getCurHand().getHeldTiles().add(1,new Tile(Letter.Y));
@@ -84,6 +84,6 @@ class ScrabbleModelTest {
         model.handleControllerEvent(new TileClickEvent(model.getCurHand().getHeldTiles().get(0)));
         model.handleControllerEvent(new DiscardClickEvent());
         // Tile should have been discarded
-        assertEquals(Letter.Y,player.getHand().getHeldTiles().get(0).letter());
+        assertEquals(Letter.Y,player.getHand().getHeldTiles().get(0).getLetter());
     }
 }

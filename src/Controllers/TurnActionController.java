@@ -105,6 +105,7 @@ public class TurnActionController implements SController, BoardClickListener, Ac
         if(placing) {
             placing = false; // Disable place mode before next turn
             notifyControllerListeners(new PlaceClickEvent(dir, e.origin()));
+
         }
     }
         

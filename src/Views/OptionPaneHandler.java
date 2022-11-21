@@ -7,6 +7,7 @@ import Model.ScrabbleModel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Arrays;
 import java.util.List;
 
@@ -134,5 +135,22 @@ public class OptionPaneHandler {
 
     public void displayMessage(String message){
         JOptionPane.showMessageDialog(null, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Asks user for a character when the user wants to place a blank tile.
+     * The blank tile will then contain that character
+     * @author Vladimir Kovacina
+     * @return Letter chosen by the user
+     */
+    public Letter getChosenLetter(){
+        List<Enum> letters = new ArrayList<Enum>(EnumSet.allOf(Letter.class));
+        letters.remove(Letter.BLANK);
+        Object[] choices = letters.toArray();
+
+
+        Letter choice = (Letter) JOptionPane.showInputDialog(null,"Which Letter Do You Want..",
+              "Blank Tile Choice", JOptionPane.QUESTION_MESSAGE,null,choices,choices[0]);
+        return choice;
     }
 }
