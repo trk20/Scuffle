@@ -1,28 +1,31 @@
 package Controllers;
 
+import Model.SModel;
 import Model.Tile;
 import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.ControllerEvents.TileClickEvent;
 import ScrabbleEvents.Listeners.SControllerListener;
 
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract class HandTileController is a Controller for hand tiles.
- * Enables clicking on tiles, and hovering over them.
- * A view class has to extend this class, this allows for separation of the controller and view code.
+ * HandTileController enables clicking on tiles in hand to select them.
+ *
+ * @author Alex
+ * @version NOV-21
  */
-public class HandTileController extends MouseAdapter implements SController {
-    private List<SControllerListener> listeners;
+public class HandTileController extends TurnController implements SController, MouseListener {
+    private final List<SControllerListener> listeners;
     private final Tile tile;
 
     /**
      * HandTileController constructor. Initiates fields.
      */
-    public HandTileController(Tile tile){
+    public HandTileController(Tile tile, SModel model){
+        super(model);
         this.listeners = new ArrayList<>();
         this.tile = tile;
     }
@@ -53,6 +56,7 @@ public class HandTileController extends MouseAdapter implements SController {
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        notifyControllerListeners(new TileClickEvent(tile));
+        if(!disableControl)
+            notifyControllerListeners(new TileClickEvent(tile));
     }
 }

@@ -2,6 +2,7 @@ package Views;
 
 import Controllers.HandTileController;
 import Model.Letter;
+import Model.SModel;
 import Model.Tile;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.*;
  * Displays Tile's letters. Also implements a mouse based controller to allow selecting the tiles.
  *
  * @author Alex
- * @version NOV-9
+ * @version NOV-21
  */
 public class HandTileView extends TileView{
     public static final Color TILE_BEIGE = new Color(245, 245, 220);
@@ -22,10 +23,9 @@ public class HandTileView extends TileView{
      *
      * @param tile The tile to view
      */
-    public HandTileView(Tile tile){
-        super();
+    public HandTileView(Tile tile, SModel model){
         styleHandTile(tile.letter());
-        controller = new HandTileController(tile);
+        controller = new HandTileController(tile, model);
         this.addMouseListener(controller);
     }
 

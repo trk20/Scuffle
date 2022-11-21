@@ -1,20 +1,26 @@
 package Controllers;
 
+import Model.SModel;
 import ScrabbleEvents.ControllerEvents.C_BoardClickEvent;
 import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.Listeners.SControllerListener;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardTileController extends MouseAdapter implements SController {
+/**
+ * @author Alex
+ * @version NOV-21
+ */
+public class BoardTileController extends TurnController implements SController, MouseListener {
     private final List<SControllerListener> listeners;
     private final Point origin;
 
-    public BoardTileController(Point origin) {
+    public BoardTileController(Point origin, SModel model) {
+        super(model);
         this.listeners = new ArrayList<>();
         this.origin = origin;
     }
@@ -33,6 +39,8 @@ public class BoardTileController extends MouseAdapter implements SController {
         }
     }
 
+
+
     /**
      * Invoked when an action occurs, will send a board click event to listeners.
      *
@@ -40,6 +48,16 @@ public class BoardTileController extends MouseAdapter implements SController {
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        notifyControllerListeners(new C_BoardClickEvent(origin));
+        if(!disableControl){
+            notifyControllerListeners(new C_BoardClickEvent(origin));
+        }
     }
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }
