@@ -20,7 +20,7 @@ import static Views.DebugView.DEBUG_VIEW;
  * @author Kieran Rourke, Alex
  * @version NOV-12
  */
-public class ScrabbleModel implements SControllerListener, SModel, ModelListener{
+public class ScrabbleModel implements SControllerListener, SModel{
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
@@ -60,10 +60,11 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
         this.debugControllers = new ArrayList<>();
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
+
         // Guard against null human players
         if(playerInfo != null){
             this.numPlayers = playerInfo.size();
-            initializePlayers(playerInfo);
+            initializePlayers(playerInfo, drawPile);
         }
     }
 
@@ -95,14 +96,14 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     /**
      * Creates Player models from a list of player names.
      *
-     *
      * @param playerInfos The list of playerInfo for each player in the model
+     * @param drawPile
      */
-    private void initializePlayers(List<?> playerInfos){
+    private void initializePlayers(List<?> playerInfos, DrawPile drawPile){
         players = new ArrayList<>();
         for (Object playerInfo: playerInfos) {
             if(!(boolean)((List<?>)playerInfo).get(1)) {
-                players.add(new Player((String)((List<?>)playerInfo).get(0), this));
+                players.add(new Player((String)((List<?>)playerInfo).get(0), drawPile));
             }else{
                 players.add(new AIPlayer((String)((List<?>)playerInfo).get(0), this));
             }
@@ -312,11 +313,6 @@ public class ScrabbleModel implements SControllerListener, SModel, ModelListener
     //  and then pass only the relevant parts in model events
     public Board getBoard() {
         return board;
-    }
-
-    @Override
-    public void handleModelEvent(ModelEvent e) {
-        if(e instanceof DiscardEvent dc) drawPile.addToPile(dc.used());
     }
 
     /**

@@ -1,24 +1,19 @@
 package Model;
 
-import Controllers.SController;
-import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.ControllerEvents.DiscardClickEvent;
 import ScrabbleEvents.ControllerEvents.PlaceClickEvent;
 import ScrabbleEvents.ControllerEvents.TileClickEvent;
 import ScrabbleEvents.Listeners.ModelListener;
-import ScrabbleEvents.Listeners.SControllerListener;
-import ScrabbleEvents.ModelEvents.*;
+import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
-public class AIPlayer extends Player implements SController  {
-    private List<ModelListener> modelListeners;
-    private DictionaryHandler dict;
-    private ScrabbleModel model;
+public class AIPlayer extends Player {
+    private final List<ModelListener> modelListeners;
+    private final DictionaryHandler dict;
+    private final ScrabbleModel model;
 
     /**
      * AIPlayer constructor
@@ -27,7 +22,7 @@ public class AIPlayer extends Player implements SController  {
      * @param model the Scrabble game's model
      */
     public AIPlayer(String name, ScrabbleModel model) {
-        super(name, model); // TODO: planning to refactor model out (of player, AI needs access to the model)
+        super(name, model.getDrawPile());
         this.modelListeners = new ArrayList<>();
         this.model = model;
         dict = new DictionaryHandler();
@@ -266,23 +261,5 @@ public class AIPlayer extends Player implements SController  {
             perms.add(new ArrayList<>(shuffle.subList(0,r.nextInt(1,shuffle.size()))));
         }
         return perms;
-    }
-
-    /**
-     * Add a listener to notify when an event is raised.
-     *
-     * @param l the listener to add to this SController.
-     */
-    @Override
-    public void addControllerListener(SControllerListener l) {
-    }
-
-    /**
-     * Notify listeners by sending them a controller event.
-     *
-     * @param e the event to send to the listeners
-     */
-    @Override
-    public void notifyControllerListeners(ControllerEvent e) {
     }
 }
