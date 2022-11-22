@@ -158,18 +158,21 @@ class BoardValidatorTest {
      */
 
     @Test
-    void isValidPlacement2WordsNotAdjacentTest() {
+    void isValidPlacement2WordsNotAdjacentHorizontallyTest() {
         //Place Hello (horizontally) at start and place Hello again but not adjacent to the first word
         board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT));//place validStart1
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.RIGHT);
         assertEquals(BoardValidator.Status.NOT_NEXT_TO_WORD, validator.isValidLocation(invalidPlace));
 
+    }
+    @Test
+    void isValidPlacement2WordsNotAdjacentVerticallyTest() {
         //Place Hello (vertically) at start and place Hello again but not adjacent to the first word
         board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN)); //place validStart3
-        invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
+        BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
         assertEquals(BoardValidator.Status.NOT_NEXT_TO_WORD, validator.isValidLocation(invalidPlace));
-
     }
+
     /**
      * Tests placing 2 words that completly overlap
      * @author Vladimir Kovacina
@@ -181,8 +184,8 @@ class BoardValidatorTest {
         board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN));
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN);
         // Valid location... but invalid words
+        List<BoardWord> curWords = board.getCurrentWords();
         assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(invalidPlace));
-        assertEquals(-1, board.placeWord(invalidPlace));
     }
 
     /**
@@ -203,9 +206,9 @@ class BoardValidatorTest {
         wordToPlace2.add(new Tile(Letter.O));
         Point newPoint = new Point(6,8);
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(wordToPlace2, newPoint, Board.Direction.RIGHT);
+
         // Valid location... but invalid words
         assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(invalidPlace));
-        assertEquals(-1, board.placeWord(invalidPlace));
     }
 
     /**
