@@ -62,12 +62,6 @@ public class Board {
         return boardGrid.get(p);
     }
 
-    @Deprecated // TODO: should be sending a message to a view through validation
-    private void handleInvalidPlacement(BoardValidator.Status status){
-        OptionPaneHandler errorDisplayer = new OptionPaneHandler();
-        errorDisplayer.displayError(status.getErrorMessage());
-    }
-
     /**
      * Places a word on the board, and calculates the resulting score from the placement.
      * For invalid placements, will cancel the operation and indicate an exception.

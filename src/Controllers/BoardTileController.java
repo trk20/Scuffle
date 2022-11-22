@@ -43,8 +43,6 @@ public class BoardTileController extends TurnController implements SController, 
         }
     }
 
-
-
     /**
      * Invoked when an action occurs, will send a board click event to listeners.
      *
@@ -56,12 +54,4 @@ public class BoardTileController extends TurnController implements SController, 
             notifyControllerListeners(new C_BoardClickEvent(origin));
         }
     }
-    @Override
-    public void mouseClicked(MouseEvent e) {}
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-    @Override
-    public void mouseExited(MouseEvent e) {}
 }

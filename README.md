@@ -108,6 +108,23 @@ Extended by any controller that is used to control the flow of a turn.
 These controllers are disabled on AI turns to prevent humans from playing for them.
 
 ## Model
+### AIPlayer
+TODO
+### Class Model.Board :
+This class handles the internal representation of the board's current state. 
+It contains the methods to validate word placements, and to place them.
+Placing assumes a validation has been done before.
+
+
+### DrawPile
+- Uses a list to contain a group of Tiles with letters, can be shuffled to simulate a random draw order
+- Cannot use a set, there has to be multiple copy to have fluctuating odds for each tile
+- Tiles can be added back in (for discarding) and drawn from the pile (to remove them)
+### Hand
+- Uses a list of letters to hold up to 7 letters
+    - If possible, always fills up to the max (as long as there are letters to draw), otherwise alerts model
+- Allow to check if the hand contains a subset of letters
+- Allows to use letters, or see letters
 
 ## ScrabbleEvents
 ### Event Interfaces
@@ -127,15 +144,7 @@ Main ones are Model, and SController listeners.
 Other listeners have default code that ignores all events they would typically receive 
 except for the events they listen to.
 
-### Model.DrawPile
-- Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
-- Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
-- Letters can be added back in (for discarding) and drawn from the pile (to remove them)
-### Model.Hand
-- Uses a list of letters to hold up to 7 letters
-  - If possible, always fills up to the max (as long as there are letters to draw), otherwise alerts model
-- Allow to check if the hand contains a subset of letters
-- Allows to use letters, or see letters
+
 ### Model.Player
 - Can add to their own points, or display them
 - Can check if they have letters, play letters, or discard them
@@ -152,8 +161,6 @@ the prompter returns the value.
 This class handles running the game and delegating tasks to other classes. This class follows the model pattern
 from the MVC design pattern. This class is also the main class which starts the game and handles the user's turns as well as
 it handles processing and parsing of the user input.  
-### Class Model.Board :
-This class handles the internal representation of the board's current state. It contains the methods to validate and place words, and to return the score given by a placement.
 ### Class Model.BoardTile:
 This class is used to handle the squares in the Model.Board class.
 The Model.BoardTile Class uses two enums, Type enum and Model.Letter enum.

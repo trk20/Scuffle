@@ -154,6 +154,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
             notifyModelListeners(new BoardChangeEvent(board));
             nextTurn();
         } else { //Reset Blank tile (could not place)
+            notifyModelListeners(new ME_InvalidPlacement(validStatus));
             for(int i=0; i< selectedTiles.size(); i++){
                 if(selectedTiles.get(i).getScore() == 0){
                     selectedTiles.get(i).setLetter(Letter.BLANK);
