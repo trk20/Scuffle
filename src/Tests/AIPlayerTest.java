@@ -1,3 +1,4 @@
+
 //package Tests;
 //
 //import ScrabbleEvents.ControllerEvents.C_SkipEvent;
@@ -60,6 +61,7 @@
 //         * If the AI decides to discard, the score should not change at the end of the turn
 //         */
 //        ai1.addControllerListener(new SControllerListener() {
+
 //            private static int oldScore = 0;
 //
 //            @Override

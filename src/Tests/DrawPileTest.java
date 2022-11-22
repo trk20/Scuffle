@@ -18,13 +18,13 @@ class DrawPileTest {
      * Set up for each test case in the test suite,
      * initializes a Scrabble model and list of players
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      *
      */
     @BeforeEach
     void setUp() {
 
-        players =Arrays.asList("Vlad");
+        players = List.of("Vlad");
         model = new ScrabbleModel(players);
 
     }
@@ -37,37 +37,31 @@ class DrawPileTest {
     @Test
     void containsAllLetters(){
         DrawPile dp = new DrawPile();
-        for(Letter expectedLetter: Letter.values()) { //check if the DrawPile has the correct number of each type of letter (INCL blank)
-
+        //check if the DrawPile has the correct number of each type of letter (INCL blank)
+        for(Letter expectedLetter: Letter.values()) {
             assertEquals(dp.getLetterPile().stream().filter(
                     tile -> tile.getLetter().equals(expectedLetter)).count(),
                     expectedLetter.getFrequency()
             );
-
         }
     }
 
     /**
-     * Tests the initial drawPile to make sure it is the correct size, takes into account the number of players
-     * and their hand size, also checks that each tile is the correct type
+     * Tests the initial drawPile to make sure it is the correct size
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
     @Test
     void initialDrawPileSizeTest(){
         DrawPile dp = model.getDrawPile();
         List<Tile> tiles = dp.getLetterPile();
-        assertEquals(98 - 7, tiles.size());
-        for(int i = 0; i< tiles.size(); i++){
-            assertTrue(tiles.get(i) instanceof Tile);
-        }
-
+        assertEquals(100 - 7, tiles.size());
     }
     /**
      * Tests the addToPile() method, checks if it works properly when
      * multiple tiles are added and when no tiles are added
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
 
     @Test
@@ -94,20 +88,22 @@ class DrawPileTest {
      * also checks if the new drawPile is the correct size, and tests
      * that is handles drawing from an empty drawPile
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
 
     @Test
     void draw() {
         DrawPile dp = model.getDrawPile();
         Tile drawn = dp.draw();
-        assertTrue(drawn instanceof Tile);
+        assertNotNull(drawn);
         assertEquals(100-7-1, dp.getLetterPile().size());
+
+        // FIXME: draw until empty pile instead of setting it
 
         //Test Case where draw is drawing from empty pile
         List<Tile> empty = new ArrayList<>();
         dp.setLetterPile(empty);
         Tile drawn2 = dp.draw();
-        assertEquals(drawn2, null);
+        assertNull(drawn2);
     }
 }

@@ -10,7 +10,10 @@ import Views.ScrabbleFrame;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static Views.DebugView.DEBUG_VIEW;
 
@@ -51,8 +54,27 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
 
-    public ScrabbleModel(List<?> playerInfo) {
-        this.board = new Board(true);
+
+    /**
+     * For ease of testing, returns a Hashmap of <player name, false>
+     * @param playerNames names of the players
+     * @return a Hashmap of <player name, false>
+     */
+    private static HashMap<String,Boolean> getPlayerInfos(List<String> playerNames){
+        HashMap<String,Boolean> playerInfo = new HashMap<>();
+        for (String playerName:playerNames) {
+            playerInfo.put(playerName,false);
+        }
+        return playerInfo;
+    }
+
+    public ScrabbleModel(List<String> realPlayerNames){
+        this(getPlayerInfos(realPlayerNames));
+    }
+
+    public ScrabbleModel(HashMap<String,Boolean> playerInfos){
+
+        this.board = new Board(false);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
@@ -62,10 +84,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
 
-        // Guard against null human players
-        if(playerInfo != null){
-            this.numPlayers = playerInfo.size();
-            initializePlayers(playerInfo, drawPile);
+        if(playerInfos.size() != 0){
+            this.numPlayers = playerInfos.size();
+            initializePlayers(playerInfos);
         }
         input = new OptionPaneHandler();
     }
@@ -80,16 +101,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
     /**
      * Creates Player models from a list of player names.
      *
-     * @param playerInfos The list of playerInfo for each player in the model
-     * @param drawPile
+     * @param playerInfos The HashMap of playerInfo for each player in the model
      */
-    private void initializePlayers(List<?> playerInfos, DrawPile drawPile){
+    private void initializePlayers(HashMap<String,Boolean> playerInfos){
         players = new ArrayList<>();
-        for (Object playerInfo: playerInfos) {
-            if(!(boolean)((List<?>)playerInfo).get(1)) {
-                players.add(new Player((String)((List<?>)playerInfo).get(0), drawPile));
+        for (String playerName: playerInfos.keySet()) {
+            if(!playerInfos.get(playerName)) {
+                players.add(new Player(playerName, drawPile));
             }else{
-                players.add(new AIPlayer((String)((List<?>)playerInfo).get(0), this));
+                players.add(new AIPlayer(playerName, this));
             }
         }
     }
