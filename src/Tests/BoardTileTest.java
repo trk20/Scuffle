@@ -26,26 +26,11 @@ class BoardTileTest {
      */
     @Test
     void testConstructorAndEqual() {
-//        assertEquals(0, boardTile.getX());
-//        assertEquals(0, boardTile.getY());
         assertEquals(BoardTile.Type.BLANK, boardTile.getType());
         assertNull(boardTile.getLetter());
         assertFalse(boardTile.isTaken());
 
         assertEquals(boardTile, boardTile2);
-    }
-
-    /**
-     * Test initial tile state, and effect of X,Y setters on the tile.
-     */
-    @Test
-    void testXYSettersAndGetters() {
-        for(int i = 0; i < ScrabbleModel.BOARD_SIZE; i++){
-//            boardTile.setX(i);
-//            boardTile.setY(i);
-//            assertEquals(i, boardTile.getX());
-//            assertEquals(i, boardTile.getY());
-        }
     }
 
     /**
@@ -93,12 +78,13 @@ class BoardTileTest {
      * START: ST
      * word,letter (x2/x3): 2W, 3W, 2L, 3L
      * If it has a letter, it shows the letter instead.
+     */
     @Test
     void testToString() {
         // Map every type to a string representation (we should have a toString in type...)
         HashMap<BoardTile.Type, String> typeToString = new HashMap<>();
-        typeToString.put(BoardTile.Type.BLANK, " -- ");
-        typeToString.put(BoardTile.Type.START, "ST");
+        typeToString.put(BoardTile.Type.BLANK, "");
+        typeToString.put(BoardTile.Type.START, "★");
         typeToString.put(BoardTile.Type.X2WORD, "2W");
         typeToString.put(BoardTile.Type.X3WORD, "3W");
         typeToString.put(BoardTile.Type.X3LETTER, "3L");
@@ -112,5 +98,5 @@ class BoardTileTest {
         // Set letter, should return that letter as a string
         boardTile.setLetter(Letter.L);
         assertEquals("L", boardTile.toString());
-    }*/
+    }
 }
