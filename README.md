@@ -16,6 +16,8 @@
 - The options menu has only one functional button, and that is the game rules. Will bring you to the same rule set webpage linked in this read me.
 
 ## Rule set [adapted from hasbro](https://scrabble.hasbro.com/en-us/rules)
+One change in our ruleset compared to the hasbro version is that the game will automatically end once there are no more letters
+left inside the draw pile.
 ### Setup:
 - There are 100 tiles in the letter bag (Unfinished until [M3](#future-milestones))
 - One game board
