@@ -347,7 +347,7 @@ public class Board {
      *
      * @return the list of words in the board
      */
-    private List<BoardWord> getCurrentWords(){
+    public List<BoardWord> getCurrentWords(){
         List<BoardWord> curWords = new ArrayList<>();
 
         boolean readingColumns = true; // Choose to read columns first (arbitrary)

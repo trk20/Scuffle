@@ -35,24 +35,6 @@ public class BoardTest {
         event = new BoardPlaceEvent(placedTiles, point, Board.Direction.DOWN);
     }
 
-    //Currently all valid placement tests will fail due to scoring being incomplete
-
-    @Test
-    void checkInvalidPlacement(){
-        event = new BoardPlaceEvent(placedTiles, new Point(0,0), Board.Direction.DOWN);
-        int result = board.placeWord(event);
-        assertEquals(-1, result);
-    }
-
-    @Test
-    void checkInvalidWord(){
-        placedTiles.add(new Tile(Letter.C));
-        int result = board.placeWord(event);
-        assertEquals(-1, result);
-
-    }
-
-
     @Test
     void checkValidPlaceOnStartTile(){
         int result = board.placeWord(event);
@@ -95,24 +77,6 @@ public class BoardTest {
     }
 
     @Test
-    void checkInvalidAppendingWordPlacement(){
-        board.placeWord(event);
-        placedTiles = new ArrayList<Tile>();
-        placedTiles.add(new Tile(Letter.K));
-
-        event = new BoardPlaceEvent(placedTiles, new Point(7, 10), Board.Direction.DOWN);
-        int result = board.placeWord(event);
-        /*
-         * Should fail as this should look like
-         *   C
-         *   A
-         *   T
-         *   K
-         */
-        assertEquals(-1, result);
-    }
-
-    @Test
     void checkValidConnectingWordPlacement(){
         board.placeWord(event);
         placedTiles = new ArrayList<Tile>();
@@ -130,24 +94,5 @@ public class BoardTest {
          */
         assertEquals(6, result);
     }
-
-    @Test
-    void checkInvalidConnectingWordPlacement(){
-        board.placeWord(event);
-        placedTiles = new ArrayList<Tile>();
-        placedTiles.add(new Tile(Letter.S));
-        placedTiles.add(new Tile(Letter.Q));
-
-        event = new BoardPlaceEvent(placedTiles, new Point(8, 8), Board.Direction.DOWN);
-        int result = board.placeWord(event);
-        /*
-         * Should pass as this should look like
-         *   C
-         *   AS
-         *   TQ (invalid word)
-         */
-        assertEquals(-1, result);
-    }
-
 
 }
