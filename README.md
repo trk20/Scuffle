@@ -1,5 +1,5 @@
 # 3110 Group Project: Scrabble
-### Version: Milestone 2
+### Version: Milestone 3
 
 ## GUI instructions:
 - The game will give you prompts to set up the players when you run it initially (# of players, their names).
