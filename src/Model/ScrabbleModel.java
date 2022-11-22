@@ -19,18 +19,16 @@ import static Views.DebugView.DEBUG_VIEW;
 
 /**
  * Class that controls/models the overall scrabble game.
- * For Milestone 1, also acts as a text "view".
  *
  * @author Kieran Rourke, Alex, Vladimir Kovacina
- * @version NOV-20
+ * @version NOV-21
  */
 public class ScrabbleModel implements SControllerListener, SModel{
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
-    public static final int MIN_PLAYERS = 1;
-    //    public static final Boolean DISCARD = false; FIXME: outdated, should not be using bool to indicate function.
-//    public static final Boolean PLACE = true;
+    @SuppressWarnings("unused")
+    public static final int MIN_PLAYERS = 2; // Note: unused atm but probably should be
     public static final int BOARD_SIZE = 15;
 
     // Model components
@@ -41,7 +39,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     /** Player whose turn it is to play */
     private int numPlayers;
-    private int turn = 0;
+    private int turn;
     /** False until something triggers a game to end (Model.Player out of Letters, or no more possible moves)*/
     boolean gameFinished; // FIXME: may become a controller signal in the future, with no need for a field
     /** Model listeners to notify on model change */
@@ -52,7 +50,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     private OptionPaneHandler input;
 
 
-    private List<SController> debugControllers;
+    private final List<SController> debugControllers;
 
     public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
 
@@ -90,6 +88,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
             this.numPlayers = playerInfos.size();
             initializePlayers(playerInfos);
         }
+        input = new OptionPaneHandler();
     }
 
     /**
@@ -97,14 +96,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     private void incrementTurn(){
         turn = turn == numPlayers -1 ? 0 : turn+1;
-    }
-
-    /**
-     * Prints Model.Board
-     */
-    @Deprecated // View duty
-    private void printBoard(){
-        System.out.println(board);
     }
 
     /**
@@ -124,14 +115,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
     }
 
     /**
-     * Gets the user action either place or discard
-     * @return boolean mapped to the action
-     */
-    private boolean getAction(){
-        return true;
-    }
-
-    /**
      * Handles the user wanting to discard letters
      *  @author Kieran, Alexandre
      */
@@ -144,47 +127,44 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Handles the user wanting to place letters
      */
     private void handlePlace(PlaceClickEvent pce){
-        BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
-
         //Check for Blank tile in selected tiles:
         for(int i =0; i< selectedTiles.size(); i++){
             if(selectedTiles.get(i).getLetter() == Letter.BLANK){
                 selectedTiles.get(i).setLetter(input.getChosenLetter());
             }
         }
-
-        int placementScore = board.placeWord(placeEvent);
-
-        if(placementScore<0){
-            // Display error, do nothing.
-            //Reset Blank tile
+    
+        // Check if the placement event is valid
+        BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
+        BoardValidator.Status validStatus = board.isValidPlacement(placeEvent);
+        
+        if (validStatus == BoardValidator.Status.SUCCESS
+            // Place on board, save points in player
+            getCurPlayer().addPoints(board.placeWord(placeEvent));
+            
+            // Notify listeners about new board state
+            notifyModelListeners(new BoardChangeEvent(board));
+            notifyModelListeners(new PlayerChangeEvent(players));
+            try{
+                getCurPlayer().placeTiles(selectedTiles); // Get rid of tiles used
+            } catch (NullPointerException e){
+                endGame();
+            }
+            // Update turn state
+            notifyModelListeners(new BoardChangeEvent(board));
+            nextTurn();
+        } else { //Reset Blank tile (could not place)
             for(int i=0; i< selectedTiles.size(); i++){
                 if(selectedTiles.get(i).getScore() == 0){
                     selectedTiles.get(i).setLetter(Letter.BLANK);
                 }
             }
-        } else {
-            // Notify listeners about new board state
-            notifyModelListeners(new BoardChangeEvent(board));
-            notifyModelListeners(new PlayerChangeEvent(players));
-
-            // Letters have been placed, get rid of them and bank the score.
-            getCurPlayer().addPoints(placementScore);
-            try{
-                getCurPlayer().placeTiles(selectedTiles);
-
-            } catch (NullPointerException e){
-                endGame();
-            }
-
-            notifyModelListeners(new BoardChangeEvent(board));
-            nextTurn();
         }
     }
 
 
     /**
-     * Used to end the game
+     * Used to start a new game
      */
     public void newGame() {
         // TODO
@@ -221,16 +201,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
     // Creating a model should be synonymous to creating a game, we should move towards removing this.
     // I'm not convinced "synonymous to creating a game" is a good idea anymore (M3)
     public void startGame(){
-
         //Need to notify Score View here
         notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         if(getCurPlayer() instanceof AIPlayer){
+            notifyModelListeners(new AIPlayingEvent(true));
             ((AIPlayer) getCurPlayer()).play();
+            notifyModelListeners(new AIPlayingEvent(false));
         }
-        //nextTurn();
-//        System.out.println("Game ended, END SCREEN UNIMPLEMENTED");
     }
 
     /**
@@ -245,8 +224,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
         notifyModelListeners(new PlayerChangeEvent(players));
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
+        // Otherwise, wait for GUI controllers to handle turn
         if(getCurPlayer() instanceof AIPlayer){
+            notifyModelListeners(new AIPlayingEvent(true));
             ((AIPlayer) getCurPlayer()).play();
+            notifyModelListeners(new AIPlayingEvent(false));
         }
     }
 
@@ -312,7 +294,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
-        if(e instanceof C_SkipEvent skip) nextTurn();
+        if(e instanceof C_SkipEvent) nextTurn();
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
     }
 
@@ -334,8 +316,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     @Override
     public void notifyModelListeners(ModelEvent e) {
-        for (ModelListener l: modelListeners) {
-            l.handleModelEvent(e);
+        // (Concurrent modification exception otherwise)
+        // noinspection ForLoopReplaceableByForEach
+        for (int l = 0; l< modelListeners.size(); l++) {
+            modelListeners.get(l).handleModelEvent(e);
         }
     }
 

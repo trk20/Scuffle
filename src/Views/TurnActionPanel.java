@@ -12,7 +12,6 @@ import ScrabbleEvents.ModelEvents.NewPlayerEvent;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.util.List;
 
@@ -21,26 +20,16 @@ import static Views.DebugView.DEBUG_VIEW;
 
 public class TurnActionPanel extends JPanel implements ModelListener {
 
-    private JPanel turnPanel;
-    private JPanel actionPanel;
-    private JPanel directionPanel;
-    private JPanel skipPanel;
+    private final JPanel turnPanel;
+    private final JPanel actionPanel;
+    private final JPanel directionPanel;
+    private final JPanel skipPanel;
 
-    private JLabel turnLabel;
-    private JLabel actionLabel;
-    private JButton placeButton;
-    private JButton discardButton;
-    private JButton skipButton;
     private JButton directionButton;
-    private final int width = 300;
-    private final int height = 300;
     private JLabel playerLabel;
-
-    TurnActionController controller;
 
     private String currentPlayerName;
 
-    // FIXME: coupling with board controller, look for ways to decouple
     public TurnActionPanel(ScrabbleModel model, List<BoardTileController> board) {
         turnPanel = new JPanel();
         actionPanel = new JPanel();
@@ -49,20 +38,22 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         Border blackline = BorderFactory.createMatteBorder(0,0,2,0, Color.BLACK);
 
 
-        turnPanel.setPreferredSize(new Dimension(width, height/5));
+        int width = 300;
+        int height = 300;
+        turnPanel.setPreferredSize(new Dimension(width, height /5));
         turnPanel.setBackground(SIDE_BACKGROUND_COLOR);
         turnPanel.setBorder(blackline);
 
 
-        actionPanel.setPreferredSize(new Dimension(width, height/5 ));
+        actionPanel.setPreferredSize(new Dimension(width, height /5 ));
         actionPanel.setBackground(SIDE_BACKGROUND_COLOR);
         actionPanel.setBorder(blackline);
 
-        directionPanel.setPreferredSize(new Dimension(width, height/5));
+        directionPanel.setPreferredSize(new Dimension(width, height /5));
         directionPanel.setBackground(SIDE_BACKGROUND_COLOR);
         directionPanel.setBorder(blackline);
 
-        skipPanel.setPreferredSize(new Dimension(width, height/5*2));
+        skipPanel.setPreferredSize(new Dimension(width, height /5*2));
         skipPanel.setBackground(SIDE_BACKGROUND_COLOR);
 
 
@@ -86,7 +77,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     }
 
     private void setUpTurnPanel(){
-        turnLabel = new JLabel("Turn: ");
+        JLabel turnLabel = new JLabel("Turn: ");
         turnLabel.setFont(new Font("Serif", Font.BOLD, 15));
         turnLabel.setForeground(Color.WHITE);
 
@@ -101,8 +92,8 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     }
 
     private void setUpActionButtons(ScrabbleModel model, List<BoardTileController> board){
-        placeButton = new JButton("Place");
-        discardButton = new JButton("Discard");
+        JButton placeButton = new JButton("Place");
+        JButton discardButton = new JButton("Discard");
 
         placeButton.addActionListener(new TurnActionController(model, board));
         discardButton.addActionListener(new TurnActionController(model, TurnActionController.ActionState.DISCARD));
@@ -151,7 +142,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     }
 
     private void setUpSkipButton(ScrabbleModel model){
-        skipButton = new JButton("Skip");
+        JButton skipButton = new JButton("Skip");
         skipButton.addActionListener(new TurnActionController(model, TurnActionController.ActionState.SKIP));
 
         skipPanel.setLayout(new GridBagLayout());

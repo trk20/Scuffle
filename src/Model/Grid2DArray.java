@@ -10,23 +10,12 @@ import java.util.ArrayList;
  * @param <T> The type of the object to make a 2D array for.
  *
  * @author Alex
- * @version NOV-18
+ * @version NOV-21
  */
 public class Grid2DArray<T>{
     // "T" is the generic type
     private final ArrayList<ArrayList<T>> array2D;
     private final int size;
-
-//    /**
-//     * General Constructor, used to copy Grid2DArray
-//     *
-//     * @param size The length of the "grid"
-//     * @param copiedArray The grid to copy into the internal array2D
-//     */
-//    private Grid2DArray(int size, ArrayList<ArrayList<T>> copiedArray){
-//        this.size = size;
-//
-//    }
 
     /**
      * Constructor for Grid2DArray
@@ -71,14 +60,6 @@ public class Grid2DArray<T>{
     public int getSize(){
         return this.size;
     }
-
-//    /**
-//     * Returns a deep copy of this Grid2DArray
-//     * @return a deep copy of this objet
-//     */
-//    public Grid2DArray<T> copy(){
-//        return new Grid2DArray<>(size, array2D);
-//    }
 
     /**
      * Checks if a point coordinate is in the Array2D.

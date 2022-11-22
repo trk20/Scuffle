@@ -1,14 +1,11 @@
 package Model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Enumeration class Model.Letter, contains constants for each Scrabble letter.
  * Assigns a letter score (int), and a character (String) for each Model.Letter.
  *
  * @author Alexandre Marques - 101189743
- * @version 2022-10-19
+ * @version NOV-21
  */
 public enum Letter {
     // Model.Letter enums, sorted by order of frequency, in tiles/game
@@ -81,49 +78,6 @@ public enum Letter {
      */
     public int getFrequency() {
         return frequency;
-    }
-
-    /**
-     * Convert a word string to a list of Letters.
-     * Assumes all characters are valid.
-     *
-     * @author Vladimir Kovacina
-     * @param word a word to be seperated into individual Model.Letter enums
-     * @return An ArrayList of letters corresponding to the word's characters.
-     * @author Alexandre Marques - 101189743
-     */
-    @Deprecated
-    public static ArrayList<Letter> wordToLetters(String word){
-        ArrayList<Letter> letters = new ArrayList<>();
-        //Go through the letters of the word
-        for (int i =0; i<word.length(); i++){
-            //Look for the corresponding Model.Letter
-            for(Letter l: Letter.values()){
-                if(l.character == word.toUpperCase().charAt(i)){
-                    //Add the corresponding Model.Letter to the returned ArrayList
-                    letters.add(l);
-                }
-            }
-        }
-        return letters;
-    }
-
-    /**
-     * Convert a list of Letters to a word string.
-     * Assumes all characters are valid.
-     *
-     * @author Alexandre Marques
-     * @param word A List of letters corresponding to the word's characters.
-     * @return A string corresponding to the word's letters.
-     * @author Alexandre Marques - 101189743
-     */
-    @Deprecated
-    public static String lettersToString(List<Letter> word){
-        StringBuilder str = new StringBuilder();
-        for (Letter l: word) {
-            str.append(l.toString());
-        }
-        return str.toString();
     }
 
     /**

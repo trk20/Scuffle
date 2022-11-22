@@ -20,7 +20,7 @@ import static Views.DebugView.DEBUG_VIEW;
  * Displays held tiles, shows which ones are selected, and in what order.
  *
  * @author Alex
- * @version NOV-9
+ * @version NOV-21
  */
 public class HandView extends JPanel implements HandChangeListener {
     /** Row with the selected tiles*/
@@ -117,7 +117,7 @@ public class HandView extends JPanel implements HandChangeListener {
      */
     private void addNewTileView(Tile tile){
 
-        HandTileView view = new HandTileView(tile);
+        HandTileView view = new HandTileView(tile, model);
         unselected_row.add(view);
         // Add model listener to tile
         SController viewController = view.getController();
