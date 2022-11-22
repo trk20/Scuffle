@@ -92,18 +92,21 @@ class DrawPileTest {
      */
 
     @Test
-    void draw() {
+    void drawSuccess() {
         DrawPile dp = model.getDrawPile();
         Tile drawn = dp.draw();
         assertNotNull(drawn);
         assertEquals(100-7-1, dp.getLetterPile().size());
+    }
 
-        // FIXME: draw until empty pile instead of setting it
+    @Test
+    void drawFail() {
+        DrawPile dp = model.getDrawPile();
 
-        //Test Case where draw is drawing from empty pile
-        List<Tile> empty = new ArrayList<>();
-        dp.setLetterPile(empty);
-        Tile drawn2 = dp.draw();
-        assertNull(drawn2);
+        for(int i = 0; i < 100; i++){
+            dp.draw();
+        }
+
+        assertNull(dp.draw());
     }
 }
