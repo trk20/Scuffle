@@ -21,7 +21,10 @@ Version: Milestone 3
 
 # Rule set 
 Rules adapted from [hasbro](https://scrabble.hasbro.com/en-us/rules)
-## Setup:
+
+One change in our ruleset compared to the hasbro version is that the game will automatically end once there are no more letters
+left inside the draw pile.
+### Setup:
 - There are 100 tiles in the letter bag (Unfinished until [M3](#future-milestones))
 - One game board
 - Four racks (up to four players can play)
