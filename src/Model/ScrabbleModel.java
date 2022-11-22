@@ -5,15 +5,12 @@ import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
-import Views.OptionPaneHandler;
-import Views.ScrabbleFrame;
+import Controllers.OptionPaneHandler;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static Views.DebugView.DEBUG_VIEW;
 

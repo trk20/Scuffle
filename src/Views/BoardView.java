@@ -13,6 +13,10 @@ import java.util.List;
 
 import static Model.ScrabbleModel.BOARD_SIZE;
 
+/**
+ * @author Alex, Timothy
+ * @version NOV-22
+ */
 public class BoardView extends JPanel implements BoardChangeListener {
     private final Grid2DArray<BoardTileView> boardTileViewGrid;
 

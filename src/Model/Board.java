@@ -1,7 +1,6 @@
 package Model;
 
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
-import Views.OptionPaneHandler;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @author Vladimir Kovacina
  * @author Timothy Kennedy
  * @author Alex
- * @version NOV-18
+ * @version NOV-22
  */
 public class Board {
     /** Enum for board placement possibilities */

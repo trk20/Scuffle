@@ -1,4 +1,4 @@
-package Views;
+package Controllers;
 
 import Model.BoardValidator;
 import Model.Letter;

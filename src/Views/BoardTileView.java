@@ -10,6 +10,12 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * View to display tiles on the board, occupied or not.
+ * Has multiple style "states":
+ * State 0 (on creation),
+ * State 1 (empty styled tile),
+ * State 2 (occupied tile).
+ *
  * @author Alex
  * @version NOV-21
  */

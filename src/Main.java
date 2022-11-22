@@ -1,7 +1,6 @@
-import Model.BoardValidator;
 import Model.ScrabbleModel;
 import Views.DebugView;
-import Views.OptionPaneHandler;
+import Controllers.OptionPaneHandler;
 import Views.ScrabbleFrame;
 
 import static Views.DebugView.DEBUG_VIEW;
