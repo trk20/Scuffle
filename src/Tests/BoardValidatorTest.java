@@ -232,5 +232,15 @@ class BoardValidatorTest {
 
     }
 
+    @Test
+    void testInvalidWord(){
+        assertEquals(BoardValidator.Status.INVALID_WORD, board.isValidPlacement(new BoardPlaceEvent(invalidWord, start, Board.Direction.RIGHT)));
+    }
+
+    @Test
+    void testValidWord(){
+        assertEquals(BoardValidator.Status.SUCCESS, board.isValidPlacement(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT)));
+    }
+
 
 }
