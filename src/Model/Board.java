@@ -30,7 +30,7 @@ public class Board {
         public String toString() {return dirStr;}
 
     }
-    public static int MIN_WORD_SIZE = 2;
+    public static final int MIN_WORD_SIZE = 2;
     public static final Point START_TILE_POINT = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
     private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
@@ -98,7 +98,7 @@ public class Board {
         // Location is valid, check if words are valid
         if(currentStatus == BoardValidator.Status.SUCCESS){
             // Save board state
-            Grid2DArray<BoardTile> savedBoardGrid = this.copyGrid(boardGrid);
+            Grid2DArray<BoardTile> savedBoardGrid = copySelfGrid();
             // Place word on board, check if it creates invalid words
             setWordTiles(placeEvent);
             List<BoardWord> curWords = getCurrentWords();
@@ -110,7 +110,12 @@ public class Board {
         return currentStatus;
     }
 
-    private Grid2DArray<BoardTile> copyGrid(Grid2DArray<BoardTile> boardGrid) {
+    /**
+     * Copy its own boardGrid, and return it.
+     * Returns a deep copy, to be able to save it without mutation.
+     * @return A deep copy of the current boardGrid state.
+     */
+    private Grid2DArray<BoardTile> copySelfGrid() {
         int boardSize = boardGrid.getSize();
         Grid2DArray<BoardTile> gridCopy = new Grid2DArray<>(boardSize);
 
@@ -332,11 +337,13 @@ public class Board {
         };
     }
 
+    // FIXME: not convinced this should be public,
+    //  at least it doesn't allow mutation of the board now.
     public ArrayList<BoardTile> getBoardTiles(){
         ArrayList<BoardTile> tiles = new ArrayList<>();
         for (int x = 0; x < 15; x++){
             for (int y = 0; y < 15; y++) {
-                tiles.add(boardGrid.get(new Point(x, y)));
+                tiles.add(new BoardTile(boardGrid.get(new Point(x, y))));
             }
         }
         return tiles;
