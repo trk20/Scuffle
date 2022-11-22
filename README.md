@@ -58,9 +58,7 @@ When playing a blank, you must state which letter it represents. It remains that
 To do this, choose the discard option at the start of your turn. Choose the letters to discard.
 You will add your letters to the bag, then draw the same amount. This ends your turn.
 8. Cannot challenge words, as the game validates them for the players.
-9. The game ends when all letters have been drawn and one player uses their last letter;
-or when all possible plays have been made.
-   - Note: second condition no legal moves is a [work in progress](#milestone-1)
+9. The game ends when all letters have been drawn.
 
 ## Scoring:
 1. The game keeps a tally of each player's score, displaying it after each turn. 
@@ -83,8 +81,6 @@ On subsequent turns, letters on those tiles count at face values.
 In addition, if a player has used all of his or her letters, 
 the sum of the other players' unplayed letters is added to that player's score. [Unimplemented](#milestone-1)
 9. The player with the highest final score wins the game. 
-In case of a tie, the player with the highest score before adding or deducting unplayed letters wins. 
-[Unimplemented](#milestone-1)
 
 # Design
 ## Controllers
