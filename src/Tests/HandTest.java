@@ -22,20 +22,21 @@ class HandTest {
      */
     @BeforeEach
     void setUp() {
-        model = new ScrabbleModel(Arrays.asList("Tim"));
+        model = new ScrabbleModel(List.of("Tim"));
         drawPile = model.getDrawPile();
+        hand = new Hand(drawPile);
+        // FIXME: should not be setting the hand
         tiles = new ArrayList<>();
         tiles.addAll(Arrays.asList(new Tile(Letter.A),new Tile(Letter.B),new Tile(Letter.C),
                 new Tile(Letter.D),new Tile(Letter.E),new Tile(Letter.F),new Tile(Letter.G),
                 new Tile(Letter.H),new Tile(Letter.I),new Tile(Letter.J)));
-        hand = new Hand(drawPile);
         hand.setTiles(tiles);
-
     }
 
     /**
      * Tests the setting and getting of tiles from the hand
      */
+    @Deprecated // These are deprecated methods you shouldn't be using (setters) ideally
     @Test
     void setAndGetTiles() {
         assertEquals(tiles,hand.getHeldTiles());
@@ -51,8 +52,13 @@ class HandTest {
      */
     @Test
     void useSelected() {
+        // TODO: update this test with more cases.
+        //  Possibly use different subsets, smaller, at different spots.
+
+        // FIXME: do not use setters (deprecated), use getters to check initial state and compare against it
+
         //make a copy of the first 7 tiles (the ones that will be in the hand)
-        ArrayList tileCopy = new ArrayList(tiles.subList(0,7));
+        ArrayList<Tile> tileCopy = new ArrayList<>(tiles.subList(0,7));
         hand.useTiles(tiles); // use a known set of tiles
         //the hand should not contain those exact tiles
         assertFalse(tileCopy.stream().anyMatch(tile-> hand.getHeldTiles().contains(tile)));

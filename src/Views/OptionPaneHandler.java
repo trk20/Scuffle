@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -88,7 +89,7 @@ public class OptionPaneHandler {
      * @param index: the index of the player list
      * @return: the name
      */
-    public List askForPlayerInfo(int index){
+    public Object[] askForPlayerInfo(int index){
         String word = "";
         boolean validWord = false;
         boolean isAi = false;
@@ -105,7 +106,7 @@ public class OptionPaneHandler {
             if(isAi)
                 word += " - (AI)";
         }
-        return Arrays.asList(word,isAi);
+        return new Object[]{word,isAi};
     }
 
     /**
@@ -116,15 +117,14 @@ public class OptionPaneHandler {
      *
      * TODO: make player info HashMap or similar
      */
-    public List getNewPlayers() {
-        List playerInfo;
+    public HashMap<String, Boolean> getNewPlayers() {
 
         int numPlayers = this.askForNumPlayers();
-        ArrayList<List> players = new ArrayList<>(numPlayers);
+        HashMap<String,Boolean> players = new HashMap<>();
 
         for (int i = 0; i < numPlayers; i++){
-            playerInfo = this.askForPlayerInfo(i);
-            players.add(playerInfo);
+            Object[] playerInfo = this.askForPlayerInfo(i);
+            players.put((String)playerInfo[0],(boolean)playerInfo[1]);
         }
         return players;
     }

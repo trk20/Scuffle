@@ -58,11 +58,9 @@ public class Player implements SModel {
      * Called to discard letters (and draw the same amount)
      *
      * @param used List of letters to discard
-     * @return True if hand contains used letters, false otherwise.
      *
      * @author Alexandre Marques - 101189743
      */
-    @Deprecated
     public void discardTiles(List<Tile> used){
         // Notify listeners of a discard event
         notifyModelListeners(new DiscardEvent(used));

@@ -86,6 +86,7 @@ public class DrawPile implements ModelListener {
      * For Testing purposes, to get the size of the letter pile
      * @return List of Tiles
      */
+    // FIXME: should not be making setters/getters specifically for tests
     public List<Tile> getLetterPile() {
         return letterPile;
     }
@@ -94,6 +95,8 @@ public class DrawPile implements ModelListener {
      * For testing purposes, to set the letterPile
      * @param letterPile List of Tiles
      */
+    // FIXME: should not be making setters/getters specifically for tests
+    @Deprecated
     public void setLetterPile(List<Tile> letterPile) {
         this.letterPile = letterPile;
     }
