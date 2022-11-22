@@ -22,7 +22,7 @@ class HandTest {
      */
     @BeforeEach
     void setUp() {
-        model = new ScrabbleModel(Arrays.asList("Tim"));
+        model = new ScrabbleModel(ScrabbleModel.getPlayerInfos(List.of("Tim")));
         drawPile = model.getDrawPile();
         tiles = new ArrayList<>();
         tiles.addAll(Arrays.asList(new Tile(Letter.A),new Tile(Letter.B),new Tile(Letter.C),
@@ -52,7 +52,7 @@ class HandTest {
     @Test
     void useSelected() {
         //make a copy of the first 7 tiles (the ones that will be in the hand)
-        ArrayList tileCopy = new ArrayList(tiles.subList(0,7));
+        ArrayList<Tile> tileCopy = new ArrayList<>(tiles.subList(0,7));
         hand.useTiles(tiles); // use a known set of tiles
         //the hand should not contain those exact tiles
         assertFalse(tileCopy.stream().anyMatch(tile-> hand.getHeldTiles().contains(tile)));

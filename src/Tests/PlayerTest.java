@@ -27,8 +27,8 @@ class PlayerTest {
      */
     @org.junit.jupiter.api.BeforeEach
     public void setUp() {
-        playerNames = Arrays.asList("Vlad","Alex","Kieran","Tim");
-        model = new ScrabbleModel(playerNames);
+        playerNames = Arrays.asList("Vlad","Alex","Tim","Kieran");
+        model = new ScrabbleModel(ScrabbleModel.getPlayerInfos(playerNames));
         players = model.getPlayers();
 
         sampleHand = new ArrayList<>();
@@ -158,7 +158,7 @@ class PlayerTest {
     void getNameTest() {
         assertEquals("Vlad", players.get(0).getName());
         assertEquals("Alex", players.get(1).getName());
-        assertEquals("Kieran", players.get(2).getName());
-        assertEquals("Tim", players.get(3).getName());
+        assertEquals("Tim", players.get(2).getName());
+        assertEquals("Kieran", players.get(3).getName());
     }
 }

@@ -25,7 +25,7 @@ class ScrabbleModelTest {
      */
     @BeforeEach
     void setUp() {
-        model = new ScrabbleModel(Arrays.asList("Tim","Not Tim"));
+        model = new ScrabbleModel(ScrabbleModel.getPlayerInfos(Arrays.asList("Tim","Not Tim")));
     }
 
 

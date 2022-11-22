@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,7 +29,7 @@ public class BoardTest {
         placedTiles.add(new Tile(Letter.A));
         placedTiles.add(new Tile(Letter.T));
 
-        model = new ScrabbleModel(new ArrayList<String>(1));
+        model = new ScrabbleModel(model.getPlayerInfos(List.of("Nobody")));
         board = new Board(false);
         point = new Point(7,7);
         event = new BoardPlaceEvent(placedTiles, point, Board.Direction.DOWN);

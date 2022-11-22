@@ -25,7 +25,7 @@ class DrawPileTest {
     void setUp() {
 
         players =Arrays.asList("Vlad");
-        model = new ScrabbleModel(players);
+        model = new ScrabbleModel(ScrabbleModel.getPlayerInfos(players));
 
     }
 
@@ -38,18 +38,15 @@ class DrawPileTest {
     void containsAllLetters(){
         DrawPile dp = new DrawPile();
         for(Letter expectedLetter: Letter.values()) { //check if the DrawPile has the correct number of each type of letter (INCL blank)
-
             assertEquals(dp.getLetterPile().stream().filter(
                     tile -> tile.getLetter().equals(expectedLetter)).count(),
                     expectedLetter.getFrequency()
             );
-
         }
     }
 
     /**
-     * Tests the initial drawPile to make sure it is the correct size, takes into account the number of players
-     * and their hand size, also checks that each tile is the correct type
+     * Tests the initial drawPile to make sure it is the correct size
      *
      * @author: Vladimir Kovacina
      */
@@ -57,11 +54,7 @@ class DrawPileTest {
     void initialDrawPileSizeTest(){
         DrawPile dp = model.getDrawPile();
         List<Tile> tiles = dp.getLetterPile();
-        assertEquals(98 - 7, tiles.size());
-        for(int i = 0; i< tiles.size(); i++){
-            assertTrue(tiles.get(i) instanceof Tile);
-        }
-
+        assertEquals(100 - 7, tiles.size());
     }
     /**
      * Tests the addToPile() method, checks if it works properly when

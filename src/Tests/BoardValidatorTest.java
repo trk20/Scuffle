@@ -34,7 +34,7 @@ class BoardValidatorTest {
 
         //Initialized model and board
         List<String> playerNames = Arrays.asList("Vlad", "Alex", "Kieran", "Tim");
-        ScrabbleModel model = new ScrabbleModel(playerNames);
+        ScrabbleModel model = new ScrabbleModel(ScrabbleModel.getPlayerInfos(playerNames));
         board = model.getBoard();
 
         //Initialize Words

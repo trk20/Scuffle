@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,7 @@ class AIPlayerTest {
     @BeforeEach
     public void setUp() {
         // Num AI = 3
-        model = new ScrabbleModel(null, 3);
+        model = new ScrabbleModel(model.getPlayerInfos(Arrays.asList("Tim")));
     }
 
     /**
