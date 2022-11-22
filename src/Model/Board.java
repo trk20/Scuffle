@@ -1,7 +1,6 @@
 package Model;
 
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
-import Views.OptionPaneHandler;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @author Vladimir Kovacina
  * @author Timothy Kennedy
  * @author Alex
- * @version NOV-18
+ * @version NOV-22
  */
 public class Board {
     /** Enum for board placement possibilities */
@@ -60,12 +59,6 @@ public class Board {
      */
     public BoardTile getBoardTile(Point p){
         return boardGrid.get(p);
-    }
-
-    @Deprecated // TODO: should be sending a message to a view through validation
-    private void handleInvalidPlacement(BoardValidator.Status status){
-        OptionPaneHandler errorDisplayer = new OptionPaneHandler();
-        errorDisplayer.displayError(status.getErrorMessage());
     }
 
     /**

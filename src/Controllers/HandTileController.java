@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * HandTileController enables clicking on tiles in hand to select them.
+ * HandTileController is a TurnController that enables clicking on tiles in hand to select them.
+ * Raises TileClickEvent(s) when that happens.
  *
  * @author Alex
  * @version NOV-21

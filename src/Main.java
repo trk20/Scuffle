@@ -1,6 +1,6 @@
 import Model.ScrabbleModel;
 import Views.DebugView;
-import Views.OptionPaneHandler;
+import Controllers.OptionPaneHandler;
 import Views.ScrabbleFrame;
 
 import static Views.DebugView.DEBUG_VIEW;
@@ -14,9 +14,10 @@ import static Views.DebugView.DEBUG_VIEW;
  */
 public class Main {
     public static void main(String[] args){
-        OptionPaneHandler input = new OptionPaneHandler();
+        OptionPaneHandler optionPaneHandler = new OptionPaneHandler();
         // TODO: may change model placement, here for testing atm
-        ScrabbleModel model = new ScrabbleModel(input.getNewPlayers());
+        ScrabbleModel model = new ScrabbleModel(optionPaneHandler.getNewPlayers());
+        model.addModelListener(optionPaneHandler);
         ScrabbleFrame frame = new ScrabbleFrame(model);
 
         // Text view for debug outputs

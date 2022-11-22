@@ -9,13 +9,14 @@ import static Model.Board.START_TILE_POINT;
 
 /**
  * Handles tile placement validation for Board models,
- * Does not indicate what caused an invalid placement, could be added in future versions.
+ * Indicates results of a validation through its Status enum.
  * Should not be able to modify the board!
  *
- * @author Alex
+ * @author Alex, Kieran
  * @version NOV-18
  */
 public class BoardValidator {
+    /** Enum for different possible validation outcomes, with associated error messages (if applicable) */
     public enum Status{
         SUCCESS (null),
         OUT_OF_BOUNDS("Error: PLACEMENT WAS OUT OF BOUNDS"),
@@ -189,6 +190,11 @@ public class BoardValidator {
         return boardToValidate.isBoardEmpty();
     }
 
+    /**
+     * Checks if the words in the board are valid, according to the game's dictionary.
+     * @param currentWords List of words currently in the board
+     * @return True if an invalid word is in the board
+     */
     public Status isInvalidWordInBoard(List<BoardWord> currentWords) {
         for (BoardWord curWord: currentWords)
             if (!dictionary.isValidWord(curWord.toString())){
