@@ -1,7 +1,11 @@
 # 3110 Group Project: Scrabble
-### Version: Milestone 3
+Version: Milestone 3
+## Table of contents
+### [Rule set](#rule-set)
+### [Design](#design)
+### [Missing Features and bugs](#missing-features-and-bugs)
 
-## GUI instructions:
+# GUI instructions:
 - The game will give you prompts to set up the players when you run it initially (# of players, their names).
 - Afterwards, on the right there are actions, and at the bottom is your hand with your tiles.
 - You can select tiles in the hand, and then choose an action to either
@@ -15,8 +19,9 @@
     - If you click on the board, or another option, you need to click place again to enter "placing" mode (Otherwise, your board clicks are ignored)
 - The options menu has only one functional button, and that is the game rules. Will bring you to the same rule set webpage linked in this read me.
 
-## Rule set [adapted from hasbro](https://scrabble.hasbro.com/en-us/rules)
-### Setup:
+# Rule set 
+Rules adapted from [hasbro](https://scrabble.hasbro.com/en-us/rules)
+## Setup:
 - There are 100 tiles in the letter bag (Unfinished until [M3](#future-milestones))
 - One game board
 - Four racks (up to four players can play)
@@ -24,7 +29,7 @@
   - Dictionary used: Collins Scrabble Words (2019)
 - Choose starting player, by drawing letters. Closest letter to A (alphabetically) starts. Blanks beat all other letters.
     - [Work in progress](#milestone-1): currently, the order is determined by the name input order.
-### Game Loop:
+## Game Loop:
 1. The first player combines their letters to form a word and 
 places it on the board to read either across or down with one letter on the center square. 
 Diagonal words are not allowed.
@@ -54,7 +59,7 @@ You will add your letters to the bag, then draw the same amount. This ends your 
 or when all possible plays have been made.
    - Note: second condition no legal moves is a [work in progress](#milestone-1)
 
-### Scoring:
+## Scoring:
 1. The game keeps a tally of each player's score, displaying it after each turn. 
 The score value of each letter is indicated by a number next to its character. 
 The score value of a blank ([M3](#future-milestones)) is zero.
@@ -78,9 +83,25 @@ the sum of the other players' unplayed letters is added to that player's score. 
 In case of a tie, the player with the highest score before adding or deducting unplayed letters wins. 
 [Unimplemented](#milestone-1)
 
-## Design
-### ScrabbleEvents and listeners
-See event package [README](/src/ScrabbleEvents/README.md)
+# Design
+## ScrabbleEvents
+### Event Interfaces
+Event interfaces typically have nothing in them, 
+they serve as labels for what the event represents.
+### Event Records
+Event Records are concrete events that can be raised.
+They contain information that event listeners can grab 
+(as part of their record parameters). 
+Implements at least one event interface to label their type.
+### ModelEvents vs ControllerEvents
+The two main categories of events are events sent by models (classes implementing SModel),
+or events sent by controllers (events implementing SController).
+### Listeners
+Listeners are interfaces that listen for a specific event type.
+Main ones are Model, and SController listeners. 
+Other listeners have default code that ignores all events they would typically receive 
+except for the events they listen to.
+
 ### Model.DrawPile
 - Uses a list to contain a group of letters, can be shuffled to simulate a random draw order
 - Cannot use a set, there has to be multiple copy to have fluctuating odds for each letter
@@ -141,8 +162,8 @@ This class handles the buton presses from the panel itself. Currently this class
 to save the origin point. Therefore sending complete context for placing a word to the model. 
 When sending actions to the model  
 
-## Missing Features and bugs
-### Milestone 1
+# Missing Features and bugs
+## Milestone 1
 - End game score adjustments
   - Remove remaining letters' point value from score at the end of the game
   - Determine winner -> Have an end "screen"
@@ -150,7 +171,7 @@ When sending actions to the model
 - Have a way to end the game
 - Determine player order by drawing from the letter bag
 - Special scoring -> BINGO
-### Milestone 2
+## Milestone 2
 - GUI user feedback: indicate why the user cannot place, a tile.
   - Have instructions / a tutorial on how to use the GUI
 - Some GUI features not implemented, Skip button not working, menu save/loard not working (M4 feature)
@@ -159,7 +180,7 @@ When sending actions to the model
 - Some model tests missing for the newer classes
   - Some existing tests are outdated due to evolving class interfaces
 
-### Future Milestones 
+## Future Milestones 
 Note: these do not include all future features yet
 - Add blank tiles (Milestone 3)
 - Premium tile scoring (Milestone 3)
