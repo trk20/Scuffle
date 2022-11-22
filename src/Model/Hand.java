@@ -144,6 +144,7 @@ public class Hand {
      * For Testing purposes, used to set the tiles in the Hand
      * @param tiles List of Tiles in the Hand
      */
+    @Deprecated
     public void setTiles(List<Tile> tiles) {
         this.tiles = tiles;
     }

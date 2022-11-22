@@ -23,7 +23,7 @@ class PlayerTest {
      * Set up for each test case in the test suite,
      * initializes some words, a hand and list of players
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
     @org.junit.jupiter.api.BeforeEach
     public void setUp() {
@@ -55,7 +55,7 @@ class PlayerTest {
      * Tests the placeTiles method, checks if it works properly when
      * the word is and is not in the players hand
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
 
     @org.junit.jupiter.api.Test
@@ -65,21 +65,16 @@ class PlayerTest {
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
 
-
-        // FIXME: Player interface changed, it doesn't return true/false now
-//        //Word is in hand
-//        assertTrue(players.get(1).placeTiles(word1));
-//        //Word is not in hand
-//        assertFalse(players.get(1).placeTiles(word2));
-
-
+        // TODO: Check that hand changes after placement.
+        //  Precise effect depends on hand, just trying to detect any change
+        // players.get(1).getHand().getHeldTiles() (before, after, notEquals)
     }
 
     /**
      * Tests the discardTiles method, checks if it works properly when
      * the word is and is not in the players hand
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     public void discardTilesTest() {
@@ -89,11 +84,11 @@ class PlayerTest {
         players.get(1).setHand(newHand);
 
 
-        // FIXME: discard tiles does not return boolean anymore
-//        //Word is in hand
-//        assertTrue(players.get(1).discardTiles(word1));
-//        //Word is not in hand
-//        assertFalse(players.get(1).discardTiles(word2));
+        // TODO: Check that hand changes after placement.
+        //  Precise effect depends on hand, just trying to detect any change
+        //  (in very rare cases, possible this fails because you draw again from drawPile)
+        //  Check that drawPile size stays equal as well
+        // players.get(1).getHand().getHeldTiles() (before, after, notEquals)
 
     }
 
@@ -101,7 +96,7 @@ class PlayerTest {
      * Tests the outOfTiles method, checks if it works properly when
      * the hand is empty and when it is not empty
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     public void outOfTilesTest() {
@@ -124,12 +119,12 @@ class PlayerTest {
      * Tests the getHand method, checks if it works properly and
      * if the returned hand is the correct type
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     public void getHandTest() {
         Hand playerHand = players.get(0).getHand();
-        assertTrue(playerHand instanceof Hand);
+        assertNotNull(playerHand);
         assertEquals(playerHand.getHeldTiles().size(), 7);
     }
 
@@ -137,7 +132,7 @@ class PlayerTest {
      * Tests the getScore method, checks if it works properly with
      * various different scores
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     public void getScoreTest() {
@@ -152,7 +147,7 @@ class PlayerTest {
      * Tests the getName method, checks if it works properly with
      * various different Names
      *
-     * @author: Vladimir Kovacina
+     * @author Vladimir Kovacina
      */
     @org.junit.jupiter.api.Test
     void getNameTest() {
