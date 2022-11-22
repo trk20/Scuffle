@@ -28,7 +28,7 @@ class PlayerTest {
     @org.junit.jupiter.api.BeforeEach
     public void setUp() {
         playerNames = Arrays.asList("Vlad","Alex","Tim","Kieran");
-        model = new ScrabbleModel(ScrabbleModel.getPlayerInfos(playerNames));
+        model = new ScrabbleModel(playerNames);
         players = model.getPlayers();
 
         sampleHand = new ArrayList<>();

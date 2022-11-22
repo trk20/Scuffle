@@ -22,7 +22,7 @@ class HandTest {
      */
     @BeforeEach
     void setUp() {
-        model = new ScrabbleModel(ScrabbleModel.getPlayerInfos(List.of("Tim")));
+        model = new ScrabbleModel(List.of("Tim"));
         drawPile = model.getDrawPile();
         tiles = new ArrayList<>();
         tiles.addAll(Arrays.asList(new Tile(Letter.A),new Tile(Letter.B),new Tile(Letter.C),

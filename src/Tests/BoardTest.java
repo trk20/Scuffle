@@ -29,7 +29,7 @@ public class BoardTest {
         placedTiles.add(new Tile(Letter.A));
         placedTiles.add(new Tile(Letter.T));
 
-        model = new ScrabbleModel(model.getPlayerInfos(List.of("Nobody")));
+        model = new ScrabbleModel(List.of("Nobody"));
         board = new Board(false);
         point = new Point(7,7);
         event = new BoardPlaceEvent(placedTiles, point, Board.Direction.DOWN);

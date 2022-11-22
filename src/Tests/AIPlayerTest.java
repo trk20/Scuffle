@@ -26,7 +26,7 @@ class AIPlayerTest {
     @BeforeEach
     public void setUp() {
         // Num AI = 3
-        model = new ScrabbleModel(model.getPlayerInfos(Arrays.asList("Tim")));
+        model = new ScrabbleModel(Arrays.asList("Tim"));
     }
 
     /**

@@ -62,12 +62,16 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * @param playerNames names of the players
      * @return a Hashmap of <player name, false>
      */
-    public static HashMap<String,Boolean> getPlayerInfos(List<String> playerNames){
+    private static HashMap<String,Boolean> getPlayerInfos(List<String> playerNames){
         HashMap<String,Boolean> playerInfo = new HashMap<>();
         for (String playerName:playerNames) {
             playerInfo.put(playerName,false);
         }
         return playerInfo;
+    }
+
+    public ScrabbleModel(List<String> realPlayerNames){
+        this(getPlayerInfos(realPlayerNames));
     }
 
     public ScrabbleModel(HashMap<String,Boolean> playerInfos){
