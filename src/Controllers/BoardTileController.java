@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * BoardTileController is a TurnController that enables clicking on a tile in the board to select them.
+ * Each tile in the board has its own controller.
+ * Raises a C_BoardClickEvent when the tile is clicked on.
+ *
  * @author Alex
  * @version NOV-21
  */

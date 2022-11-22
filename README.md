@@ -84,6 +84,31 @@ In case of a tie, the player with the highest score before adding or deducting u
 [Unimplemented](#milestone-1)
 
 # Design
+## Controllers
+### Interface, SController:
+Identifies controller, allows to attach/notify controller listeners.
+All controllers are SControllers (exception: MenuController).
+### Class, BoardTileController:
+BoardTileController is a TurnController that enables clicking on a tile in the board to select them.
+Each tile in the board has its own controller. 
+Raises a C_BoardClickEvent when the tile is clicked on.
+### Class, HandTileController:
+HandTileController is a TurnController that enables clicking on tiles in hand to select them. 
+Raises a TileClickEvent when that happens.
+### Class, MenuController:
+This class is used to handle the action that is selected from the Menu.
+This controller class implements the ActionListener and therefore overrides the actionPerformed method to determine what to do when a MenuItem is selected.
+This class is used to implement the MVC design pattern for the Menu in the Scrabble game.
+### Class Model.TurnActionController:
+This class handles the button presses from the panel itself. Currently, this class also listens for board click events in order
+to save the origin point. Therefore, sending complete context for placing a word to the model.
+When sending actions to the model
+### Abstract Class, TurnController:
+Extended by any controller that is used to control the flow of a turn.
+These controllers are disabled on AI turns to prevent humans from playing for them.
+
+## Model
+
 ## ScrabbleEvents
 ### Event Interfaces
 Event interfaces typically have nothing in them, 
@@ -135,10 +160,6 @@ The Model.BoardTile Class uses two enums, Type enum and Model.Letter enum.
 The Type enum is created within the Model.BoardTile Class and it is used to assign types to the BoardTiles. Since the types are constant we decided to put them in an enum to avoid accidentally assigning a wrong type.
 The Model.Letter enum is also used in the Model.BoardTile class, each tile wil be able to hold one Model.Letter. Letters were made to be an enum since they are constant and contain values and frequencies of each letter.
 The Model.BoardTile also keeps track of its location on the board, using integers x and y to store the appropriate row and column values.
-### Class Controllers.MenuController:
-This class is used to handle the action that is selected from the Menu. 
-This controller class implements the ActionListener and therefore overrides the actionPerformed method to determine what to do when a MenuItem is selected.
-This class is used to implement the MVC design pattern for the Menu in the Scrabble game.
 ### Class Views.MenuView:
 This class is used to create the GUI for the Menu, this is done by extending JMenuBar. The menu name and menu items are created in this class and all the actionListeners are initialized.  
 This class is the view part of the MVC design pattern for the GUI of the Menu in the Scrabble game.
@@ -157,10 +178,7 @@ We decided to implement tests for this class to help with code correctness and f
 This class handles the view for the right content of the game. It contains a button for signalling a place action,
 discard action, the direction for the place action(Horizontal or Vertical) and a skip turn button. The main design choice
 is to have a seperate panel for each sections of button. This allows for easy position manipulation should it be needed in the future  .
-### Class Model.TurnActionController:
-This class handles the buton presses from the panel itself. Currently this class also listens for board click events in order 
-to save the origin point. Therefore sending complete context for placing a word to the model. 
-When sending actions to the model  
+
 
 # Missing Features and bugs
 ## Milestone 1
