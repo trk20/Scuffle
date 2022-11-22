@@ -138,7 +138,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         BoardPlaceEvent placeEvent = new BoardPlaceEvent(selectedTiles, pce.origin(), pce.dir());
         BoardValidator.Status validStatus = board.isValidPlacement(placeEvent);
         
-        if (validStatus == BoardValidator.Status.SUCCESS
+        if (validStatus == BoardValidator.Status.SUCCESS){
             // Place on board, save points in player
             getCurPlayer().addPoints(board.placeWord(placeEvent));
             

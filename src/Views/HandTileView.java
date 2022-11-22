@@ -24,7 +24,7 @@ public class HandTileView extends TileView{
      * @param tile The tile to view
      */
     public HandTileView(Tile tile, SModel model){
-        styleHandTile(tile.letter());
+        styleHandTile(tile.getLetter());
         controller = new HandTileController(tile, model);
         this.addMouseListener(controller);
     }
