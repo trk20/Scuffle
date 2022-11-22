@@ -40,14 +40,14 @@ public class Board {
     /**
      * Constructor for a Board object
      *
-     * @param premiumBoard If true, will add premium tiles to the board (point multipliers)
+     * @param isPremiumBoard If true, will add premium tiles to the board (point multipliers)
      */
-    public Board(boolean premiumBoard){
+    public Board(boolean isPremiumBoard){
         validator = new BoardValidator(this);
         lastPlacedWords = new ArrayList<>();
         initializeBlankGrid();  // Initialize tiles in boardGrid
 
-        if(premiumBoard) setPremiumTiles();
+        if(isPremiumBoard) setPremiumTiles();
         boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START); // Set start tile
     }
 
