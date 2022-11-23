@@ -6,7 +6,7 @@ Version: Milestone 3
 ### [Missing Features and bugs](#missing-features-and-bugs)
 
 # GUI instructions:
-- The game will give you prompts to set up the players when you run it initially (# of players, their names).
+- The game will give you prompts to set up the players when you run it initially (# of players, their names, and whether they should be AI controlled).
 - Afterwards, on the right there are actions, and at the bottom is your hand with your tiles.
 - You can select tiles in the hand, and then choose an action to either
   - Discard them (and draw that amount back) to end your turn
@@ -119,7 +119,8 @@ All models which can be listened to are SModels.
 Currently: Player, ScrabbleModel are SModels; 
 possibly more in the future for looser coupling.
 ### Class, AIPlayer:
-TODO (TIM)
+This class handles the choice and placement of words by AI players.
+It contains methods to find possible words, and to "play" - selecting what tiles it will use and placing them at the correct location.
 ### Class, Board:
 This class handles the internal representation of the board's current state. 
 It contains methods to place on the board, and get the resulting score.
@@ -142,7 +143,7 @@ Only used to store information about identified words,
 and to test if its components are equal when looking for new words, record is ideal.
 The only thing overridden is the toString method (for debugging purposes only).
 ### Class, Dictionary Handler
-TODO (TIM)
+Simple class that contains a list of dictionary words, and has a method to verify if a word is a dictionary word.
 ### Class, DrawPile
 - Uses a list to contain a group of Tiles, can be shuffled to simulate a random draw order
 - Cannot use a set, there has to be multiple copy to have fluctuating odds for each tile
@@ -198,7 +199,8 @@ State 0 (on creation),
 State 1 (empty styled tile),
 State 2 (occupied tile).
 ### Class, BoardView:
-TODO TIM (also, javadoc, since M2!)
+View containing the main board where words will be played. (also, javadoc, since M2!)
+Updates on BoardChangeEvents to display played words.
 ### Class, DebugView:
 View that can be partially, or entirely disabled. 
 Handles both model and controller events to detect when they happen, and what info they pass.
