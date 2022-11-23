@@ -15,6 +15,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Class for testing Board
+ *
+ *  @author Kieran Rourke
+ */
 public class BoardTest {
     ArrayList<Tile> placedTiles;
     ScrabbleModel model;
