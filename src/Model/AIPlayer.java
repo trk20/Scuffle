@@ -74,8 +74,6 @@ public class AIPlayer extends Player {
             }
         }
 
-        //System.out.println("Couldn't find a placement for " + super.getHand()+", discarding");
-
         //if the AI can't find anywhere to play, it discards its entire hand
         doHandDiscard();
     }
@@ -139,12 +137,6 @@ public class AIPlayer extends Player {
                                 tilesToPlace.stream()
                                                 .filter(currentTile->currentTile.getLetter().name().equals(boardTileUsed.getLetter().name())).toList().get(0));
 
-                //debug
-
-                /*System.out.println("Trying placement\n" +
-                        new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()-boardTileIndex), Board.Direction.DOWN)+
-                        " and placement\n" + new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT));
-                */
                 //check if placing the word going down is a valid placement
                 if(board.isValidPlacement(
                         new BoardPlaceEvent(
@@ -160,7 +152,7 @@ public class AIPlayer extends Player {
                 else if (board.isValidPlacement(
                         new BoardPlaceEvent(
                                 tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT
-                        )) ==
+                        ))
                         BoardValidator.Status.SUCCESS)
                 {
                     //return corresponding placement event
@@ -182,7 +174,7 @@ public class AIPlayer extends Player {
      *
      * @author Timothy Kennedy
      */
-    public void transferTilesMatchingWord(ArrayList<Tile> removeFrom, ArrayList<Tile> insertInto, ArrayList<String> word){
+    private void transferTilesMatchingWord(ArrayList<Tile> removeFrom, ArrayList<Tile> insertInto, ArrayList<String> word){
         for(String letter:word) {
             for(int i = 0; i < removeFrom.size(); i ++) {
                 Tile current = removeFrom.get(i);
@@ -260,13 +252,15 @@ public class AIPlayer extends Player {
     private HashSet<ArrayList<String>> getNRandomPermutations(String letters) {
         Random r = new Random();
         HashSet<ArrayList<String>> perms = new HashSet<>(); // Set of permutations generated-don't want to have duplicates
+        int count = 0;
 
         //list of letters to shuffle to get a random permutation
         ArrayList<String> shuffle = new ArrayList<>(Arrays.asList(letters.split("")));
 
-        while(perms.size() < MAX_ATTEMPTS) {
-            Collections.shuffle(shuffle, r);
 
+        while(perms.size() < MAX_ATTEMPTS && count < 150) {
+            Collections.shuffle(shuffle, r);
+            count++; // Stop it running forever
             // add a permutation of variable length
             perms.add(new ArrayList<>(shuffle.subList(0,r.nextInt(1,shuffle.size()))));
         }

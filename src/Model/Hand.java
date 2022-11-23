@@ -42,7 +42,6 @@ public class Hand {
      * @throws NullPointerException if draw pile has no more letters to draw.
      * @author Alexandre Marques - 101189743
      */
-    // TODO: Consider making custom exception (i.e. EmptyPileException)
     private void fillHand() throws NullPointerException {
         // Keep drawing until reaching hand limit
         while(tiles.size() < HAND_SIZE) {
@@ -57,7 +56,6 @@ public class Hand {
      * @throws NullPointerException if draw pile has no more letters to draw.
      * @author Alexandre Marques - 101189743
      */
-    // TODO: Consider making custom exception (i.e. EmptyPileException)
     private void draw() throws NullPointerException {
         // Check for valid letter (non-null value)
         Tile newTile = pile.draw();
@@ -76,7 +74,6 @@ public class Hand {
      * Otherwise, return False.
      * @author Alexandre Marques - 101189743
      */
-    @Deprecated // We won't need to check this if they can't input their own tiles.
     private boolean containsTiles(List<Tile> used){
         for(Tile t: used){
             // If l is not in hand, return false
@@ -96,9 +93,8 @@ public class Hand {
      * @throws NullPointerException to indicate that the game's Model.DrawPile is empty.
      */
     public void useTiles(List<Tile> used) throws NullPointerException{
-//        if(!containsTiles(used)){
-//            return false;
-//        }
+        // We assume with the GUI that the player/model would never choose tiles not contained in hand
+        assert(containsTiles(used));
 
         // For each used letter, remove it from the hand
         tiles.removeIf(used::contains);
@@ -107,7 +103,6 @@ public class Hand {
          * Note: Throws exception for empty draw pile!
          */
         fillHand();
-//        return true;
     }
 
     /**
