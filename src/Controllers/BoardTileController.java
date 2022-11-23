@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * BoardTileController is a TurnController that enables clicking on a tile in the board to select them.
+ * Each tile in the board has its own controller.
+ * Raises a C_BoardClickEvent when the tile is clicked on.
+ *
  * @author Alex
  * @version NOV-21
  */
@@ -39,8 +43,6 @@ public class BoardTileController extends TurnController implements SController, 
         }
     }
 
-
-
     /**
      * Invoked when an action occurs, will send a board click event to listeners.
      *
@@ -52,12 +54,4 @@ public class BoardTileController extends TurnController implements SController, 
             notifyControllerListeners(new C_BoardClickEvent(origin));
         }
     }
-    @Override
-    public void mouseClicked(MouseEvent e) {}
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-    @Override
-    public void mouseExited(MouseEvent e) {}
 }

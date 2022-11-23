@@ -8,6 +8,13 @@ import java.awt.*;
 
 import static Views.HandTileView.TILE_BEIGE;
 
+/**
+ * Declares shared methods that TileViews re-use.
+ * Mostly for styling tiles representing a letter.
+ *
+ * @author Alex
+ * @version NOV-22
+ */
 public abstract class TileView extends JPanel {
     /**
      * Set visuals for a letter tile. This includes a border, and a background color,

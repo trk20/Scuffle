@@ -87,6 +87,7 @@ public class DrawPile implements ModelListener {
      * @return List of Tiles
      */
     // FIXME: should not be making setters/getters specifically for tests
+    @Deprecated
     public List<Tile> getLetterPile() {
         return letterPile;
     }

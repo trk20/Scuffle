@@ -110,6 +110,7 @@ class PlayerTest {
         //Make player hand empty
         List<Tile> empty = new ArrayList<>();
         Hand newHand = new Hand(model.getDrawPile());
+        // FIXME: use until out of tiles instead
         newHand.setTiles(empty);
         players.get(0).setHand(newHand);
         //Hand is Empty

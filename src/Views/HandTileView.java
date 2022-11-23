@@ -8,7 +8,7 @@ import Model.Tile;
 import java.awt.*;
 
 /**
- * HandView is responsible for displaying information about individual Tile objects.
+ * HandView is responsible for displaying information about individual Tile object in the hand.
  * Displays Tile's letters. Also implements a mouse based controller to allow selecting the tiles.
  *
  * @author Alex

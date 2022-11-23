@@ -1,8 +1,11 @@
-package Views;
+package Controllers;
 
 import Model.BoardValidator;
 import Model.Letter;
 import Model.ScrabbleModel;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.ME_InvalidPlacement;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +23,7 @@ import java.util.List;
  * @Author: Kieran Rourke
  * @Version OCT-23
  */
-public class OptionPaneHandler {
+public class OptionPaneHandler implements ModelListener {
 
     /**
      * Checks if a word is only letters
@@ -152,5 +155,14 @@ public class OptionPaneHandler {
         Letter choice = (Letter) JOptionPane.showInputDialog(null,"Which Letter Do You Want..",
               "Blank Tile Choice", JOptionPane.QUESTION_MESSAGE,null,choices,choices[0]);
         return choice;
+    }
+
+    /**
+     * Display errors if an invalid placement occurs.
+     * @param e Event raised by model, handled only if it's an invalid placement event.
+     */
+    @Override
+    public void handleModelEvent(ModelEvent e) {
+        if (e instanceof ME_InvalidPlacement ev) displayError(ev.status().getErrorMessage());
     }
 }

@@ -10,6 +10,13 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+/**
+ * AIPlayer is an extension of the player class to handle
+ * the choice and placement of words by an AI player.
+ *
+ * @author Timothy Kennedy
+ * @version NOV-22
+ */
 public class AIPlayer extends Player {
     private static final int MAX_ATTEMPTS = 100;
     private final List<ModelListener> modelListeners;

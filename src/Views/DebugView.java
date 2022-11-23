@@ -97,6 +97,10 @@ public class DebugView implements ModelListener, SControllerListener {
         }
     }
 
+    /**
+     * Add itself as a controller listener to a list of controllers
+     * @param debugControllers controllers to listen to
+     */
     public void listenToControllers(List<SController> debugControllers) {
         for(SController c: debugControllers){
             c.addControllerListener(this);

@@ -2,8 +2,9 @@ package Model;
 
 /**
  * Tile model class, represents a tile in the scrabble game.
- * Has a Letter reference.
- * Serves as a wrapper to differentiate between two tiles with the same Letter.
+ * Stores the score of its initial letter.
+ * The letter can be changed if the tile was originally a blank (0 score),
+ * but never the score.
  *
  * @author Alex, Vladimir
  * @version NOV-20

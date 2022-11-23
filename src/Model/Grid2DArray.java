@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Handles accesses to a 2D (square shaped) array of type T.
+ * Utility class, Handles accesses to a 2D (square shaped) array of type T.
  * Allows to pass Point objects for 2D array indexing.
  *
  * @param <T> The type of the object to make a 2D array for.
