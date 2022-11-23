@@ -206,7 +206,9 @@ Displays held tiles, shows which ones are selected, and in what order.
 Uses 2 JPanels, one on the top (for selected tiles), and one on the bottom (for unselected tiles).
 Handles TileSelectEvents from model to identify which tiles get selected/unselected.
 ### Class, ScrabbleFrame:
-TODO Kieran
+This class is responsible for displaying the other views. Each view has a corresponding JPanel inside ScrabbleFrame that 
+allows for easy replacement. ScrabbleFrame uses BorderLayout for storing the panels with each direction corresponding to a view.
+Ex. Center: Board, East: TurnActionPanel etc..
 ### Class, MenuView:
 This class is used to create the GUI for the Menu, this is done by extending JMenuBar. The menu name and menu items are created in this class and all the actionListeners are initialized.  
 This class is the view part of the MVC design pattern for the GUI of the Menu in the Scrabble game.
