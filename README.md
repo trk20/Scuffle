@@ -2,18 +2,7 @@
 ### Version: Milestone 3
 
 ## GUI instructions:
-- The game will give you prompts to set up the players when you run it initially (# of players, their names).
-- Afterwards, on the right there are actions, and at the bottom is your hand with your tiles.
-- You can select tiles in the hand, and then choose an action to either
-  - Discard them (and draw that amount back) to end your turn
-  - Place them
-  - Or flip the direction you would like to place them in 
-    - (Currently, the display is inversed, the right arrow will actually place downwards, and vice versa)
-  - Skipping is not implemented as of Milestone 2
-- Additional placing instructions: After clicking place, you need to click the tile on the board where you would like the word to start
-    - If the placement fails, it will still be your turn and nothing will have changed (No feedback except the lack of word placement as of Milestone 2)
-    - If you click on the board, or another option, you need to click place again to enter "placing" mode (Otherwise, your board clicks are ignored)
-- The options menu has only one functional button, and that is the game rules. Will bring you to the same rule set webpage linked in this read me.
+- Refer to the GUI Instructions PDF for in depth instructions.
 
 ## Rule set [adapted from hasbro](https://scrabble.hasbro.com/en-us/rules)
 ### Setup:

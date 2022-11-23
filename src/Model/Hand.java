@@ -2,6 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class Model.Hand takes care of holding, playing, and drawing
@@ -130,6 +131,7 @@ public class Hand {
         return sb.toString().trim();
     }
 
+
     /**
      * Get held tiles.
      *
@@ -144,7 +146,7 @@ public class Hand {
      * For Testing purposes, used to set the tiles in the Hand
      * @param tiles List of Tiles in the Hand
      */
-    @Deprecated
+
     public void setTiles(List<Tile> tiles) {
         this.tiles = tiles;
     }

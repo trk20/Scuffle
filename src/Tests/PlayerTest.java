@@ -64,10 +64,15 @@ class PlayerTest {
         Hand newHand = new Hand(model.getDrawPile());
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
-
+        players.get(1).placeTiles(word1);
+        assertNotEquals(sampleHand, players.get(1).getHand());
         // TODO: Check that hand changes after placement.
         //  Precise effect depends on hand, just trying to detect any change
-        // players.get(1).getHand().getHeldTiles() (before, after, notEquals)
+//        List<Tile> before = players.get(1).getHand().getHeldTiles() ;
+//        players.get(1).placeTiles(before);
+//        List<Tile> after = players.get(1).getHand().getHeldTiles();
+//        assertFalse(before.equals(after));
+
     }
 
     /**
@@ -82,6 +87,8 @@ class PlayerTest {
         Hand newHand = new Hand(model.getDrawPile());
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
+        players.get(1).discardTiles(word1);
+        assertNotEquals(players.get(1).getHand(), sampleHand);
 
 
         // TODO: Check that hand changes after placement.
@@ -102,8 +109,6 @@ class PlayerTest {
     public void outOfTilesTest() {
         //Make player hand empty
         List<Tile> empty = new ArrayList<>();
-        List<Tile> sampleHand = Arrays.asList(new Tile(Letter.L),new Tile(Letter.I),
-                new Tile(Letter.E), new Tile(Letter.R),new Tile(Letter.A),new Tile(Letter.N));
         Hand newHand = new Hand(model.getDrawPile());
         newHand.setTiles(empty);
         players.get(0).setHand(newHand);
@@ -113,6 +118,15 @@ class PlayerTest {
         players.get(0).setHand(newHand);
         //Hand is not Empty
         assertFalse(players.get(0).outOfTiles());
+
+        //Test Exception:
+        for(int i = 0; i < 100; i++){
+            try{
+                players.get(0).discardTiles(players.get(0).getHand().getHeldTiles());
+            }catch (NullPointerException e){
+                assertTrue(e instanceof NullPointerException);
+            }
+        }
     }
 
     /**
