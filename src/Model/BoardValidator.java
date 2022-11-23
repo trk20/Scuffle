@@ -65,6 +65,19 @@ public class BoardValidator {
     }
 
     /**
+     * Checks if the words in the board are valid, according to the game's dictionary.
+     * @param currentWords List of words currently in the board
+     * @return True if an invalid word is in the board
+     */
+    public Status isInvalidWordInBoard(List<BoardWord> currentWords) {
+        for (BoardWord curWord: currentWords)
+            if (!dictionary.isValidWord(curWord.toString())){
+                return Status.INVALID_WORD;
+            }
+        return Status.SUCCESS; // No invalid words detected
+    }
+
+    /**
      * Checks if a tile would be adjacent to the placed word
      * @param placementEvent The event representing a placement attempt
      * @return True if a tile would be adjacent to the placed word
@@ -188,18 +201,5 @@ public class BoardValidator {
      */
     private boolean isBoardEmpty(){
         return boardToValidate.isBoardEmpty();
-    }
-
-    /**
-     * Checks if the words in the board are valid, according to the game's dictionary.
-     * @param currentWords List of words currently in the board
-     * @return True if an invalid word is in the board
-     */
-    public Status isInvalidWordInBoard(List<BoardWord> currentWords) {
-        for (BoardWord curWord: currentWords)
-            if (!dictionary.isValidWord(curWord.toString())){
-                return Status.INVALID_WORD;
-            }
-        return Status.SUCCESS; // No invalid words detected
     }
 }
