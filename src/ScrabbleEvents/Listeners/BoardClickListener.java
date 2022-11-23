@@ -3,6 +3,12 @@ package ScrabbleEvents.Listeners;
 import ScrabbleEvents.ControllerEvents.C_BoardClickEvent;
 import ScrabbleEvents.ControllerEvents.ControllerEvent;
 
+/**
+ * Interface to label board click listeners, handles C_BoardClickEvents
+ *
+ * @author Alex
+ * @version NOV-18
+ */
 public interface BoardClickListener extends SControllerListener{
 
     default void handleControllerEvent(ControllerEvent e) {

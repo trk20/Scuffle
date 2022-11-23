@@ -110,6 +110,7 @@ public class Player implements SModel {
 
     /**
      * Get player's hand.
+     * @author Vladimir Kovacina
      * @return the player's hand.
      */
     public Hand getHand() {
@@ -118,6 +119,7 @@ public class Player implements SModel {
     
     /**
      * Get player's score
+     * @author Vladimir Kovacina
      * @return the player's score
      */
     public int getScore() {
@@ -126,6 +128,7 @@ public class Player implements SModel {
 
     /**
      * Gets the player's name
+     * @author Vladimir Kovacina
      * @return the player's name
      */
     public String getName() {
@@ -135,8 +138,9 @@ public class Player implements SModel {
     /**
      * For testing purposes, sets the players hand
      * @param hand the new players hand
+     * @author Vladimir Kovacina
      */
-    @Deprecated
+
     public void setHand(Hand hand) {
         this.hand = hand;
     }
