@@ -152,7 +152,7 @@ public class AIPlayer extends Player {
                 else if (board.isValidPlacement(
                         new BoardPlaceEvent(
                                 tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT
-                        ))
+                        )) ==
                         BoardValidator.Status.SUCCESS)
                 {
                     //return corresponding placement event
