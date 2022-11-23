@@ -14,12 +14,20 @@ import java.util.List;
 import static Model.ScrabbleModel.BOARD_SIZE;
 
 /**
+ * View to display the board and tiles played on it.
+ * Updates on BoardChangeEvents.
+ *
  * @author Alex, Timothy
  * @version NOV-22
  */
 public class BoardView extends JPanel implements BoardChangeListener {
     private final Grid2DArray<BoardTileView> boardTileViewGrid;
 
+    /**
+     * Constructor for a BoardView
+     * Initialises the grid of tiles and adds itself as a model listener
+     * @param model the model from which to base the board's state
+     */
     public BoardView(ScrabbleModel model) {
         boardTileViewGrid = new Grid2DArray<>(BOARD_SIZE);
         model.addModelListener(this);
