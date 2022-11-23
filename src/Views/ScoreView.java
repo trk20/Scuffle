@@ -87,7 +87,7 @@ public class ScoreView extends JPanel implements ModelListener {
         List<Player> players = updatedPlayers;
         for (int i =0; i < players.size();i++ ){
             //Change the JLabels to display the players names and scores
-            playerLabels[i] .setText(players.get(i).getName()+ ":\t "+ players.get(i).getScore());
+            playerLabels[i].setText(players.get(i).getName()+ ":\t "+ players.get(i).getScore());
         }
     }
 
