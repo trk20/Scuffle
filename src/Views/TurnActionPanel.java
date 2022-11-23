@@ -18,6 +18,12 @@ import java.util.List;
 import static Model.ScrabbleModel.SIDE_BACKGROUND_COLOR;
 import static Views.DebugView.DEBUG_VIEW;
 
+/**
+ * Class for turn actions view, Place Discard etc.
+ *
+ *  @author Kieran Rourke
+ */
+
 public class TurnActionPanel extends JPanel implements ModelListener {
 
     private final JPanel turnPanel;

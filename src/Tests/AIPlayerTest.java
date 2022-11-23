@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class for testing AiPlayer
+ *
+ *  @author Kieran Rourke
+ */
 class AIPlayerTest {
     List<String> playerNames = Arrays.asList("Vlad","Alex","Tim","Kieran");
 
