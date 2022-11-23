@@ -5,8 +5,13 @@ Version: Milestone 3
 ### [Design](#design)
 ### [Missing Features and bugs](#missing-features-and-bugs)
 
+
+## GUI instructions:
+- Refer to the GUI Instructions PDF for in depth instructions.
+
 # Rule set 
 Rules adapted from [hasbro](https://scrabble.hasbro.com/en-us/rules)
+
 
 One change in our ruleset compared to the hasbro version is that the game will automatically end once there are no more letters
 left inside the draw pile.
