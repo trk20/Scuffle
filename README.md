@@ -238,16 +238,16 @@ is to have a seperate panel for each sections of button. This allows for easy po
 - Some GUI features not implemented, menu save/load not working (M4 feature)
 - Class diagrams, sequence diagrams not fully up to date
 - AI choosing words is currently very inefficient
- -Cannot find words a significant percent of the time
- -Does not take into account more than one tile on the board
- -Gets words from generating random sequences instead of filtering an already known set of words
--Human players have no feedback for when an AI is doing/has completed their turn
- -GUI does not update the board with the previous player's move until the AI player finishes choosing its placement
- -The AI plays instantly once it makes a choice, which means players don't get to see the AI's hand or the actions it takes
+  - Cannot find words a significant percent of the time
+  - Does not take into account more than one tile on the board
+  - Gets words from generating random sequences instead of filtering an already known set of words
+- Human players have no feedback for when an AI is doing/has completed their turn
+  - GUI does not update the board with the previous player's move until the AI player finishes choosing its placement
+  - The AI plays instantly once it makes a choice, which means players don't get to see the AI's hand or the actions it takes
 
 ## Future Milestones 
 Note: these do not include all future features yet
-- Add blank tiles (Milestone 3)
-- Premium tile scoring (Milestone 3)
+- Serialization (load / save)
+- XML loading of the initial board state
+- Multiple level undo/redo
 - Choose from a set of dictionaries before starting (Low priority)
-- Machine learning A.I.!!! (After Milestone 4)

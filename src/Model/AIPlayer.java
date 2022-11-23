@@ -18,7 +18,7 @@ import java.util.*;
  * @version NOV-22
  */
 public class AIPlayer extends Player {
-    private static final int MAX_ATTEMPTS = 100;
+    private static final int MAX_ATTEMPTS = 200;
     private final List<ModelListener> modelListeners;
     private final DictionaryHandler dict;
     private final ScrabbleModel model;
@@ -58,9 +58,9 @@ public class AIPlayer extends Player {
                 return;
             }
         }else {
-            ArrayList<BoardTile> boardTiles = new ArrayList<BoardTile>(model.getBoard().getBoardTiles().stream().filter(BoardTile::isTaken).toList());
+            ArrayList<BoardTile> boardTiles = new ArrayList<>(model.getBoard().getBoardTiles().stream().filter(BoardTile::isTaken).toList());
             Collections.shuffle(boardTiles);
-            for (BoardTile tile : boardTiles) {
+            for (BoardTile tile : boardTiles.subList(0,Math.min(5,boardTiles.size()))) {
                 try {
                     placeEvent = getPlacementEventOn(tile, false); // The board has words on it, find a word including this tile
                 } catch (
@@ -130,12 +130,12 @@ public class AIPlayer extends Player {
                 // place the first valid word, starting at the center going down
                 return new BoardPlaceEvent(tilesToPlace, new Point(7,7), Board.Direction.DOWN);
             }else {
+
                 //get the position where the boardTile intersects the word, to know what position to play the word later
                 int boardTileIndex =
                         tilesToPlace.indexOf(
                                 tilesToPlace.stream()
-                                                .filter(currentTile->currentTile.getLetter().name().equals(boardTileUsed.getLetter().name()))
-                                        .findFirst().get());
+                                                .filter(currentTile->currentTile.getLetter().name().equals(boardTileUsed.getLetter().name())).toList().get(0));
 
                 //check if placing the word going down is a valid placement
                 if(board.isValidPlacement(
@@ -152,7 +152,7 @@ public class AIPlayer extends Player {
                 else if (board.isValidPlacement(
                         new BoardPlaceEvent(
                                 tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT
-                        )) ==
+                        ))
                         BoardValidator.Status.SUCCESS)
                 {
                     //return corresponding placement event
@@ -224,7 +224,8 @@ public class AIPlayer extends Player {
      */
     public ArrayList<ArrayList<String>> getValidWords(BoardTile tile, Hand hand){
         // The letters in the hand of the AI player: what it has to "work with"
-        StringBuilder letters = new StringBuilder(tile.getLetter().toString());
+        StringBuilder letters = new StringBuilder();
+        Random r = new Random();
 
         ArrayList<ArrayList<String>> placementCandidates = new ArrayList<>();
         for(Tile heldTile:hand.getHeldTiles()){
@@ -232,7 +233,8 @@ public class AIPlayer extends Player {
         }
         //Find valid words in a large amount of random strings that contain the right letters (including that of the BoardTile
         for(ArrayList<String> wordCandidate:getNRandomPermutations(letters.toString())){
-            if(wordCandidate.contains(tile.getLetter().name()) && dict.isValidWord(String.join("",wordCandidate))){
+            wordCandidate.add(r.nextInt(0,wordCandidate.size()+1),tile.getLetter().toString());
+            if(dict.isValidWord(String.join("",wordCandidate))){
                 placementCandidates.add(wordCandidate);
             }
         }
