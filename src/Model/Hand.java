@@ -148,17 +148,4 @@ public class Hand {
     public void setTiles(List<Tile> tiles) {
         this.tiles = tiles;
     }
-
-//    /**
-//     * Discards the tiles selected, and draws back from the draw pile afterwards.
-//     * Precondition: Assumes all selected tiles are in the hand
-//     * @param selectedTiles list of tiles to remove from the hand
-//     */
-//    // TODO: change this call to use tiles
-//    public void discardSelected(List<Tile> selectedTiles) {
-//        for(Tile t: selectedTiles){
-//            tiles.remove(t);
-//        }
-//        fillHand();
-//    }
 }
