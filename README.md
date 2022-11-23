@@ -227,22 +227,21 @@ discard action, the direction for the place action(Horizontal or Vertical) and a
 is to have a seperate panel for each sections of button. This allows for easy position manipulation should it be needed in the future  .
 
 # Missing Features and bugs
-## Milestone 1
 - End game score adjustments
   - Remove remaining letters' point value from score at the end of the game
   - Determine winner -> Have an end "screen"
     - Tie breaking
-- Have a way to end the game
 - Determine player order by drawing from the letter bag
 - Special scoring -> BINGO
-## Milestone 2
-- GUI user feedback: indicate why the user cannot place, a tile.
-  - Have instructions / a tutorial on how to use the GUI
-- Some GUI features not implemented, Skip button not working, menu save/loard not working (M4 feature)
-  - (low priority because discarding 0 tiles can be used to skip your turn already)
+- Some GUI features not implemented, menu save/load not working (M4 feature)
 - Class diagrams, sequence diagrams not fully up to date
-- Some model tests missing for the newer classes
-  - Some existing tests are outdated due to evolving class interfaces
+- AI choosing words is currently very inefficient
+  -Cannot find words a significant percent of the time
+  -Does not take into account more than one tile on the board
+  -Gets words from generating random sequences instead of filtering an already known set of words
+-Human players have no feedback for when an AI is doing/has completed their turn
+  -GUI does not update the board with the previous player's move until the AI player finishes choosing its placement
+  -The AI plays instantly once it makes a choice, which means players don't get to see the AI's hand or the actions it takes
 
 ## Future Milestones 
 Note: these do not include all future features yet
