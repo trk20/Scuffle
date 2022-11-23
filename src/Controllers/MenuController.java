@@ -9,6 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
+/**
+ * MenuController Class controls the logic behind what happens when one of the menu items are pressed
+ *
+ * @author Vladimir Kovacina
+ * @version 22 Nov 2022
+ */
 public class MenuController implements ActionListener {
     private ScrabbleModel model;
 

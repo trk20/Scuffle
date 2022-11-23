@@ -5,6 +5,11 @@ import Model.ScrabbleModel;
 
 import javax.swing.*;
 
+/**
+ * The GUI of the Menu in the Scrabble game
+ * @author Vladimir Kovacina
+ * @version 22 Nov 2022
+ */
 public class MenuView extends JMenuBar {
 
     private JMenu menu;
