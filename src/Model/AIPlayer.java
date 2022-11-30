@@ -83,7 +83,7 @@ public class AIPlayer extends Player {
         for(Tile tile:placeEvent.placedTiles()){
             model.handleControllerEvent(new TileClickEvent(tile));
             try {
-                Thread.sleep(120);
+                Thread.sleep(70);
             }catch (InterruptedException e){
             }
         }
@@ -141,12 +141,12 @@ public class AIPlayer extends Player {
                 //check if placing the word going down is a valid placement
                 if(board.isValidPlacement(
                         new BoardPlaceEvent(
-                                tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()-boardTileIndex), Board.Direction.DOWN
+                                tilesToPlace, new Point(boardTileUsed.getX(), (boardTileIndex > 0) ? (boardTileUsed.getY()-boardTileIndex): boardTileUsed.getY()+1), Board.Direction.DOWN
                         )) ==
                         BoardValidator.Status.SUCCESS)
                 {
                     //return corresponding placement event
-                    return new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX(), (boardTileIndex > 0) ? (boardTileUsed.getY()-boardTileIndex): boardTileUsed.getY()+1) , Board.Direction.DOWN);
+                    return new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()-boardTileIndex) , Board.Direction.DOWN);
                 }
 
                 //check if placing the word going right is a valid placement
@@ -289,12 +289,14 @@ public class AIPlayer extends Player {
         HashSet<ArrayList<String>> placementCandidates = new HashSet<>();
 
         for(Tile heldTile:hand.getHeldTiles()){
-            letters.append(heldTile.getLetter().name());
+            if(!heldTile.getLetter().name().equals("BLANK")) {
+                letters.append(heldTile.getLetter().name());
+            }
         }
 
         //Find valid words
         for(String permutation:getNRandomPerms(Arrays.asList(letters.toString().split("")))){
-            placementCandidates.addAll(dict.getValidWords(getLetterCount(permutation)));
+            placementCandidates.addAll(dict.optimizedGetValidWords(getLetterCount(permutation),permutation.length()));
         }
         return placementCandidates;
     }
@@ -315,13 +317,15 @@ public class AIPlayer extends Player {
         HashSet<ArrayList<String>> placementCandidates = new HashSet<>();
 
         for(Tile heldTile:hand.getHeldTiles()){
-            letters.append(heldTile.getLetter().name());
+            if(!heldTile.getLetter().name().equals("BLANK")) {
+                letters.append(heldTile.getLetter().name());
+            }
         }
         letters.append(tile.getLetter().name());
 
         //Find valid words
         for(String permutation:getNRandomPerms(Arrays.asList(letters.toString().split("")))){
-            placementCandidates.addAll(dict.getValidWords(getLetterCount(permutation)));
+            placementCandidates.addAll(dict.optimizedGetValidWords(getLetterCount(permutation),permutation.length()));
         }
         return placementCandidates;
     }
@@ -332,7 +336,7 @@ public class AIPlayer extends Player {
      * @param letters the string to count from
      * @return a HashMap mapping letters to their frequency
      */
-    private HashMap<String,Integer> getLetterCount(String letters){
+    public static HashMap<String,Integer> getLetterCount(String letters){
         HashMap<String,Integer> letterCount = new HashMap<>();
 
         letters.chars().forEach(

@@ -12,6 +12,8 @@ import java.util.stream.IntStream;
  */
 public class DictionaryHandler {
     private final ArrayList<String> allWords; // Storage for all valid words
+
+    private final ArrayList<HashMap<String,HashMap<String,Integer>>> sortedLetterCounts;
     private final HashMap<String,HashMap<String,Integer>> letterCounts;
 
 
@@ -21,6 +23,7 @@ public class DictionaryHandler {
     public DictionaryHandler() {
         allWords = new ArrayList<>();
         letterCounts = new HashMap<>();
+        sortedLetterCounts = new ArrayList<>();
         /*
          * Load all valid words from the 2019 version of Scrabble into an ArrayList
          * If something goes wrong, print an error message
@@ -37,14 +40,18 @@ public class DictionaryHandler {
             System.out.println("Something went wrong with loading the dictionary");
         }
 
+        for(int i = 0; i < 15; i++){
+            sortedLetterCounts.add(new HashMap<>());
+        }
+
         //create Hashmap of words and their associated letter frequencies
-        allWords.parallelStream().forEach(word->{
+        allWords.forEach(word->{
             HashMap<String, Integer> letterCount = new HashMap<>();
             IntStream distinct = word.chars().distinct();
             for (int letter : distinct.toArray()) {
                 letterCount.put(Character.toString(letter), (int) word.chars().filter(e -> e == letter).count());
             }
-            letterCounts.put(word, letterCount);
+            sortedLetterCounts.get(word.length()-1).put(word,letterCount);
         });
 
     }
@@ -60,14 +67,14 @@ public class DictionaryHandler {
     }
 
     /**
-     * Find all dictionary words that match the letter frequencies passed to it
+     * Find all dictionary words that match the letter frequencies passed to it, only looking at words with the given length
      *
      * @param letterCount the letter frequencies to consider
      * @return a list of all valid words with those letters
      */
-    public ArrayList<ArrayList<String>> getValidWords(HashMap<String,Integer> letterCount){
+    public ArrayList<ArrayList<String>> optimizedGetValidWords(HashMap<String,Integer> letterCount, int len){
         ArrayList<ArrayList<String>> words = new ArrayList<>();
-        letterCounts.entrySet().stream()
+        sortedLetterCounts.get(len-1).entrySet().parallelStream()
                 .filter(entry -> letterCount.equals(entry.getValue()))
                 .map(Map.Entry::getKey)
                 .forEach(
