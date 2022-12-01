@@ -22,10 +22,8 @@ public class UndoHandler implements ModelListener{
     @Override
     public void handleModelEvent(ModelEvent e){
         if (e instanceof PlayerChangeEvent newPlayers){
-            System.out.println("Model event");
             playerState.push(newPlayers.players());
         }else if (e instanceof  BoardChangeEvent newBoard){
-            System.out.println("Board event");
             boardState.push(newBoard.board());
         }
     }
