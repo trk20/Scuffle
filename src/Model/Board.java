@@ -390,4 +390,22 @@ public class Board {
 
         return curWords;
     }
+
+    public BoardTile getTile(Point p){
+        return boardGrid.get(p);
+    }
+
+    private void setTile(Point p, BoardTile t){
+        boardGrid.set(p, t);
+    }
+
+    public void setBoard(Board newBoard){
+        for (int x = 0; x < 15; x++){
+            for (int y = 0; y < 15; y++) {
+                Point p = new Point(x,y);
+                setTile(p, newBoard.getTile(p));
+
+            }
+        }
+    }
 }
