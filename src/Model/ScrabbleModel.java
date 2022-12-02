@@ -49,6 +49,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
 
     private final List<SController> debugControllers;
 
+    private UndoHandler undoHandler;
     public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
 
 
@@ -80,6 +81,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
         this.debugControllers = new ArrayList<>();
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
+        this.undoHandler = new UndoHandler();
+
+        addModelListener(undoHandler);
 
         if(playerInfos.size() != 0){
             this.numPlayers = playerInfos.size();
@@ -93,6 +97,10 @@ public class ScrabbleModel implements SControllerListener, SModel{
      */
     private void incrementTurn(){
         turn = turn == numPlayers -1 ? 0 : turn+1;
+    }
+
+    private void decrementTurn(){
+        turn = turn == 0 ? turn = numPlayers-1 : turn--;
     }
 
     /**
@@ -138,17 +146,15 @@ public class ScrabbleModel implements SControllerListener, SModel{
         if (validStatus == BoardValidator.Status.SUCCESS){
             // Place on board, save points in player
             getCurPlayer().addPoints(board.placeWord(placeEvent));
-            
+
             // Notify listeners about new board state
             notifyModelListeners(new BoardChangeEvent(board));
-            notifyModelListeners(new PlayerChangeEvent(players));
             try{
                 getCurPlayer().placeTiles(selectedTiles); // Get rid of tiles used
             } catch (NullPointerException e){
                 endGame();
             }
             // Update turn state
-            notifyModelListeners(new BoardChangeEvent(board));
             nextTurn();
         } else { //Reset Blank tile (could not place)
             notifyModelListeners(new ME_InvalidPlacement(validStatus));
@@ -349,5 +355,11 @@ public class ScrabbleModel implements SControllerListener, SModel{
             return this.debugControllers;
         else
             return null;
+    }
+
+    public void undoMove(){
+        board.setBoard(undoHandler.getPreviousBoard());
+        players = (ArrayList<Player>) undoHandler.getPreviousPlayerState();
+        decrementTurn();
     }
 }
