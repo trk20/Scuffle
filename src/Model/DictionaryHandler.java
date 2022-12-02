@@ -11,9 +11,10 @@ import java.util.stream.IntStream;
  * @version NOV-29
  */
 public class DictionaryHandler {
-    private final ArrayList<String> allWords; // Storage for all valid words
+    private final HashSet<String> allWords; // Storage for all valid words
 
     private final ArrayList<HashMap<String,HashMap<String,Integer>>> sortedLetterCounts;
+
     private final HashMap<String,HashMap<String,Integer>> letterCounts;
 
 
@@ -21,7 +22,7 @@ public class DictionaryHandler {
      * Constructs a new Model.DictionaryHandler object with all valid words loaded into an ArrayList, and a HashMap of their letter frequencies.
      */
     public DictionaryHandler() {
-        allWords = new ArrayList<>();
+        allWords = new HashSet<>();
         letterCounts = new HashMap<>();
         sortedLetterCounts = new ArrayList<>();
         /*

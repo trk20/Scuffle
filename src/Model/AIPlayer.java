@@ -18,7 +18,9 @@ import java.util.*;
  * @version NOV-29
  */
 public class AIPlayer extends Player {
-    private static final int MAX_ATTEMPTS = 50;
+
+    private static final boolean delay = false;
+    private static final int MAX_ATTEMPTS = 40;
     private final List<ModelListener> modelListeners;
     private final DictionaryHandler dict;
     private final ScrabbleModel model;
@@ -56,7 +58,7 @@ public class AIPlayer extends Player {
         }else {
             ArrayList<BoardTile> boardTiles = new ArrayList<>(model.getBoard().getBoardTiles().stream().filter(BoardTile::isTaken).toList());
             Collections.shuffle(boardTiles);
-            for (BoardTile tile : boardTiles.subList(0,Math.min(10,boardTiles.size()))) {
+            for (BoardTile tile : boardTiles) {
                 try {
                     placeEvent = getPlacementEventOn(tile, false); // The board has words on it, find a word including this tile
                 } catch (
@@ -82,9 +84,11 @@ public class AIPlayer extends Player {
     private void doPlacementEvent(BoardPlaceEvent placeEvent){
         for(Tile tile:placeEvent.placedTiles()){
             model.handleControllerEvent(new TileClickEvent(tile));
-            try {
-                Thread.sleep(70);
-            }catch (InterruptedException e){
+            if(delay) {
+                try {
+                    Thread.sleep(70);
+                } catch (InterruptedException e) {
+                }
             }
         }
         model.handleControllerEvent(new PlaceClickEvent(placeEvent.direction(),placeEvent.wordOrigin()));
@@ -96,9 +100,11 @@ public class AIPlayer extends Player {
     private void doHandDiscard(){
         for(Tile tile:super.getHand().getHeldTiles()){
             model.handleControllerEvent(new TileClickEvent(tile));
-            try {
-                Thread.sleep(50);
-            }catch (InterruptedException e){
+            if(delay) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                }
             }
         }
         model.handleControllerEvent(new DiscardClickEvent());
@@ -325,7 +331,7 @@ public class AIPlayer extends Player {
 
         //Find valid words
         for(String permutation:getNRandomPerms(Arrays.asList(letters.toString().split("")))){
-            placementCandidates.addAll(dict.optimizedGetValidWords(getLetterCount(permutation),permutation.length()));
+            placementCandidates.addAll(dict.optimizedGetValidWords(getLetterCount(permutation),permutation.length()).stream().filter(word->word.contains(tile.getLetter().name())).toList());
         }
         return placementCandidates;
     }
