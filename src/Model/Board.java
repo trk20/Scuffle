@@ -239,15 +239,13 @@ public class Board {
         }
     }
 
+    /**
+     *Set the board up with no premium tiles, this is used for xml configurations
+     * @author Vladimir Kovacina
+     */
+
     public void setDefaultBoard(){
-        boardGrid = new Grid2DArray<>(BOARD_SIZE);
-        // Fill tile array
-        for (int x = 0; x< BOARD_SIZE; x ++){
-            for(int y = 0; y<BOARD_SIZE; y ++){
-                Point p = new Point(x, y);
-                boardGrid.set(p, new BoardTile(p));
-            }
-        }
+        initializeBlankGrid();
         boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START); // Set start tile
     }
 

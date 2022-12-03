@@ -132,6 +132,11 @@ public class OptionPaneHandler implements ModelListener {
         return players;
     }
 
+    /**
+     * Asks for the filename that corresponds to the board configuration XML file
+     * @author Vladimir Kovacina
+     * @return String the filename of the XML file
+     */
     public String getFilename(){
         String filename = "";
         filename = JOptionPane.showInputDialog("Enter XML filename, leave blank for no configuration file");
