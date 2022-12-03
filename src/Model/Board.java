@@ -239,6 +239,18 @@ public class Board {
         }
     }
 
+    public void setDefaultBoard(){
+        boardGrid = new Grid2DArray<>(BOARD_SIZE);
+        // Fill tile array
+        for (int x = 0; x< BOARD_SIZE; x ++){
+            for(int y = 0; y<BOARD_SIZE; y ++){
+                Point p = new Point(x, y);
+                boardGrid.set(p, new BoardTile(p));
+            }
+        }
+        boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START); // Set start tile
+    }
+
     /**
      * Set premium score tiles in the board.
      * Currently, randomly places them on the board.
@@ -257,6 +269,22 @@ public class Board {
                 }
             }
         }
+    }
+
+    public void setXMLPremiumTiles(int x, int y, String type){
+        Point p = new Point(x, y);
+        if(type.equals("2W")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[2]);
+        }else if(type.equals("3W")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[3]);
+        }else if(type.equals("2L")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[4]);
+        }else if(type.equals("3L")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[5]);
+        }else{
+            boardGrid.get(p).setType(BoardTile.Type.values()[1]);
+        }
+
     }
 
     /**

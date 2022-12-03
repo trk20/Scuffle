@@ -70,7 +70,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     }
 
     public ScrabbleModel(HashMap<String,Boolean> playerInfos){
-
+        input = new OptionPaneHandler();
         this.board = new Board(true);
         this.drawPile = new DrawPile();
         this.gameFinished = false;
@@ -85,7 +85,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
             this.numPlayers = playerInfos.size();
             initializePlayers(playerInfos);
         }
-        input = new OptionPaneHandler();
+
     }
 
     /**

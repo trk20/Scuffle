@@ -1,3 +1,4 @@
+import Model.ReadXMLFile;
 import Model.ScrabbleModel;
 import Views.DebugView;
 import Controllers.OptionPaneHandler;
@@ -19,6 +20,17 @@ public class Main {
         ScrabbleModel model = new ScrabbleModel(optionPaneHandler.getNewPlayers());
         model.addModelListener(optionPaneHandler);
         ScrabbleFrame frame = new ScrabbleFrame(model);
+        String xmlFile = optionPaneHandler.getFilename();
+        if (!xmlFile.equals("")) {
+
+                ReadXMLFile xmlReader = new ReadXMLFile(model, xmlFile);
+                xmlReader.read();
+
+            }
+
+
+
+
 
         // Text view for debug outputs
         DebugView debug;
