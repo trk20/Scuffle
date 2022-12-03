@@ -44,31 +44,30 @@ public class AIPlayer extends Player {
      * @author Timothy Kennedy
      */
     public void play(){
-        BoardPlaceEvent placeEvent = null; //make a new PlaceEvent to store placement information
-        if(model.getBoard().isBoardEmpty()){ //The board is empty, play the first possible valid word
+        HashMap<BoardPlaceEvent,Integer> placeEvents = new HashMap<>(); //make a HashMap to store placement information and corresponding score
+        if(model.getBoard().isBoardEmpty()){ //The board is empty, play from the center
             try {
-                placeEvent = getPlacementEventOn(null, true); // the board is empty, no BoardTile included in the word
+                placeEvents = getPlacementEventOn(null, true); // the board is empty, and no BoardTile is included in the word
             }catch (Exception e){
                 //System.out.println(e.getMessage());
             }
-            if(placeEvent!= null){ //if there was a possible placement found, play it
-                doPlacementEvent(placeEvent);
+            if(placeEvents.size() > 0){ //if there were possible placements found, play the one with the highest score
+                doPlacementEvent(Collections.max(placeEvents.entrySet(), Map.Entry.comparingByValue()).getKey());
                 return;
             }
         }else {
             ArrayList<BoardTile> boardTiles = new ArrayList<>(model.getBoard().getBoardTiles().stream().filter(BoardTile::isTaken).toList());
-            Collections.shuffle(boardTiles);
             for (BoardTile tile : boardTiles) {
                 try {
-                    placeEvent = getPlacementEventOn(tile, false); // The board has words on it, find a word including this tile
+                    placeEvents.putAll(getPlacementEventOn(tile, false)); // The board has words on it, find placements including this tile
                 } catch (
                         Exception e) {
                     //System.out.println(e.getMessage());
                 }
-                if (placeEvent != null) {
-                    doPlacementEvent(placeEvent);
-                    return;
-                }
+            }
+            if(placeEvents.size() > 0) { // if any placement events were found
+                doPlacementEvent(Collections.max(placeEvents.entrySet(), Map.Entry.comparingByValue()).getKey()); //play the highest scoring placement
+                return;
             }
         }
 
@@ -111,34 +110,39 @@ public class AIPlayer extends Player {
     }
 
     /**
-     * Gets a placement event including a boardTile if applicable, and returns a valid placement if found.
-     * If it finds no placements, it returns null.
+     * Gets placement events including a boardTile if applicable, and returns a HashSet of valid placements and their scores if found.
      *
      * @param boardTileUsed the boardTile to include in the placement (if applicable)
      * @param startOfGame whether the board is blank
      * @return a valid placement, or null if none are found
      * @throws Exception if there is no passed boardTile but the board isn't empty
      */
-    private BoardPlaceEvent getPlacementEventOn(BoardTile boardTileUsed, boolean startOfGame) throws Exception {
+    private HashMap<BoardPlaceEvent,Integer> getPlacementEventOn(BoardTile boardTileUsed, boolean startOfGame) throws Exception {
         if(!startOfGame && boardTileUsed == null){
             throw new Exception("boardTileUsed is null but tiles have already been played");
         }
         Board board = model.getBoard();
         Hand hand = super.getHand();
 
+        HashMap<BoardPlaceEvent,Integer> placeEvents = new HashMap<>();
         ArrayList<Tile> tilesToPlace; //Tiles with which to attempt a placement
-
+        ArrayList<Tile> notPlaced; //intermediate list to avoid modifying hand
+        BoardPlaceEvent event;
 
         for(ArrayList<String> word: (startOfGame) ? getValidWordsNew(hand) : getValidWordsNew(boardTileUsed,hand)){
             tilesToPlace = new ArrayList<>(); //clear list each attempt (otherwise will grow)
-            ArrayList<Tile> notPlaced = new ArrayList<>(hand.getHeldTiles()); //intermediate list to avoid modifying hand
+            notPlaced = new ArrayList<>(hand.getHeldTiles());
             if(startOfGame){
-                // place the first valid word, starting at the center going down
-                transferTilesMatchingWord(notPlaced,tilesToPlace,word);
-                return new BoardPlaceEvent(tilesToPlace, new Point(7,7), Board.Direction.DOWN);
+                // Start play from the center
+                transferTilesMatchingWord(notPlaced, tilesToPlace, word);
+                for(int offset = 0; offset < word.size()-1; offset++) { //try all placements of the first word
+
+                    event = new BoardPlaceEvent(tilesToPlace, new Point(7, 7-offset), Board.Direction.DOWN);
+                    placeEvents.put(event, board.getPlacementScore(event));
+                    event = new BoardPlaceEvent(tilesToPlace, new Point(7-offset, 7), Board.Direction.RIGHT);
+                    placeEvents.put(event, board.getPlacementScore(event));
+                }
             }else {
-
-
                 //get the position where the boardTile intersects the word, to know what position to play the word later
                 int boardTileIndex = word.indexOf(boardTileUsed.getLetter().name());
 
@@ -151,8 +155,9 @@ public class AIPlayer extends Player {
                         )) ==
                         BoardValidator.Status.SUCCESS)
                 {
-                    //return corresponding placement event
-                    return new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()-boardTileIndex) , Board.Direction.DOWN);
+                    //add corresponding placement event
+                    event = new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()-boardTileIndex) , Board.Direction.DOWN);
+                    placeEvents.put(event,board.getPlacementScore(event));
                 }
 
                 //check if placing the word going right is a valid placement
@@ -162,14 +167,13 @@ public class AIPlayer extends Player {
                         )) ==
                         BoardValidator.Status.SUCCESS)
                 {
-                    //return corresponding placement event
-                    return new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT);
+                    //add corresponding placement event
+                    event = new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT);
+                    placeEvents.put(event,board.getPlacementScore(event));
                 }
             }
         }
-
-        //no placements were found :(
-        return null;
+        return placeEvents;
     }
 
     /**
