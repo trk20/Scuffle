@@ -269,6 +269,15 @@ public class Board {
         }
     }
 
+    /**
+     * Method used to set the XML premium tiles that are read from the configuration file
+     *
+     * @author Vladimir Kovacina
+     * @param x the col of the tile
+     * @param y the row of the tile
+     * @param type which premium tile type
+     */
+
     public void setXMLPremiumTiles(int x, int y, String type){
         Point p = new Point(x, y);
         if(type.equals("2W")){
