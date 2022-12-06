@@ -26,12 +26,12 @@ public class Hand {
      *
      * @author Alexandre Marques - 101189743
      */
-    public Hand(DrawPile pile){
+    public Hand(DrawPile pile, boolean fillHand){
         // Initialize fields to default / parameter values
         this.pile = pile;
         tiles = new ArrayList<>();
         // Start hand in filled state
-        fillHand();
+        if (fillHand) fillHand();
         // TOOD: M2, reset hand, set tile, use selectedtiles field in useTiles.
     }
 
@@ -144,5 +144,13 @@ public class Hand {
 
     public void setTiles(List<Tile> tiles) {
         this.tiles = tiles;
+    }
+
+    public DrawPile getDrawPile() {
+        return pile;
+    }
+
+    public void addTile(Tile t){
+        tiles.add(t);
     }
 }

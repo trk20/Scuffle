@@ -23,7 +23,7 @@ class AIPlayerTest {
     AIPlayer player = new AIPlayer("Ai", model);
 
     ArrayList<Tile> tiles = new ArrayList<>();
-    Hand hand = new Hand(model.getDrawPile());
+    Hand hand = new Hand(model.getDrawPile(), true);
     Point start;
     @BeforeEach
     void setup(){

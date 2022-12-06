@@ -24,7 +24,7 @@ class HandTest {
     void setUp() {
         model = new ScrabbleModel(List.of("Tim"));
         drawPile = model.getDrawPile();
-        hand = new Hand(drawPile);
+        hand = new Hand(drawPile, true);
         // FIXME: should not be setting the hand
         tiles = new ArrayList<>();
         tiles.addAll(Arrays.asList(new Tile(Letter.A),new Tile(Letter.B),new Tile(Letter.C),

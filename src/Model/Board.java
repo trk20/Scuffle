@@ -17,7 +17,9 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @author Alex
  * @version NOV-22
  */
-public class Board {
+public class Board implements Cloneable {
+
+
     /** Enum for board placement possibilities */
     public enum Direction{
         DOWN("↓"), RIGHT("→");
@@ -34,11 +36,14 @@ public class Board {
     public static final Point START_TILE_POINT = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
     private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
+
+
     /** Takes care of validating the board */
     private final BoardValidator validator;
 
     /**
      * Constructor for a Board object
+
      *
      * @param isPremiumBoard If true, will add premium tiles to the board (point multipliers)
      */
@@ -289,7 +294,7 @@ public class Board {
             int wordMulti = 1;
 
             // Check the scoring values of each tile
-            for (BoardTile tile:newWord.tiles()) {
+            for (BoardTile tile:newWord.getTiles()) {
                 wordSum += getTileScore(tile);
                 wordMulti *= getTileMulti(tile);
             }
@@ -299,7 +304,7 @@ public class Board {
 
         // Set new word tiles to blank type (to disable bonus types on subsequent turns)
         for(BoardWord newWord: newWords){
-            for (BoardTile tile:newWord.tiles()) {
+            for (BoardTile tile:newWord.getTiles()) {
                 tile.setType(BoardTile.Type.BLANK);
             }
         }
@@ -406,6 +411,33 @@ public class Board {
                 setTile(p, newBoard.getTile(p));
 
             }
+        }
+    }
+
+    private void setBoardGrid(Grid2DArray<BoardTile> boardGrid) {
+        this.boardGrid = boardGrid;
+    }
+
+    private void setLastPlacedWords(List<BoardWord> lastPlacedWords) {
+        this.lastPlacedWords = lastPlacedWords;
+    }
+    @Override
+    public Board clone() {
+        try {
+            Board clone = (Board) super.clone();
+            List<BoardWord> lastPlacedWordsClone = new ArrayList<>();
+
+            for(BoardWord bw : lastPlacedWords){
+                lastPlacedWordsClone.add(bw.clone());
+            }
+
+            clone.setBoardGrid(this.copySelfGrid());
+            clone.setLastPlacedWords(lastPlacedWordsClone);
+
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }

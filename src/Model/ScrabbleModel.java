@@ -29,7 +29,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     public static final int BOARD_SIZE = 15;
 
     // Model components
-    final private Board board;
+    private Board board;
     private ArrayList<Player> players;
     /** Model's shared DrawPile */
     private final DrawPile drawPile;
@@ -100,7 +100,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     }
 
     private void decrementTurn(){
-        turn = turn == 0 ? turn = numPlayers-1 : turn--;
+        turn = turn == 0 ? numPlayers-1 : turn-1;
     }
 
     /**
@@ -124,8 +124,9 @@ public class ScrabbleModel implements SControllerListener, SModel{
      *  @author Kieran, Alexandre
      */
     private void handleDiscard(){
+        notifyModelListeners(new UndoHandlerEvent(players, board));
         getCurPlayer().discardTiles(selectedTiles);
-        nextTurn();
+        nextTurn(false);
     }
 
     /**
@@ -144,18 +145,16 @@ public class ScrabbleModel implements SControllerListener, SModel{
         BoardValidator.Status validStatus = board.isValidPlacement(placeEvent);
         
         if (validStatus == BoardValidator.Status.SUCCESS){
+            notifyModelListeners(new UndoHandlerEvent(players, board));
             // Place on board, save points in player
             getCurPlayer().addPoints(board.placeWord(placeEvent));
-
-            // Notify listeners about new board state
-            notifyModelListeners(new BoardChangeEvent(board));
             try{
                 getCurPlayer().placeTiles(selectedTiles); // Get rid of tiles used
             } catch (NullPointerException e){
                 endGame();
             }
             // Update turn state
-            nextTurn();
+            nextTurn(false);
         } else { //Reset Blank tile (could not place)
             notifyModelListeners(new ME_InvalidPlacement(validStatus));
             for(int i=0; i< selectedTiles.size(); i++){
@@ -219,14 +218,20 @@ public class ScrabbleModel implements SControllerListener, SModel{
     /**
      * Handles running a turn, will be called in a loop until the game is over
      */
-    private void nextTurn(){
+    private void nextTurn(boolean isSpecialAction){
         if(gameFinished) return;
 
         selectedTiles = new ArrayList<>(); // Clear selection
-        // Update views to show current player
-        incrementTurn();
 
+
+        if(!isSpecialAction){
+            incrementTurn();
+        }
+        // Notify listeners about new board state
+        notifyModelListeners(new BoardChangeEvent(board));
+        // Update views to show current player
         notifyModelListeners(new PlayerChangeEvent(players));
+
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         // Otherwise, wait for GUI controllers to handle turn
         if(getCurPlayer() instanceof AIPlayer){
@@ -298,7 +303,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
         // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
-        if(e instanceof C_SkipEvent) nextTurn();
+        if(e instanceof C_SkipEvent) handleUndo();
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
     }
 
@@ -357,9 +362,17 @@ public class ScrabbleModel implements SControllerListener, SModel{
             return null;
     }
 
-    public void undoMove(){
-        board.setBoard(undoHandler.getPreviousBoard());
+    public void handleUndo(){
+        if(undoHandler.isStackEmpty()){
+            return;
+        }
+        board = undoHandler.getPreviousBoard();
         players = (ArrayList<Player>) undoHandler.getPreviousPlayerState();
         decrementTurn();
+
+        System.out.println("TEST\n"+getCurPlayer());
+
+
+        nextTurn(true);
     }
 }
