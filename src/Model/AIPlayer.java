@@ -161,7 +161,7 @@ public class AIPlayer extends Player {
                 }
 
                 //check if placing the word going right is a valid placement
-                else if (board.isValidPlacement(
+                if (board.isValidPlacement(
                         new BoardPlaceEvent(
                                 tilesToPlace, new Point((boardTileIndex > 0) ? (boardTileUsed.getX()-boardTileIndex) : boardTileUsed.getX()+1, boardTileUsed.getY()), Board.Direction.RIGHT
                         )) ==
