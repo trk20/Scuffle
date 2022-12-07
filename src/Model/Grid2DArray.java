@@ -1,6 +1,7 @@
 package Model;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @author Alex
  * @version NOV-21
  */
-public class Grid2DArray<T>{
+public class Grid2DArray<T> implements Serializable {
     // "T" is the generic type
     private final ArrayList<ArrayList<T>> array2D;
     private final int size;

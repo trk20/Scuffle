@@ -1,12 +1,14 @@
 package Controllers;
 
 import Model.ScrabbleModel;
-import Views.ScrabbleFrame;
+import ScrabbleEvents.ControllerEvents.C_LoadEvent;
+import ScrabbleEvents.ControllerEvents.C_SaveEvent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -37,17 +39,23 @@ public class MenuController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
             String s = e.getActionCommand();
+            if(e.getActionCommand().equals("Load Game")){
+                // Get file to load in
+                JFileChooser fileChooser = new JFileChooser();
+                // Set directory to "Saves" folder
+                fileChooser.setCurrentDirectory(new File((System.getProperty("user.dir"))+File.separator+"Saves"));
+                fileChooser.showOpenDialog(null);
+                File chosenFile = fileChooser.getSelectedFile();
 
-            if(e.getActionCommand().equals("New Game")){//FIXME: Not finished yet
-                model.newGame(); // TODO: could be an event, on controller listeners in the future
-
+                model.handleControllerEvent(new C_LoadEvent(chosenFile));
             }
+
             if(e.getActionCommand().equals("Game Rules")){
                 String url = "https://scrabble.hasbro.com/en-us/rules";
                 openRules(url);
             }
-            if(e.getActionCommand().equals("Save Game")){ //FIXME: Not finished yet
-
+            if(e.getActionCommand().equals("Save Game")){
+                model.handleControllerEvent(new C_SaveEvent(new File("Saves"+File.separator+System.currentTimeMillis()+".sav")));
             }
     }
 
