@@ -299,6 +299,7 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
         if(e instanceof C_SaveEvent se) serializeModel(se.fileLocation());
         if(e instanceof C_LoadEvent se) deSerializeModel(se.fileLocation());
+        if(e instanceof C_DirectionChangeEvent bce) notifyModelListeners(new ME_NewDirectionEvent(bce.dir()));
     }
 
     private void serializeModel(File fileLocation) {

@@ -112,7 +112,6 @@ public class ScoreView extends JPanel implements ModelListener {
      * @param e the ModelEvent
      *
      */
-
     @Override
     public void handleModelEvent(ModelEvent e) {
         if(e instanceof PlayerChangeEvent newPlayers) updateScores(newPlayers.players());

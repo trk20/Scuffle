@@ -2,13 +2,12 @@ package Views;
 
 import Controllers.BoardTileController;
 import Controllers.TurnActionController;
+import Model.Board;
 import Model.ScrabbleModel;
-import ScrabbleEvents.ControllerEvents.C_DirectionChangeEvent;
-import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.ME_NewDirectionEvent;
 import ScrabbleEvents.ModelEvents.ModelEvent;
 import ScrabbleEvents.ModelEvents.NewPlayerEvent;
-
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -41,6 +40,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         actionPanel = new JPanel();
         skipPanel = new JPanel();
         directionPanel = new JPanel();
+        model.addModelListener(this);
         Border blackline = BorderFactory.createMatteBorder(0,0,2,0, Color.BLACK);
 
 
@@ -77,7 +77,6 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         add(directionPanel);
         add(skipPanel);
 
-        model.addModelListener(this);
         setSize(width, height);
 
     }
@@ -122,7 +121,7 @@ public class TurnActionPanel extends JPanel implements ModelListener {
         // Set direction controller, and listeners
         TurnActionController directionControl = new TurnActionController(model, TurnActionController.ActionState.FLIP_DIR);
         directionButton.addActionListener(directionControl);
-        directionControl.addControllerListener(e -> setDirectionViewText(e, directionButton));
+        directionButton.doClick();
         if(DEBUG_VIEW) model.addDebugController(directionControl);
 
         directionPanel.setLayout(new GridBagLayout());
@@ -140,11 +139,11 @@ public class TurnActionPanel extends JPanel implements ModelListener {
      * Set the direction view's text based on the controller's state,
      * Will only act on DirectionChangeEvent (which contain the direction state)
      *
-     * @param e The controller event which triggered the call
+     * @param dir The current direction in the model
      * @param button The button to modify if applicable
      */
-    private void setDirectionViewText(ControllerEvent e, JButton button) {
-        if(e instanceof C_DirectionChangeEvent de) button.setText(de.dir().toString());
+    private void setDirectionViewText(Board.Direction dir, JButton button) {
+        button.setText(dir.toString());
     }
 
     private void setUpSkipButton(ScrabbleModel model){
@@ -160,11 +159,11 @@ public class TurnActionPanel extends JPanel implements ModelListener {
     public void handleModelEvent(ModelEvent e) {
         if(e instanceof NewPlayerEvent newPlayer){
             if(!newPlayer.player().getName().equals(currentPlayerName)){
-                currentPlayerName = newPlayer.player().getName(); // FIXME: redundant?
+                currentPlayerName = newPlayer.player().getName();
                 playerLabel.setText(currentPlayerName);
-
             }
         }
-
+        if(e instanceof ME_NewDirectionEvent de)
+            setDirectionViewText(de.dir(), directionButton);
     }
 }

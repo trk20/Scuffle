@@ -3,6 +3,11 @@ package Controllers;
 import Model.ScrabbleModel;
 import ScrabbleEvents.ControllerEvents.C_LoadEvent;
 import ScrabbleEvents.ControllerEvents.C_SaveEvent;
+import ScrabbleEvents.ControllerEvents.ControllerEvent;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.Listeners.SControllerListener;
+import ScrabbleEvents.ModelEvents.ME_ModelChangeEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MenuController Class controls the logic behind what happens when one of the menu items are pressed
@@ -17,11 +24,12 @@ import java.net.URL;
  * @author Vladimir Kovacina
  * @version 22 Nov 2022
  */
-public class MenuController implements ActionListener {
-    private ScrabbleModel model;
-
+public class MenuController implements ActionListener, ModelListener, SController {
+    private final List<SControllerListener> listeners;
     public MenuController(ScrabbleModel model){
-        this.model = model;
+        listeners = new ArrayList<>();
+        model.addModelListener(this);
+        this.addControllerListener(model);
     }
 
     /**
@@ -38,16 +46,8 @@ public class MenuController implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-            String s = e.getActionCommand();
             if(e.getActionCommand().equals("Load Game")){
-                // Get file to load in
-                JFileChooser fileChooser = new JFileChooser();
-                // Set directory to "Saves" folder
-                fileChooser.setCurrentDirectory(new File((System.getProperty("user.dir"))+File.separator+"Saves"));
-                fileChooser.showOpenDialog(null);
-                File chosenFile = fileChooser.getSelectedFile();
-
-                model.handleControllerEvent(new C_LoadEvent(chosenFile));
+                notifyControllerListeners(new C_LoadEvent(chooseSaveFile()));
             }
 
             if(e.getActionCommand().equals("Game Rules")){
@@ -55,7 +55,8 @@ public class MenuController implements ActionListener {
                 openRules(url);
             }
             if(e.getActionCommand().equals("Save Game")){
-                model.handleControllerEvent(new C_SaveEvent(new File("Saves"+File.separator+System.currentTimeMillis()+".sav")));
+//                File saveFile = new File("Saves"+File.separator+System.currentTimeMillis()+".sav");
+                notifyControllerListeners(new C_SaveEvent(chooseSaveFile()));
             }
     }
 
@@ -70,6 +71,45 @@ public class MenuController implements ActionListener {
             Desktop.getDesktop().browse(new URL(urlString).toURI());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private File chooseSaveFile(){
+        // Get file to load in
+        JFileChooser fileChooser = new JFileChooser();
+        // Set directory to "Saves" folder
+        fileChooser.setCurrentDirectory(new File((System.getProperty("user.dir"))+File.separator+"Saves"));
+        fileChooser.showOpenDialog(null);
+        return fileChooser.getSelectedFile();
+    }
+
+    @Override
+    public void handleModelEvent(ModelEvent e) {
+        if(e instanceof ME_ModelChangeEvent mce){
+            listeners.clear(); // Remove old model reference
+            addControllerListener(mce.newModel()); // Control new model
+        }
+    }
+
+    /**
+     * Add a listener to notify when an event is raised.
+     *
+     * @param l the listener to add to this SController.
+     */
+    @Override
+    public void addControllerListener(SControllerListener l) {
+        listeners.add(l);
+    }
+
+    /**
+     * Notify listeners by sending them a controller event.
+     *
+     * @param e the event to send to the listeners
+     */
+    @Override
+    public void notifyControllerListeners(ControllerEvent e) {
+        for (SControllerListener l: listeners) {
+            l.handleControllerEvent(e);
         }
     }
 }
