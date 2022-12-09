@@ -84,8 +84,8 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
         this.undoHandler = new UndoHandler();
         this.redoHandler = new RedoHandler();
 
-        addModelListener(undoHandler);
         addModelListener(redoHandler);
+        addModelListener(undoHandler);
 
         if(playerInfos.size() != 0){
             this.numPlayers = playerInfos.size();
@@ -235,6 +235,7 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
 
         if(!isSpecialAction){
             incrementTurn();
+            notifyModelListeners(new RedoHandlerClearEvent());
         } else{
             notifyModelListeners(new ME_ModelChangeEvent(this));
         }
