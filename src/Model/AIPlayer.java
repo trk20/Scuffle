@@ -3,7 +3,6 @@ package Model;
 import ScrabbleEvents.ControllerEvents.DiscardClickEvent;
 import ScrabbleEvents.ControllerEvents.PlaceClickEvent;
 import ScrabbleEvents.ControllerEvents.TileClickEvent;
-import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
@@ -15,7 +14,7 @@ import java.util.*;
  * the choice and placement of words by an AI player.
  *
  * @author Timothy Kennedy
- * @version NOV-29
+ * @version DEC-9
  */
 public class AIPlayer extends Player {
 
@@ -137,7 +136,7 @@ public class AIPlayer extends Player {
         ArrayList<Tile> notPlaced; //intermediate list to avoid modifying hand
         BoardPlaceEvent event;
 
-        for(ArrayList<String> word: (startOfGame) ? getValidWordsNew(hand) : getValidWordsNew(boardTileUsed,hand)){
+        for(ArrayList<String> word: (startOfGame) ? getValidWords(hand) : getValidWords(boardTileUsed,hand)){
             tilesToPlace = new ArrayList<>(); //clear list each attempt (otherwise will grow)
             notPlaced = new ArrayList<>(hand.getHeldTiles());
             if(startOfGame){
@@ -242,7 +241,6 @@ public class AIPlayer extends Player {
         }
     }
 
-
     /**
      * Gets a set of valid words given the AI's hand using new algorithm
      *
@@ -251,7 +249,7 @@ public class AIPlayer extends Player {
      *
      * @author Timothy Kennedy
      */
-    public HashSet<ArrayList<String>> getValidWordsNew(Hand hand){
+    public HashSet<ArrayList<String>> getValidWords(Hand hand){
         // The letters in the hand of the AI player: what it has to "work with"
         StringBuilder letters = getHandLetters(hand);
 
@@ -274,7 +272,7 @@ public class AIPlayer extends Player {
      *
      * @author Timothy Kennedy
      */
-    public HashSet<ArrayList<String>> getValidWordsNew(BoardTile tile, Hand hand){
+    public HashSet<ArrayList<String>> getValidWords(BoardTile tile, Hand hand){
         StringBuilder letters = getHandLetters(hand);
 
         letters.append(tile.getLetter().name());
@@ -287,7 +285,12 @@ public class AIPlayer extends Player {
         return placementCandidates;
     }
 
-    private StringBuilder getHandLetters(Hand hand){
+    /**
+     * Gets the letters in a given hand
+     * @param hand the given hand
+     * @return a StringBuilder containing all letters in the hand
+     */
+    private static StringBuilder getHandLetters(Hand hand){
         StringBuilder letters = new StringBuilder();
         for(Tile heldTile:hand.getHeldTiles()){
             if(!heldTile.getLetter().name().equals("BLANK")) {
