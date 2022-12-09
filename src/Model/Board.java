@@ -378,8 +378,6 @@ public class Board implements Serializable, Cloneable {
         };
     }
 
-    // FIXME: not convinced this should be public,
-    //  at least it doesn't allow mutation of the board now.
     public ArrayList<BoardTile> getBoardTiles(){
         ArrayList<BoardTile> tiles = new ArrayList<>();
         for (int x = 0; x < 15; x++){
@@ -459,7 +457,7 @@ public class Board implements Serializable, Cloneable {
      *
      * @author Timothy Kennedy
      */
-    public int getPlacementScore(BoardPlaceEvent placeEvent){
+    public int getPlacementScore(BoardPlaceEvent placeEvent) {
         // Store board state
         Grid2DArray<BoardTile> savedBoardGrid = copySelfGrid();
         // Place word on board, check if it creates invalid words
@@ -468,6 +466,8 @@ public class Board implements Serializable, Cloneable {
         // Load board state (Prevent mutation)
         boardGrid = savedBoardGrid;
         return score;
+    }
+
     private void setBoardGrid(Grid2DArray<BoardTile> boardGrid) {
         this.boardGrid = boardGrid;
     }
