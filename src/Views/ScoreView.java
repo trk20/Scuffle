@@ -9,6 +9,7 @@ import Model.ScrabbleModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.TextAttribute;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ScoreView extends JPanel implements ModelListener {
     private JLabel title;
     private JPanel scorePanel;
 
-    private JLabel[] playerLabels;
+    private final ArrayList<JLabel> playerLabels;
 
     private final int width = 300;
     private final int height = 300;
@@ -38,7 +39,7 @@ public class ScoreView extends JPanel implements ModelListener {
         super();
         //initialize model, JPanel and JLabels
         this.model = model;
-        playerLabels = new JLabel[model.getPlayers().size()];
+        this.playerLabels = new ArrayList<>();
         scorePanel = new JPanel();
 
         //Initialize how the JPanel will look
@@ -60,13 +61,6 @@ public class ScoreView extends JPanel implements ModelListener {
 
         scorePanel.add(title);
 
-        //Initially set the JLabels as empty and white font
-        for (int i =0; i < playerLabels.length; i++){
-            playerLabels[i] = new JLabel("",JLabel.CENTER);
-            playerLabels[i].setForeground(Color.white);
-            scorePanel.add(playerLabels[i]);
-        }
-
         //Add this view to the model listeners
         model.addModelListener(this);
 
@@ -84,11 +78,32 @@ public class ScoreView extends JPanel implements ModelListener {
     // TODO: if players are a map, only need the changed player's score (less updates needed most of the time)
     //  Will also allow us to eliminate an event
     public void updateScores(List<Player> updatedPlayers){
+        // Clear old players (in case of change in players)
+        for(JLabel l: playerLabels){
+            scorePanel.remove(l);
+        }
+        playerLabels.clear();
+
         List<Player> players = updatedPlayers;
         for (int i =0; i < players.size();i++ ){
-            //Change the JLabels to display the players names and scores
-            playerLabels[i].setText(players.get(i).getName()+ ":\t "+ players.get(i).getScore());
+            // Only show non-0 scores.
+            if(players.get(i).getScore() != 0){
+                playerLabels.add(new JLabel(players.get(i).getName()+ ":\t "+ players.get(i).getScore()));
+            }
         }
+
+        // Add new players
+        for(JLabel l: playerLabels){
+            styleLabel(l);
+            scorePanel.add(l);
+        }
+        validate();
+        repaint();
+    }
+
+    private void styleLabel(JLabel l) {
+        l.setHorizontalAlignment(JLabel.CENTER);
+        l.setForeground(Color.white);
     }
 
     /**
@@ -97,7 +112,6 @@ public class ScoreView extends JPanel implements ModelListener {
      * @param e the ModelEvent
      *
      */
-
     @Override
     public void handleModelEvent(ModelEvent e) {
         if(e instanceof PlayerChangeEvent newPlayers) updateScores(newPlayers.players());

@@ -3,6 +3,8 @@ package Controllers;
 import ScrabbleEvents.ControllerEvents.ControllerEvent;
 import ScrabbleEvents.Listeners.SControllerListener;
 
+import java.io.Serializable;
+
 /**
  * Interface for Scrabble Controllers (SController).
  * Allows controller listeners (SControllerListener) to listen for controller events.
@@ -10,7 +12,7 @@ import ScrabbleEvents.Listeners.SControllerListener;
  * @version 11-NOV
  * @author Alex
  */
-public interface SController {
+public interface SController extends Serializable {
     /**
      * Add a listener to notify when an event is raised.
      * @param l the listener to add to this SController.

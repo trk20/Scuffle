@@ -132,6 +132,26 @@ public class OptionPaneHandler implements ModelListener {
         return players;
     }
 
+    /**
+     * Asks for the filename that corresponds to the board configuration XML file
+     * @author Vladimir Kovacina
+     * @return String the filename of the XML file
+     */
+    public String getFilename(){
+        String filename = "";
+        filename = JOptionPane.showInputDialog("Enter XML filename, leave blank for no configuration file");
+        return filename;
+    }
+
+//    public boolean getBoardType(){
+//        int reply = JOptionPane.showConfirmDialog(null, "Do you want a board with random premium squares", "Premium Squares", JOptionPane.YES_NO_OPTION);
+//        if (reply == JOptionPane.YES_OPTION) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+
     public void displayError(String message){
         JOptionPane.showMessageDialog(null, message, "Invalid Input", JOptionPane.ERROR_MESSAGE);
     }

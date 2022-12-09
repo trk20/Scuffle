@@ -22,7 +22,7 @@ public class AIPlayer extends Player {
     private static final boolean delay = false;
     private static final int MAX_ATTEMPTS = 40;
     private final List<ModelListener> modelListeners;
-    private final DictionaryHandler dict;
+    private static final DictionaryHandler dict = new DictionaryHandler();
     private final ScrabbleModel model;
 
     /**
@@ -35,7 +35,6 @@ public class AIPlayer extends Player {
         super(name, model.getDrawPile());
         this.modelListeners = new ArrayList<>();
         this.model = model;
-        dict = new DictionaryHandler();
     }
 
     /**

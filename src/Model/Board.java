@@ -3,6 +3,7 @@ package Model;
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,7 +18,9 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @author Alex
  * @version NOV-22
  */
-public class Board {
+ 
+public class Board implements Serializable, Cloneable {
+
     /** Enum for board placement possibilities */
     public enum Direction{
         DOWN("↓"), RIGHT("→");
@@ -32,18 +35,21 @@ public class Board {
     }
     public static final int MIN_WORD_SIZE = 2;
     public static final Point START_TILE_POINT = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
+
+    /** Takes care of validating the board */
+    private static final BoardValidator validator = new BoardValidator();
     private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
-    /** Takes care of validating the board */
-    private final BoardValidator validator;
+
+
 
     /**
      * Constructor for a Board object
+
      *
      * @param isPremiumBoard If true, will add premium tiles to the board (point multipliers)
      */
     public Board(boolean isPremiumBoard){
-        validator = new BoardValidator(this);
         lastPlacedWords = new ArrayList<>();
         initializeBlankGrid();  // Initialize tiles in boardGrid
 
@@ -93,7 +99,7 @@ public class Board {
      */
     public BoardValidator.Status isValidPlacement(BoardPlaceEvent placeEvent){
         BoardValidator.Status currentStatus;
-        currentStatus = validator.isValidLocation(placeEvent);
+        currentStatus = validator.isValidLocation(this, placeEvent); // Pass board copy instead?
 
         // Location is valid, check if words are valid
         if(currentStatus == BoardValidator.Status.SUCCESS){
@@ -240,6 +246,16 @@ public class Board {
     }
 
     /**
+     *Set the board up with no premium tiles, this is used for xml configurations
+     * @author Vladimir Kovacina
+     */
+
+    public void setDefaultBoard(){
+        initializeBlankGrid();
+        boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START); // Set start tile
+    }
+
+    /**
      * Set premium score tiles in the board.
      * Currently, randomly places them on the board.
      */
@@ -257,6 +273,31 @@ public class Board {
                 }
             }
         }
+    }
+
+    /**
+     * Method used to set the XML premium tiles that are read from the configuration file
+     *
+     * @author Vladimir Kovacina
+     * @param x the col of the tile
+     * @param y the row of the tile
+     * @param type which premium tile type
+     */
+
+    public void setXMLPremiumTiles(int x, int y, String type){
+        Point p = new Point(x, y);
+        if(type.equals("2W")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[2]);
+        }else if(type.equals("3W")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[3]);
+        }else if(type.equals("2L")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[4]);
+        }else if(type.equals("3L")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[5]);
+        }else{
+            boardGrid.get(p).setType(BoardTile.Type.values()[1]);
+        }
+
     }
 
     /**
@@ -289,7 +330,7 @@ public class Board {
             int wordMulti = 1;
 
             // Check the scoring values of each tile
-            for (BoardTile tile:newWord.tiles()) {
+            for (BoardTile tile:newWord.getTiles()) {
                 wordSum += getTileScore(tile);
                 wordMulti *= getTileMulti(tile);
             }
@@ -299,7 +340,7 @@ public class Board {
 
         // Set new word tiles to blank type (to disable bonus types on subsequent turns)
         for(BoardWord newWord: newWords){
-            for (BoardTile tile:newWord.tiles()) {
+            for (BoardTile tile:newWord.getTiles()) {
                 tile.setType(BoardTile.Type.BLANK);
             }
         }
@@ -427,5 +468,31 @@ public class Board {
         // Load board state (Prevent mutation)
         boardGrid = savedBoardGrid;
         return score;
+    private void setBoardGrid(Grid2DArray<BoardTile> boardGrid) {
+        this.boardGrid = boardGrid;
+    }
+
+    private void setLastPlacedWords(List<BoardWord> lastPlacedWords) {
+        this.lastPlacedWords = lastPlacedWords;
+    }
+
+    @Override
+    public Board clone() {
+        try {
+            Board clone = (Board) super.clone();
+            List<BoardWord> lastPlacedWordsClone = new ArrayList<>();
+
+            for(BoardWord bw : lastPlacedWords){
+                lastPlacedWordsClone.add(bw.clone());
+            }
+
+            clone.setBoardGrid(this.copySelfGrid());
+            clone.setLastPlacedWords(lastPlacedWordsClone);
+
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

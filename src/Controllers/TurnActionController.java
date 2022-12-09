@@ -1,9 +1,12 @@
 package Controllers;
+
+import Model.Board;
+import Model.ScrabbleModel;
 import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.BoardClickListener;
 import ScrabbleEvents.Listeners.SControllerListener;
-import Model.Board;
-import Model.ScrabbleModel;
+import ScrabbleEvents.ModelEvents.ME_ModelChangeEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,7 +55,7 @@ public class TurnActionController extends TurnController implements SController,
         // TODO: should probably separate PLACE into its own class for safety (M3)
         this.action = action;
         listeners = new ArrayList<>();
-        listeners.add(model);
+        addControllerListener(model);
     }
 
     /**
@@ -108,7 +111,15 @@ public class TurnActionController extends TurnController implements SController,
         if(placing && !disableControl) {
             placing = false; // Disable place mode before next turn
             notifyControllerListeners(new PlaceClickEvent(dir, e.origin()));
+        }
+    }
 
+    @Override
+    public void handleModelEvent(ModelEvent e) {
+        super.handleModelEvent(e); // Ensures TurnController event handling occurs as well
+        if(e instanceof ME_ModelChangeEvent mce){
+            listeners.clear(); // Remove old model reference
+            addControllerListener(mce.newModel());
         }
     }
         
@@ -136,4 +147,7 @@ public class TurnActionController extends TurnController implements SController,
         }
     }
 
+    public Board.Direction getDir(){
+        return dir;
+    }
 }

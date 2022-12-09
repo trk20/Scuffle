@@ -1,4 +1,5 @@
 package Model;
+import ScrabbleEvents.ControllerEvents.UndoHandlerEvent;
 import ScrabbleEvents.Listeners.BoardChangeListener;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.ModelEvents.BoardChangeEvent;
@@ -20,11 +21,16 @@ public class UndoHandler implements ModelListener{
     }
 
     @Override
-    public void handleModelEvent(ModelEvent e){
-        if (e instanceof PlayerChangeEvent newPlayers){
-            playerState.push(newPlayers.players());
-        }else if (e instanceof  BoardChangeEvent newBoard){
-            boardState.push(newBoard.board());
+    public void handleModelEvent(ModelEvent e) {
+         if (e instanceof UndoHandlerEvent event){
+             ArrayList<Player> playerCopy = new ArrayList<Player>();
+             for(Player p : event.players()){
+                 playerCopy.add((Player) p.clone());
+             }
+             playerState.push(playerCopy);
+             boardState.push(event.board().clone());
+//             System.out.println(playerState.peek().get(0));
+             System.out.println(event.players().get(0));
         }
     }
 
@@ -35,5 +41,10 @@ public class UndoHandler implements ModelListener{
 
     public List<Player> getPreviousPlayerState(){
         return playerState.pop();
+    }
+
+    public boolean isStackEmpty(){
+        System.out.println("test " + boardState.size() + playerState.size());
+        return boardState.size() == 0 || playerState.size() == 0;
     }
 }

@@ -20,8 +20,8 @@ class AIPlayerTest {
     ScrabbleModel model;
     AIPlayer player;
 
-    ArrayList<Tile> tiles;
-    Hand hand;
+    ArrayList<Tile> tiles = new ArrayList<>();
+    Hand hand = new Hand(model.getDrawPile(), true);
     Point start;
     @BeforeEach
     void setup(){
