@@ -64,15 +64,8 @@ class PlayerTest {
         Hand newHand = new Hand(model.getDrawPile(), true);
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
-        players.get(1).placeTiles(word1);
+        players.get(1).placeTiles(newHand.getHeldTiles());
         assertNotEquals(sampleHand, players.get(1).getHand());
-        // TODO: Check that hand changes after placement.
-        //  Precise effect depends on hand, just trying to detect any change
-//        List<Tile> before = players.get(1).getHand().getHeldTiles() ;
-//        players.get(1).placeTiles(before);
-//        List<Tile> after = players.get(1).getHand().getHeldTiles();
-//        assertFalse(before.equals(after));
-
     }
 
     /**
@@ -87,16 +80,8 @@ class PlayerTest {
         Hand newHand = new Hand(model.getDrawPile(), true);
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
-        players.get(1).discardTiles(word1);
+        players.get(1).discardTiles(newHand.getHeldTiles());
         assertNotEquals(players.get(1).getHand(), sampleHand);
-
-
-        // TODO: Check that hand changes after placement.
-        //  Precise effect depends on hand, just trying to detect any change
-        //  (in very rare cases, possible this fails because you draw again from drawPile)
-        //  Check that drawPile size stays equal as well
-        // players.get(1).getHand().getHeldTiles() (before, after, notEquals)
-
     }
 
     /**
