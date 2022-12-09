@@ -1,6 +1,7 @@
 package Model;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * A class handling the board tiles.
@@ -12,7 +13,7 @@ import java.awt.*;
  * @author Alex
  * @version NOV-19
  */
-public class BoardTile {
+public class BoardTile implements Serializable {
 
     public enum Type {
         START(new Color(233, 187, 171), "★"),
