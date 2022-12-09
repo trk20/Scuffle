@@ -10,8 +10,8 @@ Version: Milestone 4
   - [Game Loop](#game-loop)
   - [Scoring](#scoring)
 - [Design](#design) 
+  - [Controllers](#controllers)  
   - [Model](#model)  
-  - [Controller](#controller)  
   - [ScrabbleEvents](#scrabbleevents)  
   - [Views](#views)  
 
