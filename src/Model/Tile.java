@@ -1,5 +1,7 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * Tile model class, represents a tile in the scrabble game.
  * Stores the score of its initial letter.
@@ -9,7 +11,7 @@ package Model;
  * @author Alex, Vladimir
  * @version NOV-20
  */
-public class Tile {
+public class Tile implements Serializable {
     /**
      * Compares two tiles to see if they are equal.
      * For tiles, this means they are referring to the same record in memory. (same letters does not mean equal!!)

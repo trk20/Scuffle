@@ -1,8 +1,8 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Class Model.Hand takes care of holding, playing, and drawing
@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author Alexandre Marques - 101189743
  * @version NOV-9
  */
-public class Hand {
+public class Hand implements Serializable {
     /** The game's draw pile (should be the same for all players/hands in the game) */
     final private DrawPile pile;
     /** The Model.Hand's contained letters*/

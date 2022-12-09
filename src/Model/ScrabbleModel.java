@@ -1,13 +1,14 @@
 package Model;
 
+import Controllers.OptionPaneHandler;
 import Controllers.SController;
 import ScrabbleEvents.ControllerEvents.*;
 import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.*;
-import Controllers.OptionPaneHandler;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,8 @@ import static Views.DebugView.DEBUG_VIEW;
  * @author Kieran Rourke, Alex, Vladimir Kovacina
  * @version NOV-21
  */
-public class ScrabbleModel implements SControllerListener, SModel{
+public class ScrabbleModel implements SControllerListener, SModel, Serializable {
+    public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
     /** Max players limited by the four racks (see README setup rules) */
     public static final int MAX_PLAYERS = 4;
     /** Min players, should be 2 but 1 could work if we want to allow solo play */
@@ -32,25 +34,26 @@ public class ScrabbleModel implements SControllerListener, SModel{
     private Board board;
     private ArrayList<Player> players;
     /** Model's shared DrawPile */
-    private final DrawPile drawPile;
-
+    private static final DrawPile drawPile = new DrawPile();
+    private static final OptionPaneHandler input = new OptionPaneHandler();
+    // Model components
     /** Player whose turn it is to play */
     private int numPlayers;
     private int turn;
     /** False until something triggers a game to end (Model.Player out of Letters, or no more possible moves)*/
     boolean gameFinished; // FIXME: may become a controller signal in the future, with no need for a field
+    final private Board board;
+    private ArrayList<Player> players;
+
     /** Model listeners to notify on model change */
-    List<ModelListener> modelListeners;
+    private transient List<ModelListener> modelListeners;
     /** list of selected tiles (in order) to pass to the board when placing*/
-    List<Tile> selectedTiles;
+    private List<Tile> selectedTiles;
 
-    private OptionPaneHandler input;
-
+    private final UndoHandler undoHandler;
 
     private final List<SController> debugControllers;
 
-    private UndoHandler undoHandler;
-    public static final Color SIDE_BACKGROUND_COLOR = new Color(144, 42, 42);
 
 
     /**
@@ -71,9 +74,7 @@ public class ScrabbleModel implements SControllerListener, SModel{
     }
 
     public ScrabbleModel(HashMap<String,Boolean> playerInfos){
-
         this.board = new Board(true);
-        this.drawPile = new DrawPile();
         this.gameFinished = false;
         this.modelListeners = new ArrayList<>();
         this.selectedTiles = new ArrayList<>();
@@ -89,7 +90,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
             this.numPlayers = playerInfos.size();
             initializePlayers(playerInfos);
         }
-        input = new OptionPaneHandler();
     }
 
     /**
@@ -305,8 +305,45 @@ public class ScrabbleModel implements SControllerListener, SModel{
         if(e instanceof DiscardClickEvent) handleDiscard();
         if(e instanceof C_SkipEvent) handleUndo();
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
+        if(e instanceof C_SaveEvent se) serializeModel(se.fileLocation());
+        if(e instanceof C_LoadEvent se) deSerializeModel(se.fileLocation());
+        if(e instanceof C_DirectionChangeEvent bce) notifyModelListeners(new ME_NewDirectionEvent(bce.dir()));
     }
 
+    private void serializeModel(File fileLocation) {
+        ObjectOutputStream objOut = null;
+        try {
+            objOut = new ObjectOutputStream(new FileOutputStream(fileLocation));
+            objOut.writeObject(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deSerializeModel(File fileLocation) {
+        ObjectInputStream objIn = null;
+        ScrabbleModel newModel = null;
+        try {
+            objIn = new ObjectInputStream(new FileInputStream(fileLocation));
+            newModel = (ScrabbleModel) objIn.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        //
+        newModel.modelListeners = new ArrayList<>(); // Transient, have to re-initialize here
+        // Update views to look at the new model only
+        for (int l = 0; l< modelListeners.size(); l++) {
+            newModel.addModelListener(modelListeners.get(l));
+        }
+        // Make views stop listening to old model
+        modelListeners.clear();
+        // Update views for new model
+        newModel.notifyModelListeners(new ME_ModelChangeEvent(newModel));
+        newModel.notifyModelListeners(new BoardChangeEvent(newModel.board));
+        System.out.println(newModel.board);
+        newModel.notifyModelListeners(new PlayerChangeEvent(newModel.players));
+        newModel.notifyModelListeners(new NewPlayerEvent(newModel.getCurPlayer()));
+    }
 
 
     /**
@@ -336,8 +373,6 @@ public class ScrabbleModel implements SControllerListener, SModel{
      * Getter for board related events
      * @return Model's board
      */
-    // FIXME: in the future, should inherit SModel in ModelEvents
-    //  and then pass only the relevant parts in model events
     public Board getBoard() {
         return board;
     }

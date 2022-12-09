@@ -1,6 +1,10 @@
 package Model;
 
+
 import java.util.ArrayList;
+
+import java.io.Serializable;
+
 import java.util.List;
 
 /**
@@ -9,7 +13,7 @@ import java.util.List;
  * @author Alex
  * @version NOV-18
  */
-public class BoardWord implements Cloneable {
+public class BoardWord implements Cloneable, Serializable {
 
     private List<BoardTile> tiles;
 
@@ -21,6 +25,8 @@ public class BoardWord implements Cloneable {
         return tiles;
     }
 
+
+public record BoardWord(List<BoardTile> tiles) implements Serializable {
     /**
      * Creates and returns a string representation of the BoardWord.
      * If the tiles spell the word "cat", the string will be "CAT".

@@ -14,7 +14,7 @@ public class MenuView extends JMenuBar {
 
     private JMenu menu;
 
-    private JMenuItem newGame, saveGame, help;
+    private JMenuItem loadGame, saveGame, help;
 
     private MenuController mc;
 
@@ -25,17 +25,17 @@ public class MenuView extends JMenuBar {
         menu = new JMenu("Options");
 
         //Create Menu Items
-        newGame = new JMenuItem("New Game");
+        loadGame = new JMenuItem("Load Game");
         saveGame = new JMenuItem("Save Game");
         help = new JMenuItem("Game Rules");
 
         //Set action listeners
-        newGame.addActionListener(mc);
+        loadGame.addActionListener(mc);
         saveGame.addActionListener(mc);
         help.addActionListener(mc);
 
         //Add items to Menu
-        menu.add(newGame);
+        menu.add(loadGame);
         menu.add(saveGame);
         menu.add(help);
 

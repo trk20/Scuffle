@@ -3,6 +3,7 @@ package Model;
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,8 +18,8 @@ import static Model.ScrabbleModel.BOARD_SIZE;
  * @author Alex
  * @version NOV-22
  */
-public class Board implements Cloneable {
-
+ 
+public class Board implements Serializable, Cloneable {
 
     /** Enum for board placement possibilities */
     public enum Direction{
@@ -34,12 +35,13 @@ public class Board implements Cloneable {
     }
     public static final int MIN_WORD_SIZE = 2;
     public static final Point START_TILE_POINT = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
+    private static final BoardValidator validator = new BoardValidator();
     private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
 
-
     /** Takes care of validating the board */
     private final BoardValidator validator;
+
 
     /**
      * Constructor for a Board object
@@ -48,7 +50,6 @@ public class Board implements Cloneable {
      * @param isPremiumBoard If true, will add premium tiles to the board (point multipliers)
      */
     public Board(boolean isPremiumBoard){
-        validator = new BoardValidator(this);
         lastPlacedWords = new ArrayList<>();
         initializeBlankGrid();  // Initialize tiles in boardGrid
 
@@ -98,7 +99,7 @@ public class Board implements Cloneable {
      */
     public BoardValidator.Status isValidPlacement(BoardPlaceEvent placeEvent){
         BoardValidator.Status currentStatus;
-        currentStatus = validator.isValidLocation(placeEvent);
+        currentStatus = validator.isValidLocation(this, placeEvent); // Pass board copy instead?
 
         // Location is valid, check if words are valid
         if(currentStatus == BoardValidator.Status.SUCCESS){

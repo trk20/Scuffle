@@ -1,6 +1,5 @@
 package Tests;
 
-import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 import Model.*;
 import ScrabbleEvents.ModelEvents.BoardPlaceEvent;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the Board Validator Class, more specifcally the isValidPlacement method
@@ -73,7 +72,7 @@ class BoardValidatorTest {
         newPoint = new Point(6,8);
 
         //validator = board.getValidator();
-        validator = new BoardValidator(board);
+        validator = new BoardValidator();
     }
 
     /**
@@ -85,14 +84,14 @@ class BoardValidatorTest {
 
         //Placed outside board vertically
         BoardPlaceEvent outsideBoardV = new BoardPlaceEvent(validWord, outside, Board.Direction.DOWN);
-        assertEquals(BoardValidator.Status.OUT_OF_BOUNDS, validator.isValidLocation(outsideBoardV));
+        assertEquals(BoardValidator.Status.OUT_OF_BOUNDS, validator.isValidLocation(board, outsideBoardV));
         //Placed outside board horizontally
         BoardPlaceEvent outsideBoardH = new BoardPlaceEvent(validWord, outside, Board.Direction.RIGHT);
-        assertEquals(BoardValidator.Status.OUT_OF_BOUNDS, validator.isValidLocation(outsideBoardH));
+        assertEquals(BoardValidator.Status.OUT_OF_BOUNDS, validator.isValidLocation(board, outsideBoardH));
 
         //Placed inside board but goes out horizontally
         BoardPlaceEvent edgeBoardH = new BoardPlaceEvent(validWord, onEdge, Board.Direction.RIGHT);
-        assertEquals(BoardValidator.Status.OUT_OF_BOUNDS, validator.isValidLocation(edgeBoardH));
+        assertEquals(BoardValidator.Status.OUT_OF_BOUNDS, validator.isValidLocation(board, edgeBoardH));
     }
 
     /**
@@ -104,27 +103,27 @@ class BoardValidatorTest {
         //Placing invalid word at start
         BoardPlaceEvent invalidStart = new BoardPlaceEvent(invalidWord, start, Board.Direction.RIGHT);
         // Valid location... but invalid words
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(invalidStart));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, invalidStart));
 
         //Placing valid word but not at start tile initially (horizontally)
         BoardPlaceEvent invalidStart2 = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.RIGHT);
-        assertEquals(BoardValidator.Status.NOT_ON_START, validator.isValidLocation(invalidStart2));
+        assertEquals(BoardValidator.Status.NOT_ON_START, validator.isValidLocation(board, invalidStart2));
 
         //Placing valid word but not at start tile initially (vertically)
         BoardPlaceEvent invalidStart3 = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
-        assertEquals(BoardValidator.Status.NOT_ON_START, validator.isValidLocation(invalidStart3));
+        assertEquals(BoardValidator.Status.NOT_ON_START, validator.isValidLocation(board, invalidStart3));
 
         //Placing valid word at start tile
         BoardPlaceEvent validStart1 = new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT);
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(validStart1));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, validStart1));
 
         //Placing valid word across (horizontal) start tile (so that is doesn't start on it but still hits it)
         BoardPlaceEvent validStart2 = new BoardPlaceEvent(validWord, leftStart, Board.Direction.RIGHT);
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(validStart2));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, validStart2));
 
         //Placing valid word across (vertical) start tile (so that is doesn't start on it but still hits it)
         BoardPlaceEvent validStart3 = new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN);
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(validStart3));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, validStart3));
     }
 
     /**
@@ -137,7 +136,7 @@ class BoardValidatorTest {
         //Place Hello (horizontally) at start and place Hello across it (vertically) to see if adjacent words work
         board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT));
         BoardPlaceEvent acrossVert = new BoardPlaceEvent(wordToPlace, acrossWord1, Board.Direction.DOWN);
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(acrossVert));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, acrossVert));
     }
 
     /**
@@ -149,7 +148,7 @@ class BoardValidatorTest {
         //Place Hello (vertically) at start and place Hello across it (horizontally) to see if adjacent words work
         board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN));
         BoardPlaceEvent acrossHoriz = new BoardPlaceEvent(wordToPlace, acrossWord2, Board.Direction.RIGHT);
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(acrossHoriz));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, acrossHoriz));
     }
 
     /**
@@ -162,7 +161,7 @@ class BoardValidatorTest {
         //Place Hello (horizontally) at start and place Hello again but not adjacent to the first word
         board.placeWord(new BoardPlaceEvent(validWord, start, Board.Direction.RIGHT));//place validStart1
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.RIGHT);
-        assertEquals(BoardValidator.Status.NOT_NEXT_TO_WORD, validator.isValidLocation(invalidPlace));
+        assertEquals(BoardValidator.Status.NOT_NEXT_TO_WORD, validator.isValidLocation(board, invalidPlace));
 
     }
     @Test
@@ -170,7 +169,7 @@ class BoardValidatorTest {
         //Place Hello (vertically) at start and place Hello again but not adjacent to the first word
         board.placeWord(new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN)); //place validStart3
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, otherPoint, Board.Direction.DOWN);
-        assertEquals(BoardValidator.Status.NOT_NEXT_TO_WORD, validator.isValidLocation(invalidPlace));
+        assertEquals(BoardValidator.Status.NOT_NEXT_TO_WORD, validator.isValidLocation(board, invalidPlace));
     }
 
     /**
@@ -185,7 +184,7 @@ class BoardValidatorTest {
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(validWord, upStart, Board.Direction.DOWN);
         // Valid location... but invalid words
         List<BoardWord> curWords = board.getCurrentWords();
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(invalidPlace));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, invalidPlace));
     }
 
     /**
@@ -208,7 +207,7 @@ class BoardValidatorTest {
         BoardPlaceEvent invalidPlace = new BoardPlaceEvent(wordToPlace2, newPoint, Board.Direction.RIGHT);
 
         // Valid location... but invalid words
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(invalidPlace));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, invalidPlace));
     }
 
     /**
@@ -228,7 +227,7 @@ class BoardValidatorTest {
         wordToPlace2.add(new Tile(Letter.O));
         board.placeWord(new BoardPlaceEvent(wordToPlace2, start, Board.Direction.DOWN));
         BoardPlaceEvent validPlace = new BoardPlaceEvent(validWord2, newPoint, Board.Direction.DOWN);
-        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(validPlace));
+        assertEquals(BoardValidator.Status.SUCCESS, validator.isValidLocation(board, validPlace));
 
     }
 

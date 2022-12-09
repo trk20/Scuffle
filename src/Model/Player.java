@@ -3,6 +3,7 @@ import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.ModelEvents.DiscardEvent;
 import ScrabbleEvents.ModelEvents.ModelEvent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,8 @@ import java.util.List;
  * @author Alexandre Marques - 101189743
  * @version 2022-10-23
  */
-public class Player implements SModel, Cloneable {
+
+public class Player implements SModel, Serializable, Cloneable {
     /** Model.Player's display name */
     final private String name;
     /** Model.Player's Model.Hand (holds their letters) */
