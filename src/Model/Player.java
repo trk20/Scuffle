@@ -14,7 +14,8 @@ import java.util.List;
  * @author Alexandre Marques - 101189743
  * @version 2022-10-23
  */
-public class Player implements SModel, Serializable {
+
+public class Player implements SModel, Serializable, Cloneable {
     /** Model.Player's display name */
     final private String name;
     /** Model.Player's Model.Hand (holds their letters) */
@@ -36,7 +37,7 @@ public class Player implements SModel, Serializable {
         //needs model to add it as a listener
         this.name = name;
         this.modelListeners = new ArrayList<>();
-        this.hand = new Hand(pile);
+        this.hand = new Hand(pile, true);
         this.addModelListener(pile);
         this.score = 0;
     }
@@ -127,6 +128,14 @@ public class Player implements SModel, Serializable {
         return score;
     }
 
+    public void setModelListeners(List<ModelListener> modelListeners) {
+        this.modelListeners = modelListeners;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     /**
      * Gets the player's name
      * @author Vladimir Kovacina
@@ -153,9 +162,36 @@ public class Player implements SModel, Serializable {
     }
 
     @Override
-    public void notifyModelListeners(ModelEvent e) {
+    public void notifyModelListeners(ModelEvent e){
         for(ModelListener listener:modelListeners){
             listener.handleModelEvent(e);
         }
+    }
+
+    /**
+     * Clones the player instance
+     *
+     * @return Cloned player
+     */
+    @Override
+    public Player clone() {
+        Player playerClone = null;
+        Hand handClone = new Hand(this.hand.getDrawPile(), false);
+
+        try {
+            playerClone = (Player) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+
+        for(Tile t : this.hand.getHeldTiles()){
+            handClone.addTile(t);
+        }
+        playerClone.setHand(handClone);
+        playerClone.setScore(this.score);
+        playerClone.setModelListeners(this.modelListeners);
+
+
+        return playerClone;
     }
 }
