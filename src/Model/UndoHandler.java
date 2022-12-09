@@ -6,6 +6,9 @@ import ScrabbleEvents.ModelEvents.UndoHandlerEvent;
 
 /**
  * Class to handle managing the undo functionality of scrabble
+ *
+ *
+ * @Author: Kieran
  */
 public class UndoHandler extends ActionHandler implements ModelListener{
 

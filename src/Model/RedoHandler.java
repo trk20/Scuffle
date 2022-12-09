@@ -3,10 +3,12 @@ package Model;
 import ScrabbleEvents.ModelEvents.ModelEvent;
 import ScrabbleEvents.ModelEvents.RedoHandlerClearEvent;
 import ScrabbleEvents.ModelEvents.RedoHandlerEvent;
-import ScrabbleEvents.ModelEvents.UndoHandlerEvent;
 
-import java.util.ArrayList;
-
+/**
+ * Class for handling Redo action
+ *
+ * @Author: Kieran
+ */
 public class RedoHandler extends ActionHandler {
     public RedoHandler(){
         super();
