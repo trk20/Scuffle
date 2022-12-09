@@ -62,6 +62,8 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
     private static HashMap<String,Boolean> getPlayerInfos(List<String> playerNames){
         HashMap<String,Boolean> playerInfo = new HashMap<>();
         for (String playerName:playerNames) {
+            while(playerInfo.containsKey(playerName))
+                playerName+=" ";
             playerInfo.put(playerName,false);
         }
         return playerInfo;
