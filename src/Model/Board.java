@@ -246,6 +246,16 @@ public class Board implements Serializable, Cloneable {
     }
 
     /**
+     *Set the board up with no premium tiles, this is used for xml configurations
+     * @author Vladimir Kovacina
+     */
+
+    public void setDefaultBoard(){
+        initializeBlankGrid();
+        boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START); // Set start tile
+    }
+
+    /**
      * Set premium score tiles in the board.
      * Currently, randomly places them on the board.
      */
@@ -263,6 +273,31 @@ public class Board implements Serializable, Cloneable {
                 }
             }
         }
+    }
+
+    /**
+     * Method used to set the XML premium tiles that are read from the configuration file
+     *
+     * @author Vladimir Kovacina
+     * @param x the col of the tile
+     * @param y the row of the tile
+     * @param type which premium tile type
+     */
+
+    public void setXMLPremiumTiles(int x, int y, String type){
+        Point p = new Point(x, y);
+        if(type.equals("2W")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[2]);
+        }else if(type.equals("3W")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[3]);
+        }else if(type.equals("2L")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[4]);
+        }else if(type.equals("3L")){
+            boardGrid.get(p).setType(BoardTile.Type.values()[5]);
+        }else{
+            boardGrid.get(p).setType(BoardTile.Type.values()[1]);
+        }
+
     }
 
     /**

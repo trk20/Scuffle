@@ -1,7 +1,10 @@
+import Model.ReadXMLFile;
 import Model.ScrabbleModel;
 import Views.DebugView;
 import Controllers.OptionPaneHandler;
 import Views.ScrabbleFrame;
+
+import java.io.FileNotFoundException;
 
 import static Views.DebugView.DEBUG_VIEW;
 
@@ -13,12 +16,30 @@ import static Views.DebugView.DEBUG_VIEW;
  * @version NOV-11
  */
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args)  {
         OptionPaneHandler optionPaneHandler = new OptionPaneHandler();
         // TODO: may change model placement, here for testing atm
         ScrabbleModel model = new ScrabbleModel(optionPaneHandler.getNewPlayers());
         model.addModelListener(optionPaneHandler);
         ScrabbleFrame frame = new ScrabbleFrame(model);
+        //Verify the file entered is valid
+        boolean valid = false;
+        while(!valid){
+            String xmlFile = optionPaneHandler.getFilename();
+            if (!xmlFile.equals("")) {
+                    ReadXMLFile xmlReader = new ReadXMLFile(model, xmlFile);
+                    try{
+                        xmlReader.read();
+                        valid = true;
+                    } catch (RuntimeException e){
+                        valid  =false;
+                    }
+            }else{
+                //User doesn't want to use configuration file
+                valid = true;
+            }
+
+        }
 
         // Text view for debug outputs
         DebugView debug;
