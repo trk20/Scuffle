@@ -35,12 +35,12 @@ public class Board implements Serializable, Cloneable {
     }
     public static final int MIN_WORD_SIZE = 2;
     public static final Point START_TILE_POINT = new Point(BOARD_SIZE/2, BOARD_SIZE/2);
+
+    /** Takes care of validating the board */
     private static final BoardValidator validator = new BoardValidator();
     private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
 
-    /** Takes care of validating the board */
-    private final BoardValidator validator;
 
 
     /**
@@ -422,6 +422,7 @@ public class Board implements Serializable, Cloneable {
     private void setLastPlacedWords(List<BoardWord> lastPlacedWords) {
         this.lastPlacedWords = lastPlacedWords;
     }
+
     @Override
     public Board clone() {
         try {

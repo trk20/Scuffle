@@ -42,8 +42,6 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
     private int turn;
     /** False until something triggers a game to end (Model.Player out of Letters, or no more possible moves)*/
     boolean gameFinished; // FIXME: may become a controller signal in the future, with no need for a field
-    final private Board board;
-    private ArrayList<Player> players;
 
     /** Model listeners to notify on model change */
     private transient List<ModelListener> modelListeners;

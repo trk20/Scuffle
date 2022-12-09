@@ -25,17 +25,6 @@ public class BoardWord implements Cloneable, Serializable {
         return tiles;
     }
 
-
-public record BoardWord(List<BoardTile> tiles) implements Serializable {
-    /**
-     * Creates and returns a string representation of the BoardWord.
-     * If the tiles spell the word "cat", the string will be "CAT".
-     *
-     * @return the word contained in the Model.BoardWord record
-     * @author Timothy Kennedy
-     */
-
-
     @Override
     public String toString() {
         StringBuilder returnString = new StringBuilder();
