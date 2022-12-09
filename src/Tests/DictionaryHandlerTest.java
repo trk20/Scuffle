@@ -5,6 +5,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test for DictionaryHandler test
+ *
+ * @author Alex
+ * @version DEC-09
+ */
 class DictionaryHandlerTest {
     private DictionaryHandler dictionary;
 

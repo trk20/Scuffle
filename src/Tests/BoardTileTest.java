@@ -9,6 +9,11 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Class for testing the BoardTile class
+ * @author Alex
+ * @version DEC-09
+ */
 class BoardTileTest {
     private BoardTile boardTile;
     private BoardTile boardTile2;
