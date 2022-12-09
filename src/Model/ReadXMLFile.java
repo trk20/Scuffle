@@ -5,6 +5,7 @@ import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -65,7 +66,7 @@ public class ReadXMLFile {
                     String type = element.getElementsByTagName("type").item(0).getTextContent();
                     //Check that the coordinates of the tiles are in the board bounds and not on the start tile
                     if(x < ScrabbleModel.BOARD_SIZE && y < ScrabbleModel.BOARD_SIZE && x >= 0 && y>= 0 &&
-                            x != Board.START_TILE_POINT.x && y != Board.START_TILE_POINT.y) {
+                            (new Point(x,y) != Board.START_TILE_POINT)) {
                         model.getBoard().setXMLPremiumTiles(x, y, type);
                     }
 

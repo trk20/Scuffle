@@ -35,8 +35,15 @@ public class Main {
                         valid  =false;
                     }
             }else{
-                //User doesn't want to use configuration file
-                valid = true;
+                //User doesn't want to use their own configuration file, use the default board config file
+                ReadXMLFile xmlReader = new ReadXMLFile(model, "boardConfig.xml");
+                try{
+                    xmlReader.read();
+                    valid = true;
+                } catch (RuntimeException e){
+                    valid  =false;
+                }
+
             }
 
         }
