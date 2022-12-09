@@ -49,6 +49,7 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
     private List<Tile> selectedTiles;
 
     private final UndoHandler undoHandler;
+    private final RedoHandler redoHandler;
 
     private final List<SController> debugControllers;
 
@@ -83,8 +84,10 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
         this.turn = 0;
         this.numPlayers = 0; // In case of null players
         this.undoHandler = new UndoHandler();
+        this.redoHandler = new RedoHandler();
 
         addModelListener(undoHandler);
+        addModelListener(redoHandler);
 
         if(playerInfos.size() != 0){
             this.numPlayers = playerInfos.size();
@@ -117,6 +120,14 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
                 players.add(new AIPlayer(playerName, this));
             }
         }
+    }
+
+    /**
+     * Handles the player wanting to skip
+     */
+    private void handleSkip(){
+        notifyModelListeners(new UndoHandlerEvent(players, board));
+        nextTurn(false);
     }
 
     /**
@@ -226,12 +237,13 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
 
         if(!isSpecialAction){
             incrementTurn();
+        } else{
+            notifyModelListeners(new ME_ModelChangeEvent(this));
         }
         // Notify listeners about new board state
-        notifyModelListeners(new BoardChangeEvent(board));
         // Update views to show current player
+        notifyModelListeners(new BoardChangeEvent(board));
         notifyModelListeners(new PlayerChangeEvent(players));
-
         notifyModelListeners(new NewPlayerEvent(getCurPlayer()));
         // Otherwise, wait for GUI controllers to handle turn
         if(getCurPlayer() instanceof AIPlayer){
@@ -303,12 +315,15 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
         // TODO: make switch, show dropped events
         if(e instanceof PlaceClickEvent pce) handlePlace(pce);
         if(e instanceof DiscardClickEvent) handleDiscard();
-        if(e instanceof C_SkipEvent) handleUndo();
+        if(e instanceof C_SkipEvent) handleSkip();
         if(e instanceof TileClickEvent tce) flipTileSelect(tce);
         if(e instanceof C_SaveEvent se) serializeModel(se.fileLocation());
         if(e instanceof C_LoadEvent se) deSerializeModel(se.fileLocation());
         if(e instanceof C_DirectionChangeEvent bce) notifyModelListeners(new ME_NewDirectionEvent(bce.dir()));
+        if(e instanceof C_UndoEvent) handleUndo();
+        if(e instanceof C_RedoEvent) handleRedo();
     }
+
 
     private void serializeModel(File fileLocation) {
         ObjectOutputStream objOut = null;
@@ -319,7 +334,6 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
             throw new RuntimeException(e);
         }
     }
-
     private void deSerializeModel(File fileLocation) {
         ObjectInputStream objIn = null;
         ScrabbleModel newModel = null;
@@ -397,17 +411,42 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
             return null;
     }
 
-    public void handleUndo(){
+    /**
+     * Handles the player wanting to undo
+     */
+    private void handleUndo(){
         if(undoHandler.isStackEmpty()){
             return;
         }
+        notifyModelListeners(new RedoHandlerEvent(players, board));
         board = undoHandler.getPreviousBoard();
         players = (ArrayList<Player>) undoHandler.getPreviousPlayerState();
         decrementTurn();
 
-        System.out.println("TEST\n"+getCurPlayer());
-
 
         nextTurn(true);
+    }
+
+    /**
+     * Handles the player wamting to redo
+     */
+    private void handleRedo() {
+        if(redoHandler.isStackEmpty()){
+            return;
+        }
+        notifyModelListeners(new UndoHandlerEvent(players, board));
+        board = redoHandler.getPreviousBoard();
+        players = (ArrayList<Player>) redoHandler.getPreviousPlayerState();
+        incrementTurn();
+
+        nextTurn(true);
+    }
+
+    public UndoHandler getUndoHandler(){
+        return undoHandler;
+    }
+
+    public RedoHandler getRedoHandler(){
+        return redoHandler;
     }
 }
