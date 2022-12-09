@@ -43,6 +43,20 @@ public class BoardWord implements Cloneable, Serializable {
     }
 
     @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (!(o instanceof BoardWord otherWord)) return false;
+        if(otherWord.tiles.size() != this.tiles.size()) return false;
+
+        for (int i =0; i < this.tiles.size(); i++) {
+            if(!this.tiles.get(i).equals(otherWord.tiles.get(i)))
+                return false;
+        }
+        // All tiles are equal, in same order.
+        return true;
+    }
+
+    @Override
     public BoardWord clone() {
         try {
             BoardWord clone = (BoardWord) super.clone();

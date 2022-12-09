@@ -34,7 +34,7 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
     private Board board;
     private ArrayList<Player> players;
     /** Model's shared DrawPile */
-    private static final DrawPile drawPile = new DrawPile();
+    private final DrawPile drawPile = new DrawPile();
     private static final OptionPaneHandler input = new OptionPaneHandler();
     // Model components
     /** Player whose turn it is to play */
@@ -62,6 +62,8 @@ public class ScrabbleModel implements SControllerListener, SModel, Serializable 
     private static HashMap<String,Boolean> getPlayerInfos(List<String> playerNames){
         HashMap<String,Boolean> playerInfo = new HashMap<>();
         for (String playerName:playerNames) {
+            while(playerInfo.containsKey(playerName))
+                playerName+=" ";
             playerInfo.put(playerName,false);
         }
         return playerInfo;

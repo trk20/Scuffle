@@ -1,6 +1,5 @@
 package Controllers;
 
-import Model.BoardValidator;
 import Model.Letter;
 import Model.ScrabbleModel;
 import ScrabbleEvents.Listeners.ModelListener;
@@ -8,10 +7,8 @@ import ScrabbleEvents.ModelEvents.ME_InvalidPlacement;
 import ScrabbleEvents.ModelEvents.ModelEvent;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -127,7 +124,17 @@ public class OptionPaneHandler implements ModelListener {
 
         for (int i = 0; i < numPlayers; i++){
             Object[] playerInfo = this.askForPlayerInfo(i);
-            players.put((String)playerInfo[0],(boolean)playerInfo[1]);
+
+            // Duplicate names do not get merged into 1 player
+            String name = (String) playerInfo[0];
+            String copyStr = "";
+            int copyNum = 0;
+            while(players.containsKey(name+copyStr)){
+                copyNum++;
+                copyStr = ""+copyNum;
+            }
+
+            players.put(name+copyStr,(boolean)playerInfo[1]);
         }
         return players;
     }

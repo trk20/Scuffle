@@ -81,7 +81,7 @@ public class Board implements Serializable, Cloneable {
         // Place word on board, save resulting state
         setWordTiles(placeEvent);
         List<BoardWord> curWords = getCurrentWords();
-        List<BoardWord> turnWords = getPlacedWords(getCurrentWords());
+        List<BoardWord> turnWords = getPlacedWords(curWords);
         lastPlacedWords = curWords; // Store words from this turn (for next placement)
 
         return getPlacedScore(turnWords);
