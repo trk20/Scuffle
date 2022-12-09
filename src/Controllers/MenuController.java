@@ -8,6 +8,8 @@ import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.Listeners.SControllerListener;
 import ScrabbleEvents.ModelEvents.ME_ModelChangeEvent;
 import ScrabbleEvents.ModelEvents.ModelEvent;
+import ScrabbleEvents.ControllerEvents.C_RedoEvent;
+import ScrabbleEvents.ControllerEvents.C_UndoEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,13 +52,19 @@ public class MenuController implements ActionListener, ModelListener, SControlle
                 notifyControllerListeners(new C_LoadEvent(chooseSaveFile()));
             }
 
-            if(e.getActionCommand().equals("Game Rules")){
+            else if(e.getActionCommand().equals("Game Rules")){
                 String url = "https://scrabble.hasbro.com/en-us/rules";
                 openRules(url);
             }
-            if(e.getActionCommand().equals("Save Game")){
+            else if(e.getActionCommand().equals("Save Game")){
 //                File saveFile = new File("Saves"+File.separator+System.currentTimeMillis()+".sav");
                 notifyControllerListeners(new C_SaveEvent(chooseSaveFile()));
+            }
+            else if(e.getActionCommand().equals("Undo")){
+                notifyControllerListeners(new C_UndoEvent());
+            }
+            else if (e.getActionCommand().equals("Redo")){
+                notifyControllerListeners(new C_RedoEvent());
             }
     }
 

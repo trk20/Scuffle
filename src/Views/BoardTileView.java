@@ -48,6 +48,7 @@ public class BoardTileView extends TileView implements ModelListener {
     private void resetStyle(BoardTile modelTile) {
         removeAll();
         validate();
+        addMouseListener(controller);
         styleBoardTile(modelTile);
     }
 
@@ -78,6 +79,7 @@ public class BoardTileView extends TileView implements ModelListener {
         }
         if(updatedTile.isTaken()){ // In State 1, check for placed letter
             remove(0); // Remove initial component (From State 1)
+
             styleLetterTile(updatedTile.getLetter());
             // Disable placement on placed tiles
             removeMouseListener(controller);
