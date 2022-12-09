@@ -3,8 +3,10 @@ package Views;
 import Controllers.BoardTileController;
 import Model.BoardTile;
 import Model.ScrabbleModel;
-import ScrabbleEvents.Listeners.BoardChangeListener;
+import ScrabbleEvents.Listeners.ModelListener;
 import ScrabbleEvents.ModelEvents.BoardChangeEvent;
+import ScrabbleEvents.ModelEvents.ME_ModelChangeEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +21,7 @@ import java.awt.*;
  * @author Alex
  * @version NOV-21
  */
-public class BoardTileView extends TileView implements BoardChangeListener {
+public class BoardTileView extends TileView implements ModelListener {
     private final Point boardPoint;
     private final BoardTileController controller;
 
@@ -31,11 +33,22 @@ public class BoardTileView extends TileView implements BoardChangeListener {
         // Empirically found a size to stick with
         setPreferredSize(new Dimension(30,30));
     }
-
     @Override
-    public void handleBoardChangeEvent(BoardChangeEvent e) {
-        BoardTile updatedTile = e.board().getBoardTile(boardPoint);
-        styleBoardTile(updatedTile);
+    public void handleModelEvent(ModelEvent e) {
+        if(e instanceof BoardChangeEvent bce){
+            BoardTile updatedTile = bce.board().getBoardTile(boardPoint);
+            styleBoardTile(updatedTile);
+        }
+        if(e instanceof ME_ModelChangeEvent mce){
+            // Reset style
+            resetStyle(mce.newModel().getBoard().getBoardTile(boardPoint));
+        }
+    }
+
+    private void resetStyle(BoardTile modelTile) {
+        removeAll();
+        validate();
+        styleBoardTile(modelTile);
     }
 
     /**
@@ -51,7 +64,6 @@ public class BoardTileView extends TileView implements BoardChangeListener {
      */
     private void styleBoardTile(BoardTile updatedTile) {
         if(getComponentCount() == 0){ // Checks if in State 0
-            // Shared properties for unoccupied tiles (1x1 grid, white border, premium label)
             setLayout(new GridLayout(1,1));
             setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             // Set centered label (with tile type text)
@@ -70,6 +82,8 @@ public class BoardTileView extends TileView implements BoardChangeListener {
             // Disable placement on placed tiles
             removeMouseListener(controller);
             // Style State 2
+            validate();
+            repaint();
         }
 
     }

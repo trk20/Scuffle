@@ -33,18 +33,8 @@ public class BoardValidator {
             return errorMessage;
         }
     }
-    private final Board boardToValidate;
-    private final DictionaryHandler dictionary;
-
-    /**
-     * Constructor for BoardValidator, initializes fields.
-     *
-     * @param board reference to the board to validate.
-     */
-    public BoardValidator(Board board){
-        this.boardToValidate = board;
-        this.dictionary = new DictionaryHandler();
-    }
+//    private final Board boardToValidate;
+    private final static DictionaryHandler dictionary = new DictionaryHandler();
 
     /**
      * Checks if a word can be placed with the desired placement.
@@ -56,12 +46,12 @@ public class BoardValidator {
      * @param placementEvent The event representing a placement attempt
      * @return True if the word passes all the checks, false otherwise.
      */
-    public Status isValidLocation(BoardPlaceEvent placementEvent) {
-        if(!areNewTilesInBoard(placementEvent)) return Status.OUT_OF_BOUNDS;
+    public Status isValidLocation(Board boardToValidate, BoardPlaceEvent placementEvent) {
+        if(!areNewTilesInBoard(boardToValidate, placementEvent)) return Status.OUT_OF_BOUNDS;
 
-        if(isBoardEmpty()){
+        if(isBoardEmpty(boardToValidate)){
             return isPlacedOnStart(placementEvent) ? Status.SUCCESS : Status.NOT_ON_START;
-        } else return isPlacedNextToWord(placementEvent) ? Status.SUCCESS : Status.NOT_NEXT_TO_WORD;
+        } else return isPlacedNextToWord(boardToValidate, placementEvent) ? Status.SUCCESS : Status.NOT_NEXT_TO_WORD;
     }
 
     /**
@@ -82,7 +72,7 @@ public class BoardValidator {
      * @param placementEvent The event representing a placement attempt
      * @return True if a tile would be adjacent to the placed word
      */
-    private boolean isPlacedNextToWord(BoardPlaceEvent placementEvent) {
+    private boolean isPlacedNextToWord(Board boardToValidate, BoardPlaceEvent placementEvent) {
         // Unpack relevant event info
         Point wordOrigin = placementEvent.wordOrigin();
         Board.Direction placementDirection = placementEvent.direction();
@@ -91,9 +81,11 @@ public class BoardValidator {
         // Check if any tile is on adjacent to another tile, using given info
         for(int i = 0; i < numTiles; i++){
             if(placementDirection == Board.Direction.RIGHT){ // Increment Col (Right from origin)
-                if(isAdjacentToTile(new Point((int) (wordOrigin.getX()+i), (int) wordOrigin.getY()))) return true;
+                if(isAdjacentToTile(boardToValidate, new Point((int) (wordOrigin.getX()+i), (int) wordOrigin.getY())))
+                    return true;
             } else { // Decrement row (y)
-                if(isAdjacentToTile(new Point((int) wordOrigin.getX(), (int) (wordOrigin.getY()+i)))) return true;
+                if(isAdjacentToTile(boardToValidate, new Point((int) wordOrigin.getX(), (int) (wordOrigin.getY()+i))))
+                    return true;
             }
         }
 
@@ -109,21 +101,21 @@ public class BoardValidator {
      * @param point The point coordinates of a possible new tile in the board.
      * @return True if the point is adjacent to an existing tile
      */
-    private boolean isAdjacentToTile(Point point){
-        if(isTaken(point)) return true;  // If overlapping, then adjacent (transitive relation)
+    private boolean isAdjacentToTile(Board boardToValidate, Point point){
+        if(isTaken(boardToValidate, point)) return true;  // If overlapping, then adjacent (transitive relation)
 
         // Translate in the four cardinal directions to check for a tile adjacent to the given point:
         // Ignoring exceptions because placements outside the board simply indicate a non-adjacent tile
-        try{ if(isTaken(new Point(point.x+1, point.y))) return true; }
+        try{ if(isTaken(boardToValidate, new Point(point.x+1, point.y))) return true; }
         catch (IndexOutOfBoundsException ignored) {}
 
-        try{ if(isTaken(new Point(point.x-1, point.y))) return true; }
+        try{ if(isTaken(boardToValidate, new Point(point.x-1, point.y))) return true; }
         catch (IndexOutOfBoundsException ignored) {}
 
-        try{ if(isTaken(new Point(point.x, point.y+1))) return true; }
+        try{ if(isTaken(boardToValidate, new Point(point.x, point.y+1))) return true; }
         catch (IndexOutOfBoundsException ignored) {}
 
-        try{ if(isTaken(new Point(point.x, point.y-1))) return true; }
+        try{ if(isTaken(boardToValidate, new Point(point.x, point.y-1))) return true; }
         catch (IndexOutOfBoundsException ignored) {}
         // No tests passed, must not be adjacent.
         return false;
@@ -134,7 +126,7 @@ public class BoardValidator {
      * @param placeEvent  The event representing a placement attempt
      * @return True if all placed tiles are within the board's limit, false if any are not.
      */
-    private boolean areNewTilesInBoard(BoardPlaceEvent placeEvent) {
+    private boolean areNewTilesInBoard(Board boardToValidate, BoardPlaceEvent placeEvent) {
         // Unpack event info
         List<Tile> word = placeEvent.placedTiles();
         Board.Direction placementDirection = placeEvent.direction();
@@ -147,7 +139,7 @@ public class BoardValidator {
             for (int i = 0; i < word.size(); i++) {
                 // Place tile at first available location
                 Point firstFree = boardToValidate.getFirstNonTakenPoint(placementDirection, new Point(nextPoint));
-                isTaken(firstFree); // Will check to see if it causes an out-of-bounds exception
+                isTaken(boardToValidate, firstFree); // Will check to see if it causes an out-of-bounds exception
 
                 // nextPoint is checked one after last place
                 if (placementDirection == Board.Direction.RIGHT) firstFree.translate(1, 0);
@@ -190,7 +182,7 @@ public class BoardValidator {
      * @param p A point coordinate in the board to check
      * @return True if a tile is placed at that location, false otherwise.
      */
-    private boolean isTaken(Point p){
+    private boolean isTaken(Board boardToValidate, Point p){
         return boardToValidate.isTaken(p);
     }
 
@@ -199,7 +191,7 @@ public class BoardValidator {
      * no words have been placed on the board yet.
      * @return True if the board is empty, false otherwise.
      */
-    private boolean isBoardEmpty(){
+    private boolean isBoardEmpty(Board boardToValidate){
         return boardToValidate.isBoardEmpty();
     }
 }

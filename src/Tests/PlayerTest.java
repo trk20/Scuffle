@@ -61,7 +61,7 @@ class PlayerTest {
     @org.junit.jupiter.api.Test
     public void placeTilesTest() {
 
-        Hand newHand = new Hand(model.getDrawPile());
+        Hand newHand = new Hand(model.getDrawPile(), true);
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
         players.get(1).placeTiles(word1);
@@ -84,7 +84,7 @@ class PlayerTest {
     @org.junit.jupiter.api.Test
     public void discardTilesTest() {
 
-        Hand newHand = new Hand(model.getDrawPile());
+        Hand newHand = new Hand(model.getDrawPile(), true);
         newHand.setTiles(sampleHand);
         players.get(1).setHand(newHand);
         players.get(1).discardTiles(word1);
@@ -109,7 +109,7 @@ class PlayerTest {
     public void outOfTilesTest() {
         //Make player hand empty
         List<Tile> empty = new ArrayList<>();
-        Hand newHand = new Hand(model.getDrawPile());
+        Hand newHand = new Hand(model.getDrawPile(), true);
         // FIXME: use until out of tiles instead
         newHand.setTiles(empty);
         players.get(0).setHand(newHand);

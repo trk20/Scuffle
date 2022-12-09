@@ -4,8 +4,9 @@ import Controllers.SController;
 import Model.Hand;
 import Model.ScrabbleModel;
 import Model.Tile;
-import ScrabbleEvents.Listeners.HandChangeListener;
-import ScrabbleEvents.ModelEvents.HandChangeEvent;
+import ScrabbleEvents.Listeners.ModelListener;
+import ScrabbleEvents.ModelEvents.ME_ModelChangeEvent;
+import ScrabbleEvents.ModelEvents.ModelEvent;
 import ScrabbleEvents.ModelEvents.NewPlayerEvent;
 import ScrabbleEvents.ModelEvents.TileSelectEvent;
 
@@ -22,7 +23,7 @@ import static Views.DebugView.DEBUG_VIEW;
  * @author Alex
  * @version NOV-21
  */
-public class HandView extends JPanel implements HandChangeListener {
+public class HandView extends JPanel implements ModelListener {
     /** Row with the selected tiles*/
     private static final Color BACKGROUND_COLOR = new Color(187, 129, 65);
     final private JPanel selected_row;
@@ -31,7 +32,7 @@ public class HandView extends JPanel implements HandChangeListener {
     /** Maps model tiles to their respective tile view (for selection referencing)*/
     final private HashMap<Tile, HandTileView> handTileMap;
     /** Model reference, needed to pass it to new controllers as a listener*/
-    final private ScrabbleModel model;
+    private ScrabbleModel model;
 
     /**
      * HandView constructor, initializes fields and components of the View.
@@ -111,12 +112,11 @@ public class HandView extends JPanel implements HandChangeListener {
 
     /**
      * Adds a new tile view to the HandView.
-     * Groups a set of operations that need to be done each time to ensure correct behavior.
+     * Groups a set of operations that need to be done each time a new tile in the hand is shown.
      *
      * @param tile The tile to add to the hand
      */
     private void addNewTileView(Tile tile){
-
         HandTileView view = new HandTileView(tile, model);
         unselected_row.add(view);
         // Add model listener to tile
@@ -133,9 +133,11 @@ public class HandView extends JPanel implements HandChangeListener {
      * @param e the information related to the event.
      */
     @Override
-    public void handleHandChangeEvent(HandChangeEvent e) {
+    public void handleModelEvent(ModelEvent e) {
         // Handle based on event type
         if(e instanceof TileSelectEvent sel) updateSelectionRow(sel);
         if(e instanceof NewPlayerEvent newPlayer) updateNewHand(newPlayer.player().getHand());
+        if(e instanceof ME_ModelChangeEvent mce)
+            this.model = mce.newModel();
     }
 }

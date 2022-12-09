@@ -1,8 +1,8 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Class Model.Hand takes care of holding, playing, and drawing
@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author Alexandre Marques - 101189743
  * @version NOV-9
  */
-public class Hand {
+public class Hand implements Serializable {
     /** The game's draw pile (should be the same for all players/hands in the game) */
     final private DrawPile pile;
     /** The Model.Hand's contained letters*/
@@ -26,12 +26,12 @@ public class Hand {
      *
      * @author Alexandre Marques - 101189743
      */
-    public Hand(DrawPile pile){
+    public Hand(DrawPile pile, boolean fillHand){
         // Initialize fields to default / parameter values
         this.pile = pile;
         tiles = new ArrayList<>();
         // Start hand in filled state
-        fillHand();
+        if (fillHand) fillHand();
         // TOOD: M2, reset hand, set tile, use selectedtiles field in useTiles.
     }
 
@@ -144,5 +144,13 @@ public class Hand {
 
     public void setTiles(List<Tile> tiles) {
         this.tiles = tiles;
+    }
+
+    public DrawPile getDrawPile() {
+        return pile;
+    }
+
+    public void addTile(Tile t){
+        tiles.add(t);
     }
 }
