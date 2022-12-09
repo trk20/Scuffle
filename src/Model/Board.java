@@ -81,7 +81,7 @@ public class Board implements Serializable, Cloneable {
         // Place word on board, save resulting state
         setWordTiles(placeEvent);
         List<BoardWord> curWords = getCurrentWords();
-        List<BoardWord> turnWords = getPlacedWords(getCurrentWords());
+        List<BoardWord> turnWords = getPlacedWords(curWords);
         lastPlacedWords = curWords; // Store words from this turn (for next placement)
 
         return getPlacedScore(turnWords);
@@ -378,8 +378,6 @@ public class Board implements Serializable, Cloneable {
         };
     }
 
-    // FIXME: not convinced this should be public,
-    //  at least it doesn't allow mutation of the board now.
     public ArrayList<BoardTile> getBoardTiles(){
         ArrayList<BoardTile> tiles = new ArrayList<>();
         for (int x = 0; x < 15; x++){
