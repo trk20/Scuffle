@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests the Board Validator Class, more specifcally the isValidPlacement method
+ * Tests the Board Validator Class, more specifically the isValidPlacement method
  *
  * @author Vladimir Kovacina
  * @version NOV-19 2022
