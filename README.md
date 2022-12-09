@@ -1,13 +1,20 @@
 # 3110 Group Project: Scrabble
-Version: Milestone 3
-## Table of contents
-- [Rule set](#rule-set)
-- [Design](#design)
-- [Missing Features and bugs](#missing-features-and-bugs)
-
+Version: Milestone 4
 
 ## GUI instructions:
 - Refer to the GUI Instructions PDF for in depth instructions.
+
+## Table of contents
+- [Rule set](#rule-set)
+  - [Setup](#setup)
+  - [Game Loop](#game-loop)
+  - [Scoring](#scoring)
+- [Design](#design) 
+  - [Model](#model)  
+  - [Controller](#controller)  
+  - [ScrabbleEvents](#scrabbleevents)  
+  - [Views](#views)  
+
 
 # Rule set 
 Rules adapted from [hasbro](https://scrabble.hasbro.com/en-us/rules)
