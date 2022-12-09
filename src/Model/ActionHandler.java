@@ -58,6 +58,11 @@ public abstract class ActionHandler implements ModelListener{
      * @return: Boolean
      */
     public boolean isStackEmpty(){
-        return boardState.size() == 0 || playerState.size() == 0;
+        return boardState.empty() || playerState.empty();
+    }
+
+    public void clearStack(){
+        boardState.clear();
+        playerState.clear();
     }
 }
