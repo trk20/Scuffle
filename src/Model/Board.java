@@ -378,8 +378,6 @@ public class Board implements Serializable, Cloneable {
         };
     }
 
-    // FIXME: not convinced this should be public,
-    //  at least it doesn't allow mutation of the board now.
     public ArrayList<BoardTile> getBoardTiles(){
         ArrayList<BoardTile> tiles = new ArrayList<>();
         for (int x = 0; x < 15; x++){
@@ -448,6 +446,26 @@ public class Board implements Serializable, Cloneable {
 
             }
         }
+    }
+
+    /**
+     * Returns the score of a theoretical placement event without changing the board
+     * For use by AI
+     *
+     * @param placeEvent the placement event to evaluate
+     * @return the score of the placement event
+     *
+     * @author Timothy Kennedy
+     */
+    public int getPlacementScore(BoardPlaceEvent placeEvent) {
+        // Store board state
+        Grid2DArray<BoardTile> savedBoardGrid = copySelfGrid();
+        // Place word on board, check if it creates invalid words
+        setWordTiles(placeEvent);
+        int score = getPlacedScore(getPlacedWords(getCurrentWords()));
+        // Load board state (Prevent mutation)
+        boardGrid = savedBoardGrid;
+        return score;
     }
 
     private void setBoardGrid(Grid2DArray<BoardTile> boardGrid) {
