@@ -1,9 +1,9 @@
 # 3110 Group Project: Scrabble
 Version: Milestone 3
 ## Table of contents
-[Rule set](#rule-set)
-[Design](#design)
-[Missing Features and bugs](#missing-features-and-bugs)
+- [Rule set](#rule-set)
+- [Design](#design)
+- [Missing Features and bugs](#missing-features-and-bugs)
 
 
 ## GUI instructions:
