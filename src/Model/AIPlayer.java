@@ -21,7 +21,6 @@ public class AIPlayer extends Player {
 
     private static final boolean delay = false;
     private static final int MAX_ATTEMPTS = 40;
-    private final List<ModelListener> modelListeners;
     private static final DictionaryHandler dict = new DictionaryHandler();
     private final ScrabbleModel model;
 
@@ -33,7 +32,6 @@ public class AIPlayer extends Player {
      */
     public AIPlayer(String name, ScrabbleModel model) {
         super(name, model.getDrawPile());
-        this.modelListeners = new ArrayList<>();
         this.model = model;
     }
 
@@ -43,8 +41,8 @@ public class AIPlayer extends Player {
      * @author Timothy Kennedy
      */
     public void play(){
-        HashMap<BoardPlaceEvent,Integer> placeEvents = new HashMap<>(); //make a HashMap to store placement information and corresponding score
         if(model.getBoard().isBoardEmpty()){ //The board is empty, play from the center
+            HashMap<BoardPlaceEvent,Integer> placeEvents = new HashMap<>(); //make a HashMap to store placement information and corresponding score
             try {
                 placeEvents = getPlacementEventOn(null, true); // the board is empty, and no BoardTile is included in the word
             }catch (Exception e){
@@ -55,15 +53,7 @@ public class AIPlayer extends Player {
                 return;
             }
         }else {
-            ArrayList<BoardTile> boardTiles = new ArrayList<>(model.getBoard().getBoardTiles().stream().filter(BoardTile::isTaken).toList());
-            for (BoardTile tile : boardTiles) {
-                try {
-                    placeEvents.putAll(getPlacementEventOn(tile, false)); // The board has words on it, find placements including this tile
-                } catch (
-                        Exception e) {
-                    //System.out.println(e.getMessage());
-                }
-            }
+            HashMap<BoardPlaceEvent, Integer> placeEvents  = continuePlay();
             if(placeEvents.size() > 0) { // if any placement events were found
                 doPlacementEvent(Collections.max(placeEvents.entrySet(), Map.Entry.comparingByValue()).getKey()); //play the highest scoring placement
                 return;
@@ -72,6 +62,25 @@ public class AIPlayer extends Player {
 
         //if the AI can't find anywhere to play, it discards its entire hand
         doHandDiscard();
+    }
+
+    /**
+     * Handles the finding of a placement when the board already has tiles placed
+     *
+     * @return the list of placements found
+     */
+    private HashMap<BoardPlaceEvent, Integer> continuePlay() {
+        HashMap<BoardPlaceEvent,Integer> placeEvents = new HashMap<>(); //make a HashMap to store placement information and corresponding score
+        ArrayList<BoardTile> boardTiles = new ArrayList<>(model.getBoard().getBoardTiles().stream().filter(BoardTile::isTaken).toList());
+        for (BoardTile tile : boardTiles) {
+            try {
+                placeEvents.putAll(getPlacementEventOn(tile, false)); // The board has words on it, find placements including this tile
+            } catch (
+                    Exception e) {
+                //System.out.println(e.getMessage());
+            }
+        }
+        return placeEvents;
     }
 
     /**
@@ -132,48 +141,85 @@ public class AIPlayer extends Player {
             tilesToPlace = new ArrayList<>(); //clear list each attempt (otherwise will grow)
             notPlaced = new ArrayList<>(hand.getHeldTiles());
             if(startOfGame){
-                // Start play from the center
-                transferTilesMatchingWord(notPlaced, tilesToPlace, word);
-                for(int offset = 0; offset < word.size()-1; offset++) { //try all placements of the first word
 
-                    event = new BoardPlaceEvent(tilesToPlace, new Point(7, 7-offset), Board.Direction.DOWN);
-                    placeEvents.put(event, board.getPlacementScore(event));
-                    event = new BoardPlaceEvent(tilesToPlace, new Point(7-offset, 7), Board.Direction.RIGHT);
-                    placeEvents.put(event, board.getPlacementScore(event));
-                }
+                transferTilesMatchingWord(notPlaced, tilesToPlace, word);
+
+                placeEvents.putAll(getStartingPlacement(board, tilesToPlace));
+
             }else {
-                //get the position where the boardTile intersects the word, to know what position to play the word later
+                //get the position where the boardTile intersects the word, to know what position to play the word
                 int boardTileIndex = word.indexOf(boardTileUsed.getLetter().name());
 
-                word.remove(boardTileUsed.getLetter().name());
-                transferTilesMatchingWord(notPlaced,tilesToPlace,word); //Get the tiles needed for the placement
-                //check if placing the word going down is a valid placement
-                if(board.isValidPlacement(
-                        new BoardPlaceEvent(
-                                tilesToPlace, new Point(boardTileUsed.getX(), (boardTileIndex > 0) ? (boardTileUsed.getY()-boardTileIndex): boardTileUsed.getY()+1), Board.Direction.DOWN
-                        )) ==
-                        BoardValidator.Status.SUCCESS)
-                {
-                    //add corresponding placement event
-                    event = new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()-boardTileIndex) , Board.Direction.DOWN);
-                    placeEvents.put(event,board.getPlacementScore(event));
-                }
+                word.remove(boardTileUsed.getLetter().name()); //remove the tile's letter from the word
 
-                //check if placing the word going right is a valid placement
-                if (board.isValidPlacement(
-                        new BoardPlaceEvent(
-                                tilesToPlace, new Point((boardTileIndex > 0) ? (boardTileUsed.getX()-boardTileIndex) : boardTileUsed.getX()+1, boardTileUsed.getY()), Board.Direction.RIGHT
-                        )) ==
-                        BoardValidator.Status.SUCCESS)
-                {
-                    //add corresponding placement event
-                    event = new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX()-boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT);
-                    placeEvents.put(event,board.getPlacementScore(event));
-                }
+                transferTilesMatchingWord(notPlaced,tilesToPlace,word); //Get the tiles needed for the placement
+
+                placeEvents.putAll(getContinuedPlacement(boardTileUsed, board, tilesToPlace, boardTileIndex));
             }
         }
         return placeEvents;
     }
+
+
+    /**
+     * Finds placements for a given word when there are no tiles on the board
+     *
+     * @param board the board
+     * @param tilesToPlace the tiles that make up the word
+
+     * @return a list of starting placements using a given word
+     */
+    private HashMap<BoardPlaceEvent,Integer> getStartingPlacement(Board board, ArrayList<Tile> tilesToPlace) {
+        BoardPlaceEvent event;
+        HashMap<BoardPlaceEvent, Integer> placeEvents = new HashMap<>();
+        for(int offset = 0; offset < tilesToPlace.size()-1; offset++) { //try all placements of the first word
+            event = new BoardPlaceEvent(tilesToPlace, new Point(7, 7-offset), Board.Direction.DOWN);
+            placeEvents.put(event, board.getPlacementScore(event));
+            event = new BoardPlaceEvent(tilesToPlace, new Point(7-offset, 7), Board.Direction.RIGHT);
+            placeEvents.put(event, board.getPlacementScore(event));
+        }
+        return placeEvents;
+    }
+
+    /**
+     * Finds placements for a given word on a board with tiles already placed
+     *
+     * @param boardTileUsed the BoardTile to use in the word (overlap/start/end)
+     * @param board the board
+     * @param tilesToPlace the tiles that make up the word
+     * @param boardTileIndex the index of the tile in the given word
+     *
+     * @return the list of placements found
+     */
+    private HashMap<BoardPlaceEvent,Integer> getContinuedPlacement(BoardTile boardTileUsed, Board board, ArrayList<Tile> tilesToPlace, int boardTileIndex) {
+        BoardPlaceEvent event;
+        HashMap<BoardPlaceEvent, Integer> placeEvents = new HashMap<>();
+        //check if placing the word going down is a valid placement
+        if(board.isValidPlacement(
+                new BoardPlaceEvent(
+                        tilesToPlace, new Point(boardTileUsed.getX(), (boardTileIndex > 0) ? (boardTileUsed.getY()- boardTileIndex): boardTileUsed.getY()+1), Board.Direction.DOWN
+                )) ==
+                BoardValidator.Status.SUCCESS)
+        {
+            //add corresponding placement event
+            event = new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX(), boardTileUsed.getY()- boardTileIndex) , Board.Direction.DOWN);
+            placeEvents.put(event, board.getPlacementScore(event));
+        }
+
+        //check if placing the word going right is a valid placement
+        if (board.isValidPlacement(
+                new BoardPlaceEvent(
+                        tilesToPlace, new Point((boardTileIndex > 0) ? (boardTileUsed.getX()- boardTileIndex) : boardTileUsed.getX()+1, boardTileUsed.getY()), Board.Direction.RIGHT
+                )) ==
+                BoardValidator.Status.SUCCESS)
+        {
+            //add corresponding placement event
+            event = new BoardPlaceEvent(tilesToPlace, new Point(boardTileUsed.getX()- boardTileIndex, boardTileUsed.getY()), Board.Direction.RIGHT);
+            placeEvents.put(event, board.getPlacementScore(event));
+        }
+        return placeEvents;
+    }
+
 
     /**
      * A utility function to transfer a tile for each matching letter in a word from one ArrayList to another
@@ -196,92 +242,6 @@ public class AIPlayer extends Player {
         }
     }
 
-    /**
-     * Gets a list of valid words given the AI's hand
-
-     *
-     * @param hand the hand of the AI player
-     * @return a list of valid words to place
-     *
-     * @author Timothy Kennedy
-     * @deprecated
-     */
-    public ArrayList<ArrayList<String>> getValidWords(Hand hand){
-        // The letters in the hand of the AI player: what it has to "work with"
-        StringBuilder letters = new StringBuilder();
-
-        // List of words found
-        ArrayList<ArrayList<String>> placementCandidates = new ArrayList<>();
-
-        for(Tile heldTile:hand.getHeldTiles()){
-            letters.append(heldTile.getLetter().name());
-        }
-
-        //Find valid words in a large amount of random strings that contain the right letters
-        for(ArrayList<String> wordCandidate:getNRandomPermutations(letters.toString())){
-            if(dict.isValidWord(String.join("",wordCandidate))){
-                placementCandidates.add(wordCandidate);
-            }
-        }
-        return placementCandidates;
-    }
-
-    /**
-     * Gets a list of valid words given a tile to [extend from/extend to/cross] and the AI's hand
-     *
-     * @param tile the tile being considered for placement
-     * @param hand the hand of the AI player
-     * @return a list of valid words to place
-     *
-     * @author Timothy Kennedy
-     * @deprecated
-     */
-    public ArrayList<ArrayList<String>> getValidWords(BoardTile tile, Hand hand){
-        // The letters in the hand of the AI player: what it has to "work with"
-        StringBuilder letters = new StringBuilder();
-        Random r = new Random();
-
-        ArrayList<ArrayList<String>> placementCandidates = new ArrayList<>();
-        for(Tile heldTile:hand.getHeldTiles()){
-            letters.append(heldTile.getLetter().name());
-        }
-        //Find valid words in a large amount of random strings that contain the right letters (including that of the BoardTile
-        for(ArrayList<String> wordCandidate:getNRandomPermutations(letters.toString())){
-            wordCandidate.add(r.nextInt(0,wordCandidate.size()+1),tile.getLetter().toString());
-            if(dict.isValidWord(String.join("",wordCandidate))){
-                placementCandidates.add(wordCandidate);
-            }
-        }
-        //System.out.println(placementCandidates);
-        return placementCandidates;
-    }
-
-    /**
-     * Utility function to get n random permutations of a string
-     *
-     * @param letters the string to get the permutations of
-     * @return a hashset of n random permutations of the string
-     * @author Timothy Kennedy
-     * @deprecated
-     */
-    private HashSet<ArrayList<String>> getNRandomPermutations(String letters) {
-        Random r = new Random();
-        HashSet<ArrayList<String>> perms = new HashSet<>(); // Set of permutations generated-don't want to have duplicates
-        int count = 0;
-
-        //list of letters to shuffle to get a random permutation
-        ArrayList<String> shuffle = new ArrayList<>(Arrays.asList(letters.split("")));
-
-
-        while(perms.size() < MAX_ATTEMPTS && count < 150) {
-            Collections.shuffle(shuffle, r);
-            count++; // Stop it running forever
-            // add a permutation of variable length
-            perms.add(new ArrayList<>(shuffle.subList(0,r.nextInt(1,shuffle.size()))));
-        }
-        return perms;
-    }
-
 
     /**
      * Gets a set of valid words given the AI's hand using new algorithm
@@ -293,15 +253,9 @@ public class AIPlayer extends Player {
      */
     public HashSet<ArrayList<String>> getValidWordsNew(Hand hand){
         // The letters in the hand of the AI player: what it has to "work with"
-        StringBuilder letters = new StringBuilder();
+        StringBuilder letters = getHandLetters(hand);
 
         HashSet<ArrayList<String>> placementCandidates = new HashSet<>();
-
-        for(Tile heldTile:hand.getHeldTiles()){
-            if(!heldTile.getLetter().name().equals("BLANK")) {
-                letters.append(heldTile.getLetter().name());
-            }
-        }
 
         //Find valid words
         for(String permutation:getNRandomPerms(Arrays.asList(letters.toString().split("")))){
@@ -321,22 +275,26 @@ public class AIPlayer extends Player {
      * @author Timothy Kennedy
      */
     public HashSet<ArrayList<String>> getValidWordsNew(BoardTile tile, Hand hand){
-        StringBuilder letters = new StringBuilder();
+        StringBuilder letters = getHandLetters(hand);
 
-        HashSet<ArrayList<String>> placementCandidates = new HashSet<>();
-
-        for(Tile heldTile:hand.getHeldTiles()){
-            if(!heldTile.getLetter().name().equals("BLANK")) {
-                letters.append(heldTile.getLetter().name());
-            }
-        }
         letters.append(tile.getLetter().name());
 
+        HashSet<ArrayList<String>> placementCandidates = new HashSet<>();
         //Find valid words
         for(String permutation:getNRandomPerms(Arrays.asList(letters.toString().split("")))){
             placementCandidates.addAll(dict.optimizedGetValidWords(getLetterCount(permutation),permutation.length()).stream().filter(word->word.contains(tile.getLetter().name())).toList());
         }
         return placementCandidates;
+    }
+
+    private StringBuilder getHandLetters(Hand hand){
+        StringBuilder letters = new StringBuilder();
+        for(Tile heldTile:hand.getHeldTiles()){
+            if(!heldTile.getLetter().name().equals("BLANK")) {
+                letters.append(heldTile.getLetter().name());
+            }
+        }
+        return letters;
     }
 
     /**
