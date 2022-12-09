@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * MenuController Class controls the logic behind what happens when one of the menu items are pressed
  *
- * @author Vladimir Kovacina
- * @version 22 Nov 2022
+ * @author Vladimir Kovacina, Alex, Kieran
+ * @version DEC-09
  */
 public class MenuController implements ActionListener, ModelListener, SController {
     private final List<SControllerListener> listeners;
@@ -37,10 +37,12 @@ public class MenuController implements ActionListener, ModelListener, SControlle
     /**
      * Used to handle the actions of the Menu based off of which event is selected
      * The possible actions are:
-     *
      * New game
      * Show the Game Rules
      * Save Game
+     * Load Game
+     * Undo
+     * Redo
      *
      * @author Vladimir Kovacina
      *
