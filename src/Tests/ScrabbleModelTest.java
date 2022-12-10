@@ -14,6 +14,12 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+/**
+ * Class for testing the functionality of the ScrabbleModel class
+ *
+ * @author Timothy Kennedy
+ * @version DEC-9
+ */
 class ScrabbleModelTest {
 
     ScrabbleModel model;
