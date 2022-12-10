@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
 <board>
+
+    <tile>
+        <id>111</id>
+        <row>0</row>
+        <col>0</col>
+        <type>3W</type>
+    </tile>
+
     <tile>
         <id>101</id>
         <row>1</row>
@@ -11,28 +19,28 @@
         <id>102</id>
         <row>2</row>
         <col>2</col>
-        <type>2L</type>
+        <type>2W</type>
     </tile>
 
     <tile>
         <id>103</id>
         <row>3</row>
         <col>3</col>
-        <type>3W</type>
+        <type>2W</type>
     </tile>
 
     <tile>
         <id>104</id>
         <row>4</row>
         <col>4</col>
-        <type>3L</type>
+        <type>2W</type>
     </tile>
 
     <tile>
         <id>105</id>
         <row>5</row>
         <col>5</col>
-        <type>2W</type>
+        <type>3L</type>
     </tile>
 
     <tile>
@@ -42,18 +50,12 @@
         <type>2L</type>
     </tile>
 
-    <tile>
-        <id>107</id>
-        <row>7</row>
-        <col>7</col>
-        <type>3W</type>
-    </tile>
 
     <tile>
         <id>108</id>
         <row>8</row>
         <col>8</col>
-        <type>2W</type>
+        <type>2L</type>
     </tile>
 
     <tile>
@@ -63,24 +65,386 @@
         <type>3L</type>
     </tile>
 
+
     <tile>
-        <id>110</id>
-        <row>-1</row>
-        <col>-1</col>
+        <id>112</id>
+        <row>10</row>
+        <col>10</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>113</id>
+        <row>11</row>
+        <col>11</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>114</id>
+        <row>12</row>
+        <col>12</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>115</id>
+        <row>13</row>
+        <col>13</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>115</id>
+        <row>14</row>
+        <col>14</col>
         <type>3W</type>
     </tile>
+
+
+
+
+
+
+
     <tile>
-        <id>111</id>
+        <id>116</id>
         <row>0</row>
-        <col>0</col>
+        <col>14</col>
         <type>3W</type>
     </tile>
 
     <tile>
-        <id>112</id>
-        <row>15</row>
-        <col>15</col>
+        <id>117</id>
+        <row>1</row>
+        <col>13</col>
         <type>2W</type>
     </tile>
+
+    <tile>
+        <id>118</id>
+        <row>2</row>
+        <col>12</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>119</id>
+        <row>3</row>
+        <col>11</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>120</id>
+        <row>4</row>
+        <col>10</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>121</id>
+        <row>5</row>
+        <col>9</col>
+        <type>3L</type>
+    </tile>
+
+    <tile>
+        <id>122</id>
+        <row>6</row>
+        <col>8</col>
+        <type>2L</type>
+    </tile>
+
+
+    <tile>
+        <id>123</id>
+        <row>8</row>
+        <col>6</col>
+        <type>2L</type>
+    </tile>
+
+    <tile>
+        <id>124</id>
+        <row>9</row>
+        <col>5</col>
+        <type>3L</type>
+    </tile>
+
+
+    <tile>
+        <id>125</id>
+        <row>10</row>
+        <col>4</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>126</id>
+        <row>11</row>
+        <col>3</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>127</id>
+        <row>12</row>
+        <col>2</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>128</id>
+        <row>13</row>
+        <col>1</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>129</id>
+        <row>14</row>
+        <col>0</col>
+        <type>3W</type>
+    </tile>
+
+
+
+
+
+
+    <tile>
+        <id>130</id>
+        <row>0</row>
+        <col>3</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>131</id>
+        <row>0</row>
+        <col>7</col>
+        <type>3W</type>
+    </tile>
+    <tile>
+        <id>132</id>
+        <row>0</row>
+        <col>11</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>133</id>
+        <row>0</row>
+        <col>14</col>
+        <type>3W</type>
+    </tile>
+
+    <tile>
+        <id>134</id>
+        <row>1</row>
+        <col>5</col>
+        <type>3L</type>
+    </tile>
+    <tile>
+        <id>135</id>
+        <row>1</row>
+        <col>9</col>
+        <type>3L</type>
+    </tile>
+
+    <tile>
+        <id>136</id>
+        <row>2</row>
+        <col>6</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>137</id>
+        <row>2</row>
+        <col>8</col>
+        <type>2L</type>
+    </tile>
+
+    <tile>
+        <id>138</id>
+        <row>3</row>
+        <col>7</col>
+        <type>2L</type>
+    </tile>
+
+
+
+
+
+    <tile>
+        <id>139</id>
+        <row>14</row>
+        <col>3</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>140</id>
+        <row>14</row>
+        <col>7</col>
+        <type>3W</type>
+    </tile>
+    <tile>
+        <id>141</id>
+        <row>14</row>
+        <col>11</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>142</id>
+        <row>14</row>
+        <col>14</col>
+        <type>3W</type>
+    </tile>
+
+    <tile>
+        <id>143</id>
+        <row>13</row>
+        <col>5</col>
+        <type>3L</type>
+    </tile>
+    <tile>
+        <id>144</id>
+        <row>13</row>
+        <col>9</col>
+        <type>3L</type>
+    </tile>
+
+    <tile>
+        <id>145</id>
+        <row>12</row>
+        <col>6</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>146</id>
+        <row>12</row>
+        <col>8</col>
+        <type>2L</type>
+    </tile>
+
+    <tile>
+        <id>147</id>
+        <row>11</row>
+        <col>7</col>
+        <type>2L</type>
+    </tile>
+
+
+
+
+
+
+    <tile>
+        <id>148</id>
+        <row>3</row>
+        <col>0</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>149</id>
+        <row>7</row>
+        <col>0</col>
+        <type>3W</type>
+    </tile>
+    <tile>
+        <id>150</id>
+        <row>11</row>
+        <col>0</col>
+        <type>2L</type>
+    </tile>
+
+
+    <tile>
+        <id>152</id>
+        <row>5</row>
+        <col>1</col>
+        <type>3L</type>
+    </tile>
+    <tile>
+        <id>153</id>
+        <row>9</row>
+        <col>1</col>
+        <type>3L</type>
+    </tile>
+
+    <tile>
+        <id>154</id>
+        <row>6</row>
+        <col>2</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>155</id>
+        <row>8</row>
+        <col>2</col>
+        <type>2L</type>
+    </tile>
+
+    <tile>
+        <id>156</id>
+        <row>7</row>
+        <col>3</col>
+        <type>2L</type>
+    </tile>
+
+
+
+
+    <tile>
+        <id>157</id>
+        <row>3</row>
+        <col>14</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>158</id>
+        <row>7</row>
+        <col>14</col>
+        <type>3W</type>
+    </tile>
+    <tile>
+        <id>159</id>
+        <row>11</row>
+        <col>14</col>
+        <type>2L</type>
+    </tile>
+
+
+    <tile>
+        <id>160</id>
+        <row>5</row>
+        <col>13</col>
+        <type>3L</type>
+    </tile>
+    <tile>
+        <id>161</id>
+        <row>9</row>
+        <col>13</col>
+        <type>3L</type>
+    </tile>
+
+    <tile>
+        <id>162</id>
+        <row>6</row>
+        <col>12</col>
+        <type>2L</type>
+    </tile>
+    <tile>
+        <id>163</id>
+        <row>8</row>
+        <col>12</col>
+        <type>2L</type>
+    </tile>
+
+    <tile>
+        <id>164</id>
+        <row>7</row>
+        <col>11</col>
+        <type>2L</type>
+    </tile>
+
 
 </board>
