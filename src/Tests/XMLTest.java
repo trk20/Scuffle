@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit Tests for the ReadXMLFile class
+ * Unit Tests for the ReadXMLFile class, uses the test.xml for testing purposes
  *
  * @author Vladimir Kovacina
  * @version 2022-12-08
@@ -50,8 +50,6 @@ class XMLTest {
         assertEquals(board.getBoardTile(new Point(1,1)).getType(), BoardTile.Type.X2WORD);
         assertEquals(board.getBoardTile(new Point(2,2)).getType(), BoardTile.Type.X2LETTER);
         assertEquals(board.getBoardTile(new Point(3,3)).getType(), BoardTile.Type.X3LETTER);
-
-
     }
 
     /**
@@ -71,8 +69,6 @@ class XMLTest {
 
         assertEquals(board.getBoardTile(new Point(7,7)).getType(), BoardTile.Type.START);
         assertEquals(board.getBoardTile(new Point(10,10)).getType(), BoardTile.Type.BLANK);
-
-
 
     }
 
