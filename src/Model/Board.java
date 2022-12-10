@@ -41,8 +41,6 @@ public class Board implements Serializable, Cloneable {
     private Grid2DArray<BoardTile> boardGrid;
     private List<BoardWord> lastPlacedWords;
 
-
-
     /**
      * Constructor for a Board object
 
@@ -259,7 +257,6 @@ public class Board implements Serializable, Cloneable {
      * Set premium score tiles in the board.
      * Currently, randomly places them on the board.
      */
-    // TODO: M4 will be using XML loading for the configuration
     private void setPremiumTiles() {
         Random r = new Random();
         for (int x = 0; x< BOARD_SIZE; x ++){
