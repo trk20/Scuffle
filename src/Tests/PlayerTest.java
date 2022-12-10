@@ -8,6 +8,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the PLayer Model class
+ *
+ * @author Vladimir Kovacina
+ * @version Dec-09-2022
+ */
+
 class PlayerTest {
     ScrabbleModel model;
     List<String> playerNames;

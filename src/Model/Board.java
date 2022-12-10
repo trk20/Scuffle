@@ -51,6 +51,7 @@ public class Board implements Serializable, Cloneable {
         lastPlacedWords = new ArrayList<>();
         initializeBlankGrid();  // Initialize tiles in boardGrid
 
+
         if(isPremiumBoard) setPremiumTiles();
         boardGrid.get(START_TILE_POINT).setType(BoardTile.Type.START); // Set start tile
     }

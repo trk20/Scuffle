@@ -161,12 +161,32 @@ Other calling objects have to take care of putting them somewhere else.
 - Cna display their info (name, score, hand information)
 ### Class, ScrabbleModel
 This class handles running the game and delegating tasks to other classes. 
+This contains all of the game state info, this is the object serialized when saving a game. 
+When loading a game, a new model instance is created and all the listeners detach from the old model to attach to the new one. 
 This class follows the model pattern from the MVC design pattern.
 ### Class, Tile 
 Represents a tile in the scrabble game.
 Stores the score of its initial letter.
 The letter can be changed if the tile was originally a blank (0 score),
 but never the score.
+<<<<<<< Updated upstream
+### Class, ReadXMLFile
+This class handles the reading of the XML board configuration files. The parsing uses
+the DOM library. We chose to use DOM since it was the simplest option in our opinion, 
+the sub elements were easily identifiable. the read() method in this class will read the XML 
+and update the premium tiles on the board.
+=======
+### Abstract Class Action Handler
+This is an abstract class that build the functionality for the redo and undo buttons.
+It has methods to store the board state and player state inside of stacks that are then
+instantiated into making the undo and redo handler.
+### Class Redo Handler
+This class is in responsible for listening for redo
+handler events that it used to manipulate the action handler stack inside.
+### Class Undo Handler
+This class is in responsible for listening for undo
+handler events that it used to manipulate the stack inside.
+>>>>>>> Stashed changes
 
 ## ScrabbleEvents
 ### Event Interfaces

@@ -12,8 +12,8 @@ import static Views.DebugView.DEBUG_VIEW;
  * The main executable for the scrabble project.
  * Takes care of setting up the views and model initially.
  *
- * @author Alex
- * @version NOV-11
+ * @author Alex and Vladimir
+ * @version Dec-09-2022
  */
 public class Main {
     public static void main(String[] args)  {
@@ -35,8 +35,15 @@ public class Main {
                         valid  =false;
                     }
             }else{
-                //User doesn't want to use configuration file
-                valid = true;
+                //User doesn't want to use their own configuration file, use the default board config file
+                ReadXMLFile xmlReader = new ReadXMLFile(model, "boardConfig.xml");
+                try{
+                    xmlReader.read();
+                    valid = true;
+                } catch (RuntimeException e){
+                    valid =false;
+                }
+
             }
 
         }
