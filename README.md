@@ -176,14 +176,14 @@ the DOM library. We chose to use DOM since it was the simplest option in our opi
 the sub elements were easily identifiable. the read() method in this class will read the XML 
 and update the premium tiles on the board.
 =======
-### Action Handler
+### Abstract Class Action Handler
 This is an abstract class that build the functionality for the redo and undo buttons.
 It has methods to store the board state and player state inside of stacks that are then
 instantiated into making the undo and redo handler.
-### Redo Handler
+### Class Redo Handler
 This class is in responsible for listening for redo
 handler events that it used to manipulate the action handler stack inside.
-### Undo Handler
+### Class Undo Handler
 This class is in responsible for listening for undo
 handler events that it used to manipulate the stack inside.
 >>>>>>> Stashed changes
