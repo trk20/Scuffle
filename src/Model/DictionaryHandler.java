@@ -15,15 +15,12 @@ public class DictionaryHandler {
 
     private final ArrayList<HashMap<String,HashMap<String,Integer>>> sortedLetterCounts;
 
-    private final HashMap<String,HashMap<String,Integer>> letterCounts;
-
 
     /**
      * Constructs a new Model.DictionaryHandler object with all valid words loaded into an ArrayList, and a HashMap of their letter frequencies.
      */
     public DictionaryHandler() {
         allWords = new HashSet<>();
-        letterCounts = new HashMap<>();
         sortedLetterCounts = new ArrayList<>();
         /*
          * Load all valid words from the 2019 version of Scrabble into an ArrayList
