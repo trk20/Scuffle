@@ -45,6 +45,10 @@ public class BoardTileView extends TileView implements ModelListener {
         }
     }
 
+    /**
+     * Reset this board tile's style back to state 1
+     * @param modelTile
+     */
     private void resetStyle(BoardTile modelTile) {
         removeAll();
         validate();
