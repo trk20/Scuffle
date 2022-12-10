@@ -14,7 +14,7 @@ import java.awt.event.MouseAdapter;
  * @author Alex
  * @version NOV-21
  */
-public abstract class TurnController extends MouseAdapter implements ModelListener {
+public abstract class TurnController extends MouseAdapter implements ModelListener, SController {
     protected boolean disableControl;
 
     /**

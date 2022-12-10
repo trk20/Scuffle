@@ -23,7 +23,7 @@ import static Views.DebugView.DEBUG_VIEW;
  * @author Alex
  * @version NOV-21
  */
-public class TurnActionController extends TurnController implements SController, BoardClickListener, ActionListener {
+public class TurnActionController extends TurnController implements BoardClickListener, ActionListener {
     /** Depending on the action, will send different action events to listeners*/
     public enum ActionState {
         PLACE (null), // Special case, event made outside
