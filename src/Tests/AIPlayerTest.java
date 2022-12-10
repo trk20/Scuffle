@@ -56,7 +56,7 @@ class AIPlayerTest {
 
         DictionaryHandler dictionaryHandler = new DictionaryHandler();
 
-        player.getValidWordsNew(startTile, hand).forEach(word->{
+        player.getValidWords(startTile, hand).forEach(word->{
             assert(dictionaryHandler.isValidWord(String.join("",word)));
             assert(word.contains("Q"));
         });
@@ -77,7 +77,7 @@ class AIPlayerTest {
         expectedResult.add(expectedResult1);
         expectedResult.add(expectedResult2);
 
-        assert(player.getValidWordsNew(hand).contains(expectedResult1));
-        assert(player.getValidWordsNew(hand).contains(expectedResult2));
+        assert(player.getValidWords(hand).contains(expectedResult1));
+        assert(player.getValidWords(hand).contains(expectedResult2));
     }
 }
