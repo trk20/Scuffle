@@ -18,7 +18,7 @@ import java.util.List;
  * @author Alex
  * @version NOV-21
  */
-public class HandTileController extends TurnController implements SController, MouseListener {
+public class HandTileController extends TurnController implements MouseListener {
     private final List<SControllerListener> listeners;
     private final Tile tile;
 
