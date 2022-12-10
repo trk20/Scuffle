@@ -12,8 +12,8 @@ import static Views.DebugView.DEBUG_VIEW;
  * The main executable for the scrabble project.
  * Takes care of setting up the views and model initially.
  *
- * @author Alex
- * @version NOV-11
+ * @author Alex and Vladimir
+ * @version Dec-09-2022
  */
 public class Main {
     public static void main(String[] args)  {
