@@ -161,6 +161,8 @@ Other calling objects have to take care of putting them somewhere else.
 - Cna display their info (name, score, hand information)
 ### Class, ScrabbleModel
 This class handles running the game and delegating tasks to other classes. 
+This contains all of the game state info, this is the object serialized when saving a game. 
+When loading a game, a new model instance is created and all the listeners detach from the old model to attach to the new one. 
 This class follows the model pattern from the MVC design pattern.
 ### Class, Tile 
 Represents a tile in the scrabble game.
