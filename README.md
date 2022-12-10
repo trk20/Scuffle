@@ -23,7 +23,7 @@ Rules adapted from [hasbro](https://scrabble.hasbro.com/en-us/rules)
 One change in our ruleset compared to the hasbro version is that the game will automatically end once there are no more letters
 left inside the draw pile.
 ### Setup:
-- There are 100 tiles in the letter bag (Unfinished until [M3](#future-milestones))
+- There are 100 tiles in the letter bag
 - One game board
 - Four racks (up to four players can play)
 - Choose a dictionary ([Choice not implemented](#future-milestones))
@@ -137,7 +137,8 @@ Only used to store information about identified words,
 and to test if its components are equal when looking for new words, record is ideal.
 The only thing overridden is the toString method (for debugging purposes only).
 ### Class, Dictionary Handler
-Simple class that contains a list of dictionary words, and has a method to verify if a word is a dictionary word.
+Class that contains a set of dictionary words, has a method to verify if a word is a dictionary word, 
+and one to find words containing certain letters.
 ### Class, DrawPile
 - Uses a list to contain a group of Tiles, can be shuffled to simulate a random draw order
 - Cannot use a set, there has to be multiple copy to have fluctuating odds for each tile
