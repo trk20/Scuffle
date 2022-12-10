@@ -169,6 +169,11 @@ Represents a tile in the scrabble game.
 Stores the score of its initial letter.
 The letter can be changed if the tile was originally a blank (0 score),
 but never the score.
+### Class, ReadXMLFile
+This class handles the reading of the XML board configuration files. The parsing uses
+the DOM library. We chose to use DOM since it was the simplest option in our opinion, 
+the sub elements were easily identifiable. the read() method in this class will read the XML 
+and update the premium tiles on the board.
 
 ## ScrabbleEvents
 ### Event Interfaces

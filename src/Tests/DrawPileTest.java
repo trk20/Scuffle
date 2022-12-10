@@ -8,6 +8,13 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for DrawPile model class
+ *
+ * @author Vladimir Kovacina
+ * @version Dec-09-2022
+ */
+
 class DrawPileTest {
     ScrabbleModel model;
 
