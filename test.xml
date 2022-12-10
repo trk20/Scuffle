@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<board>
+
+    <tile>
+        <id>100</id>
+        <row>0</row>
+        <col>0</col>
+        <type>3W</type>
+    </tile>
+
+    <tile>
+        <id>101</id>
+        <row>1</row>
+        <col>1</col>
+        <type>2W</type>
+    </tile>
+
+    <tile>
+        <id>102</id>
+        <row>2</row>
+        <col>2</col>
+        <type>2L</type>
+    </tile>
+
+    <tile>
+        <id>103</id>
+        <row>3</row>
+        <col>3</col>
+        <type>3L</type>
+    </tile>
+
+    <tile>
+        <id>104</id>
+        <row>-1</row>
+        <col>-1</col>
+        <type>3W</type>
+    </tile>
+
+    <tile>
+        <id>105</id>
+        <row>7</row>
+        <col>7</col>
+        <type>3W</type>
+    </tile>
+
+    <tile>
+        <id>106</id>
+        <row>15</row>
+        <col>15</col>
+        <type>3W</type>
+    </tile>
+
+    <notTile>
+        <id>107</id>
+        <row>10</row>
+        <col>10</col>
+        <type>3W</type>
+    </notTile>
+</board>

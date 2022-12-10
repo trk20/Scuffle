@@ -41,7 +41,7 @@ public class Main {
                     xmlReader.read();
                     valid = true;
                 } catch (RuntimeException e){
-                    valid  =false;
+                    valid =false;
                 }
 
             }

@@ -66,7 +66,7 @@ public class ReadXMLFile {
                     String type = element.getElementsByTagName("type").item(0).getTextContent();
                     //Check that the coordinates of the tiles are in the board bounds and not on the start tile
                     if(x < ScrabbleModel.BOARD_SIZE && y < ScrabbleModel.BOARD_SIZE && x >= 0 && y>= 0 &&
-                            (new Point(x,y) != Board.START_TILE_POINT)) {
+                            (!(x == y && x == Board.START_TILE_POINT.getX()))) {
                         model.getBoard().setXMLPremiumTiles(x, y, type);
                     }
 
