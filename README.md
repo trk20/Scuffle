@@ -1,6 +1,10 @@
 # 3110 Group Project: Scrabble
 Version: Milestone 4
 
+# Note:
+This project and its contributors are not affiliated with, endorsed by, or sponsored by Hasbro or any of their affiliates or subsidiaries, and the developers of this game do not claim any ownership or rights to the Scrabble trademark or intellectual property.
+The game is intended for educational purposes only and is not intended for commercial use. 
+
 ## GUI instructions:
 - Refer to the GUI Instructions PDF for in depth instructions.
 
